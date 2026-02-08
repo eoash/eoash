@@ -1,0 +1,59 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Local testing
+test_results/
+.tmp/
+
+# Credentials and secrets
+*.key
+*.pem
+secret*.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+agent/reports/daily/*.json
+agent/reports/weekly/*.json
+agent/memory/last_run.json
+agent/memory/*_run.json
