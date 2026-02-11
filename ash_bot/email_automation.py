@@ -58,10 +58,10 @@ class EmailAutomation:
             if pattern.lower() in sender_lower:
                 return True, "lawyer"
 
-        # 파트너
-        for pattern in self.vip_config.get('partners', []):
+        # 회계사
+        for pattern in self.vip_config.get('accountants', []):
             if pattern.lower() in sender_lower:
-                return True, "partner"
+                return True, "accountant"
 
         return False, ""
 

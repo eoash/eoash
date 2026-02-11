@@ -1,22 +1,42 @@
 {
   "investors": [
     "hslee@sazze.vc",
-    "sazze.vc"
+    "sazze.vc",
+    "@vc.com",
+    "@ventures.com",
+    "investor",
+    "investment"
   ],
   "lawyers": [
-    "lawfirm.com",
-    "legalcorp.com"
+    "kang.sings@gmail.com",
+    "hoseok.jung@seumlaw.com",
+    "haena.suh@seumlaw.com",
+    "jeongmin.noh@seumlaw.com",
+    "jihoon.choi@seumlaw.com",
+    "advisory_assistants@seumlaw.com",
+    "@seumlaw.com",
+    "@law.com",
+    "@lawfirm.com",
+    "@legalcorp.com",
+    "lawyer",
+    "attorney"
   ],
-  "partners": [
-    "partner@",
-    "collaboration@"
+  "accountants": [
+    "lyn@cntt.co.kr",
+    "yra@mstacc.com",
+    "jyjeong@mstacc.com",
+    "@cntt.co.kr",
+    "@mstacc.com",
+    "accountant",
+    "회계사"
   ],
   "keywords": {
-    "urgent": ["긴급", "urgent", "asap", "immediate"],
-    "action_required": ["검토", "승인", "확인", "답변", "회신", "review", "approve", "confirm", "reply"],
-    "meeting": ["미팅", "회의", "meeting", "call", "zoom"],
-    "contract": ["계약", "contract", "agreement", "NDA"],
-    "investment": ["투자", "investment", "funding", "round"]
+    "urgent": ["긴급", "urgent", "asap", "immediate", "시급"],
+    "action_required": ["검토", "승인", "확인", "답변", "회신", "review", "approve", "confirm", "reply", "response needed"],
+    "meeting": ["미팅", "회의", "meeting", "call", "zoom", "schedule"],
+    "contract": ["계약", "contract", "agreement", "NDA", "sign"],
+    "investment": ["투자", "investment", "funding", "round", "valuation"],
+    "financial": ["감사", "재무제표", "세무", "회계", "audit", "financial statement", "tax"]
   },
-  "notes": "발신자 이메일 주소나 도메인을 추가하세요. 부분 매칭도 지원합니다."
+  "notes": "VIP 발신자: 투자자, 변호사(SEUM 법무법인), 회계사(CNTT, MST). partners 제외 (회사 공식 문의). 이메일 주소나 도메인을 추가하세요. 부분 매칭 지원."
 }

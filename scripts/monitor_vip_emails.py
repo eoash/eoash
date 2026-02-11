@@ -46,7 +46,7 @@ def monitor_vip_emails():
                     category_emoji = {
                         'investor': '💰',
                         'lawyer': '⚖️',
-                        'partner': '🤝'
+                        'accountant': '📊'
                     }.get(email['category'], '📧')
 
                     message = f"""
