@@ -81,6 +81,19 @@ class LoggingConfig:
         return str(LOGS_DIR / f"{name}.log")
 
 
+class ClaudeConfig:
+    """Claude API configuration for AI-powered features."""
+    API_KEY = os.getenv("ANTHROPIC_API_KEY")
+    MODEL = "claude-opus-4-6"
+    MAX_TOKENS = 4096
+
+    @staticmethod
+    def validate():
+        """Validate Claude API configuration."""
+        if not ClaudeConfig.API_KEY:
+            raise ValueError("Claude API key not configured")
+
+
 class ARConfig:
     """AR matching and reporting configuration."""
     # Payment matching tolerance (cents)
@@ -99,3 +112,21 @@ class ARConfig:
 
     # Timezone for reports
     TIMEZONE = "America/Los_Angeles"
+
+
+class ThumbnailConfig:
+    """YouTube thumbnail caption generation configuration."""
+    STYLE_GUIDE_PATH = AGENT_DIR / "memory" / "thumbnail_team_style_guide.md"
+    CAPTION_COUNT = 18  # 생성할 캡션 개수
+    MIN_CAPTION_LENGTH = 10
+    MAX_CAPTION_LENGTH = 150
+    NOTION_DATABASE_ID = os.getenv("NOTION_THUMBNAIL_DATABASE_ID", "")
+
+    @staticmethod
+    def load_style_guide() -> str:
+        """Load team style guide from file."""
+        try:
+            with open(ThumbnailConfig.STYLE_GUIDE_PATH, 'r', encoding='utf-8') as f:
+                return f.read()
+        except FileNotFoundError:
+            return ""

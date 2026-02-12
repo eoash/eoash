@@ -1,6 +1,7 @@
 plaid-python>=14.0.0
 requests>=2.31.0
 slack-sdk>=3.23.0
+slack-bolt>=1.18.0
 notion-client>=2.2.0
 python-dotenv>=1.0.0
 pytest>=7.4.0
@@ -9,3 +10,5 @@ google-auth>=2.25.0
 google-auth-oauthlib>=1.2.0
 google-auth-httplib2>=0.2.0
 google-api-python-client>=2.110.0
+anthropic>=0.28.0
+flask>=3.0.0
