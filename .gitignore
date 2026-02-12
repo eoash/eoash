@@ -47,6 +47,9 @@ test_results/
 *.key
 *.pem
 secret*.txt
+credentials.json
+token.json
+.claude/
 
 # OS
 .DS_Store

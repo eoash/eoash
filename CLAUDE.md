@@ -20,6 +20,9 @@ ash_bot/               # 메인 애플리케이션
 └── main.py           # 메인 오케스트레이션
 
 agent/                # 프로젝트 메모리 및 컨텍스트
+├── advisors/         # 코드 리뷰 및 아키텍처 가이드
+│   ├── senior_architect.md      # 시니어 아키텍트 (Alex Kim)
+│   └── code_review_checklist.md # 코드 리뷰 체크리스트
 ├── context/          # ar_structure.md (AR 데이터 구조)
 ├── memory/           # 운영 데이터 (financial_state, decisions)
 ├── tasks/            # 반복 작업 정의
@@ -52,6 +55,49 @@ python scripts/run_weekly.py
 
 ## 개발 워크플로우
 
+### 코드 작성 프로세스 (MANDATORY)
+
+**모든 코드는 Alex Kim (시니어 아키텍트) 리뷰를 거쳐야 합니다.**
+
+1. **설계 단계**
+   - 요구사항 분석
+   - 클린 아키텍처 원칙 확인 (`agent/advisors/senior_architect.md`)
+   - 레이어 분리 설계 (Domain → Application → Infrastructure)
+   - Alex에게 설계 리뷰 요청: "이 설계가 클린 아키텍처를 따르나요?"
+
+2. **코드 작성**
+   - Type hints 필수
+   - Dependency injection 사용
+   - SOLID 원칙 준수
+   - 작은 함수 (<20 lines)
+   - 의미있는 변수/함수명
+
+3. **Self-Review (코드 작성 후)**
+   - `agent/advisors/code_review_checklist.md` 체크리스트 확인
+   - 모든 항목 통과 확인
+   - 스스로 물어보기:
+     - "이 코드를 테스트할 수 있나?"
+     - "한 문장으로 설명 가능한가?"
+     - "의존성을 교체할 수 있나?"
+
+4. **Alex Review (커밋 전 필수)**
+   - Alex에게 코드 리뷰 요청
+   - SOLID 위반 여부 확인
+   - 리팩토링 제안 반영
+   - 아키텍처 개선점 적용
+
+5. **테스트**
+   - Unit tests 작성
+   - Integration tests (필요시)
+   - 모든 테스트 통과 확인
+
+6. **커밋**
+   - 명확한 커밋 메시지
+   - 원자적 커밋 (one logical change)
+   - `.env` 파일 제외 확인
+
+### 운영 워크플로우
+
 ### 1. 환경 변수 설정
 - `.env.example` 복사하여 `.env` 생성
 - 모든 API credentials 입력
@@ -70,6 +116,55 @@ python scripts/run_weekly.py
 - `.env` BILL_COM_UPDATE_ENABLED=true 설정
 - Scheduler 설정 (GitHub Actions 또는 cron)
 - Slack/Notion 채널 모니터링 시작
+
+## 클린 아키텍처 가이드라인
+
+### 아키텍처 원칙
+
+**의존성 규칙**: 외부 레이어 → 내부 레이어 (역방향 불가)
+
+```
+┌─────────────────────────────────────┐
+│  Presentation (Scripts/CLI)         │  ← 사용자 인터페이스
+├─────────────────────────────────────┤
+│  Application (Use Cases)            │  ← 비즈니스 로직 오케스트레이션
+├─────────────────────────────────────┤
+│  Domain (Business Logic)            │  ← 핵심 비즈니스 규칙
+├─────────────────────────────────────┤
+│  Infrastructure (API Clients)       │  ← 외부 연동
+└─────────────────────────────────────┘
+```
+
+### SOLID 원칙
+
+- **S** - Single Responsibility: 한 클래스는 하나의 책임만
+- **O** - Open/Closed: 확장에는 열려있고 수정에는 닫혀있게
+- **L** - Liskov Substitution: 파생 클래스는 기반 클래스를 대체 가능해야
+- **I** - Interface Segregation: 클라이언트별 인터페이스 분리
+- **D** - Dependency Inversion: 추상화에 의존, 구체화에 의존 X
+
+### 필수 규칙
+
+1. **Dependency Injection**: 모든 외부 의존성은 생성자로 주입
+2. **Type Hints**: 모든 함수 시그니처에 타입 힌트
+3. **No Hard-coded Values**: 설정은 `.env` 또는 config 파일
+4. **Small Functions**: 함수는 20줄 이하 권장
+5. **Testing**: 핵심 로직은 반드시 테스트 작성
+
+### Code Review 프로세스
+
+**커밋 전 필수 확인사항**:
+- [ ] `agent/advisors/code_review_checklist.md` 전체 확인
+- [ ] Alex Kim (시니어 아키텍트)에게 리뷰 요청
+- [ ] SOLID 원칙 위반 없음
+- [ ] 모든 테스트 통과
+- [ ] Type hints 완료
+
+**참고 문서**:
+- `agent/advisors/senior_architect.md` - 클린 아키텍처 가이드
+- `agent/advisors/code_review_checklist.md` - 리뷰 체크리스트
+
+---
 
 ## 핵심 로직 위치
 
@@ -232,4 +327,5 @@ python -c "from ash_bot.core import PaymentMatcher; ..."
 
 **프로젝트 시작**: 2026-02-09
 **담당자**: Seohyun Ahn (Finance Lead)
-**마지막 업데이트**: 2026-02-09
+**시니어 아키텍트**: Alex Kim (Code Review & Architecture)
+**마지막 업데이트**: 2026-02-11
