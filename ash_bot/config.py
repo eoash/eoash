@@ -20,15 +20,19 @@ REPORTS_DIR.mkdir(exist_ok=True)
 # API Configuration
 class BillComConfig:
     """Bill.com API configuration."""
-    API_KEY = os.getenv("BILL_COM_API_KEY")
+    API_KEY = os.getenv("BILL_COM_API_KEY")  # Developer Key
     ORG_ID = os.getenv("BILL_COM_ORG_ID")
-    BASE_URL = "https://api.bill.com/api/v2"
+    USERNAME = os.getenv("BILL_COM_USERNAME")  # Login email
+    PASSWORD = os.getenv("BILL_COM_PASSWORD")  # Login password
+    BASE_URL = "https://api.bill.com/api/v2"  # Production v2 API
 
     @staticmethod
     def validate():
         """Validate Bill.com configuration."""
         if not BillComConfig.API_KEY or not BillComConfig.ORG_ID:
             raise ValueError("Bill.com API credentials not configured")
+        if not BillComConfig.USERNAME or not BillComConfig.PASSWORD:
+            raise ValueError("Bill.com login credentials not configured")
 
 
 class PlaidConfig:
