@@ -236,11 +236,96 @@ skills/
 
 ---
 
-## 📎 참고 자료
+## 🛠️ Context Sync 스킬 제작 (Day 2 메인 실습)
 
--
+### 스킬 개요
+- **이름**: my-context-sync
+- **목적**: 여러 소스에서 정보를 자동 수집하여 하나의 문서로 정리
+- **트리거**: "싱크", "sync", "정보 수집"
+- **출력**: Markdown 파일 (sync/날짜-context-sync.md)
+
+### Block 0: 도구 선택 + 스킬 생성
+- 선택한 도구: Slack, Gmail, Google Calendar, Notion, GitHub (5개)
+- 템플릿 기반으로 `.claude/skills/my-context-sync/SKILL.md` 생성
+- 각 소스별 수집 방법 정의
+
+### Block 1: 프로젝트 탐색
+- **Explore 에이전트** 사용하여 프로젝트 구조 파악
+- 발견 사항:
+  - Windows 환경
+  - credentials.json, token.json 존재 (Google API)
+  - Slack API 토큰 설정됨
+  - 멀티 에이전트 구조 (agent/ 디렉토리)
+- 스킬을 프로젝트 환경에 맞게 조정 (PowerShell 기반)
+
+### Block 2: 도구 연결
+**3가지 연결 방법 학습:**
+1. **Connectors** (가장 쉬움): 웹 브라우저에서 클릭으로 연결
+2. **claude mcp add**: 명령어 한 줄로 MCP 서버 연결
+3. **API 스크립트**: Claude가 코드 작성
+
+**실제 연결:**
+- Slack, Notion: Connectors로 연결
+- GitHub: Plugin 설치됨
+- Gmail, Calendar: API 스크립트 작성
+  - `gmail_fetch.py`: Gmail API로 이메일 수집
+  - `calendar_fetch.py`: Google Calendar API로 일정 수집
+
+### Block 3: 병렬 수집 & 검증
+**병렬 수집 개념:**
+- 카페 직원 비유: 여러 직원이 동시에 일하면 3배 빠름
+- Subagent로 각 소스를 독립적으로 동시 수집
+- 순차 90초 → 병렬 30초
+
+**수집 실패 원인 (4가지):**
+1. 인증/API 키 문제 (가장 흔함)
+2. 네트워크 문제
+3. 권한 문제
+4. 도구 설정 문제
+
+### Block 4: Output 설정
+**3가지 출력 옵션:**
+1. Markdown 파일 (기본, 가장 간단)
+2. Slack 메시지 (팀 공유)
+3. Notion 페이지 (기록 축적)
+
+**선택**: Markdown 파일만 (sync/YYYY-MM-DD-context-sync.md)
+
+### Block 5: 최종 완성 + 실행
+✅ 스킬 구성 최종 확인
+✅ 트리거 설정: "싱크해줘" 한마디로 실행
+✅ 5개 소스 연결 완료
+✅ 병렬 수집 구조 설계 완료
+
+**활용 팁:**
+- 매일 아침 "싱크해줘"로 모닝 브리핑
+- CLAUDE.md에 스케줄 추가하면 자동 실행 가능
+- 소스 추가/제거 자유롭게 가능
 
 ---
 
-**다음 단계**:
+## 💡 Day 2 핵심 학습
+
+### 3대 핵심 개념
+1. **MCP 연결**: Claude와 외부 도구를 연결하는 표준 통로
+2. **Subagent 병렬 수집**: 여러 작업을 동시에 처리
+3. **스킬 구축**: 나만의 자동화 레시피 제작
+
+### 기술적 성과
+- Explore 에이전트 활용 (읽기 전용 프로젝트 탐색)
+- Google API 스크립트 작성 (gmail_fetch.py, calendar_fetch.py)
+- Windows PowerShell 환경 대응
+- 멀티 에이전트 구조 이해
+
+---
+
+## 📎 참고 자료
+
+- MCP 공식 문서: https://modelcontextprotocol.io/
+- Claude Code MCP: https://code.claude.com/en/docs/claude-code/mcp
+- Subagent 문서: https://docs.claude.com/en/docs/claude-code/sub-agents
+
+---
+
+**다음 단계**: Day 3 - Context Sync 스킬 개선 및 고도화
 
