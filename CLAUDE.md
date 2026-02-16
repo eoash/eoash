@@ -1,331 +1,166 @@
 # CLAUDE.md
 
-가이드 라인: Claude Code와 함께 이 저장소에서 작업할 때 참고하는 파일입니다.
-
-## 프로젝트 정보
-
-**프로젝트명**: EO Studio AR Automation System
-**목표**: US region 미수금(AR) 추적 자동화
-**기술**: Python, Bill.com API, Plaid, Slack, Notion
-**상태**: Phase 1 MVP 구현 완료 (2026-02-09)
-
-## 프로젝트 구조
-
-```
-ash_bot/               # 메인 애플리케이션
-├── integrations/      # 외부 API 클라이언트
-├── core/             # 비즈니스 로직 (Matcher, Reporter, Updater)
-├── utils/            # 유틸리티 함수
-├── config.py         # 설정 관리
-└── main.py           # 메인 오케스트레이션
-
-agent/                # 프로젝트 메모리 및 컨텍스트
-├── advisors/         # 코드 리뷰 및 아키텍처 가이드
-│   ├── senior_architect.md      # 시니어 아키텍트 (Alex Kim)
-│   └── code_review_checklist.md # 코드 리뷰 체크리스트
-├── context/          # ar_structure.md (AR 데이터 구조)
-├── memory/           # 운영 데이터 (financial_state, decisions)
-├── tasks/            # 반복 작업 정의
-└── reports/          # 일일/주간 리포트 아카이브
-
-scripts/              # 실행 스크립트
-├── run_daily.py      # 일일 AR 자동화
-└── run_weekly.py     # 주간 리포트
-
-tests/                # 단위 테스트
-```
-
-## 빌드 및 테스트 명령어
-
-```bash
-# 환경 설정
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# 테스트 실행
-pytest tests/ -v
-
-# 일일 실행 (Dry-run)
-python scripts/run_daily.py
-
-# 주간 리포트
-python scripts/run_weekly.py
-```
-
-## 개발 워크플로우
-
-### 코드 작성 프로세스 (MANDATORY)
-
-**모든 코드는 Alex Kim (시니어 아키텍트) 리뷰를 거쳐야 합니다.**
-
-1. **설계 단계**
-   - 요구사항 분석
-   - 클린 아키텍처 원칙 확인 (`agent/advisors/senior_architect.md`)
-   - 레이어 분리 설계 (Domain → Application → Infrastructure)
-   - Alex에게 설계 리뷰 요청: "이 설계가 클린 아키텍처를 따르나요?"
-
-2. **코드 작성**
-   - Type hints 필수
-   - Dependency injection 사용
-   - SOLID 원칙 준수
-   - 작은 함수 (<20 lines)
-   - 의미있는 변수/함수명
-
-3. **Self-Review (코드 작성 후)**
-   - `agent/advisors/code_review_checklist.md` 체크리스트 확인
-   - 모든 항목 통과 확인
-   - 스스로 물어보기:
-     - "이 코드를 테스트할 수 있나?"
-     - "한 문장으로 설명 가능한가?"
-     - "의존성을 교체할 수 있나?"
-
-4. **Alex Review (커밋 전 필수)**
-   - Alex에게 코드 리뷰 요청
-   - SOLID 위반 여부 확인
-   - 리팩토링 제안 반영
-   - 아키텍처 개선점 적용
-
-5. **테스트**
-   - Unit tests 작성
-   - Integration tests (필요시)
-   - 모든 테스트 통과 확인
-
-6. **커밋**
-   - 명확한 커밋 메시지
-   - 원자적 커밋 (one logical change)
-   - `.env` 파일 제외 확인
-
-### 운영 워크플로우
-
-### 1. 환경 변수 설정
-- `.env.example` 복사하여 `.env` 생성
-- 모든 API credentials 입력
-
-### 2. 테스트 모드에서 시작
-- `dry_run=True`로 설정
-- Bill.com 실제 업데이트 없음
-- 로그와 리포트만 생성
-
-### 3. 검증
-- Matching 정확도 확인 (target: 90%+)
-- 리포트 형식 검증
-- Slack/Notion 알림 테스트
-
-### 4. 운영 전환
-- `.env` BILL_COM_UPDATE_ENABLED=true 설정
-- Scheduler 설정 (GitHub Actions 또는 cron)
-- Slack/Notion 채널 모니터링 시작
-
-## 클린 아키텍처 가이드라인
-
-### 아키텍처 원칙
-
-**의존성 규칙**: 외부 레이어 → 내부 레이어 (역방향 불가)
-
-```
-┌─────────────────────────────────────┐
-│  Presentation (Scripts/CLI)         │  ← 사용자 인터페이스
-├─────────────────────────────────────┤
-│  Application (Use Cases)            │  ← 비즈니스 로직 오케스트레이션
-├─────────────────────────────────────┤
-│  Domain (Business Logic)            │  ← 핵심 비즈니스 규칙
-├─────────────────────────────────────┤
-│  Infrastructure (API Clients)       │  ← 외부 연동
-└─────────────────────────────────────┘
-```
-
-### SOLID 원칙
-
-- **S** - Single Responsibility: 한 클래스는 하나의 책임만
-- **O** - Open/Closed: 확장에는 열려있고 수정에는 닫혀있게
-- **L** - Liskov Substitution: 파생 클래스는 기반 클래스를 대체 가능해야
-- **I** - Interface Segregation: 클라이언트별 인터페이스 분리
-- **D** - Dependency Inversion: 추상화에 의존, 구체화에 의존 X
-
-### 필수 규칙
-
-1. **Dependency Injection**: 모든 외부 의존성은 생성자로 주입
-2. **Type Hints**: 모든 함수 시그니처에 타입 힌트
-3. **No Hard-coded Values**: 설정은 `.env` 또는 config 파일
-4. **Small Functions**: 함수는 20줄 이하 권장
-5. **Testing**: 핵심 로직은 반드시 테스트 작성
-
-### Code Review 프로세스
-
-**커밋 전 필수 확인사항**:
-- [ ] `agent/advisors/code_review_checklist.md` 전체 확인
-- [ ] Alex Kim (시니어 아키텍트)에게 리뷰 요청
-- [ ] SOLID 원칙 위반 없음
-- [ ] 모든 테스트 통과
-- [ ] Type hints 완료
-
-**참고 문서**:
-- `agent/advisors/senior_architect.md` - 클린 아키텍처 가이드
-- `agent/advisors/code_review_checklist.md` - 리뷰 체크리스트
+**작성자**: 안서현 (Seohyun Ahn)
+**역할**: Finance & Operations Lead at EO Studio
+**작성일**: 2026-02-16
+**목적**: AI Native Camp 기간 동안 Claude와의 효과적인 협업을 위한 컨텍스트
 
 ---
 
-## 핵심 로직 위치
+## 나는 누구인가
 
-### Matching Logic
-`ash_bot/core/matcher.py:PaymentMatcher`
-- 3단계 매칭 (Exact → Number Extraction → Fuzzy)
-- Confidence score 계산
-- Multiple candidates 처리
+안녕하세요, 안서현입니다. EO Studio에서 한국, 미국, 베트남 3개 법인의 재무와 운영 업무를 총괄하고 있습니다. 재무, 회계, 인사, 총무, 법무 등 백오피스 전반을 다루며, "시스템이 없어서 매번 데이터를 재가공하는 비효율"을 없애는 것이 저의 최대 과제입니다.
 
-### Report Generation
-`ash_bot/core/ar_reporter.py:ARReporter`
-- Daily/Weekly report 생성
-- Aging analysis
-- Top overdue invoices 추출
-
-### Bill.com Updates
-`ash_bot/core/updater.py:InvoiceUpdater`
-- Status update 처리
-- Dry-run mode 지원
-- Audit trail 로깅
-
-## 설정 및 커스터마이제이션
-
-### AR Matching 설정
-`ash_bot/config.py:ARConfig`
-```python
-AMOUNT_TOLERANCE = 0.01      # Exact match tolerance
-TRANSACTION_LOOKBACK_DAYS = 7  # 조회 기간
-AGING_BUCKETS = {...}        # 미수금 구간
-```
-
-### API 설정
-각 서비스별 config class:
-- `BillComConfig`
-- `PlaidConfig`
-- `SlackConfig`
-- `NotionConfig`
-
-## 메모리 및 컨텍스트
-
-### 프로젝트 메모리 파일
-- `agent/context/ar_structure.md`: AR 데이터 구조 정의
-- `agent/memory/financial_state.md`: 현재 재무 상태
-- `agent/memory/decisions.md`: 주요 정책 및 결정
-
-### 운영 데이터
-- `agent/memory/last_run.json`: 최근 실행 결과
-- `agent/reports/daily/`: 일일 리포트 아카이브
-- `agent/reports/weekly/`: 주간 리포트 아카이브
-
-## 주요 고려사항
-
-### 보안
-- ✅ 모든 credentials는 `.env` 파일 (git-ignored)
-- ✅ API keys는 절대 로그에 출력 안 함
-- ✅ Sensitive data는 암호화
-
-### 성능
-- Rate limiting 고려 (Bill.com 1회/초)
-- Plaid timeout 30초
-- Local caching (선택사항)
-
-### 안정성
-- Graceful degradation (부분 실패 허용)
-- Comprehensive error handling
-- Slack/Notion alert on failure
-- Audit trail 유지
-
-## 테스트 전략
-
-### Unit Tests
-`tests/test_matcher.py`
-- Exact amount match
-- Invoice number extraction
-- Fuzzy name matching
-- Edge cases (multiple invoices, no match)
-
-### Integration Tests
-- Bill.com API connectivity
-- Plaid transaction fetch
-- Slack message posting
-- Notion page creation
-
-### Manual Testing Checklist
-- [ ] Dry-run 모드에서 매칭 확인
-- [ ] Slack 메시지 포맷 검증
-- [ ] Notion 페이지 생성 확인
-- [ ] 90+ days overdue alert 테스트
-
-## 배포 및 스케줄링
-
-### GitHub Actions (권장)
-`.github/workflows/daily-ar-check.yml`
-```yaml
-schedule:
-  - cron: '0 9 * * *'  # 매일 9:00 UTC
-```
-
-### Local Cron
-```bash
-0 9 * * * /path/to/venv/bin/python /path/to/scripts/run_daily.py
-0 9 * * MON /path/to/venv/bin/python /path/to/scripts/run_weekly.py
-```
-
-## 모니터링 및 유지보수
-
-### 일일 체크
-- Slack에 리포트 도착
-- Matching rate 확인
-- Failed updates 확인
-
-### 주간 리뷰
-- Financial state 업데이트
-- Overdue invoices follow-up
-- Policy 변경 필요 여부
-
-### 월간 리뷰
-- `agent/memory/financial_state.md` 업데이트
-- Matching 규칙 성능 검토
-- Phase 2 계획 진행
-
-## 문제 해결
-
-### 로그 위치
-`logs/` 디렉토리:
-- `ar_automation.log`: 메인 로그
-- `bill_com.log`: Bill.com API 로그
-- `plaid_client.log`: Plaid API 로그
-
-### 디버깅
-```bash
-# Verbose 로깅
-LOG_LEVEL=DEBUG python scripts/run_daily.py
-
-# 특정 모듈만
-python -c "from ash_bot.core import PaymentMatcher; ..."
-```
-
-## 다음 단계
-
-### Phase 2 계획
-- [ ] Hanmi Bank integration
-- [ ] Manual override mechanism
-- [ ] Duplicate payment detection
-
-### 성능 최적화
-- [ ] Caching layer 추가
-- [ ] Batch processing
-- [ ] Async API calls
-
-## 유용한 링크 및 참고자료
-
-- **Bill.com API Docs**: https://bill.com/api-docs
-- **Plaid API Docs**: https://plaid.com/docs
-- **Slack API Docs**: https://api.slack.com
-- **Notion API Docs**: https://developers.notion.com
-- **프로젝트 메모리**: `agent/memory/`
+**핵심 역할**:
+- 3개국 재무 관리 및 현금 흐름 추적
+- 운영 시스템 설계 및 구축
+- 팀원들의 행정 업무 부담 최소화
+- AI-native 조직으로의 전환 리드
 
 ---
 
-**프로젝트 시작**: 2026-02-09
-**담당자**: Seohyun Ahn (Finance Lead)
-**시니어 아키텍트**: Alex Kim (Code Review & Architecture)
-**마지막 업데이트**: 2026-02-11
+## 나의 가치관
+
+### 1. 시스템 > 수작업
+매번 사람이 손으로 하는 일은 반복되면 안 됩니다. 한 번 만들어두면 계속 돌아가는 시스템이 훨씬 가치 있습니다.
+
+### 2. 빠른 실행 > 완벽한 계획
+70% 완성도로 먼저 작동시키고, 쓰면서 개선합니다. 완벽을 추구하다 출시 못 하는 것보다, 불완전해도 실제로 쓰이는 것이 낫습니다.
+
+### 3. 팀의 시간 > 나의 시간
+제가 시스템을 만드는 데 10시간을 쓰면, 팀원 5명이 각각 1시간씩 아낍니다. 이건 50시간의 가치입니다.
+
+### 4. 가시성 = 의사결정력
+돈이 어디 있고, 언제 들어오고, 얼마나 나가는지 실시간으로 보이면 회사는 훨씬 안정적으로 운영됩니다.
+
+### 5. AI Native하게 일하기
+AI는 보조 도구가 아니라, 조직의 OS가 되어야 합니다. 모든 팀원이 당연하게 AI와 일하는 문화를 만들고 싶습니다.
+
+---
+
+## 나의 업무 스타일
+
+### 선호하는 방식
+- ✅ **빠른 프로토타입**: 완벽보다 작동하는 것 먼저
+- ✅ **직접 만들기**: 외주나 기성 툴보다 직접 구축
+- ✅ **데이터 기반 판단**: 직관보다 숫자와 데이터
+- ✅ **자동화 우선**: 반복 작업은 무조건 자동화
+- ✅ **실용성 중심**: 멋진 것보다 매일 쓸 수 있는 것
+
+### 회피하는 것
+- ❌ 너무 긴 회의 (결정은 빠르게)
+- ❌ 불필요한 문서 작업 (필요한 것만)
+- ❌ 레거시 프로세스 (유연하게 바꾸기)
+- ❌ 기술 장벽 (비개발자지만 포기 안 함)
+
+---
+
+## Claude와 작업할 때 선호하는 방식
+
+### 이렇게 해주세요 ✅
+1. **구체적인 결과물 바로 제시**: 긴 설명보다 작동하는 코드나 솔루션을 먼저 보여주세요.
+2. **실용성 우선**: 이론적으로 완벽한 것보다 지금 당장 쓸 수 있는 것을 주세요.
+3. **에러는 구체적으로**: "이 부분이 문제입니다"가 아니라 "이렇게 고치면 됩니다" 형식으로.
+4. **다음 단계 제시**: 지금 단계가 끝나면 "다음은 이걸 하면 됩니다" 알려주세요.
+5. **모호하면 질문**: 추측하지 말고 명확히 물어봐주세요.
+
+### 이건 피해주세요 ❌
+1. 여러 옵션만 나열하고 선택 안 함 → 추천하는 것 명시해주세요
+2. 너무 기술적인 설명 → 비개발자도 이해할 수 있게
+3. "~할 수 있습니다"만 말하기 → 실제로 만들어주세요
+4. 문제만 지적 → 해결 방법까지
+
+---
+
+## 현재 상황
+
+### 이미 만든 것들
+- **4년 전**: 에어테이블 + 슬랙으로 회사 그룹웨어 구축 (연차, 지출결의, 세금계산서 등)
+- **최근**: Claude Code로 미국 AR 자동화 시스템 개발 (Bill.com, Plaid API 연동)
+- **최근**: Slack 썸네일 평가 에이전트 개발
+
+### 현재 상태
+- 비개발자지만 API 연동까지 해봤음
+- 작동은 하지만 파편화되어 있고 실용성이 낮음
+- 실무에 치여서 시스템 업그레이드 못함
+
+### 가장 큰 페인 포인트
+- 매일 2시간씩 입금 매칭 수작업
+- 3개국 재무 데이터를 한눈에 못 봄
+- 팀원들이 행정 업무에 시간 많이 씀
+- 시스템이 없어서 매번 데이터 재가공
+
+---
+
+## AI Native Camp 목표
+
+### 1주일 목표: 입금 매칭 자동화
+**무엇을**: 매일 2시간 걸리던 입금 매칭 작업을 10분 검토로 단축
+**어떻게**:
+- Bill.com 미수금 ↔ Plaid 입금 내역 자동 매칭
+- 자동으로 Slack/Notion 알림
+- Dry-run → Production 전환
+- Matching accuracy 95%+
+
+**왜 중요한가**:
+- 가장 반복적이고 시간 많이 드는 업무
+- 완성되면 팀에게 "AI가 이 정도까지 한다"고 보여줄 수 있음
+- 이후 다른 자동화의 기반이 됨
+
+### 장기 목표: 1인 1어드민 AI 시스템
+- Slack에서 모든 요청과 답변 처리
+- 회사의 모든 맥락을 기억하는 세컨 브레인
+- 각 업무별 에이전트 (재무, 인사, 법무 등)
+- 행정부터 매출까지 모든 데이터 통합 대시보드
+
+### 최종 비전: AI Native 조직
+모든 팀원이 AI를 당연하게 쓰고, AI가 팀원들의 행정 부담을 줄여서 본업에 집중하게 만드는 것. "이 정도까지 가능하다"는 상상력을 확장시키고 싶습니다.
+
+---
+
+## 현재 우려사항
+
+### 기술적 복잡도 (가장 큰 걱정)
+- API 연동 제대로 할 수 있을까?
+- 에러 처리를 완벽하게 할 수 있을까?
+- 비개발자로서 한계에 부딪히지 않을까?
+
+### 해결 방법
+- Claude와 긴밀하게 협업
+- 작은 단위로 나눠서 하나씩 완성
+- 완벽하지 않아도 작동하면 OK
+
+---
+
+## 소통 스타일
+
+### 나는 이렇게 말합니다
+- 직설적이고 명확하게
+- "이거 되나요?" → "이렇게 만들어주세요"
+- 불필요한 예의 표현 최소화
+- 빠른 의사결정 선호
+
+### 이렇게 대해주세요
+- 존댓말 편하게 쓰세요 (반말도 OK)
+- 질문은 명확하게
+- 제안은 구체적으로
+- 추천하는 것 명시
+
+---
+
+## 가장 마음에 드는 문장
+
+> "70% 완성도로 먼저 작동시키고, 쓰면서 개선합니다. 완벽을 추구하다 출시 못 하는 것보다, 불완전해도 실제로 쓰이는 것이 낫습니다."
+
+---
+
+## 참고 문서
+
+- 프로젝트 가이드: `/CLAUDE.md` (프로젝트 루트)
+- 개인 메모리: `~/.claude/projects/*/memory/MEMORY.md`
+- 프로젝트 컨텍스트: `agent/` 디렉토리
+
+---
+
+**마지막 업데이트**: 2026-02-16
+**다음 리뷰**: AI Native Camp 종료 후 (2026-02-23)
