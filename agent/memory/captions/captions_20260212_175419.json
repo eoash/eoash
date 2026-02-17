@@ -1,0 +1,224 @@
+{
+  "request": {
+    "video_title": "ChatGPT 99% 활용법",
+    "keywords": [
+      "ChatGPT",
+      "프롬프트",
+      "AI"
+    ],
+    "target_audience": "직장인,창업가",
+    "video_url": null,
+    "created_by": "U013YP1TURZ",
+    "timestamp": "2026-02-12T17:54:08.227045"
+  },
+  "generated_captions": [
+    "당신은 ChatGPT의 1%만 쓰고 있습니다",
+    "왜 내 ChatGPT는 맨날 동문서답일까?",
+    "ChatGPT 제대로 쓰면 업무 속도 10배 달라집니다",
+    "아직도 ChatGPT한테 실망하는 당신, 문제는 프롬프트입니다",
+    "ChatGPT 답변이 영 찝찝한 이유? 당신이 놓친 5가지",
+    "혹시 당신도 ChatGPT한테 \"다시 써줘\"만 반복하고 있나요?",
+    "ChatGPT 잘 쓰는 직장인은 이 3단계를 알고 있습니다",
+    "같은 ChatGPT 쓰는데 왜 나만 결과물이 별로일까?",
+    "ChatGPT 프롬프트, 이것만 고치면 결과가 완전히 달라집니다",
+    "당신이 ChatGPT를 도구가 아니라 검색엔진으로 쓰고 있는 이유",
+    "ChatGPT로 1시간 걸리던 일을 10분에 끝내는 방법",
+    "AI 결과물 맨날 버리는 당신, 이 4가지 습관만 바꿔보세요",
+    "ChatGPT 99% 활용하는 사람들의 프롬프트에는 공통점이 있습니다",
+    "당신의 ChatGPT가 그저 착하기만 한 이유",
+    "ChatGPT한테 계속 실망한다면 지금 당장 확인해야 할 5가지",
+    "창업가의 90%가 ChatGPT를 잘못 쓰고 있습니다",
+    "왜 내 프롬프트는 매번 평균 이하의 답변만 만들까?",
+    "ChatGPT 제대로 못 쓰면 남들보다 10배 느려집니다"
+  ],
+  "scored_captions": [
+    {
+      "caption": "ChatGPT 답변이 영 찝찝한 이유? 당신이 놓친 5가지",
+      "ctr_potential": 80.0,
+      "clarity": 85.0,
+      "brand_alignment": 85.0,
+      "overall_score": 83.0,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "당신은 ChatGPT의 1%만 쓰고 있습니다",
+      "ctr_potential": 75.0,
+      "clarity": 85.0,
+      "brand_alignment": 70.0,
+      "overall_score": 76.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT로 1시간 걸리던 일을 10분에 끝내는 방법",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 75.0,
+      "overall_score": 74.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT한테 계속 실망한다면 지금 당장 확인해야 할 5가지",
+      "ctr_potential": 65.0,
+      "clarity": 95.0,
+      "brand_alignment": 65.0,
+      "overall_score": 74.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "왜 내 ChatGPT는 맨날 동문서답일까?",
+      "ctr_potential": 75.0,
+      "clarity": 70.0,
+      "brand_alignment": 75.0,
+      "overall_score": 73.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "같은 ChatGPT 쓰는데 왜 나만 결과물이 별로일까?",
+      "ctr_potential": 75.0,
+      "clarity": 70.0,
+      "brand_alignment": 75.0,
+      "overall_score": 73.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "왜 내 프롬프트는 매번 평균 이하의 답변만 만들까?",
+      "ctr_potential": 75.0,
+      "clarity": 70.0,
+      "brand_alignment": 75.0,
+      "overall_score": 73.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "혹시 당신도 ChatGPT한테 \"다시 써줘\"만 반복하고 있나요?",
+      "ctr_potential": 70.0,
+      "clarity": 70.0,
+      "brand_alignment": 80.0,
+      "overall_score": 73.0,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "AI 결과물 맨날 버리는 당신, 이 4가지 습관만 바꿔보세요",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 70.0,
+      "overall_score": 72.5,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT 제대로 쓰면 업무 속도 10배 달라집니다",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 65.0,
+      "overall_score": 71.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "ChatGPT 잘 쓰는 직장인은 이 3단계를 알고 있습니다",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 65.0,
+      "overall_score": 71.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "창업가의 90%가 ChatGPT를 잘못 쓰고 있습니다",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 65.0,
+      "overall_score": 71.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "ChatGPT 제대로 못 쓰면 남들보다 10배 느려집니다",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 65.0,
+      "overall_score": 71.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "당신이 ChatGPT를 도구가 아니라 검색엔진으로 쓰고 있는 이유",
+      "ctr_potential": 65.0,
+      "clarity": 70.0,
+      "brand_alignment": 70.0,
+      "overall_score": 68.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "당신의 ChatGPT가 그저 착하기만 한 이유",
+      "ctr_potential": 65.0,
+      "clarity": 70.0,
+      "brand_alignment": 70.0,
+      "overall_score": 68.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT 99% 활용하는 사람들의 프롬프트에는 공통점이 있습니다",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 50.0,
+      "overall_score": 66.5,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ⚠️ 팀 톤에 덜 맞음"
+    },
+    {
+      "caption": "아직도 ChatGPT한테 실망하는 당신, 문제는 프롬프트입니다",
+      "ctr_potential": 55.0,
+      "clarity": 70.0,
+      "brand_alignment": 55.0,
+      "overall_score": 59.5,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ⚠️ CTR 잠재력 개선 필요 | ⚠️ 팀 톤에 덜 맞음"
+    },
+    {
+      "caption": "ChatGPT 프롬프트, 이것만 고치면 결과가 완전히 달라집니다",
+      "ctr_potential": 50.0,
+      "clarity": 70.0,
+      "brand_alignment": 50.0,
+      "overall_score": 56.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ⚠️ CTR 잠재력 개선 필요 | ⚠️ 팀 톤에 덜 맞음"
+    }
+  ],
+  "top_5": [
+    {
+      "caption": "ChatGPT 답변이 영 찝찝한 이유? 당신이 놓친 5가지",
+      "ctr_potential": 80.0,
+      "clarity": 85.0,
+      "brand_alignment": 85.0,
+      "overall_score": 83.0,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "당신은 ChatGPT의 1%만 쓰고 있습니다",
+      "ctr_potential": 75.0,
+      "clarity": 85.0,
+      "brand_alignment": 70.0,
+      "overall_score": 76.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT로 1시간 걸리던 일을 10분에 끝내는 방법",
+      "ctr_potential": 65.0,
+      "clarity": 85.0,
+      "brand_alignment": 75.0,
+      "overall_score": 74.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    },
+    {
+      "caption": "ChatGPT한테 계속 실망한다면 지금 당장 확인해야 할 5가지",
+      "ctr_potential": 65.0,
+      "clarity": 95.0,
+      "brand_alignment": 65.0,
+      "overall_score": 74.0,
+      "feedback": "✅ 명확하고 이해하기 쉬움"
+    },
+    {
+      "caption": "왜 내 ChatGPT는 맨날 동문서답일까?",
+      "ctr_potential": 75.0,
+      "clarity": 70.0,
+      "brand_alignment": 75.0,
+      "overall_score": 73.5,
+      "feedback": "✅ CTR 잠재력 높음 | ✅ 명확하고 이해하기 쉬움 | ✅ 팀 톤과 완벽히 일치"
+    }
+  ],
+  "timestamp": "2026-02-12T17:54:19.844929",
+  "model_used": "claude-opus-4-6"
+}

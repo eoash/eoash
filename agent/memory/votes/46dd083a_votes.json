@@ -1,0 +1,106 @@
+{
+  "request_id": "46dd083a",
+  "channel_id": "C033Z5AC3FA",
+  "captions": {
+    "2": {
+      "number": 2,
+      "text": "당신이 a를 포기하기 전에 반드시 알아야 할 5가지",
+      "score": 0
+    },
+    "4": {
+      "number": 4,
+      "text": "왜 당신의 a는 매번 실패할까?",
+      "score": 0
+    },
+    "1": {
+      "number": 1,
+      "text": "당신이 a를 모른다면? 지금 바로 확인해야 할 5가지",
+      "score": 0
+    },
+    "3": {
+      "number": 3,
+      "text": "a 결과가 영 찝찝한 이유? 당신이 놓친 4가지",
+      "score": 0
+    },
+    "5": {
+      "number": 5,
+      "text": "a 때문에 고민이라면 이 3단계만 따라하세요",
+      "score": 0
+    }
+  },
+  "votes": [
+    {
+      "caption_num": 2,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:51:54.312436"
+    },
+    {
+      "caption_num": 4,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:02.814915"
+    },
+    {
+      "caption_num": 2,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:04.545364"
+    },
+    {
+      "caption_num": 1,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:05.062564"
+    },
+    {
+      "caption_num": 2,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:05.625470"
+    },
+    {
+      "caption_num": 3,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:06.229877"
+    },
+    {
+      "caption_num": 4,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:06.651002"
+    },
+    {
+      "caption_num": 5,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:06.998216"
+    },
+    {
+      "caption_num": 4,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:07.586437"
+    },
+    {
+      "caption_num": 4,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:52:08.738812"
+    },
+    {
+      "caption_num": 1,
+      "user_id": "U09D8BW4S87",
+      "user_name": "yoonhwanjun",
+      "timestamp": "2026-02-12T17:52:42.751417"
+    },
+    {
+      "caption_num": 4,
+      "user_id": "U09D8BW4S87",
+      "user_name": "yoonhwanjun",
+      "timestamp": "2026-02-12T17:53:13.672330"
+    }
+  ],
+  "created_at": "2026-02-12T17:51:54.312405"
+}

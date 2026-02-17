@@ -1,0 +1,53 @@
+{
+  "request_id": "c9a539a6",
+  "channel_id": "C033Z5AC3FA",
+  "captions": {
+    "1": {
+      "number": 1,
+      "text": "a 결과가 영 찝찝한 이유? 당신이 놓친 4가지",
+      "score": 0
+    },
+    "5": {
+      "number": 5,
+      "text": "a 성과 10배 올리는 3단계 방법",
+      "score": 0
+    },
+    "2": {
+      "number": 2,
+      "text": "당신이 a를 잘못 쓰고 있다는 5가지 신호",
+      "score": 0
+    },
+    "3": {
+      "number": 3,
+      "text": "왜 당신의 a는 매번 실패할까?",
+      "score": 0
+    }
+  },
+  "votes": [
+    {
+      "caption_num": 1,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:49:05.346555"
+    },
+    {
+      "caption_num": 5,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:49:10.261620"
+    },
+    {
+      "caption_num": 2,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:49:19.169152"
+    },
+    {
+      "caption_num": 3,
+      "user_id": "U013YP1TURZ",
+      "user_name": "ash",
+      "timestamp": "2026-02-12T17:49:21.364862"
+    }
+  ],
+  "created_at": "2026-02-12T17:49:05.346522"
+}

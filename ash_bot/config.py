@@ -36,7 +36,7 @@ class BillComConfig:
 
 
 class PlaidConfig:
-    """Plaid API configuration."""
+    """Plaid API configuration (deprecated - using QuickBooks)."""
     CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
     SECRET = os.getenv("PLAID_SECRET")
     ENV = os.getenv("PLAID_ENV", "sandbox")
@@ -47,6 +47,37 @@ class PlaidConfig:
         """Validate Plaid configuration."""
         if not PlaidConfig.CLIENT_ID or not PlaidConfig.SECRET:
             raise ValueError("Plaid credentials not configured")
+
+
+class QuickBooksConfig:
+    """QuickBooks API configuration."""
+    CLIENT_ID = os.getenv("QUICKBOOKS_CLIENT_ID")
+    CLIENT_SECRET = os.getenv("QUICKBOOKS_CLIENT_SECRET")
+    REALM_ID = os.getenv("QUICKBOOKS_REALM_ID")
+    REFRESH_TOKEN = os.getenv("QUICKBOOKS_REFRESH_TOKEN")
+    ENV = os.getenv("QUICKBOOKS_ENV", "production")
+
+    # API endpoints
+    BASE_URL_PRODUCTION = "https://quickbooks.api.intuit.com"
+    BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com"
+    AUTH_URL = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer"
+
+    @staticmethod
+    def get_base_url():
+        """Get base URL based on environment."""
+        if QuickBooksConfig.ENV == "sandbox":
+            return QuickBooksConfig.BASE_URL_SANDBOX
+        return QuickBooksConfig.BASE_URL_PRODUCTION
+
+    @staticmethod
+    def validate():
+        """Validate QuickBooks configuration."""
+        if not QuickBooksConfig.CLIENT_ID or not QuickBooksConfig.CLIENT_SECRET:
+            raise ValueError("QuickBooks CLIENT_ID and CLIENT_SECRET not configured")
+        if not QuickBooksConfig.REALM_ID:
+            raise ValueError("QuickBooks REALM_ID not configured")
+        if not QuickBooksConfig.REFRESH_TOKEN:
+            raise ValueError("QuickBooks REFRESH_TOKEN not configured")
 
 
 class SlackConfig:
