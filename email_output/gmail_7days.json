@@ -1,0 +1,711 @@
+{
+  "collected_at": "2026-02-16T22:17:27.103170",
+  "period_days": 7,
+  "total_count": 50,
+  "unread_count": 3,
+  "important_count": 12,
+  "emails": [
+    {
+      "id": "19c6684e485b1048",
+      "from": "\"Anthropic, PBC\" <invoice+statements@mail.anthropic.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Your receipt from Anthropic, PBC #2094-7225-4663",
+      "date": "Mon, 16 Feb 2026 12:55:10 +0000",
+      "snippet": "Your receipt from Anthropic, PBC #2094-7225-4663 ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
+      "labels": [
+        "UNREAD",
+        "Label_98",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19c66722a11b76d6",
+      "from": "Google AI Studio <googleaistudio-noreply@google.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "[Action needed] Complete your billing setup for the Gemini API",
+      "date": "Mon, 16 Feb 2026 04:34:43 -0800",
+      "snippet": "Activate your account now ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19c664c6bfdf1c51",
+      "from": "\"철우 안 via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Meeting Summary for AI Native Camp",
+      "date": "Mon, 16 Feb 2026 11:53:29 +0000 (UTC)",
+      "snippet": "철우 안 has shared notes from AI Native Camp, Feb 16 . The conversation appears to be a discussion among team members about various AI-related projects and strategies. They discuss the importance of AI in",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19c66485ebb7959b",
+      "from": "\"sanghun chae via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Meeting Summary for AI Native Camp",
+      "date": "Mon, 16 Feb 2026 11:49:03 +0000 (UTC)",
+      "snippet": "sanghun chae has shared notes from AI Native Camp, Feb 16 . The meeting discussed various AI-related topics, including venture capital, interactive care, and economic impact. 김성중 mentioned AI ventures",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c6644996a3077a",
+      "from": "Ramp <communications@ramp.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Ramp sign-in alert",
+      "date": "Mon, 16 Feb 2026 11:44:55 +0000 (UTC)",
+      "snippet": "New sign-in detected for your Ramp account We&#39;ve noticed a new sign-in from an unrecognized device or location. If you recognize these deta… Ramp logo Ramp logo New sign-in detected for your Ramp",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c661a8105fe850",
+      "from": "\"철우 안 via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "철우 안 shared AI Native Camp in Otter",
+      "date": "Mon, 16 Feb 2026 10:58:58 +0000 (UTC)",
+      "snippet": "철우 안 shared a conversation with you Otter.ai logo 철우 안 shared a conversation with you AI Native Camp Mon Feb 16, 8:00 pm Open in Otter To stop the recording, open the meeting notes and click Stop.",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c661a64f87bca3",
+      "from": "\"sanghun chae via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "sanghun chae shared AI Native Camp in Otter",
+      "date": "Mon, 16 Feb 2026 10:58:51 +0000 (UTC)",
+      "snippet": "sanghun chae shared a conversation with you Otter.ai logo sanghun chae shared a conversation with you AI Native Camp Mon Feb 16, 8:00 pm Open in Otter To stop the recording, open the meeting notes and",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c65cbdcb354b89",
+      "from": "Next Insurance <hello@nextinsurance.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "ACTION REQUIRED! Your Professional Liability insurance payment didn’t go through for EO Studio Inc. , EO",
+      "date": "Mon, 16 Feb 2026 09:33:04 +0000 (UTC)",
+      "snippet": "To avoid cancellation, please update your card info and try your payment again. ERGO Next Insurance YOUR BUSINESS DETAILS EO Studio Inc. , EO 152 Ferne Ct Palo Alto CA 94306 Policy number: NXTK9VLRPD-",
+      "labels": [
+        "IMPORTANT",
+        "Label_100",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c6576c8abae3eb",
+      "from": "Charan <charan.achari@kuberns.cloud>",
+      "to": "EO Team <partner@eoeoeo.net>",
+      "subject": "EO Team, want to collaborate on the next trend after vibe coding?",
+      "date": "Mon, 16 Feb 2026 08:00:04 +0000",
+      "snippet": "I&#39;m following up to see if you&#39;d be interested in reviewing Kuberns Hi EO Team, Just following up in case you missed my earlier email. We&#39;re seeing creators talk about vibe coding and AI",
+      "labels": [
+        "Label_91",
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c6513da246a87a",
+      "from": "B2B_payment@socar.kr",
+      "to": "ash@eoeoeo.net",
+      "subject": "[쏘카] 비즈니스플랜_신차장기 청구서 전달의 건_이오스튜디오",
+      "date": "Sun, 15 Feb 2026 22:12:03 -0800",
+      "snippet": "안녕하세요, 쏘카 엔터프라이즈 입니다. 비즈니스플랜_신차장기 월대여료 청구서 전달드립니다. - 법인명 : 이오스튜디오 - 총 계약기간 : 2025-01-23 ~ 2029-01-22 - 청구기간 : 2026-02-23 ~ 2026-03-22 - 결제방식 : 카드결제 - 결제일자 : 청구서 내 결제일자 자세한 내용은 첨부파일을 확인 부탁드립니다. 감사합니다.",
+      "labels": [
+        "Label_92",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c64fc293c128e0",
+      "from": "Jiyoon Lim <jy.lim@eoeoeo.net>",
+      "to": "\"Koning, Rembrand (Rem)\" <rkoning@hbs.edu>, \"Kerris, Najet\" <nkerris@hbs.edu>",
+      "subject": "Re: Re:  Re: Interview Invitation: EO × Rembrand Koning (HBS)",
+      "date": "Mon, 16 Feb 2026 05:45:58 +0000",
+      "snippet": "Dear Professor Koning and Najet, I&#39;m sharing the questions for the interview on Wednesday. Najet — I noticed that the calendar invitation is currently set for Feb 18 at 12:30pm PT. Could you please",
+      "labels": [
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c64f14b018acde",
+      "from": "Aaron Yang <aayang@plaid.com>",
+      "to": "Seohyun Ahn <ash@eoeoeo.net>",
+      "subject": "let's get it moving!",
+      "date": "Mon, 16 Feb 2026 05:34:19 +0000",
+      "snippet": "Hey Seohyun, Let&#39;s get you support as soon as possible since I know you&#39;re moving fast. Our team is giving businesses and startups special priority in Q1 to kickoff the new year. Is tomorrow,",
+      "labels": [
+        "Label_95",
+        "Label_93",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c649b9a3e195bd",
+      "from": "\"원티드 고객센터\" <cs@wantedlab.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "응답이 지연된 공고를 안내해 드립니다. 지원서 검토 및 응답을 서둘러주세요.",
+      "date": "Mon, 16 Feb 2026 04:00:44 +0000 (UTC)",
+      "snippet": "안녕하세요, Seohyun Ahn 님 응답률이 높은 공고일 수록 페이지 상위에 노출됩니다. 빠른 응답으로 채용 중인 공고의 지원율을 높여보세요. 발송일 기준 무응답 지원이 있는 공고 목록을 확인하세요. 공고명 *공고명 클릭시 해당 공고 페이지로 링크됩니다 미열람 지원서 개수 무응답 지원서 개수 [사업개발팀] 사업 개발 매니저 0 1 전체 무응답 공고 확인하기",
+      "labels": [
+        "Label_91",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c6482f3eb43b59",
+      "from": "Adobe <message@adobe.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Your users' requests for Acrobat Pro could not be fulfilled",
+      "date": "Mon, 16 Feb 2026 03:33:48 +0000",
+      "snippet": "Purchase more licenses or contact your Adobe Sales representative for assistance. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Your users&#39;",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c641077d761d64",
+      "from": "\"장원준\" <real@man-of.com>",
+      "to": "ash@eoeoeo.net, andyhong315@gmail.com, yujo.dev@gmail.com, callie@influ.co.kr, zemma.selfishclub@gmail.com, rich.lee@liveklass.com, ashleyzisu@gmail.com, thk119914@gmail.com, bill7845@gmail.com, elf7979@gmail.com, jinnuae40@gmail.com, ckim526@gmail.com, ck.running.mate@gmail.com, ceo@visionventory.ai, cwoo1090@gmail.com, hallowin89@teamcookie.kr, donghoon.lee@myrealtrip.com, dev.seunggyu@gmail.com, dprjsgml@gmail.com, soyoung.kwon@youniv.kr, wlscwww@gmail.com, younghak@event-us.kr, jin@swingvy.com, finance12212@gmail.com, jiyi.lee7@gmail.com, bong@team-attention.com, newjihye531@gmail.com, koom0992@gmail.com, \"김성중\" <design@man-of.com>, \"이웅재\" <hack@man-of.com>, jae@bass.vc, minjikim1016@gmail.com, sommy618@gmail.com, yieul90e@gmail.com, sunmo@dcamp.kr, biz@creatus.kr, djohnnykang@gmail.com, hyelin.m.lee@gmail.com, gpanda2848@gmail.com, heeunnb@gmail.com, kyongeun23@gmail.com, mylee0105@gmail.com, leeilsup0909@gmail.com, hyunjong@ab180.co, elog2j@gmail.com, doah.kim@teamkai.kr, jmoh@hayanmind.com, shinjoohyung25@gmail.com, richardwkjung@gmail.com, koowoo95@naver.com, kime406@naver.com, yerim9188@naver.com, gptaku@axwith.com",
+      "subject": "초대장: AI Native Campfire - 2026년 2월 21일 (토) PM 5:30 - PM 7:30 (GMT+9) (ash@eoeoeo.net)",
+      "date": "Mon, 16 Feb 2026 01:28:46 +0000",
+      "snippet": "AI Native Campfire Google Meet으로 참여 – 뒷풀이로 장소는 추후 확정되면 캘린더에 위치 추가해놓을 예정입니다. Google Meet으로 참여하기 회의 링크 meet.google.com/ywy-xsru-ntg 휴대전화로 참여하기 (US) +1 401-830-3016 PIN: 936221280 전화번호 더보기 뒷풀이로 장소는 추후 확정",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c640f812fcca05",
+      "from": "\"장원준\" <real@man-of.com>",
+      "to": "ash@eoeoeo.net, andyhong315@gmail.com, yujo.dev@gmail.com, callie@influ.co.kr, zemma.selfishclub@gmail.com, rich.lee@liveklass.com, ashleyzisu@gmail.com, thk119914@gmail.com, bill7845@gmail.com, elf7979@gmail.com, ckim526@gmail.com, jinnuae40@gmail.com, ck.running.mate@gmail.com, ceo@visionventory.ai, cwoo1090@gmail.com, hallowin89@teamcookie.kr, donghoon.lee@myrealtrip.com, dev.seunggyu@gmail.com, dprjsgml@gmail.com, soyoung.kwon@youniv.kr, wlscwww@gmail.com, younghak@event-us.kr, jin@swingvy.com, finance12212@gmail.com, jiyi.lee7@gmail.com, bong@team-attention.com, newjihye531@gmail.com, koom0992@gmail.com, \"김성중\" <design@man-of.com>, \"이웅재\" <hack@man-of.com>, jae@bass.vc, minjikim1016@gmail.com, sommy618@gmail.com, yieul90e@gmail.com, sunmo@dcamp.kr, biz@creatus.kr, djohnnykang@gmail.com, hyelin.m.lee@gmail.com, gpanda2848@gmail.com, heeunnb@gmail.com, kyongeun23@gmail.com, mylee0105@gmail.com, leeilsup0909@gmail.com, hyunjong@ab180.co, elog2j@gmail.com, doah.kim@teamkai.kr, jmoh@hayanmind.com, shinjoohyung25@gmail.com, richardwkjung@gmail.com, koowoo95@naver.com, kime406@naver.com, yerim9188@naver.com, gptaku@axwith.com",
+      "subject": "초대장: AI Native Camp - 2026년 2월 21일 (토) PM 1:30 - PM 5:30 (GMT+9) (ash@eoeoeo.net)",
+      "date": "Mon, 16 Feb 2026 01:27:43 +0000",
+      "snippet": "AI Native Camp Google Meet으로 참여 – 장원준님이 2026년 2월 21일 (토요일) ⋅ PM 1:30 – PM 5:30 (한국 표준시 - 서울)에 열리는 AI Native Camp 일정에 나를 초대했습니다. Google Meet으로 참여하기 회의 링크 meet.google.com/yvi-kudx-wij 휴대전화로 참여하기 (US) +1",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c640e4a2cc565b",
+      "from": "\"장원준\" <real@man-of.com>",
+      "to": "ash@eoeoeo.net, andyhong315@gmail.com, yujo.dev@gmail.com, callie@influ.co.kr, zemma.selfishclub@gmail.com, rich.lee@liveklass.com, ashleyzisu@gmail.com, thk119914@gmail.com, bill7845@gmail.com, elf7979@gmail.com, jinnuae40@gmail.com, ckim526@gmail.com, ck.running.mate@gmail.com, ceo@visionventory.ai, cwoo1090@gmail.com, hallowin89@teamcookie.kr, donghoon.lee@myrealtrip.com, dev.seunggyu@gmail.com, dprjsgml@gmail.com, soyoung.kwon@youniv.kr, wlscwww@gmail.com, younghak@event-us.kr, jin@swingvy.com, finance12212@gmail.com, jiyi.lee7@gmail.com, bong@team-attention.com, newjihye531@gmail.com, koom0992@gmail.com, \"김성중\" <design@man-of.com>, \"이웅재\" <hack@man-of.com>, jae@bass.vc, minjikim1016@gmail.com, sommy618@gmail.com, yieul90e@gmail.com, sunmo@dcamp.kr, biz@creatus.kr, djohnnykang@gmail.com, hyelin.m.lee@gmail.com, gpanda2848@gmail.com, heeunnb@gmail.com, kyongeun23@gmail.com, mylee0105@gmail.com, leeilsup0909@gmail.com, hyunjong@ab180.co, elog2j@gmail.com, doah.kim@teamkai.kr, jmoh@hayanmind.com, shinjoohyung25@gmail.com, richardwkjung@gmail.com, koowoo95@naver.com, kime406@naver.com, yerim9188@naver.com, gptaku@axwith.com",
+      "subject": "초대장: AI Native Camp - 매주 주중, PM 8시 ~ PM 10시 - 2월 16일 (월) ~ 2월 20일 (금) (GMT+9) (ash@eoeoeo.net)",
+      "date": "Mon, 16 Feb 2026 01:26:23 +0000",
+      "snippet": "AI Native Camp Google Meet으로 참여 – 장원준님이 매주 주중, PM 8시 ~ PM 10시 - 2월 16일 (월요일) ~ 2월 20일 (금요일) (한국 표준시 - 서울)에 열리는 AI Native Camp 일정에 나를 초대했습니다. Google Meet으로 참여하기 회의 링크 meet.google.com/hsn-uefm-vzd 휴대전화로",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c63f8e886b5797",
+      "from": "\"스타트업얼라이언스\" <contact@startupall.kr>",
+      "to": "<ash@eoeoeo.net>",
+      "subject": "[스얼레터#508] 흑과 백 사이에서 사람이 하는 일",
+      "date": "Mon, 16 Feb 2026 10:03:01 +0900",
+      "snippet": "혹시 메일이 잘 안보인다면 여기를 클릭해주세요. 요즘 AI 기술의 발전을 보고 있으면, “나는 어떤 경쟁력을 키워야 할까?”라는 고민이 계속해서 들곤 합니다. 최근 영화 &lt;노 머시: 90분&gt;을 보며 한 문장에서 힌트를 얻었습니다. “사실은 흑과 백으로 나뉘지만, 진실은 항상 회색지대에 있다.” AI가 데이터로 바라보는 세상은 흑과 백처럼 명확하게",
+      "labels": [
+        "Label_91",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c63d0c2b13593b",
+      "from": "\"그룹바이_스카우트관리\" <startup@groupby.biz>",
+      "to": "chiri@eoeoeo.net, ash@eoeoeo.net, gia@eoeoeo.net, gwy@eoeoeo.net, june@eoeoeo.net",
+      "subject": "이오스튜디오의 주간 채용 리포트를 전달드립니다.",
+      "date": "Sun, 15 Feb 2026 16:18:19 -0800",
+      "snippet": "주간 리포트 안내 안녕하세요! 이오스튜디오의 성공적인 채용 도우미 Steve에요 🙌 이오스튜디오의 저번주 성과를 요약해드릴게요💡 인재 업데이트 안내 🆕 저번 주 신규 등록 인재 : 373명 🤝 우리 기업 공고 매칭 인재 : 19명 채용 성과 👀 우리 기업 확인 인재 : 11명 💖 우리 기업 저장 인재 : 0명 🙌 우리 기업 지원 인재 : 0명 우리 기업 현재",
+      "labels": [
+        "Label_91",
+        "CATEGORY_SOCIAL"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c63bf7749a6a9c",
+      "from": "\"김영록의 테크인사이트\" <vridge@mail.beehiiv.com>",
+      "to": "\"ash@eoeoeo.net\" <ash@eoeoeo.net>",
+      "subject": "#266 출자한 VC가 엡스타인사건에 연루되어 있다면?",
+      "date": "Mon, 16 Feb 2026 00:00:17 +0000",
+      "snippet": "벤처펀드에 있어 이러한 평판 리스크는 존재론적 위기와도 같다 ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "Label_91",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c633c79166b83d",
+      "from": "\"뉴본씨앤디\" <nb_consulting-naver.com@send.stibee.com>",
+      "to": "<ash@eoeoeo.net>",
+      "subject": "✉️ 2월 3주차 스타트업 정책 모음",
+      "date": "Mon, 16 Feb 2026 06:37:12 +0900",
+      "snippet": "기업 운영에 꼭 필요한 정보, NEWBORN을 통해 손쉽게 만나보세요. 이 메일이 잘 안보이시나요? 👑 NEWBORN&#39;S Pick 🚀 보조금 경기도 2026년 해외규격인증획득 지원사업 신청 공고- 경기도 소재 중소기업 및 제조시설 대상 (~02.26) 김포시 중소기업 국도비 유치 지원사업 참여기업 모집- 김포시 소재 중소기업 해당 (~02.27)",
+      "labels": [
+        "Label_91",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c6337b8e1198ba",
+      "from": "ceo@iddot.space",
+      "to": "eo-kr@eoeoeo.net",
+      "subject": "안녕하세요. 브이나인틴필름입니다.",
+      "date": "Mon, 16 Feb 2026 06:31:37 +0900",
+      "snippet": "안녕하세요. 영상 제작 프로덕션 브이나인틴필름입니다. 항상 좋은 콘텐츠 만들어주셔서 감사합니다. EO 채널의 콘텐츠를 통해 많은 영감과 지식을 얻었습니다. EO 채널의 콘텐츠에 좋은 영향을 드리고 싶어 연락드리게 되었습니다. 작업물 확인하시고, 회신 주시면 감사하겠습니다! -- You received this message because you are",
+      "labels": [
+        "Label_92",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c63247bb7bf967",
+      "from": "Chase <no.reply.alerts@chase.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "You added or edited ROMAN as a Zelle recipient",
+      "date": "Sun, 15 Feb 2026 21:10:58 +0000 (UTC)",
+      "snippet": "Zelle ® settings You added ROMAN as a recipient or edited their details We&#39;ll use the mobile number, 6282229638, you added whenever you send or request money from them. Go to Zelle® If you didn",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c62d713745dcc9",
+      "from": "Seo Young Youn <grace@eoeoeo.net>",
+      "to": "Loren Provins <loren@credpr.com>",
+      "subject": "Re: Otter.ai Founder & CEO for EO Studio?",
+      "date": "Sun, 15 Feb 2026 11:46:10 -0800",
+      "snippet": "Hello Loren I&#39;m Grace. Thanks for your update. I&#39;m also writing to share the updated questionnaire. (link) We thought it would be amazing to focus more on Sam&#39;s Silicon Valley background.",
+      "labels": [
+        "Label_93",
+        "IMPORTANT",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c61fc09a43be7c",
+      "from": "Wise <noreply@wise.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Your transfer #1974590281",
+      "date": "Sun, 15 Feb 2026 15:47:12 +0000",
+      "snippet": "Wise. Your account for the world&#39;s money This notification is for the business account of EO Studio Inc.. Hello ahn, Your money&#39;s taking a little longer to get to us. When you set up your",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c61d85ded36e36",
+      "from": "collab via EO partner <partner@eoeoeo.net>",
+      "to": "partner@eoeoeo.net",
+      "subject": "Re: Re: 🤖 Paid Collaboration Opportunity with Verdent AI",
+      "date": "Sun, 15 Feb 2026 09:08:11 -0600",
+      "snippet": "Hi EO, Hope this finds you well! 😊 Just following up one last time on our AI collab idea — we&#39;d still be excited to work with you if you&#39;re interested! Could you spare a quick yes/no or share",
+      "labels": [
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c619aed2f2e962",
+      "from": "Loren Provins <loren@credpr.com>",
+      "to": "Seo Young Youn <grace@eoeoeo.net>",
+      "subject": "Re: Otter.ai Founder & CEO for EO Studio?",
+      "date": "Sun, 15 Feb 2026 14:00:54 +0000",
+      "snippet": "Thanks Grace, we&#39;ve let the Otter team know this edition is close to final. They did pass along one edit - when you say &quot;The story everyone talks about is that you reached $100M in revenue",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c6159e9c4f4a8a",
+      "from": "Mint Mobile <chat@mintmobile.com>",
+      "to": "Ahn <ash@eoeoeo.net>",
+      "subject": "Ahn, Your Plan Is All Renewed",
+      "date": "Sun, 15 Feb 2026 12:50:06 +0000 (UTC)",
+      "snippet": "You&#39;ve got a new Mint plan and a fresh month of data. #renewalgoals Look at You... All Renewed and Stuff Look at You... All Renewed and Stuff Ahn, a new 3-Month, 5GB is all yours, Remember that",
+      "labels": [
+        "Label_100",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c612c52e356002",
+      "from": "\"썬데이파더스클럽\" <sunday.fathers.club-gmail.com@send.stibee.com>",
+      "to": "<ash@eoeoeo.net>",
+      "subject": "안서현님, 새해 복 많이 받으세요 😀",
+      "date": "Sun, 15 Feb 2026 21:00:19 +0900",
+      "snippet": "레터는 한 주 쉬어 갈게요 웹에서 보기 웹에서 보기 길었던 겨울도 어느덧 막바지에 들어선 것 같습니다. 안서현님은 2026년 잘 시작하고 계신가요? 새해를 맞이해 새롭게 세웠던 계획은 잘 진행되고 있나요? 아니면 아직 무얼 해야 할지 계획조차 고민하지 못하셨나요? 뭐가 되었든 낙담하지 않으셔도 됩니다. 사실 진짜 새해는 설날부터 시작되는 거라고 하더라고요.",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "Label_91"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c60f8592a46093",
+      "from": "Uzair Shaikh <uzair@thumbnailmate.com>",
+      "to": "partner@eoeoeo.net",
+      "subject": "Why 96.84% of your subscribers are scrolling past right now",
+      "date": "Sun, 15 Feb 2026 03:03:12 -0800",
+      "snippet": "Hi EO Team, Huge fan of the channel your leadership deep dives and entrepreneur success stories are a masterclass in professional transparency. I ran an audit on your data and noticed a massive &quot;",
+      "labels": [
+        "Label_91",
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c60063fd89be42",
+      "from": "\"DoNotReply@billpay.pge.com\" <DoNotReply@billpay.pge.com>",
+      "to": "\"ash@eoeoeo.net\" <ash@eoeoeo.net>",
+      "subject": "PG&E One Time Payment Confirmation",
+      "date": "Sun, 15 Feb 2026 06:39:07 +0000 (UTC)",
+      "snippet": "Dear PG&amp;E Customer, Your payment* for PG&amp;E account number ******5236-4 was successfully scheduled. Please make sure there are sufficient available funds in your account on the day your payment",
+      "labels": [
+        "IMPORTANT",
+        "Label_98",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c5f5cb18f3b99a",
+      "from": "Wise <noreply@wise.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Login from a new device detected on 15 February 2026, 03:33 GMT",
+      "date": "Sun, 15 Feb 2026 03:33:55 +0000",
+      "snippet": "Wise. Your account for the world&#39;s money Hello ahn, We noticed you logged in to Wise on a new device. If this login attempt was made by you, please double check that the web address you&#39;ve",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5ecc94f17f914",
+      "from": "Hwanjun from EO <june@eoeoeo.net>",
+      "to": "gina3653@naver.com",
+      "subject": "[EO] 박소영님 입사안내 (주의. 메일 내용에 연봉정보가 포함되어 있습니다)",
+      "date": "Sun, 15 Feb 2026 09:56:19 +0900",
+      "snippet": "안녕하세요 박소영님, EO Studio 윤환준 입니다. 저희 EO Studio 에 합류하시게 된 것을 진심으로 축하드립니다! 🎉 입사와 관련된 세부 내용을 아래와 같이 안내 드립니다. 📌 입사일 안내 입사일: 2026.02.23.(월) 오전 10시 (25일 연차사용은 참고해두었습니다) 출근장소: 서울특별시 강남구 압구정로28길 9-2, 4층 지도 보기: 👉",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_PERSONAL"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c5e7f919f0a3ba",
+      "from": "Bruce Chen <bc@freebeat.ai>",
+      "to": "<partner@eoeoeo.net>",
+      "subject": "Your next AI video is different",
+      "date": "Sun, 15 Feb 2026 07:32:15 +0800",
+      "snippet": "Hey EO team, Your Rowan Cheung episode was sharp—especially the concrete workflow breakdowns for AI creators. Quick one: have you tested music-to-video AI where the song drives every frame (no text",
+      "labels": [
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5e2f3254e3008",
+      "from": "\"㈜에스원 강남 (발신전용메일)\" <mailing@businesson.co.kr>",
+      "to": "\"안서현\" <ash@eoeoeo.net>",
+      "subject": "[전자세금계산서 정발행] ㈜에스원 강남 ▶ 이오스튜디오",
+      "date": "Sun, 15 Feb 2026 07:04:35 +0900",
+      "snippet": "데이터유니버스_휴대폰쿠폰지갑 스마트빌 전자세금계산서가 발행 되었습니다. 안서현님 안녕하십니까? 스마트빌입니다. 내용 확인 후 발행된 세금계산서를 수신 또는 거부해 주시기 바랍니다. 고객님은 비회원으로서 세금계산서의 조회만 가능하며, 메일 발송일로부터 1년 동안만 스마트빌에서 조회하실 수 있습니다. 비회원 비밀번호",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5e2f304d97b7e",
+      "from": "\"㈜에스원 강남 (발신전용메일)\" <mailing@businesson.co.kr>",
+      "to": "\"안서현\" <ash@eoeoeo.net>",
+      "subject": "[전자세금계산서 정발행] ㈜에스원 강남 ▶ 이오스튜디오",
+      "date": "Sun, 15 Feb 2026 07:04:35 +0900",
+      "snippet": "데이터유니버스_휴대폰쿠폰지갑 스마트빌 전자세금계산서가 발행 되었습니다. 안서현님 안녕하십니까? 스마트빌입니다. 내용 확인 후 발행된 세금계산서를 수신 또는 거부해 주시기 바랍니다. 고객님은 비회원으로서 세금계산서의 조회만 가능하며, 메일 발송일로부터 1년 동안만 스마트빌에서 조회하실 수 있습니다. 비회원 비밀번호",
+      "labels": [
+        "Label_91",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5dfc824c7aaeb",
+      "from": "Next Insurance <no-reply@refer.nextinsurance.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Don't miss out on $250 in rewards",
+      "date": "Sat, 14 Feb 2026 21:09:15 +0000 (UTC)",
+      "snippet": "Refer other businesses to ERGO NEXT Get up to $250 when referring other businesses to ERGO NEXT. What are you waiting for? Spread the news about ERGO NEXT&#39;s simple, affordable business insurance",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "Label_92"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5d7ff4905a462",
+      "from": "Hannah Holbert <hannaholbert123@gmail.com>",
+      "to": "partner@eoeoeo.net",
+      "subject": "Article Comments",
+      "date": "Sat, 14 Feb 2026 13:52:59 -0500",
+      "snippet": "Hey, I&#39;m interested in contacting Hyeri Jo about an Article [Inside Hacker Houses] War and Nature… One of the young men you wrote the article on, Nadav, used to work under me. This article was sent",
+      "labels": [
+        "Label_93",
+        "IMPORTANT",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19c5c7d26bf8c578",
+      "from": "\"'Maxwell' via EO partner\" <partner@eoeoeo.net>",
+      "to": "partner@eoeoeo.net",
+      "subject": "Re: Proposal for Collaboration | Katalist.ai",
+      "date": "Sat, 14 Feb 2026 14:10:27 +0000",
+      "snippet": "Hey there, Circling back to reiterate that as we want you to be part of our next releases, you&#39;d have full lead on vision and the way you show our video workflow into a visual narrative to your",
+      "labels": [
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5b93a085d4855",
+      "from": "Adobe <message@adobe.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Adobe 플랜이 이번 달에 자동으로 갱신됩니다. ",
+      "date": "Sat, 14 Feb 2026 09:55:26 +0000",
+      "snippet": "고객님의 Adobe 플랜 갱신 기간이 다가왔습니다. 이들 서비스를 계속 이용하기 위해 특별히 조치를 취해야 할 사항은 없습니다. 서비스는 2026년 03월 16일 PDT에 자동으로 갱신될 예정입니다. 해당 서비스에 대한 요약은 다음과 같습니다. 서현 님, 고객님의 구독이 곧 갱신될 예정입니다. 고객님께, 귀하의 팀이 Adobe 제품을 유익하게 활용하고 계시길",
+      "labels": [
+        "Label_92",
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5b40559fe71e0",
+      "from": "\"tl;dv Team\" <no-reply@tldv.io>",
+      "to": "ash@eoeoeo.net",
+      "subject": "\"AI Native Camp: Day 1\" meeting notes and AI answers are ready ✅",
+      "date": "Sat, 14 Feb 2026 08:24:28 +0000",
+      "snippet": "Action Items: 플러그인 설치 시 사용자 스코프 또는 프로젝트 스코프 선택하여 구성 ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5b2a0c2b90d26",
+      "from": "Charan <charan.achari@kuberns.cloud>",
+      "to": "EO Team <partner@eoeoeo.net>",
+      "subject": "EO Team, want to collaborate on the next trend after vibe coding?",
+      "date": "Sat, 14 Feb 2026 08:00:04 +0000",
+      "snippet": "I&#39;m reaching out to see if you&#39;d be interested in reviewing the platform and sharing your thoughts with your audience. Hi EO Team, I&#39;m Charan from Kuberns. I&#39;ve been following your",
+      "labels": [
+        "Label_91",
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a9ab6c2a62a4",
+      "from": "\"sanghun chae via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Meeting Summary for AI Native Camp: Day 1",
+      "date": "Sat, 14 Feb 2026 05:23:33 +0000 (UTC)",
+      "snippet": "sanghun chae has shared notes from AI Native Camp: Day 1, Feb 14 . The conversation appears to be a disjointed discussion about AI and its implications, with participants mentioning various aspects",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a921851c2fb5",
+      "from": "\"tl;dv Team\" <no-reply@tldv.io>",
+      "to": "ash@eoeoeo.net",
+      "subject": "\"AI Native Camp: Day 1\" meeting notes and AI answers are ready ✅",
+      "date": "Sat, 14 Feb 2026 05:14:09 +0000",
+      "snippet": "Action Items: 참가자들이 슬랙에서 자기소개를 완료하여 1일차 과제 진행 가능하도록 준비 . ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a6e15e8d6714",
+      "from": "\"sanghun chae via Otter.ai\" <no-reply@otter.ai>",
+      "to": "ash@eoeoeo.net",
+      "subject": "sanghun chae shared AI Native Camp: Day 1 in Otter",
+      "date": "Sat, 14 Feb 2026 04:34:49 +0000 (UTC)",
+      "snippet": "sanghun chae shared a conversation with you Otter.ai logo sanghun chae shared a conversation with you AI Native Camp: Day 1 Sat Feb 14, 1:30 pm Open in Otter To stop the recording, open the meeting",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a5f8ba9bfce9",
+      "from": "Sam Liu <samliu@insforge.dev>",
+      "to": "Sam Liu <samliu@insforge.dev>",
+      "subject": "Paid opportunity: dedicated YouTube video with InsForge",
+      "date": "Fri, 13 Feb 2026 20:18:42 -0800",
+      "snippet": "Hi, I am Sam, I lead partnerships at InsForge. InsForge is an AI native backend platform built for developers building with AI coding agents like Cursor and Claude Code. Think of it as a backend",
+      "labels": [
+        "Label_91",
+        "Label_93",
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a386e4aacf2e",
+      "from": "\"Dowon Kim (via Google Forms)\" <dwkim@eoeoeo.net>",
+      "to": "recruit@eoeoeo.net",
+      "subject": "Form shared with you: \"한국채널 콘텐츠 PD 과제제출\"",
+      "date": "Sat, 14 Feb 2026 03:36:12 +0000",
+      "snippet": "Dowon Kim shared a form Dowon Kim (dwkim@eoeoeo.net) has invited you to edit the following form: 한국채널 콘텐츠 PD 과제제출 Open Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA You have",
+      "labels": [
+        "CATEGORY_FORUMS"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c5a27456fb17f5",
+      "from": "Adobe <message@adobe.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "Your users' requests for Acrobat Pro could not be fulfilled",
+      "date": "Sat, 14 Feb 2026 03:17:28 +0000",
+      "snippet": "Purchase more licenses or contact your Adobe Sales representative for assistance. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Your users&#39;",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c59ebc84616d78",
+      "from": "Slack <feedback@slack.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "이동훈 just joined your workspace!",
+      "date": "Sat, 14 Feb 2026 02:12:29 +0000",
+      "snippet": "Head to Slack to say hi to 이동훈 Hop over to Slack to connect with 이동훈 (@donghoon.lee), who just arrived! Open Slack Workspace name: AI Native Camp AI Native Camp Workspace URL: ai-native-camp.slack.com",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19c59ea134315650",
+      "from": "Slack <feedback@slack.com>",
+      "to": "ash@eoeoeo.net",
+      "subject": "크리투스에듀 just joined your workspace!",
+      "date": "Sat, 14 Feb 2026 02:10:37 +0000",
+      "snippet": "Head to Slack to say hi to 크리투스에듀 Hop over to Slack to connect with 크리투스에듀 (@edu), who just arrived! Open Slack Workspace name: AI Native Camp AI Native Camp Workspace URL: ai-native-camp.slack.com",
+      "labels": [
+        "CATEGORY_UPDATES"
+      ],
+      "is_unread": false,
+      "is_important": false
+    }
+  ]
+}

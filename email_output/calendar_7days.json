@@ -1,0 +1,1440 @@
+{
+  "collected_at": "2026-02-16T22:21:50.164302",
+  "period_days": 7,
+  "total_count": 8,
+  "today_count": 0,
+  "events": [
+    {
+      "id": "6aonv3shqlt2o2smstpnt5a6lo_20260217T110000Z",
+      "summary": "AI Native Camp",
+      "description": "",
+      "location": "",
+      "start": "2026-02-17T20:00:00+09:00",
+      "end": "2026-02-17T22:00:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "accepted"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "accepted"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "accepted"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "needsAction"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=NmFvbnYzc2hxbHQybzJzbXN0cG50NWE2bG9fMjAyNjAyMTdUMTEwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    },
+    {
+      "id": "6aonv3shqlt2o2smstpnt5a6lo_20260218T110000Z",
+      "summary": "AI Native Camp",
+      "description": "",
+      "location": "",
+      "start": "2026-02-18T20:00:00+09:00",
+      "end": "2026-02-18T22:00:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "accepted"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "accepted"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "accepted"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "needsAction"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=NmFvbnYzc2hxbHQybzJzbXN0cG50NWE2bG9fMjAyNjAyMThUMTEwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    },
+    {
+      "id": "6aonv3shqlt2o2smstpnt5a6lo_20260219T110000Z",
+      "summary": "AI Native Camp",
+      "description": "",
+      "location": "",
+      "start": "2026-02-19T20:00:00+09:00",
+      "end": "2026-02-19T22:00:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "accepted"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "accepted"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "accepted"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "needsAction"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=NmFvbnYzc2hxbHQybzJzbXN0cG50NWE2bG9fMjAyNjAyMTlUMTEwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    },
+    {
+      "id": "17lrrgmvbt9sbq7kjbk82tmoch_20260220T020000Z",
+      "summary": "운영팀 위클리",
+      "description": "",
+      "location": "",
+      "start": "2026-02-20T11:00:00+09:00",
+      "end": "2026-02-20T12:00:00+09:00",
+      "attendees": [
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "yoonhwanjun@eoeoeo.net",
+          "response": "accepted"
+        }
+      ],
+      "organizer": "ash@eoeoeo.net",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=MTdscnJnbXZidDlzYnE3a2piazgydG1vY2hfMjAyNjAyMjBUMDIwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    },
+    {
+      "id": "6aonv3shqlt2o2smstpnt5a6lo_20260220T110000Z",
+      "summary": "AI Native Camp",
+      "description": "",
+      "location": "",
+      "start": "2026-02-20T20:00:00+09:00",
+      "end": "2026-02-20T22:00:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "accepted"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "accepted"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "accepted"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "needsAction"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=NmFvbnYzc2hxbHQybzJzbXN0cG50NWE2bG9fMjAyNjAyMjBUMTEwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    },
+    {
+      "id": "59p7csjvmo0v3i91vd68i2dmbl",
+      "summary": "AI Native Camp",
+      "description": "",
+      "location": "서초대로74길 14 삼성화재 서초타워 18층",
+      "start": "2026-02-21T13:30:00+09:00",
+      "end": "2026-02-21T17:30:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "needsAction"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "accepted"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "accepted"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=NTlwN2NzanZtbzB2M2k5MXZkNjhpMmRtYmwgYXNoQGVvZW9lby5uZXQ"
+    },
+    {
+      "id": "7ddnsoa0fcibhb1950brgqtqcj",
+      "summary": "AI Native Campfire",
+      "description": "뒷풀이로 장소는 추후 확정되면 캘린더에 위치 추가해놓을 예정입니다.",
+      "location": "",
+      "start": "2026-02-21T17:30:00+09:00",
+      "end": "2026-02-21T19:30:00+09:00",
+      "attendees": [
+        {
+          "email": "andyhong315@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yujo.dev@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "callie@influ.co.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "zemma.selfishclub@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "rich.lee@liveklass.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ashleyzisu@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "thk119914@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bill7845@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "elf7979@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "jinnuae40@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ckim526@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "ck.running.mate@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ceo@visionventory.ai",
+          "response": "accepted"
+        },
+        {
+          "email": "cwoo1090@gmail.com",
+          "response": "declined"
+        },
+        {
+          "email": "hallowin89@teamcookie.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "donghoon.lee@myrealtrip.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "dev.seunggyu@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "dprjsgml@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "soyoung.kwon@youniv.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "real@man-of.com",
+          "response": "accepted"
+        },
+        {
+          "email": "wlscwww@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "younghak@event-us.kr",
+          "response": "accepted"
+        },
+        {
+          "email": "jin@swingvy.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "finance12212@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "jiyi.lee7@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "bong@team-attention.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "newjihye531@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "koom0992@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "design@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hack@man-of.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "ash@eoeoeo.net",
+          "response": "needsAction"
+        },
+        {
+          "email": "jae@bass.vc",
+          "response": "declined"
+        },
+        {
+          "email": "minjikim1016@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sommy618@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "yieul90e@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "sunmo@dcamp.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "biz@creatus.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "djohnnykang@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyelin.m.lee@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gpanda2848@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "heeunnb@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kyongeun23@gmail.com",
+          "response": "accepted"
+        },
+        {
+          "email": "mylee0105@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "leeilsup0909@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "hyunjong@ab180.co",
+          "response": "accepted"
+        },
+        {
+          "email": "elog2j@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "doah.kim@teamkai.kr",
+          "response": "needsAction"
+        },
+        {
+          "email": "jmoh@hayanmind.com",
+          "response": "accepted"
+        },
+        {
+          "email": "shinjoohyung25@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "richardwkjung@gmail.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "koowoo95@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "kime406@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "yerim9188@naver.com",
+          "response": "needsAction"
+        },
+        {
+          "email": "gptaku@axwith.com",
+          "response": "needsAction"
+        }
+      ],
+      "organizer": "real@man-of.com",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=N2RkbnNvYTBmY2liaGIxOTUwYnJncXRxY2ogYXNoQGVvZW9lby5uZXQ"
+    },
+    {
+      "id": "9g31t69sdoqiu3juajp4sgalks_20260223T000000Z",
+      "summary": "Global Heads Weekly",
+      "description": "Seohyun Ahn이(가) 예약된 Zoom 회의에 귀하를 초대합니다.\nZoom 회의 참가\nhttps://us06web.zoom.us/j/89106608593?pwd=6S784nZOqEsuH7ZqR0AbMeblyzOq8n.1\n\n회의 ID: 891 0660 8593\n암호: 004848\n\n---\n\n원탭 모바일\n+16465588656,,89106608593#,,,,*004848# 미국 (New York)\n+16469313860,,89106608593#,,,,*004848# 미국\n\n참가 지침\nhttps://us06web.zoom.us/meetings/89106608593/invitations?signature=owBN3r2-5T-GEdmO9JjIGTq1r_DwlkFhfiu87HbjOVQ\n\n",
+      "location": "https://us06web.zoom.us/j/89106608593?pwd=6S784nZOqEsuH7ZqR0AbMeblyzOq8n.1",
+      "start": "2026-02-23T09:00:00+09:00",
+      "end": "2026-02-23T11:00:00+09:00",
+      "attendees": [
+        {
+          "email": "ty@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "gwy@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "yoonhwanjun@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "chiri@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "phoenix@eoeoeo.net",
+          "response": "accepted"
+        },
+        {
+          "email": "saul@eoeoeo.net",
+          "response": "accepted"
+        }
+      ],
+      "organizer": "ash@eoeoeo.net",
+      "status": "confirmed",
+      "html_link": "https://www.google.com/calendar/event?eid=OWczMXQ2OXNkb3FpdTNqdWFqcDRzZ2Fsa3NfMjAyNjAyMjNUMDAwMDAwWiBhc2hAZW9lb2VvLm5ldA"
+    }
+  ]
+}

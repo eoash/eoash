@@ -1,0 +1,269 @@
+{
+  "collection_timestamp": "2026-02-16T09:00:00Z",
+  "summary": {
+    "total_tasks_found": 15,
+    "ongoing_tasks": 8,
+    "upcoming_deadlines": 3,
+    "recent_updates": 4
+  },
+  "ongoing_tasks": [
+    {
+      "title": "U.S. Entity Flip 진행 현황",
+      "status": "진행 중",
+      "priority": "높음",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "한국 측(11월 기준) TCF/DCF 기업가치평가 완료",
+        "미국 측(상증 관점) 기업가치평가 추가 자료 요청 중",
+        "한국 주주 거주자/비거주자 구분 확인 필요",
+        "위임장 공증(Apostille) 진행 - 다음 주 수령 예상"
+      ],
+      "action_items": [
+        {
+          "assignee": "안서현",
+          "task": "CNT테크에 보낼 TIPS/관련 문서 초안 1차 검토 후 윤환준과 공유",
+          "deadline": "가능한 빠르게"
+        },
+        {
+          "assignee": "안서현",
+          "task": "한국 주주 거주자/비거주자 기준: 변호사 답변 수령 후 기준 확정",
+          "deadline": "진행중"
+        },
+        {
+          "assignee": "안서현",
+          "task": "Apostille(위임장 공증) 수령 후 후속 절차 진행",
+          "deadline": "다음 주"
+        },
+        {
+          "assignee": "안서현",
+          "task": "주주 대상 안내 메일 초안 작성",
+          "deadline": "진행중"
+        }
+      ]
+    },
+    {
+      "title": "미국 급여(Payroll) 지급 준비",
+      "status": "진행 중",
+      "priority": "높음",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "미국에서 급여 지급 시 회사가 해야 하는 것(세금/보험/절차/툴) 리서치 필요",
+        "태용님은 비자와 무관하게 미국 급여 지급 필요 가능성 높음"
+      ],
+      "action_items": [
+        {
+          "assignee": "윤환준",
+          "task": "미국 Payroll 지급 절차/툴/보험/세무 리서치 및 요약 공유",
+          "deadline": "진행중"
+        }
+      ]
+    },
+    {
+      "title": "Hyunsun 관련 서류/계약서 업데이트",
+      "status": "진행 중",
+      "priority": "중간",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "TestBox 계약 건 약 $120k, Hyunsun에게 약 $10k 지급 계획",
+        "비자 서류 상 '고용' 형태로 보이도록 계약서 표현/포지션 정합성 필요"
+      ],
+      "action_items": [
+        {
+          "assignee": "윤환준",
+          "task": "DLG 비자 폴더에서 Hyunsun 과거 계약서/관련 자료 찾기 및 시작일/급여 조건 업데이트 초안 작성",
+          "deadline": "진행중"
+        }
+      ]
+    },
+    {
+      "title": "TIPS 성과 조사 제출",
+      "status": "완료",
+      "priority": "높음",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "성과조사 제출 완료",
+        "1/16까지 제출 1건 추가 완료"
+      ]
+    },
+    {
+      "title": "미국 샌프란하우스 공과금 신청",
+      "status": "진행 중",
+      "priority": "중간",
+      "source": "미국 샌프란하우스 공과금 신청내역",
+      "url": "https://www.notion.so/23974768ec378077b258cd0bb77407aa",
+      "last_updated": "2026-02-15",
+      "details": [
+        "AutoPay 등록 완료 및 결제 정상 진행 중",
+        "Service Start Date: 8/18~"
+      ]
+    },
+    {
+      "title": "채용: 외국인(특히 영어 네이티브) 1명 Q1 내 채용 목표",
+      "status": "진행 중",
+      "priority": "높음",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "첫 외국인 인력을 '테스트베드'로 운영",
+        "선호 방향: 영어 네이티브(서구권 포함) 중심"
+      ]
+    },
+    {
+      "title": "내부 운영: 툴 난립/슬랙·노션·공유폴더 정리",
+      "status": "진행 중",
+      "priority": "중간",
+      "source": "20260116 회의",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "last_updated": "2026-01-16",
+      "details": [
+        "툴이 너무 많음, 슬랙 채널 정리/노션 스페이스 정리 필요",
+        "공유폴더 운영 트리 구조 개선 필요"
+      ],
+      "action_items": [
+        {
+          "assignee": "공동/추후",
+          "task": "툴/슬랙/노션/공유폴더 정리 과제, 여유 시 가이드(공유폴더 사용 규칙) 마련 검토",
+          "deadline": "추후"
+        }
+      ]
+    },
+    {
+      "title": "Global Heads Weekly 업데이트",
+      "status": "진행 중",
+      "priority": "중간",
+      "source": "Global Heads Weekly (2026.02)",
+      "url": "https://www.notion.so/2fa74768ec37802d824dc9f8bc4e6937",
+      "last_updated": "2026-02-09",
+      "details": [
+        "Filming this week in SF with Altos",
+        "From next week, about 10 days in NYC for Kalshi and several other shoots"
+      ]
+    }
+  ],
+  "upcoming_deadlines": [
+    {
+      "title": "Apostille(위임장 공증) 수령",
+      "deadline": "다음 주 (예상: 2026-01-23)",
+      "assignee": "안서현",
+      "priority": "높음",
+      "source": "20260116 회의"
+    },
+    {
+      "title": "CNT테크 검토 요청 문서 송부",
+      "deadline": "가능한 빠르게",
+      "assignee": "안서현",
+      "priority": "높음",
+      "source": "20260116 회의"
+    },
+    {
+      "title": "2026년 건강검진",
+      "deadline": "2026년 (구체적 일정 미정)",
+      "assignee": "필수 대상자",
+      "priority": "중간",
+      "source": "2026년 건강검진 안내",
+      "url": "https://www.notion.so/2fe74768ec37802b8ba6df44d9bb5edb"
+    }
+  ],
+  "recent_updates": [
+    {
+      "title": "아메리칸 드림 2026",
+      "updated": "2026-02-16T03:48:00Z",
+      "url": "https://www.notion.so/30374768ec3780d78239f5199cd8bcf8",
+      "summary": "2026년 샌프란시스코: AI 혁명과 기회의 창에 대한 콘텐츠"
+    },
+    {
+      "title": "Title/Thumbnail Copy Framework",
+      "updated": "2026-02-16T08:50:00Z",
+      "url": "https://www.notion.so/30074768ec378084a0f9fbf01cef61ea",
+      "summary": "콘텐츠 제목/썸네일 프레임워크 업데이트"
+    },
+    {
+      "title": "HOW TO",
+      "updated": "2026-02-15T18:41:00Z",
+      "url": "https://www.notion.so/30874768ec378067a416dbf18c791166",
+      "summary": "2026년 1분기 HOW TO (이오플래닛, 유튜브 콘텐츠)"
+    },
+    {
+      "title": "Design team linear sync",
+      "updated": "2026-02-13T08:59:00Z",
+      "url": "https://www.notion.so/30574768ec378074af80e68d2ae8a582",
+      "summary": "디자인 팀 Linear 동기화"
+    }
+  ],
+  "task_databases": [
+    {
+      "name": "업무 관리",
+      "url": "https://www.notion.so/898a00a460ce444c9d0b457d9f75ac55",
+      "last_updated": "2026-01-07T03:01:00Z",
+      "schema": {
+        "properties": [
+          "To-Do",
+          "배정",
+          "업무 유형",
+          "업무 일정",
+          "진행 현황"
+        ],
+        "status_options": ["시작 전", "진행 중", "완료"]
+      }
+    },
+    {
+      "name": "Tasks (Multiple instances)",
+      "url": "https://www.notion.so/30674768ec3781759280fdea75f95641",
+      "last_updated": "2026-02-13T05:23:00Z",
+      "schema": {
+        "properties": [
+          "작업",
+          "담당자",
+          "마감일",
+          "진행 상태",
+          "우선순위",
+          "태그"
+        ],
+        "status_options": ["시작 전", "진행 중", "완료", "보관"],
+        "priority_options": ["낮음", "중간", "높음"]
+      }
+    }
+  ],
+  "key_meetings": [
+    {
+      "title": "20260116 회의",
+      "date": "2026-01-16",
+      "participants": ["안서현", "윤환준"],
+      "duration": "44분 37초",
+      "url": "https://www.notion.so/2ea74768ec37804d9fc4db545832f50e",
+      "main_topics": [
+        "U.S. Entity Flip 진행 현황",
+        "TIPS 관련 업무 현황",
+        "미국 급여(Payroll) 지급 준비",
+        "Hyunsun 관련 서류/계약서 업데이트",
+        "QuickBooks 기반 미국 회계 운영",
+        "내부 운영 툴 정리",
+        "채용 계획"
+      ]
+    },
+    {
+      "title": "Global Heads Weekly (2026.02)",
+      "date": "2026-02-09",
+      "url": "https://www.notion.so/2fa74768ec37802d824dc9f8bc4e6937",
+      "topics": [
+        "SF filming with Altos",
+        "NYC shoots for Kalshi"
+      ]
+    }
+  ],
+  "notes": [
+    "검색된 Tasks 데이터베이스는 여러 인스턴스가 있으며, 각각 다른 프로젝트와 연결되어 있습니다.",
+    "20260116 회의록에서 가장 많은 액션 아이템과 진행 중인 작업이 확인되었습니다.",
+    "미국 법인 관련 작업(Entity Flip, Payroll, 비자 등)이 주요 진행 중인 업무입니다.",
+    "일부 대형 페이지는 토큰 제한으로 완전히 읽지 못했으나, 주요 정보는 추출했습니다."
+  ]
+}

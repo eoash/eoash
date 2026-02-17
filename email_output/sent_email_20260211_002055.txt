@@ -1,0 +1,1522 @@
+================================================================================
+최근 발신 이메일
+================================================================================
+
+발신: Seohyun Ahn <ash@eoeoeo.net>
+수신: Eugene Kang <kang.sings@gmail.com>
+제목: RE: EO Flip
+날짜: 2026-02-11 00:12:14
+
+================================================================================
+이메일 본문:
+================================================================================
+
+안녕하세요 EO 안서현 입니다.
+
+반올림 처리로 부탁드립니다.
+
+*안서현* Ahn Seo Hyun
+
+Finance Lead
+
+ash@eoeoeo.net
+
+서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+
+Tell. 0507 1359 2553   Mobile. 82+ 10 5382 2553
+
+Partner Mail. partner@eoeoeo.net
+
+planet icon ( https://eostudio.io/?source=emailsignature ) planet icon ( https://eopla.net/ ) youtube icon ( https://www.youtube.com/@entreprenuership_opportunities ) youtube icon ( https://www.youtube.com/@eo_studio ) youtube icon ( https://www.youtube.com/@eo_vietnam ) linkedin icon ( https://www.linkedin.com/company/eo-studio )
+
+본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며, 지정된 수취인만을 위해 작성 되었습니다.
+본 메일에 포함된 정보를 무단으로 제3자에게 공개, 배포, 복사 또는 사용하는 것을 엄격히 금지합니다.
+This email, including any attachments, is confidential and intended only for the recipient(s) listed.
+Unauthorized use or disclosure of this e-mail or any information contained within is strictly prohibited.
+
+Sent via Superhuman ( https://sprh.mn/?vip=ash@eoeoeo.net )
+
+On Tue, Feb 10, 2026 at 오후 3:05:30, Hoseok JUNG < hoseok.jung@seumlaw.com > wrote:
+
+> 
+> 
+> 
+> 강유진 변호사님
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 저희는 내림으로 단주를 처리한 반면 , 변호사님은 반올림으로 처리하여 둘 사이에 차이가 있는 듯 합니다.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 어느 방식에 의하건 투자자의 동의 아래 진행할 경우 문제 없다고 생각합니다.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 감사합니다.
+> 
+> 
+> 
+> SEUM Team
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> *From:* Eugene Kang <kang.sings@gmail.com>
+> *Sent:* Tuesday, February 10, 2026 1:31 PM
+> *To:* Hoseok JUNG ( 정호석 ) <hoseok.jung@seumlaw.com>
+> *Cc:* Seohyun Ahn <ash@eoeoeo.net>; Gunwook Yoo <gwy@eoeoeo.net>; Haena SUH
+> ( 서해나 ) <haena.suh@seumlaw.com>; Hwanjun Yoon <yoonhwanjun@eoeoeo.net>;
+> Jeongmin NOH ( 노정민 ) <jeongmin.noh@seumlaw.com>; Jihoon CHOI ( 최지훈 )
+> <jihoon.choi@seumlaw.com>; SEUM Advisory Assistants
+> <advisory_assistants@seumlaw.com>; Taeyong Kim <ty@eoeoeo.net>; 김중철 <chiri@eoeoeo.net>
+> 
+> *Subject:* Re: EO Flip
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 정호석 변호사님 안녕하세요 ,
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 미국 투자 문서들을 finalize 하는 과정에서 1 월 30 일에 보내주신 주식교환비율 표를 검토해 봤습니다.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Cells E36, J36, and K36 에서 빨간색으로 하이라이트 된 부분 보시면 총합이 맞지 않아서 보내주신 표 아래 제가 다시
+> 표를 작성해 봤습니다.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 말씀 주신 것처럼 소수점 이하는 단주처리로 절삭이 필요하다는 것에 동의하며 , *Cell J79* 에서 나온 총 미국 법인 주식수에
+> 제일 근접한 whole number 를 갖는 방법은 단순 round 를 사용하는 방법입니다 ( *Cell N79* ) - 즉 , 소수점
+> 0.5 이상은 반올림 , 소수점 0.5 이하는 반내림. 이 방법을 사용할 경우 소수점까지 있을 때의 주식수와 각각 비교했을 때 최고
+> 차이 수치가 0.0001% 로 나왔습니다 ( *Cell S81* ).
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Column N 에 있는 수치들을 미국 투자 문서에 사용할 계획인데 제가 작성한 교환비율 표 한 번 검토해 주시기 바랍니다.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 감사합니다.
+> 
+> 
+> 
+> 
+> Eugene
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> On Thu, Jan 29, 2026 at 11:31 PM Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com
+> > wrote:
+> 
+> 
+> 
+>> 
+>> 
+>> 팀장님
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 알려 주셔서 감사합니다.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 주당 가치 158 원으로 계산한 교환 주식 수를 다시 전달 드립니다.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 한국은행에서도 혼동이 되지 않도록 가치평가 보고서에 200 만원이 근사치라는 점을 명시하는 것이 바람직해 보이며 , 1 주당 가치가 158
+>> 원이라는 점을 문장으로 명확히 표현이 되면 더 좋을 듯 하다는 점을 회계법인에 전달해 주시면 감사하겠습니다. 현재 보고서상에는 표 내에
+>> 1 주당 가치가 기재되어 있을 뿐 문장으로는 기재가 되어 있지 않습니다.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 감사합니다.
+>> 
+>> 
+>> 
+>> SEUM Team
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> *정호석* *Hoseok Jung*
+>> 
+>> 
+>> 
+>> *파트너* ** *Partner*
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> T. +82 (0)2 562 3115
+>> M. +82 (0)10 2589 9672
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 5F, 211 Teheran-ro, Gangnam-gu, Seoul, KOREA
+>> 
+>> 
+>> 
+>> www.seumlaw.com ( http://www.seumlaw.com/ )
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> This message is intended to be received only by persons entitled to
+>> receive the confidential information it may contain. E-mail messages to
+>> clients of SEUM may contain information that is confidential and legally
+>> privileged. Please do not read, copy, forward, or store this message
+>> unless you are an intended recipient. If you have received this message in
+>> error, please forward it to the sender and delete it completely from your
+>> computer system.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> *From:* Seohyun Ahn < ash@eoeoeo.net >
+>> *Sent:* Friday, January 30, 2026 4:14 PM
+>> *To:* Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com >
+>> *Cc:* Gunwook Yoo < gwy@eoeoeo.net >; Haena SUH ( 서해나 ) < haena.suh@seumlaw.com
+>> >; Hwanjun Yoon < yoonhwanjun@eoeoeo.net >; Jeongmin NOH ( 노정민 ) < jeongmin.noh@seumlaw.com
+>> >; Jihoon CHOI ( 최지훈 ) < jihoon.choi@seumlaw.com >; SEUM Advisory
+>> Assistants < advisory_assistants@seumlaw.com >; Taeyong Kim < ty@eoeoeo.net
+>> >; 김중철 < chiri@eoeoeo.net >; Eugene Kang < kang.sings@gmail.com >
+>> *Subject:* Re: EO Flip
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 안녕하세요 정호석 변호사님
+>> 
+>> 
+>> 
+>> 
+>> EO 안서현 입니다.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 주식 교환 비율 관련해서 마일스톤에 크로스체크 요청드렸는데 , 아래와 같은 답변을 받았습니다.
+>> 
+>> 
+>> 
+>> 
+>> 200 만원은 백만단위로 표시해주신 것이라고 하셔서 조정이 필요해보입니다.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> *안서현* Ahn Seo Hyun
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> Finance Lead
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> ash@eoeoeo.net
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>> 
+>> 
+>> 
+>> Tell. 0507 1359 2553   Mobile. 82+ 10 5382 2553
+>> 
+>> 
+>> 
+>> Partner Mail. partner@eoeoeo.net
+>> 
+>> 
+>> 
+>> ( https://eostudio.io/?source=emailsignature ) ( https://eopla.net/ ) (
+>> https://www.youtube.com/@entreprenuership_opportunities ) (
+>> https://www.youtube.com/@eo_studio ) ( https://www.youtube.com/@eo_vietnam
+>> ) ( https://www.linkedin.com/company/eo-studio )
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다.
+>> 본 메일에 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다.
+>> This email, including any attachments, is confidential and intended only
+>> for the recipient(s) listed.
+>> Unauthorized use or disclosure of this e-mail or any information contained
+>> within is strictly prohibited.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> Sent via Superhuman ( https://sprh.mn/?vip=ash@eoeoeo.net )
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> 
+>> On Fri, Jan 30, 2026 at 오후 3:01:30, Seohyun Ahn < ash@eoeoeo.net > wrote:
+>> 
+>> 
+>>> 
+>>> 
+>>> 안녕하세요 강유진 변호사님
+>>> 
+>>> 
+>>> 
+>>> EO 안서현입니다.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> (i) 세법 관련 이슈
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 11 월 말 기준으로 가치평가를 진행한 결과 , 한국 법인 ( 주당 158 원 ) 과 미국 법인 ( 주당 약 3 원 ) 의 가치가 낮게
+>>> 평가되어 , 우려했던 세무 리스크는 없는 것으로 확인되었습니다.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 상세 내용은 다음과 같습니다.
+>>> 
+>>> 
+>>> * 양도소득세 (Capital Gains Tax): 평가액 (158 원 ) 이 주주들의 최초 취득가액보다 현저히 낮아 양도차손 ( 손실
+>>> ) 에 해당하므로 , 납부할 세액이 없습니다.
+>>> * 증권거래세 (Securities Transaction Tax): 손익과 무관하게 거래액의 0.35% 가 발생합니다. 다만 , 이는
+>>> 금액 자체가 크지 않고 단순 신고 / 납부 절차에 불과하여 딜 진행에 걸림돌이 되지 않습니다.
+>>> 
+>>> 
+>>> 
+>>> ( 참고 : 펀드 (VC) 의 경우 , 운용사 (GP) 가 조합원 (LP) 을 대신해 일괄 신고 / 납부하는 방식으로 처리해야함.)
+>>> 
+>>> 
+>>> 
+>>> 
+>>> (ii) 주주들의 주식 교환 비율 확인
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 원래의 주식 비율 그대로 진행되기 때문에 주주들에게 교환 비율을 개별적으로 확인할 필요는 없을 것 같습니다.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 따라서 한국 쪽의 세무 이슈는 모두 해소되었다고 보시면 되겠습니다.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 위 내용을 바탕으로 계약서 Finalize 등 다음 절차를 알려주시면 감사하겠습니다.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> *안서현* Ahn Seo Hyun
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> Finance Lead
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> ash@eoeoeo.net
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>>> 
+>>> 
+>>> 
+>>> Tell. 0507 1359 2553   Mobile. 82+ 10 5382 2553
+>>> 
+>>> 
+>>> 
+>>> Partner Mail. partner@eoeoeo.net
+>>> 
+>>> 
+>>> 
+>>> ( https://eostudio.io/?source=emailsignature ) ( https://eopla.net/ ) (
+>>> https://www.youtube.com/@entreprenuership_opportunities ) (
+>>> https://www.youtube.com/@eo_studio ) ( https://www.youtube.com/@eo_vietnam
+>>> ) ( https://www.linkedin.com/company/eo-studio )
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다.
+>>> 본 메일에 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다.
+>>> This email, including any attachments, is confidential and intended only
+>>> for the recipient(s) listed.
+>>> Unauthorized use or disclosure of this e-mail or any information contained
+>>> within is strictly prohibited.
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> Sent via Superhuman ( https://sprh.mn/?vip=ash@eoeoeo.net )
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> On Fri, Jan 30, 2026 at 오전 3:41:58, Eugene Kang < kang.sings@gmail.com >
+>>> wrote:
+>>> 
+>>> 
+>>>> 
+>>>> 
+>>>> 안서현 팀장님 ,
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> (i) 세법 관련 이슈 그리고 (ii) 주주들의 주식 교환 비율 확인 받으시면 진행하도록 하겠습니다.
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 감사합니다.
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> Eugene
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> On Tue, Jan 27, 2026 at 9:41 PM Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com
+>>>> > wrote:
+>>>> 
+>>>> 
+>>>> 
+>>>>> 
+>>>>> 
+>>>>> 강유진 변호사님 , 안서현 팀장님
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 첨부와 같이 교환대상 주식 수를 계산했습니다. 한국법인 주식과 미국법인 주식의 교환 비율이 딱 떨어지지 않아서 일부 단주가 발생했습니다
+>>>>> . 유의미한 차이는 아니라 주주분들도 이해하실 것이라 생각하지만 , 미리 확인을 받고 진행하시는 것이 바람직해 보입니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 살펴보시고 궁금한 점이 있으시거나 필요한 사항이 있으시면 연락 부탁 드립니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 감사합니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> SEUM Team
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> *From:* Eugene Kang < kang.sings@gmail.com >
+>>>>> *Sent:* Wednesday, January 28, 2026 2:37 PM
+>>>>> *To:* Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com >
+>>>>> *Cc:* Gunwook Yoo < gwy@eoeoeo.net >; Haena SUH ( 서해나 ) < haena.suh@seumlaw.com
+>>>>> >; Hwanjun Yoon < yoonhwanjun@eoeoeo.net >; Jeongmin NOH ( 노정민 ) < jeongmin.noh@seumlaw.com
+>>>>> >; Jihoon CHOI ( 최지훈 ) < jihoon.choi@seumlaw.com >; SEUM Advisory
+>>>>> Assistants < advisory_assistants@seumlaw.com >; Seohyun Ahn < ash@eoeoeo.net
+>>>>> >; Taeyong Kim < ty@eoeoeo.net >; 김중철 < chiri@eoeoeo.net >
+>>>>> *Subject:* Re: EO Flip
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 안녕하세요 정호석 변호사님 ,
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 한국법인의 주주들이 취득할 주식 수량 준비되면 전달 부탁드립니다. 기존의 영문 문서에 반영하고 안서현 팀장님께서 보내주실 서명된 signature
+>>>>> packet 들 보내주시면 closing folder 준비하여 EO 팀과 공유하겠습니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 안서현 팀장님 ,
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 한국측에선 전에 문의드린 세법 관련하여 이슈가 있었는지 확인 부탁드립니다. 없었다면 기존의 영문 문서들을 finalize 에서 회사측의
+>>>>> 서명이 필요한 문서들 서명 docusign 으로 보내드리겠습니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 감사합니다.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> Eugene
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> On Mon, Jan 26, 2026 at 11:28 PM Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com
+>>>>> > wrote:
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 안서현 팀장님
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 외국환신고를 위한 서류를 첨부와 같이 정리하였습니다 ( 이미 받은 서류는 수령한 것으로 체크를 해 두었습니다 ).
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 한국법인과 해외법인과의 교환 비율에 따라 한국법인의 주주들이 취득할 주식의 수량은 오늘 중에 계산해서 전달해 드리겠습니다.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 서류 준비 과정에서 궁금한 점이 있으시면 편하게 연락 부탁 드립니다.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 감사합니다.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> SEUM Team
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> *정호석* *Hoseok Jung*
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> *파트너* ** *Partner*
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> T. +82 (0)2 562 3115
+>>>>>> M. +82 (0)10 2589 9672
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 5F, 211 Teheran-ro, Gangnam-gu, Seoul, KOREA (
+>>>>>> https://www.google.com/maps/search/211+Teheran-ro,+Gangnam-gu,+Seoul,+KOREA?entry=gmail&source=g
+>>>>>> )
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> www.seumlaw.com ( http://www.seumlaw.com/ )
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> This message is intended to be received only by persons entitled to
+>>>>>> receive the confidential information it may contain. E-mail messages to
+>>>>>> clients of SEUM may contain information that is confidential and legally
+>>>>>> privileged. Please do not read, copy, forward, or store this message
+>>>>>> unless you are an intended recipient. If you have received this message in
+>>>>>> error, please forward it to the sender and delete it completely from your
+>>>>>> computer system.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> *From:* Seohyun Ahn < ash@eoeoeo.net >
+>>>>>> *Sent:* Tuesday, January 27, 2026 3:53 PM
+>>>>>> *To:* Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com >
+>>>>>> *Cc:* Eugene Kang < kang.sings@gmail.com >; Gunwook Yoo < gwy@eoeoeo.net >;
+>>>>>> Haena SUH ( 서해나 ) < haena.suh@seumlaw.com >; Hwanjun Yoon < yoonhwanjun@eoeoeo.net
+>>>>>> >; Jeongmin NOH ( 노정민 ) < jeongmin.noh@seumlaw.com >; Jihoon CHOI ( 최지훈 ) <
+>>>>>> jihoon.choi@seumlaw.com >; SEUM Advisory Assistants < advisory_assistants@seumlaw.com
+>>>>>> >; Taeyong Kim < ty@eoeoeo.net >; 김중철 < chiri@eoeoeo.net >
+>>>>>> *Subject:* Re: EO Flip
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 안녕하세요 EO 안서현 입니다.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 어제부로 11 월 기준 미국법인 비상장주식가치평가 까지 완료되어서 파일 전달드립니다.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> *안서현* Ahn Seo Hyun
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> Finance Lead
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> ash@eoeoeo.net
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> Tell. 0507 1359 2553   Mobile. 82+ 10 5382 2553
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> Partner Mail. partner@eoeoeo.net
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> ( https://eostudio.io/?source=emailsignature ) ( https://eopla.net/ ) (
+>>>>>> https://www.youtube.com/@entreprenuership_opportunities ) (
+>>>>>> https://www.youtube.com/@eo_studio ) ( https://www.youtube.com/@eo_vietnam
+>>>>>> ) ( https://www.linkedin.com/company/eo-studio )
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다.
+>>>>>> 본 메일에 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다.
+>>>>>> This email, including any attachments, is confidential and intended only
+>>>>>> for the recipient(s) listed.
+>>>>>> Unauthorized use or disclosure of this e-mail or any information contained
+>>>>>> within is strictly prohibited.
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> Sent via Superhuman ( https://sprh.mn/?vip=ash@eoeoeo.net )
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>>> On Tue, Jan 20, 2026 at 오후 3:42:31, Seohyun Ahn < ash@eoeoeo.net > wrote:
+>>>>>> 
+>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 안녕하세요
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> EO 안서현입니다.
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> *1. 비거주자 분류의 실익 확인*
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 외국환거래법상 ' 비거주자 ' 로 분류될 경우 한국 은행에 대한 증권취득신고 의무가 면제 ( 또는 절차 간소화 ) 되어 , 납세증명서
+>>>>>>> 제출 등의 번거로운 절차를 생략할 수 있다고 알고 있습니다.
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 이 내용이 맞다면 , 가능한 한 적법한 범위 내에서 비거주자로 분류하여 진행하는 것이 회사와 주주 모두에게 유리할 것으로 판단됩니다.
+>>>>>>> 이 점이 맞는지요 ?
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> *2. 특정 주주 / 임원의 비거주자 판정 문의*
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 위 1 번 내용 ( 비거주자가 유리함 ) 이 맞다면 , 아래 두 분의 케이스를 ' 비거주자 ' 로 분류하여 진행하는 편이 더 좋을까요
+>>>>>>> ?
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> *(A) 서준용 주주 ( 판단 모호 )*
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> * *상황 :* 미국 영주권자 (Green Card) 이나 , 최근 8 년간 한국에 거주했습니다.
+>>>>>>> 단 , 올해 여름 ~ 가을경 미국으로 완전히 이주 ( 출국 ) 할 예정입니다.
+>>>>>>> * *문의 :* 현재는 한국 거주 중이지만 , ' 영주권자 ' 신분과 ' 곧 출국 예정 ' 이라는 점을 들어 예외적으로 비거주자로
+>>>>>>> 처리하거나 , 신고 시점을 조율해 비거주자로 인정받을 여지가 있을까요 ? ( 리스크가 있다면 거주자로 진행하겠습니다.)
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> *(B) 김태용 대표이사 ( 비거주자 유력 )*
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> * *상황 :* 2025 년 9 월 E2 비자 ( 투자자 비자 ) 를 취득하였으며 , 현재 미국에 체류 중입니다. 앞으로도 미국 법인
+>>>>>>> 운영을 위해 계속 미국에 거주할 목적을 가지고 있습니다.
+>>>>>>> * *문의 :* 비자 취득 및 향후 장기 체류 목적 (2 년 이상 ) 이 명확하므로 , 비거주자로 분류하여 진행해도 무방할지 확인
+>>>>>>> 부탁드립니다.
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 두 분을 비거주자로 분류할 수 있다면 신고 업무 부담이 줄어들 것 같습니다.
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 의견 부탁드립니다 !
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> *안서현* Ahn Seo Hyun
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> Finance Lead
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> ash@eoeoeo.net
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> Tell. 0507 1359 2553   Mobile. 82+ 10 5382 2553
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> Partner Mail. partner@eoeoeo.net
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> ( https://eostudio.io/?source=emailsignature ) ( https://eopla.net/ ) (
+>>>>>>> https://www.youtube.com/@entreprenuership_opportunities ) (
+>>>>>>> https://www.youtube.com/@eo_studio ) ( https://www.youtube.com/@eo_vietnam
+>>>>>>> ) ( https://www.linkedin.com/company/eo-studio )
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다.
+>>>>>>> 본 메일에 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다.
+>>>>>>> This email, including any attachments, is confidential and intended only
+>>>>>>> for the recipient(s) listed.
+>>>>>>> Unauthorized use or disclosure of this e-mail or any information contained
+>>>>>>> within is strictly prohibited.
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> Sent via Superhuman ( https://sprh.mn/?vip=ash@eoeoeo.net )
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>>> On Mon, Jan 19, 2026 at 오후 4:25:59, Hoseok JUNG < hoseok.jung@seumlaw.com >
+>>>>>>> wrote:
+>>>>>>> 
+>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안녕하세요.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 말씀해 주신 주소로 보내 주시면 감사하겠습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 감사합니다.
+>>>>>>>> SEUM Team
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> iOS 용 Outlook< https://aka.ms/o0ukef > 다운로드
+>>>>>>>> ________________________________
+>>>>>>>> 보낸 사람 : Seohyun Ahn < ash@eoeoeo.net >
+>>>>>>>> 보낸 날짜 : Monday, January 19, 2026 3:16:38 PM
+>>>>>>>> 받는 사람 : Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com > 참조 : Eugene Kang <
+>>>>>>>> kang.sings@gmail.com >; Gunwook Yoo < gwy@eoeoeo.net >; Haena SUH ( 서해나 ) <
+>>>>>>>> haena.suh@seumlaw.com >; Hwanjun Yoon < yoonhwanjun@eoeoeo.net >; Jeongmin
+>>>>>>>> NOH ( 노정민 ) < jeongmin.noh@seumlaw.com >; Jihoon CHOI ( 최지훈 ) < jihoon.choi@seumlaw.com
+>>>>>>>> >; SEUM Advisory Assistants < advisory_assistants@seumlaw.com >; Taeyong
+>>>>>>>> Kim < ty@eoeoeo.net >; 김중철 < chiri@eoeoeo.net > 제목 : RE: EO Flip
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안녕하세요 EO 안서현입니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 링크드인 등을 통해 소식을 접했을 때 ,
+>>>>>>>> 저희 투자 이후에 미국으로 가신 분들이 계신 것 같아서 알려주신 비거주자 기준으로 확인 메일 보내드렸습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 지난번에 아포스티유 공증 요청한 서류가 도착했는데 , 아래 주소로 서류 보내드리면 될까요 ~?
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 5F, 211 Teheran-ro, Gangnam-gu, Seoul, KOREA (
+>>>>>>>> https://www.google.com/maps/search/211+Teheran-ro,+Gangnam-gu,+Seoul,+KOREA?entry=gmail&source=g
+>>>>>>>> )
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안서현 Ahn Seo Hyun
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Finance Lead
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> ash@eoeoeo.net <mailto: ash@eoeoeo.net >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Tell. 0507 1359 2553 Mobile. 82+ 10 5382 2553
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Partner Mail. partner@eoeoeo.net ( partner@eoeoeo.net ) <mailto: partner@eoeoeo.net
+>>>>>>>> >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> [planet icon]< https://eostudio.io/?source=emailsignature > [planet icon]
+>>>>>>>> [planet icon] < https://eopla.net/ > [youtube icon] < https://www.youtube.com/@entreprenuership_opportunities
+>>>>>>>> > [youtube icon] < https://www.youtube.com/@eo_studio > [youtube icon] < https://www.youtube.com/@eo_vietnam
+>>>>>>>> > [linkedin icon] < https://www.linkedin.com/company/eo-studio >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다. 본 메일에
+>>>>>>>> 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다. This email,
+>>>>>>>> including any attachments, is confidential and intended only for the
+>>>>>>>> recipient(s) listed. Unauthorized use or disclosure of this e-mail or any
+>>>>>>>> information contained within is strictly prohibited.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Sent via Superhuman< https://sprh.mn/?vip=ash@eoeoeo.net >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> On Sat, Jan 17, 2026 at 오전 8:30:22, Hoseok JUNG < hoseok.jung@seumlaw.com <mailto:
+>>>>>>>> hoseok.jung@seumlaw.com >> wrote:
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안녕하세요.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 비거주자 요건과 관련하여 아래와 같이 답변 드립니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 감사합니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> SEUM Team
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> • 외국환거래법상 비거주자는 원칙적으로 “ 2 년 이상 외국에 체재하고 있는지 여부”로 판단하시는 것이 맞습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> • 다만 비거주자 여부를 판단하심에 있어 아래 사항들을 유의하실 필요가 있습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> * 외국 체재 중 일시 귀국의 목적으로 3 개월 이내의 기간 동안 국내에 체재하였더라도 해당 기간은 위 2 년에 포함됩니다.
+>>>>>>>> * 반면 , 2 년 이상 외국에 체재한 뒤 입국하여 국내에 3 개월 이상 체재하고 있는 경우라면 거주자로 보게 됩니다.
+>>>>>>>> * 거주자 또는 비거주자에 의하여 주로 생계를 유지하는 동거 가족은 해당 거주자 또는 비거주자의 구분에 따라 거주자 또는 비거주자로
+>>>>>>>> 구분됩니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> ( 예시 ) 해외 취업자의 동거가족은 국내 체류기간과 상관없이 ‘비거주자’로 분류됩니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> * 외국에서 영업활동에 종사하고 있는 사람은 체류기관과 관계없이 ‘비거주자’로 분류됩니다. 따라서 해외에 취업하여 재직 중인 경우에는
+>>>>>>>> 비거주자로 보게 됩니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> [ cid:image001.png@01DC8783.0CD47CF0 ]
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 정호석 Hoseok Jung
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 파트너 Partner
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> T. +82 (0)2 562 3115
+>>>>>>>> M. +82 (0)10 2589 9672
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 5F, 211 Teheran-ro, Gangnam-gu, Seoul, KOREA (
+>>>>>>>> https://www.google.com/maps/search/211+Teheran-ro,+Gangnam-gu,+Seoul,+KOREA?entry=gmail&source=g
+>>>>>>>> )
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> www.seumlaw.com ( http://www.seumlaw.com ) < http://www.seumlaw.com/ >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> This message is intended to be received only by persons entitled to
+>>>>>>>> receive the confidential information it may contain. E-mail messages to
+>>>>>>>> clients of SEUM may contain information that is confidential and legally
+>>>>>>>> privileged. Please do not read, copy, forward, or store this message
+>>>>>>>> unless you are an intended recipient. If you have received this message in
+>>>>>>>> error, please forward it to the sender and delete it completely from your
+>>>>>>>> computer system.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> From: Seohyun Ahn < ash@eoeoeo.net >
+>>>>>>>> Sent: Friday, January 16, 2026 1:00 AM
+>>>>>>>> To: Hoseok JUNG ( 정호석 ) < hoseok.jung@seumlaw.com > Cc: Eugene Kang < kang.sings@gmail.com
+>>>>>>>> >; Gunwook Yoo < gwy@eoeoeo.net >; Haena SUH ( 서해나 ) < haena.suh@seumlaw.com
+>>>>>>>> >; Hwanjun Yoon < yoonhwanjun@eoeoeo.net >; Jeongmin NOH ( 노정민 ) < jeongmin.noh@seumlaw.com
+>>>>>>>> >; Jihoon CHOI ( 최지훈 ) < jihoon.choi@seumlaw.com >; SEUM Advisory
+>>>>>>>> Assistants < advisory_assistants@seumlaw.com >; Taeyong Kim < ty@eoeoeo.net
+>>>>>>>> >; 김중철 < chiri@eoeoeo.net > Subject: RE: EO Flip
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안녕하세요 정호석 변호사님
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> EO 안서현 입니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 문의주신 이승윤 , 조성문 , 한기용 님은 비거주자가 맞습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 세 분 모두 투자계약서상 주소지가 미국이며 , 현재도 미국에서 생활하고 계십니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 다만 , 이 세 분 외에도 개인 투자자분들 중에 현재 시점 기준으로 비거주자에 해당될 수 있는 분들이 더 계실것 같아 추가로 확인하려고
+>>>>>>>> 합니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 투자 당시에는 한국 거주자 였으나 , 이후에 미국으로 이주하신 분도 계신 것 같아서요.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 주주분들에 정확하게 확인 요청을 드리기 위해서 비거주자 판정 기준에 대해 확인 부탁드립니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 제가 알기로는 세법상 기준 (1 년중 183 일 이상 거주 ) 과 다르게 ,
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 지금 진행중인 외국환 신고의 경우 비거주자의 기준은 " 최근 2 년 이상 외국에 체류 중인 경우 " 로 알고 있는데 이 기준으로 확인
+>>>>>>>> 하면 될까요 ?
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 예를 들어 미국에 현재 거주중인데 , 그 기간이 2 년 미만인 경우에는 한국 거주자로 처리하는 것이 맞는지 궁금합니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 기준 알려주시면 해당 주주분들께 따로 연락드려서 빠르게 확인 진행해보겠습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안서현 Ahn Seo Hyun
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Finance Lead
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> ash@eoeoeo.net <mailto: ash@eoeoeo.net >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 서울특별시 강남구 압구정로 28 길 9-2, 2F, EO STUDIO
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Tell. 0507 1359 2553 Mobile. 82+ 10 5382 2553
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Partner Mail. partner@eoeoeo.net ( partner@eoeoeo.net ) <mailto: partner@eoeoeo.net
+>>>>>>>> >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> [planet icon]< https://eostudio.io/?source=emailsignature > [planet icon] <
+>>>>>>>> https://eopla.net/ > [youtube icon] < https://www.youtube.com/@entreprenuership_opportunities
+>>>>>>>> > [youtube icon] < https://www.youtube.com/@eo_studio > [youtube icon] < https://www.youtube.com/@eo_vietnam
+>>>>>>>> > [linkedin icon] < https://www.linkedin.com/company/eo-studio >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 본 메일은 법률상 보호되는 중요한 정보 및 저작권을 포함하고 있을 수 있으며 , 지정된 수취인만을 위해 작성 되었습니다. 본 메일에
+>>>>>>>> 포함된 정보를 무단으로 제 3 자에게 공개 , 배포 , 복사 또는 사용하는 것을 엄격히 금지합니다. This email,
+>>>>>>>> including any attachments, is confidential and intended only for the
+>>>>>>>> recipient(s) listed. Unauthorized use or disclosure of this e-mail or any
+>>>>>>>> information contained within is strictly prohibited.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> Sent via Superhuman< https://sprh.mn/?vip=ash@eoeoeo.net >
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> On Tue, Jan 13, 2026 at 오후 4:52:32, Hoseok JUNG < hoseok.jung@seumlaw.com <mailto:
+>>>>>>>> hoseok.jung@seumlaw.com >> wrote:
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 안서현 팀장님
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 외국환신고 서류 준비 중인데 , 이승윤 , 조성문 , 한기용 님이 비거주자인 것이 맞을까요.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 확인해 주시면 감사하겠습니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 감사합니다.
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> SEUM team
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> [ cid:image001.png@01DC8783.0CD47CF0 ]
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 정호석 Hoseok Jung
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 파트너 Partner
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> T. +82 (0)2 562 3115
+>>>>>>>> M. +82 (0)10 2589 9672
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 5F, 211 Teheran-ro, Gangnam-gu, Seoul, KOREA (
+>>>>>>>> https://www.google.com/maps/search/211+Teheran-ro,+Gangnam-gu,+Seoul,+KOREA?entry=gmail&source=g
+>>>>>>>> )
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>>> 
+>>>>>>> 
+>>>>>>> 
+>>>>>> 
+>>>>>> 
+>>>>> 
+>>>>> 
+>>>> 
+>>>> 
+>>> 
+>>> 
+>> 
+>> 
+> 
+>
