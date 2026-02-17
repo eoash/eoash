@@ -288,14 +288,18 @@ class SlackClient:
             priority = task.get('priority')
             url = task.get('url', '')
 
-            # 우선순위 표시
+            # 우선순위 표시 (ClickUp API는 priority를 dict로 반환)
             priority_map = {
-                1: '🔴',
-                2: '🟠',
-                3: '🟡',
-                4: '🟢'
+                '1': '🔴',
+                '2': '🟠',
+                '3': '🟡',
+                '4': '🟢'
             }
-            priority_emoji = priority_map.get(priority, '⚪')
+            if isinstance(priority, dict):
+                priority_id = str(priority.get('id', ''))
+            else:
+                priority_id = str(priority) if priority else ''
+            priority_emoji = priority_map.get(priority_id, '⚪')
 
             # 마감일
             due_date = task.get('due_date')
