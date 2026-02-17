@@ -282,11 +282,12 @@ def create_or_append_journal(content: str, date: Optional[datetime] = None):
         with open(journal_path, 'r', encoding='utf-8') as f:
             existing_content = f.read()
 
-        # 자동 생성 섹션이 이미 있으면 교체, 없으면 추가
-        if "# 🤖 자동 생성 일기" in existing_content:
-            # 기존 자동 생성 부분을 새 내용으로 교체
-            parts = existing_content.split("# 🤖 자동 생성 일기")
-            new_content = parts[0].rstrip() + "\n\n" + content
+        # 오늘 날짜 헤더가 이미 있으면 교체, 없으면 추가
+        today_header = f"# 📅 {datetime.now().strftime('%Y-%m-%d')} 일기"
+        if today_header in existing_content:
+            # 오늘 날짜 헤더부터 끝까지 교체
+            idx = existing_content.index(today_header)
+            new_content = existing_content[:idx].rstrip() + ("\n\n" if idx > 0 else "") + content
         else:
             # 하단에 추가
             new_content = existing_content.rstrip() + "\n\n---\n\n" + content
