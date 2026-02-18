@@ -1,0 +1,11 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Force LF for scripts and source code
+*.sh eol=lf
+*.py eol=lf
+*.json eol=lf
+*.md eol=lf
+*.yml eol=lf
+*.yaml eol=lf
+*.toml eol=lf
