@@ -2,7 +2,7 @@
 
 # YouTube 썸네일 봇 시작 스크립트
 
-PROJECT_DIR="/Users/ash/Documents/eoash"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 VENV="$PROJECT_DIR/venv/bin/python"
 
 echo "🎬 YouTube 썸네일 봇 시작..."

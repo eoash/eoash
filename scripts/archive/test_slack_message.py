@@ -2,7 +2,8 @@
 """Simple test to send message to Slack channel."""
 
 import sys
-sys.path.insert(0, '/Users/ash/Documents/eoash')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ash_bot.integrations.slack_client import SlackClient
 

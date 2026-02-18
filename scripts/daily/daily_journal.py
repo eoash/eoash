@@ -11,7 +11,7 @@ from typing import Optional, List, Dict
 import re
 
 # 설정
-OBSIDIAN_VAULT = r"C:\Users\ash\Documents\안서현 두뇌"
+OBSIDIAN_VAULT = os.environ.get("OBSIDIAN_VAULT", str(Path.home() / "Documents" / "안서현 두뇌"))
 JOURNAL_FOLDER = "일기장"
 PROJECT_ROOT = Path(__file__).parent.parent
 MEMORY_DIR = PROJECT_ROOT / "agent" / "memory"
