@@ -215,7 +215,8 @@ class PaymentMatcher:
         for invoice in invoices:
             if invoice.invoice_number == invoice_number:
                 # Verify amount is close
-                if amounts_match(payment.amount, invoice.amount, self.tolerance * 10):
+                tol = (self.tolerance * 10) if self.tolerance is not None else None
+                if amounts_match(payment.amount, invoice.amount, tol):
                     return MatchResult(
                         payment=payment,
                         invoice=invoice,
