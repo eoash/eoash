@@ -186,7 +186,7 @@ class BillComClient:
                 error_data = result.get("response_data", {})
                 logger.error(f"API error: {error_msg}")
                 logger.error(f"Error details: {error_data}")
-                logger.error(f"Full response: {result}")
+                logger.debug(f"Full response: {result}")
                 raise Exception(f"Bill.com API error: {error_msg}")
 
         except requests.exceptions.RequestException as e:
@@ -263,18 +263,20 @@ class BillComClient:
 
         try:
             data = {
-                "id": invoice_id,
-                "status": status,
-                "paidDate": paid_date,
+                "obj": {
+                    "entity": "Invoice",
+                    "id": invoice_id,
+                    "paymentStatus": "1" if status == "paid" else "4",
+                }
             }
 
-            response = self._make_request("PUT", f"v3/invoices/{invoice_id}", data=data)
+            response = self._make_request("POST", "Crud/Update/Invoice.json", data=data)
 
-            if response.get("success"):
+            if response:
                 logger.info(f"Successfully updated invoice {invoice_id}")
                 return True
             else:
-                logger.error(f"Failed to update invoice: {response.get('error')}")
+                logger.error(f"Failed to update invoice {invoice_id}")
                 return False
 
         except Exception as e:
@@ -293,23 +295,24 @@ class BillComClient:
         """
         try:
             response = self._make_request(
-                "GET",
-                f"v3/invoices/{invoice_id}"
+                "POST",
+                "Crud/Read/Invoice.json",
+                data={"id": invoice_id}
             )
 
-            if response.get("success"):
-                item = response.get("data", {})
+            if response:
+                item = response
                 invoice = Invoice(
                     id=item.get("id"),
                     invoice_number=item.get("invoiceNumber"),
                     amount=float(item.get("amount", 0)),
-                    customer_name=item.get("customerName", ""),
+                    customer_name=item.get("organizationName", ""),
                     customer_email=item.get("customerEmail"),
                     due_date=item.get("dueDate"),
-                    status=item.get("status"),
-                    created_date=item.get("createdDate"),
-                    paid_date=item.get("paidDate"),
-                    notes=item.get("notes"),
+                    status="paid" if float(item.get("amountDue", 0)) == 0 else "unpaid",
+                    created_date=item.get("invoiceDate"),
+                    paid_date=item.get("updatedTime", "")[:10] if float(item.get("amountDue", 0)) == 0 else None,
+                    notes=item.get("description"),
                 )
                 return invoice
             return None
@@ -332,30 +335,35 @@ class BillComClient:
 
         try:
             response = self._make_request(
-                "GET",
-                "v3/invoices",
-                params={
-                    "status": "paid",
-                    "daysBack": days_back,
+                "POST",
+                "List/Invoice.json",
+                data={
+                    "start": 0,
+                    "max": 999,
                 }
             )
 
             invoices = []
-            if "data" in response:
-                for item in response["data"]:
-                    invoice = Invoice(
-                        id=item.get("id"),
-                        invoice_number=item.get("invoiceNumber"),
-                        amount=float(item.get("amount", 0)),
-                        customer_name=item.get("customerName", ""),
-                        customer_email=item.get("customerEmail"),
-                        due_date=item.get("dueDate"),
-                        status="paid",
-                        created_date=item.get("createdDate"),
-                        paid_date=item.get("paidDate"),
-                        notes=item.get("notes"),
-                    )
-                    invoices.append(invoice)
+            if isinstance(response, list):
+                for item in response:
+                    amount_due = float(item.get("amountDue", 0))
+                    total_amount = float(item.get("amount", 0))
+
+                    # Only fully paid invoices with non-zero amount
+                    if amount_due == 0 and total_amount > 0:
+                        invoice = Invoice(
+                            id=item.get("id"),
+                            invoice_number=item.get("invoiceNumber"),
+                            amount=total_amount,
+                            customer_name=item.get("organizationName", ""),
+                            customer_email=item.get("customerEmail"),
+                            due_date=item.get("dueDate"),
+                            status="paid",
+                            created_date=item.get("invoiceDate"),
+                            paid_date=item.get("updatedTime", "")[:10],
+                            notes=item.get("description"),
+                        )
+                        invoices.append(invoice)
 
             return invoices
 

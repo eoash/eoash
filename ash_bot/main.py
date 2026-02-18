@@ -7,7 +7,7 @@ import traceback
 from pathlib import Path
 
 from ash_bot.config import (
-    BillComConfig, PlaidConfig, SlackConfig, NotionConfig, AGENT_DIR
+    BillComConfig, PlaidConfig, SlackConfig, NotionConfig, AGENT_DIR, ensure_dirs
 )
 from ash_bot.integrations import (
     BillComClient, PlaidClient, SlackClient, NotionClient
@@ -21,22 +21,34 @@ logger = get_logger("ar_automation")
 class ARAutomationSystem:
     """Main AR automation orchestrator."""
 
-    def __init__(self, dry_run: bool = False):
+    def __init__(
+        self,
+        dry_run: bool = False,
+        bill_com: Optional[BillComClient] = None,
+        plaid: Optional[PlaidClient] = None,
+        slack: Optional[SlackClient] = None,
+        notion: Optional[NotionClient] = None,
+    ):
         """
         Initialize AR automation system.
 
         Args:
             dry_run: If True, don't update Bill.com, just simulate
+            bill_com: BillComClient instance (created if not provided)
+            plaid: PlaidClient instance (created if not provided)
+            slack: SlackClient instance (created if not provided)
+            notion: NotionClient instance (created if not provided)
         """
         self.dry_run = dry_run
         self.start_time = datetime.now()
+        ensure_dirs()
 
-        # Initialize clients
+        # Initialize clients (DI with defaults)
         logger.info("Initializing AR automation system...")
-        self.bill_com = BillComClient()
-        self.plaid = PlaidClient()
-        self.slack = SlackClient()
-        self.notion = NotionClient()
+        self.bill_com = bill_com or BillComClient()
+        self.plaid = plaid or PlaidClient()
+        self.slack = slack or SlackClient()
+        self.notion = notion or NotionClient()
 
         # Initialize business logic
         self.matcher = PaymentMatcher()

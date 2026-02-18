@@ -1,6 +1,7 @@
 """Vote tracking for thumbnail captions."""
 
 import json
+import threading
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
@@ -16,6 +17,7 @@ class VoteTracker:
         """Initialize vote tracker."""
         self.votes_dir = Path(__file__).parent.parent.parent / "agent" / "memory" / "votes"
         self.votes_dir.mkdir(exist_ok=True)
+        self._lock = threading.Lock()
 
     def save_vote(
         self,
@@ -43,40 +45,41 @@ class VoteTracker:
             True if successful
         """
         try:
-            votes_file = self.votes_dir / f"{request_id}_votes.json"
+            with self._lock:
+                votes_file = self.votes_dir / f"{request_id}_votes.json"
 
-            # Load existing votes or create new
-            if votes_file.exists():
-                with open(votes_file, 'r', encoding='utf-8') as f:
-                    votes_data = json.load(f)
-            else:
-                votes_data = {
-                    "request_id": request_id,
-                    "channel_id": channel_id,
-                    "captions": {},
-                    "votes": [],
-                    "created_at": datetime.now().isoformat()
-                }
+                # Load existing votes or create new
+                if votes_file.exists():
+                    with open(votes_file, 'r', encoding='utf-8') as f:
+                        votes_data = json.load(f)
+                else:
+                    votes_data = {
+                        "request_id": request_id,
+                        "channel_id": channel_id,
+                        "captions": {},
+                        "votes": [],
+                        "created_at": datetime.now().isoformat()
+                    }
 
-            # Store caption info if not already there
-            if str(caption_num) not in votes_data["captions"]:
-                votes_data["captions"][str(caption_num)] = {
-                    "number": caption_num,
-                    "text": caption_text,
-                    "score": score
-                }
+                # Store caption info if not already there
+                if str(caption_num) not in votes_data["captions"]:
+                    votes_data["captions"][str(caption_num)] = {
+                        "number": caption_num,
+                        "text": caption_text,
+                        "score": score
+                    }
 
-            # Add vote
-            votes_data["votes"].append({
-                "caption_num": caption_num,
-                "user_id": user_id,
-                "user_name": user_name,
-                "timestamp": datetime.now().isoformat()
-            })
+                # Add vote
+                votes_data["votes"].append({
+                    "caption_num": caption_num,
+                    "user_id": user_id,
+                    "user_name": user_name,
+                    "timestamp": datetime.now().isoformat()
+                })
 
-            # Save
-            with open(votes_file, 'w', encoding='utf-8') as f:
-                json.dump(votes_data, f, ensure_ascii=False, indent=2)
+                # Save
+                with open(votes_file, 'w', encoding='utf-8') as f:
+                    json.dump(votes_data, f, ensure_ascii=False, indent=2)
 
             logger.info(f"Vote saved: {request_id} - Option {caption_num} by {user_name}")
             return True

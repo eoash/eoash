@@ -14,11 +14,64 @@ from slack_bolt.adapter.flask import SlackRequestHandler
 import os
 from dotenv import load_dotenv
 
-from ash_bot.core.thumbnail_agent import ThumbnailAgent
+from ash_bot.core.thumbnail_agent import ThumbnailAgent, CaptionResult
 from ash_bot.core.vote_tracker import VoteTracker
 from ash_bot.integrations.slack_client import SlackClient
 from ash_bot.utils.logger import get_logger
 import uuid
+
+
+def format_caption_result_for_slack(result: CaptionResult) -> dict:
+    """Format CaptionResult for Slack display with voting interface."""
+    blocks = [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "🎬 YouTube 썸네일 캡션 제안",
+                "emoji": True
+            }
+        },
+        {
+            "type": "section",
+            "fields": [
+                {"type": "mrkdwn", "text": f"*영상 제목*\n{result.request['video_title']}"},
+                {"type": "mrkdwn", "text": f"*타겟 오디언스*\n{result.request['target_audience']}"}
+            ]
+        },
+        {"type": "divider"}
+    ]
+
+    for idx, caption_data in enumerate(result.top_5, 1):
+        caption = caption_data["caption"]
+        score = caption_data["overall_score"]
+        blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"*옵션 {idx}* (점수: {score:.1f})\n_{caption}_\n{caption_data['feedback']}"
+            },
+            "accessory": {
+                "type": "button",
+                "text": {"type": "plain_text", "text": "👍 선택", "emoji": True},
+                "value": f"caption_{idx}",
+                "action_id": f"select_caption_{idx}"
+            }
+        })
+
+    blocks.append({"type": "divider"})
+    blocks.append({
+        "type": "context",
+        "elements": [{
+            "type": "mrkdwn",
+            "text": f"총 {len(result.generated_captions)}개 캡션 생성됨 | 팀 스타일 가이드 기반 평가"
+        }]
+    })
+
+    return {
+        "blocks": blocks,
+        "text": f"YouTube 썸네일 캡션: {result.request['video_title']}"
+    }
 
 load_dotenv()
 logger = get_logger(__name__)
@@ -141,7 +194,7 @@ def handle_thumbnail_command(ack, body, respond):
         request_cache[request_id]["message_ts"] = parent_thread_ts
 
         # Format full result with all 5 captions
-        formatted_result = thumbnail_agent.format_for_slack(result)
+        formatted_result = format_caption_result_for_slack(result)
 
         # Add request_id to blocks for tracking
         formatted_result["blocks"][0]["text"]["text"] = f"🎬 YouTube 썸네일 캡션 제안 #{request_id}"

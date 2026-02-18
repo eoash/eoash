@@ -13,9 +13,10 @@ AGENT_DIR = PROJECT_ROOT / "agent"
 LOGS_DIR = PROJECT_ROOT / "logs"
 REPORTS_DIR = AGENT_DIR / "reports"
 
-# Ensure directories exist
-LOGS_DIR.mkdir(exist_ok=True)
-REPORTS_DIR.mkdir(exist_ok=True)
+def ensure_dirs():
+    """Create required directories. Call at runtime, not import time."""
+    LOGS_DIR.mkdir(exist_ok=True)
+    REPORTS_DIR.mkdir(exist_ok=True)
 
 # API Configuration
 class BillComConfig:

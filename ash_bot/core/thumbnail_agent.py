@@ -43,10 +43,14 @@ class CaptionResult:
 class ThumbnailAgent:
     """Main agent for thumbnail caption generation and evaluation."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        claude_client: Optional[ClaudeClient] = None,
+        evaluator: Optional[ThumbnailEvaluator] = None,
+    ):
         """Initialize the thumbnail agent."""
-        self.claude_client = ClaudeClient()
-        self.evaluator = ThumbnailEvaluator()
+        self.claude_client = claude_client or ClaudeClient()
+        self.evaluator = evaluator or ThumbnailEvaluator()
         self.style_guide = ThumbnailConfig.load_style_guide()
         self.captions_dir = ThumbnailConfig.STYLE_GUIDE_PATH.parent / "captions"
         self.captions_dir.mkdir(exist_ok=True)
@@ -151,82 +155,6 @@ class ThumbnailAgent:
         except Exception as e:
             logger.error(f"Failed to save result: {e}")
             return ""
-
-    def format_for_slack(self, result: CaptionResult) -> Dict:
-        """
-        Format result for Slack display with voting interface.
-
-        Returns:
-            Slack block structure
-        """
-        blocks = [
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": "🎬 YouTube 썸네일 캡션 제안",
-                    "emoji": True
-                }
-            },
-            {
-                "type": "section",
-                "fields": [
-                    {
-                        "type": "mrkdwn",
-                        "text": f"*영상 제목*\n{result.request['video_title']}"
-                    },
-                    {
-                        "type": "mrkdwn",
-                        "text": f"*타겟 오디언스*\n{result.request['target_audience']}"
-                    }
-                ]
-            },
-            {
-                "type": "divider"
-            }
-        ]
-
-        # Add top 5 captions
-        for idx, caption_data in enumerate(result.top_5, 1):
-            caption = caption_data["caption"]
-            score = caption_data["overall_score"]
-
-            blocks.append({
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"*옵션 {idx}* (점수: {score:.1f})\n_{caption}_\n{caption_data['feedback']}"
-                },
-                "accessory": {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "👍 선택",
-                        "emoji": True
-                    },
-                    "value": f"caption_{idx}",
-                    "action_id": f"select_caption_{idx}"
-                }
-            })
-
-        blocks.append({
-            "type": "divider"
-        })
-
-        blocks.append({
-            "type": "context",
-            "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": f"총 {len(result.generated_captions)}개 캡션 생성됨 | 팀 스타일 가이드 기반 평가"
-                }
-            ]
-        })
-
-        return {
-            "blocks": blocks,
-            "text": f"YouTube 썸네일 캡션: {result.request['video_title']}"
-        }
 
     def get_saved_results(self, limit: int = 10) -> List[Dict]:
         """Get recent saved caption results."""
