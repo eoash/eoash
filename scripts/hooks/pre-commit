@@ -1,0 +1,36 @@
+#!/bin/bash
+# Pre-commit hook: 하드코딩 절대경로 감지
+# 설치: git config core.hooksPath scripts/hooks
+
+ERRORS=0
+
+# 스테이징된 .py, .sh 파일에서 하드코딩 경로 체크
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py|sh)$')
+
+if [ -z "$FILES" ]; then
+    exit 0
+fi
+
+for FILE in $FILES; do
+    # Windows 절대경로 (C:\Users\...)
+    if grep -nP 'C:\\\\Users\\\\|C:/Users/' "$FILE" 2>/dev/null; then
+        echo "WARNING: Windows 절대경로 발견 → $FILE"
+        ERRORS=$((ERRORS + 1))
+    fi
+
+    # Mac/Linux 절대경로 (/Users/...)
+    if grep -nP '"/Users/|'\''/Users/' "$FILE" 2>/dev/null; then
+        echo "WARNING: Mac 절대경로 발견 → $FILE"
+        ERRORS=$((ERRORS + 1))
+    fi
+done
+
+if [ $ERRORS -gt 0 ]; then
+    echo ""
+    echo "⚠️  하드코딩 절대경로 $ERRORS건 발견."
+    echo "상대경로 또는 환경변수로 교체를 권장합니다."
+    echo "무시하려면: git commit --no-verify"
+    exit 1
+fi
+
+exit 0
