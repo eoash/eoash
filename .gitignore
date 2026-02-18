@@ -56,8 +56,20 @@ token.json
 .DS_Store
 Thumbs.db
 
-# Project specific
+# Output data (contains private business data)
+email_output/
+sync/
+
+# Backup files
+claude_migration_backup_safe/
+
+# Agent runtime data
+agent/memory/captions/*.json
+agent/memory/votes/*.json
 agent/reports/daily/*.json
 agent/reports/weekly/*.json
 agent/memory/last_run.json
 agent/memory/*_run.json
+
+# Script logs
+scripts/daily/journal_log.txt

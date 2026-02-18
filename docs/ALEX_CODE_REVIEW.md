@@ -1,691 +1,209 @@
-# 🔍 Alex Kim's Code Review Report
+# Alex Kim's Code Review Report
 
-**Date**: 2026-02-11
+**Date**: 2026-02-18 (2차 리뷰)
+**Previous Review**: 2026-02-11
 **Reviewer**: Alex Kim (Senior Software Architect)
-**Project**: EO Studio AR Automation & Email System
-**Review Scope**: Full codebase
+**Project**: EO Studio AR Automation, Email Automation, Thumbnail Agent
+**Review Scope**: Full codebase + 이전 리뷰 대비 변화 추적
 
 ---
 
 ## Executive Summary
 
-전반적으로 **기능은 잘 작동하지만, 아키텍처 개선이 필요합니다.** 주요 문제는:
+이전 리뷰(2/11)의 Critical/Major 이슈 5개는 **미해결** 상태이나, **새로 추가된 모듈들(matcher, thumbnail 시스템)의 품질은 확실히 높아짐.** 특히 `matcher.py`는 코드베이스에서 가장 잘 설계된 모듈. 테스트도 핵심 모듈에 대해 추가됨.
 
-1. **God Object 패턴** - `EmailAutomation` 클래스가 너무 많은 책임 보유
-2. **Hard-coded Dependencies** - 의존성 주입 부족
-3. **Mixed Concerns** - 비즈니스 로직과 인프라 레이어 혼재
-4. **낮은 테스트 가능성** - 현재 구조로는 단위 테스트 작성 어려움
+**신규 Critical 이슈 2개 발견**:
+1. `matcher.py:218` -- None * 10 런타임 에러
+2. `bill_com.py` -- API v2/v3 혼용으로 프로덕션 인증 실패 가능
 
-**긍정적인 점**:
-- ✅ Type hints 잘 사용됨
-- ✅ Docstrings 작성
-- ✅ 로깅 적절히 사용
-- ✅ 환경 변수로 설정 관리
-
-**권장 사항**: 단계적 리팩토링 (Phase 1 → Phase 2 → Phase 3)
+**긍정적 변화**:
+- `matcher.py` 3단계 매칭 전략 설계 탁월
+- `InvoiceUpdater`에 DI(의존성 주입) 올바르게 적용
+- `test_matcher.py` 테스트 10개 추가 (0% → 핵심 모듈 커버)
+- `ThumbnailEvaluator` 규칙 기반 평가 설계 깔끔
 
 ---
 
-## Critical Issues 🔴 (Must Fix)
+## 이전 리뷰(2/11) 이슈 추적
 
-### 1. `EmailAutomation` - God Object Violation
-
-**File**: `ash_bot/email_automation.py:25-237`
-
-**Problem**:
-```python
-class EmailAutomation:
-    def __init__(self):
-        self.gmail = GmailClient()       # Hard-coded!
-        self.clickup = ClickUpClient()   # Hard-coded!
-        self.slack = SlackClient()       # Hard-coded!
-        self.vip_config = self._load_vip_config()
-
-    def is_vip_sender(self, ...): ...          # VIP 감지
-    def extract_action_items(self, ...): ...   # 액션 추출
-    def check_vip_emails(self, ...): ...       # 이메일 확인
-    def create_task_from_email(self, ...): ... # 작업 생성
-    def summarize_important_emails(self, ...): ... # 요약
-```
-
-**Issues**:
-- ❌ **SRP 위반**: 5개 이상의 책임 (VIP 감지, 액션 추출, 이메일 확인, 작업 생성, 요약)
-- ❌ **DIP 위반**: 구체 클래스에 직접 의존 (GmailClient, ClickUpClient, SlackClient)
-- ❌ **테스트 불가능**: 의존성이 생성자에서 hard-coded되어 mock 불가능
-- ❌ **OCP 위반**: 새 VIP 카테고리 추가 시 if/else 수정 필요
-
-**Recommended Refactoring**:
-
-```python
-# Domain Layer - 비즈니스 로직
-class VIPDetector:
-    """VIP 발신자 감지 (단일 책임)"""
-    def __init__(self, config: VIPConfig):
-        self.config = config
-
-    def detect(self, sender: str) -> Optional[VIPCategory]:
-        """VIP 카테고리 반환"""
-        for category, patterns in self.config.categories.items():
-            if any(p.lower() in sender.lower() for p in patterns):
-                return VIPCategory(category)
-        return None
-
-
-class ActionItemExtractor:
-    """액션 아이템 추출 (단일 책임)"""
-    def __init__(self, keywords: List[str]):
-        self.keywords = keywords
-
-    def extract(self, subject: str, body: str) -> List[ActionItem]:
-        """액션 아이템 추출"""
-        # ... 추출 로직
-        pass
-
-
-# Application Layer - 오케스트레이션
-class EmailWorkflow:
-    """이메일 워크플로우 조율"""
-    def __init__(
-        self,
-        email_repo: EmailRepository,      # 추상화에 의존
-        vip_detector: VIPDetector,
-        action_extractor: ActionItemExtractor,
-        task_creator: TaskCreator,
-        notifier: Notifier
-    ):
-        self.email_repo = email_repo
-        self.vip_detector = vip_detector
-        self.action_extractor = action_extractor
-        self.task_creator = task_creator
-        self.notifier = notifier
-
-    def process_vip_emails(self, hours: int = 24) -> List[VIPEmail]:
-        """VIP 이메일 처리 (의존성 조율만)"""
-        emails = self.email_repo.get_recent(hours)
-        vip_emails = [
-            self._enrich_email(email)
-            for email in emails
-            if self.vip_detector.detect(email.sender)
-        ]
-        return vip_emails
-```
-
-**Benefits**:
-- ✅ 각 클래스가 단일 책임
-- ✅ Dependency injection으로 테스트 가능
-- ✅ 의존성을 교체 가능 (Gmail → Outlook 쉽게 전환)
-- ✅ VIP 카테고리 추가 시 설정만 변경
-
-**Severity**: 🔴 BLOCKER
-**Effort**: 4-6 hours
-**Priority**: HIGH
+| # | 이슈 | 심각도 | 상태 |
+|---|------|--------|------|
+| 1 | `EmailAutomation` God Object (5개 이상 책임) | CRITICAL | 미해결 |
+| 2 | Mixed Concerns (Gmail API + 비즈니스 로직 혼재) | CRITICAL | 미해결 |
+| 3 | `ClickUpClient.format_task_summary()` Presentation in Infra | MAJOR | 미해결 |
+| 4 | `SlackClient.send_dm()` SRP 위반 | MAJOR | 미해결 |
+| 5 | `SlackClient.send_todo_list_dm()` Presentation Logic | MAJOR | 미해결 |
+| 6 | Primitive Obsession (Dict 대신 Dataclass) | MINOR | **부분 해결** (신규 모듈에서 개선) |
+| 7 | Magic Numbers | MINOR | **부분 해결** (config.py에 상수 정리) |
+| 8 | Missing Type Hints | MINOR | **부분 해결** (신규 모듈 양호) |
 
 ---
 
-### 2. Mixed Concerns - Infrastructure와 Business Logic 혼재
+## 신규 Critical Issues (Must Fix)
 
-**File**: `ash_bot/email_automation.py:99-141`
+### 1. `matcher.py:218` -- None * 10 런타임 에러
 
-**Problem**:
-```python
-def check_vip_emails(self, hours: int = 24) -> List[Dict]:
-    # Gmail API 호출 (Infrastructure)
-    since = datetime.now() - timedelta(hours=hours)
-    query = f'after:{since.strftime("%Y/%m/%d")} in:inbox'
-    messages = self.gmail.list_messages(query=query, max_results=100)
-
-    # 비즈니스 로직 (Domain)
-    for msg in messages:
-        email = self.gmail.get_message(msg['id'])
-        is_vip, category = self.is_vip_sender(sender)
-        # ... VIP 처리
-```
-
-**Issues**:
-- ❌ **Presentation + Domain + Infrastructure** 모두 혼재
-- ❌ Gmail API가 변경되면 비즈니스 로직도 영향 받음
-- ❌ 다른 이메일 제공자로 전환 시 전체 재작성 필요
-
-**Recommended Refactoring**:
+**파일**: `ash_bot/core/matcher.py:218`
 
 ```python
-# Infrastructure Layer
-class GmailRepository(EmailRepository):  # 인터페이스 구현
-    """Gmail을 통한 이메일 저장소"""
-    def __init__(self, gmail_client: GmailClient):
-        self.client = gmail_client
+# 현재 (버그)
+if amounts_match(payment.amount, invoice.amount, self.tolerance * 10):
 
-    def get_recent(self, hours: int) -> List[Email]:
-        """최근 이메일 조회 (도메인 모델 반환)"""
-        since = datetime.now() - timedelta(hours=hours)
-        query = f'after:{since.strftime("%Y/%m/%d")} in:inbox'
-        messages = self.client.list_messages(query=query, max_results=100)
-
-        # Gmail 응답을 도메인 모델로 변환
-        return [self._to_domain_model(msg) for msg in messages]
-
-    def _to_domain_model(self, gmail_message: Dict) -> Email:
-        """Gmail 메시지를 도메인 Email 객체로 변환"""
-        email = self.client.get_message(gmail_message['id'])
-        headers = {h['name']: h['value'] for h in email['payload']['headers']}
-
-        return Email(
-            id=gmail_message['id'],
-            sender=headers.get('From', ''),
-            subject=headers.get('Subject', ''),
-            body=self._extract_body(email),
-            received_at=self._parse_date(headers.get('Date')),
-            is_unread='UNREAD' in email.get('labelIds', [])
-        )
-
-
-# Domain Layer
-@dataclass
-class Email:
-    """도메인 이메일 모델 (Gmail과 무관)"""
-    id: str
-    sender: str
-    subject: str
-    body: str
-    received_at: datetime
-    is_unread: bool
-
-
-# Application Layer
-class EmailWorkflow:
-    def process_vip_emails(self, hours: int) -> List[VIPEmail]:
-        # 이제 Gmail에 의존하지 않음!
-        emails = self.email_repo.get_recent(hours)  # 추상화
-        return [
-            email for email in emails
-            if self.vip_detector.detect(email.sender)
-        ]
+# self.tolerance 기본값이 None → TypeError 발생
 ```
 
-**Benefits**:
-- ✅ Gmail → Outlook 전환 시 `GmailRepository`만 `OutlookRepository`로 교체
-- ✅ 비즈니스 로직은 변경 불필요
-- ✅ 단위 테스트 시 `MockEmailRepository` 사용 가능
+**문제**: `PaymentMatcher`의 `tolerance` 기본값이 `None`. `_try_number_extraction_match`에서 `self.tolerance * 10` 계산 시 `TypeError` 발생.
 
-**Severity**: 🔴 BLOCKER
-**Effort**: 3-4 hours
-**Priority**: HIGH
+**영향**: 인보이스 번호가 포함된 입금 건 매칭 시 시스템 크래시.
+
+**수정**:
+```python
+tol = (self.tolerance * 10) if self.tolerance is not None else None
+if amounts_match(payment.amount, invoice.amount, tol):
+```
 
 ---
 
-## Major Issues 🟠 (Fix Soon)
+### 2. `bill_com.py` -- API v2/v3 혼용
 
-### 3. `ClickUpClient.format_task_summary()` - Presentation Logic in Infrastructure
+**파일**: `ash_bot/integrations/bill_com.py`
 
-**File**: `ash_bot/integrations/clickup_client.py:296-317`
+| 메서드 | API 버전 |
+|--------|---------|
+| `get_outstanding_invoices()` (L207) | v2 (`List/Invoice.json`) |
+| `update_invoice_status()` (L271) | v3 (`v3/invoices/`) |
+| `get_invoice_details()` (L296) | v3 (`v3/invoices/`) |
+| `get_paid_invoices()` (L334) | v3 (`v3/invoices`) |
+| `get_recently_paid_invoices()` (L380) | v2 (`List/Invoice.json`) |
 
-**Problem**:
-```python
-def format_task_summary(self, task: Dict) -> str:
-    """작업을 요약 형식으로 포맷"""
-    priority_emoji = {
-        1: '🔴',
-        2: '🟠',
-        3: '🟡',
-        4: '🟢',
-    }.get(priority, '⚪')
+**문제**: `_make_request`는 v2 세션 인증 방식인데, v3 엔드포인트에 v2 인증을 보내면 프로덕션에서 인증 실패 가능.
 
-    return f"{priority_emoji} {name}{due_str}"
-```
-
-**Issues**:
-- ❌ **Infrastructure layer에 Presentation 로직** - API client가 UI 포맷팅 담당
-- ❌ 이모지는 사용자 인터페이스 관심사 (CLI, Slack, Web 등에 따라 다름)
-
-**Recommended Refactoring**:
-
-```python
-# Infrastructure Layer (API Client)
-class ClickUpClient:
-    # format_task_summary 제거!
-    # 오직 API 호출만 담당
-    pass
-
-
-# Presentation Layer (Formatters)
-class TaskFormatter:
-    """작업 포맷팅 (출력 전용)"""
-    @staticmethod
-    def to_cli_summary(task: Dict) -> str:
-        """CLI 출력용 포맷"""
-        priority_emoji = {1: '🔴', 2: '🟠', 3: '🟡', 4: '🟢'}.get(task.get('priority'), '⚪')
-        return f"{priority_emoji} {task['name']}"
-
-    @staticmethod
-    def to_slack_block(task: Dict) -> Dict:
-        """Slack Block Kit 포맷"""
-        return {
-            "type": "section",
-            "text": {"type": "mrkdwn", "text": f"*{task['name']}*"}
-        }
-```
-
-**Benefits**:
-- ✅ Infrastructure layer는 데이터만 반환
-- ✅ Presentation은 별도 레이어에서 처리
-- ✅ CLI, Slack, Web 등 다양한 출력 형식 지원 용이
-
-**Severity**: 🟠 MAJOR
-**Effort**: 1-2 hours
-**Priority**: MEDIUM
+**수정**: 모든 엔드포인트를 v2로 통일하거나, v3용 별도 인증 메서드 추가. 현재 동작하는 v2 패턴으로 통일 권장.
 
 ---
 
-### 4. `SlackClient.send_dm()` - SRP Violation
+## 신규 Major Issues
 
-**File**: `ash_bot/integrations/slack_client.py:227-263`
-
-**Problem**:
-```python
-def send_dm(self, user_id: str, text: str, blocks: Optional[list] = None) -> bool:
-    # 1. DM 채널 열기 (책임 1)
-    channel_id = self.open_dm_channel(user_id)
-    if not channel_id:
-        return False
-
-    # 2. 메시지 전송 (책임 2)
-    kwargs = {"channel": channel_id, "text": text}
-    if blocks:
-        kwargs['blocks'] = blocks
-    response = self.client.chat_postMessage(**kwargs)
-```
-
-**Issues**:
-- ❌ **두 가지 책임**: DM 채널 열기 + 메시지 전송
-- ❌ `send_dm`이 `open_dm_channel`을 호출 (낮은 응집도)
-
-**Recommended Refactoring**:
+### 3. `bill_com.py:188-189` -- 민감 정보 로그 누출
 
 ```python
-class SlackClient:
-    def send_dm(self, user_id: str, text: str, blocks: Optional[list] = None) -> bool:
-        """DM 보내기 (단일 책임)"""
-        if not self.client:
-            logger.error("Slack client not configured")
-            return False
-
-        try:
-            # 채널 ID는 외부에서 받거나, 내부 캐싱
-            channel_id = self._get_or_create_dm_channel(user_id)
-
-            return self.send_message(channel_id, text, blocks)  # 기존 메서드 재사용
-
-        except SlackApiError as e:
-            logger.error(f"DM 전송 오류: {e.response['error']}")
-            return False
-
-    def _get_or_create_dm_channel(self, user_id: str) -> str:
-        """DM 채널 가져오기 (캐싱 가능)"""
-        # 캐시 확인
-        if user_id in self._dm_channel_cache:
-            return self._dm_channel_cache[user_id]
-
-        # 채널 생성
-        channel_id = self.open_dm_channel(user_id)
-        self._dm_channel_cache[user_id] = channel_id
-        return channel_id
+logger.error(f"Error details: {error_data}")
+logger.error(f"Full response: {result}")  # 세션 ID, 인증 토큰 노출 위험
 ```
 
-**Benefits**:
-- ✅ `send_dm`이 하나의 책임만 (메시지 전송)
-- ✅ DM 채널 캐싱으로 성능 개선
-- ✅ 기존 `send_message` 메서드 재사용
-
-**Severity**: 🟠 MAJOR
-**Effort**: 1 hour
-**Priority**: MEDIUM
+**수정**: `Full response` 로그를 `DEBUG` 레벨로 변경.
 
 ---
 
-### 5. `SlackClient.send_todo_list_dm()` - Presentation Logic
-
-**File**: `ash_bot/integrations/slack_client.py:265-316`
-
-**Problem**:
-```python
-def send_todo_list_dm(self, user_id: str, tasks: list) -> bool:
-    # Presentation 로직 (포맷팅)
-    message_lines = ["📋 *오늘 할 일*\n"]
-    for i, task in enumerate(tasks, 1):
-        priority_emoji = priority_map.get(priority, '⚪')
-        task_link = f"<{url}|{name}>" if url else name
-        message_lines.append(f"{i}. {priority_emoji} {task_link}...")
-
-    text = "\n".join(message_lines)
-    return self.send_dm(user_id, text)
-```
-
-**Issues**:
-- ❌ **Infrastructure layer에 Presentation 로직**
-- ❌ SlackClient가 투두리스트 포맷을 알고 있음 (높은 결합도)
-
-**Recommended Refactoring**:
+### 4. `main.py:36-44` -- 일관성 없는 DI 패턴
 
 ```python
-# Presentation Layer
-class TodoListFormatter:
-    """투두리스트 포맷터"""
-    @staticmethod
-    def to_slack_message(tasks: List[Dict]) -> str:
-        """Slack 메시지 포맷"""
-        if not tasks:
-            return "📋 *오늘 할 일*\n\n오늘 마감 작업이 없습니다! 🎉"
-
-        lines = ["📋 *오늘 할 일*\n"]
-        for i, task in enumerate(tasks, 1):
-            # ... 포맷팅 로직
-            lines.append(f"{i}. {priority_emoji} {task_link}...")
-
-        return "\n".join(lines)
-
-
-# Infrastructure Layer
-class SlackClient:
-    # send_todo_list_dm 제거!
-    # 오직 send_dm만 제공
-
-
-# Application Layer (사용 예시)
-class TodoNotifier:
-    def notify_daily_tasks(self, user_id: str, tasks: List[Dict]):
-        message = TodoListFormatter.to_slack_message(tasks)
-        self.slack.send_dm(user_id, message)
+self.bill_com = BillComClient()       # Hard-coded
+self.plaid = PlaidClient()            # Hard-coded
+self.updater = InvoiceUpdater(self.bill_com)  # DI 적용
 ```
 
-**Benefits**:
-- ✅ SlackClient는 메시지 전송만 담당
-- ✅ 포맷팅 로직은 별도 클래스
-- ✅ 투두리스트 포맷 변경 시 SlackClient 수정 불필요
-
-**Severity**: 🟠 MAJOR
-**Effort**: 1 hour
-**Priority**: MEDIUM
+`InvoiceUpdater`에는 DI를 쓰면서, 나머지는 직접 생성. 일관성 필요.
 
 ---
 
-## Minor Issues 🟡 (Nice to Have)
+### 5. `thumbnail_agent.py:155-229` -- Core Layer에 Slack Presentation
 
-### 6. Primitive Obsession - 딕셔너리 대신 데이터클래스
-
-**Files**: 전체 코드베이스
-
-**Problem**:
-```python
-# 현재: 딕셔너리 사용
-vip_emails.append({
-    'id': msg['id'],
-    'sender': sender,
-    'subject': subject,
-    'category': category,
-    'is_unread': is_unread,
-    'date': headers.get('Date', '')
-})
-
-# 사용 시
-for email in vip_emails:
-    print(email['sender'])  # 타입 체크 불가, 오타 위험
-```
-
-**Recommended**:
-```python
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-
-class VIPCategory(Enum):
-    INVESTOR = "investor"
-    LAWYER = "lawyer"
-    ACCOUNTANT = "accountant"
-
-@dataclass
-class VIPEmail:
-    id: str
-    sender: str
-    subject: str
-    category: VIPCategory
-    is_unread: bool
-    received_at: datetime
-
-# 사용 시
-for email in vip_emails:
-    print(email.sender)  # IDE 자동완성, 타입 체크
-```
-
-**Benefits**:
-- ✅ IDE 자동완성
-- ✅ 타입 체크로 런타임 에러 감소
-- ✅ 명확한 데이터 구조
-- ✅ Immutable (frozen=True)
-
-**Severity**: 🟡 MINOR
-**Effort**: 2-3 hours
-**Priority**: LOW
+`core/` 디렉토리(비즈니스 로직)에 있는 `ThumbnailAgent`가 Slack Block Kit 구조체를 직접 생성. Presentation concern은 분리 필요.
 
 ---
 
-### 7. Magic Numbers - 상수 추출
-
-**Files**: 여러 파일
-
-**Examples**:
-```python
-# ash_bot/email_automation.py:113
-messages = self.gmail.list_messages(query=query, max_results=100)  # 100?
-
-# scripts/add_task_direct.py
-# 우선순위 숫자 (1, 2, 3, 4) 의미 불명확
-```
-
-**Recommended**:
-```python
-# config.py
-class EmailConfig:
-    MAX_EMAILS_TO_FETCH = 100
-    VIP_CHECK_INTERVAL_HOURS = 1
-    DAILY_SUMMARY_HOUR = 9
-
-class TaskPriority(Enum):
-    URGENT = 1
-    HIGH = 2
-    NORMAL = 3
-    LOW = 4
-
-# 사용
-messages = self.gmail.list_messages(
-    query=query,
-    max_results=EmailConfig.MAX_EMAILS_TO_FETCH
-)
-
-task = clickup.create_task(
-    name="Fix bug",
-    priority=TaskPriority.HIGH.value
-)
-```
-
-**Severity**: 🟡 MINOR
-**Effort**: 1 hour
-**Priority**: LOW
-
----
-
-### 8. Missing Type Hints in Some Functions
-
-**File**: `scripts/add_task_direct.py`
-
-**Problem**:
-```python
-def parse_date(date_str):  # Type hints 누락
-    """자연어 날짜 파싱"""
-    # ...
-```
-
-**Recommended**:
-```python
-from typing import Optional
-from datetime import datetime
-
-def parse_date(date_str: str) -> Optional[datetime]:
-    """자연어 날짜 파싱"""
-    # ...
-```
-
-**Severity**: 🟡 MINOR
-**Effort**: 30 minutes
-**Priority**: LOW
-
----
-
-## Positive Findings ✅
-
-### What's Good
-
-1. **Type Hints 사용** - 대부분의 함수에 타입 힌트 작성됨
-2. **Docstrings** - 모든 public 함수에 docstring 존재
-3. **환경 변수 관리** - `.env` 파일로 credential 관리
-4. **로깅** - 적절한 로깅 사용
-5. **에러 핸들링** - try/except로 에러 처리
-6. **코드 가독성** - 변수명, 함수명 명확함
-
----
-
-## Refactoring Roadmap
-
-### Phase 1: Critical Issues (Week 1)
-**Goal**: 테스트 가능한 구조 만들기
-
-1. **EmailAutomation 분해**
-   - `VIPDetector` 클래스 생성
-   - `ActionItemExtractor` 클래스 생성
-   - `EmailWorkflow` 클래스 생성 (오케스트레이터)
-
-2. **Mixed Concerns 분리**
-   - `GmailRepository` 생성 (Infrastructure)
-   - `Email` 도메인 모델 생성 (Domain)
-   - Gmail API 의존성 제거
-
-3. **Dependency Injection 적용**
-   - 모든 클래스에 생성자 주입
-   - `EmailWorkflow`에 의존성 주입
-
-**Outcome**: 단위 테스트 작성 가능
-
----
-
-### Phase 2: Major Issues (Week 2)
-**Goal**: 레이어 분리 완성
-
-1. **Presentation Logic 분리**
-   - `TaskFormatter` 클래스 생성
-   - `TodoListFormatter` 클래스 생성
-   - SlackClient에서 포맷팅 제거
-
-2. **SRP 위반 수정**
-   - `SlackClient.send_dm()` 단순화
-   - DM 채널 캐싱 추가
-
-**Outcome**: 각 레이어 명확히 분리
-
----
-
-### Phase 3: Minor Issues (Week 3)
-**Goal**: 코드 품질 향상
-
-1. **Primitive Obsession 제거**
-   - `VIPEmail` dataclass 생성
-   - `Task` dataclass 생성
-   - `Email` dataclass 생성
-
-2. **Magic Numbers 제거**
-   - `EmailConfig` 클래스 생성
-   - `TaskPriority` Enum 생성
-
-3. **Type Hints 완성**
-   - 모든 함수에 타입 힌트 추가
-
-**Outcome**: 유지보수성 극대화
-
----
-
-## Testing Strategy
-
-### Current State
-- ❌ **0% 테스트 커버리지** - 단위 테스트 없음
-- ❌ 현재 구조로는 테스트 작성 어려움 (hard-coded dependencies)
-
-### After Refactoring
+### 6. `thumbnail_agent.py:47-49` -- hard-coded dependencies 재발
 
 ```python
-# tests/test_vip_detector.py
-def test_vip_detector_identifies_investor():
-    config = VIPConfig(investors=["@sazze.vc"])
-    detector = VIPDetector(config)
-
-    category = detector.detect("hslee@sazze.vc")
-
-    assert category == VIPCategory.INVESTOR
-
-
-# tests/test_email_workflow.py
-def test_process_vip_emails():
-    # Mock dependencies
-    mock_repo = MockEmailRepository([
-        Email(sender="hslee@sazze.vc", ...),
-        Email(sender="normal@example.com", ...)
-    ])
-    detector = VIPDetector(config)
-    workflow = EmailWorkflow(email_repo=mock_repo, vip_detector=detector, ...)
-
-    vip_emails = workflow.process_vip_emails(hours=24)
-
-    assert len(vip_emails) == 1
-    assert vip_emails[0].sender == "hslee@sazze.vc"
+self.claude_client = ClaudeClient()      # Hard-coded
+self.evaluator = ThumbnailEvaluator()    # Hard-coded
 ```
 
-**Target Coverage**: 80%+
+이전 리뷰에서 `EmailAutomation`의 동일 패턴을 Critical로 지적했으나, 새 모듈에서 반복됨.
 
 ---
 
-## Summary & Recommendation
+## Minor Issues
 
-### Current State
-- 🟡 **Architecture**: Mixed concerns, God Objects
-- 🟢 **Functionality**: 모든 기능 정상 작동
-- 🟡 **Maintainability**: 변경 시 여러 파일 수정 필요
-- 🔴 **Testability**: 테스트 작성 거의 불가능
+### 7. `vote_tracker.py:49-79` -- 파일 기반 동시성 문제
 
-### After Refactoring
-- 🟢 **Architecture**: Clean architecture 준수
-- 🟢 **Functionality**: 동일하게 작동
-- 🟢 **Maintainability**: 각 변경사항이 한 곳에만 영향
-- 🟢 **Testability**: 단위 테스트 작성 용이
+여러 사용자가 동시 투표 시 race condition 발생 가능. 현재 규모에서는 OK, 팀 커지면 file lock 필요.
 
-### My Recommendation
+### 8. `config.py:17-18` -- import 시 디렉토리 생성 부작용
 
-**지금 당장 모든 것을 리팩토링할 필요는 없습니다.** 하지만:
+```python
+LOGS_DIR.mkdir(exist_ok=True)    # import만 해도 디렉토리 생성
+REPORTS_DIR.mkdir(exist_ok=True)
+```
 
-1. **새로운 기능 추가 시**: Clean architecture 원칙 따르기
-2. **기존 코드 수정 시**: 해당 부분만 리팩토링 (보이스카우트 룰)
-3. **Phase 1 우선 진행**: 테스트 가능한 구조가 가장 중요
-
-**다음 작업 시 적용할 규칙**:
-- ✅ Dependency Injection 사용
-- ✅ 한 클래스 = 한 책임
-- ✅ Infrastructure와 Domain 분리
-- ✅ 테스트 먼저 작성 (TDD)
+테스트 환경에서 의도치 않은 부작용. 실제 필요 시점에 생성해야 함.
 
 ---
 
-**Questions?** Ask Alex anytime:
-- "이 설계가 클린 아키텍처를 따르나요?"
-- "이 코드를 어떻게 리팩토링해야 하나요?"
-- "테스트 가능하게 만들려면?"
+## Positive Findings
+
+1. **`matcher.py` 설계 탁월**: 3단계 매칭 전략(exact → number_extraction → fuzzy) 명확 분리. `CandidateMatch` dataclass로 미매칭 후보군 제공.
+
+2. **`InvoiceUpdater` DI 모범 사례**: `BillComClient`를 생성자 주입. 코드베이스의 best practice.
+
+3. **테스트 추가**: `test_matcher.py`에 7개 클래스, 10+ 테스트 케이스. Edge case(음수 금액, 0 금액, 빈 목록) 커버.
+
+4. **`ThumbnailEvaluator` 규칙 기반 설계**: `BANNED_EXPRESSIONS`, `POSITIVE_PATTERNS` 등 패턴을 클래스 변수로 분리. 각 평가 축이 독립 메서드.
+
+5. **`ARReporter` 포맷 분리 시도**: `generate_daily_report()` → 데이터 반환, `format_report_for_slack()` → 포맷팅 분리. 완벽하진 않지만 방향 맞음.
+
+6. **`SlackClient.send_unmatched_alert()`**: 미매칭 건 후보군을 신뢰도 색상(초록/노랑/빨강)으로 구분. "10분 검토" 목표에 직접 기여.
+
+7. **`QuickBooksConfig` 추가**: Plaid → QuickBooks 전환 준비. 설정 구조 일관성 유지.
+
+---
+
+## 테스트 커버리지 현황
+
+| 모듈 | 테스트 | 커버리지 |
+|------|--------|---------|
+| `matcher.py` | `test_matcher.py` (10+ cases) | 양호 |
+| `email_automation.py` | 없음 | 0% |
+| `thumbnail_agent.py` | 없음 | 0% |
+| `thumbnail_evaluator.py` | 없음 | 0% |
+| `vote_tracker.py` | 없음 | 0% |
+| `ar_reporter.py` | 없음 | 0% |
+| `updater.py` | 없음 | 0% |
+| Integration clients | 없음 | 0% |
+
+**다음 테스트 우선순위**: `thumbnail_evaluator.py` (외부 의존성 없어서 바로 가능) > `ar_reporter.py` > `updater.py`
+
+---
+
+## 우선 조치 Top 3
+
+| 순위 | 파일 | 이슈 | 예상 시간 |
+|------|------|------|----------|
+| 1 | `matcher.py:218` | None * 10 런타임 에러 | 5분 |
+| 2 | `bill_com.py` | API v2/v3 혼용 정리 | 2시간 |
+| 3 | `bill_com.py:188-189` | 민감 정보 로그 제거 | 10분 |
+
+---
+
+## Refactoring Roadmap (업데이트)
+
+### Phase 1: 즉시 (이번 주)
+- `matcher.py` None 버그 수정
+- `bill_com.py` 로그 보안 수정
+- `.gitignore` 보안 항목 추가 (**완료**)
+
+### Phase 2: 다음 주
+- `bill_com.py` API 버전 통일
+- `thumbnail_evaluator.py` 테스트 추가
+
+### Phase 3: 새 기능 추가 시 (보이스카우트 룰)
+- `EmailAutomation` 분해 (새 기능 추가 시 해당 부분만)
+- `ThumbnailAgent` Presentation 분리
+- DI 패턴 일관성 확보
 
 ---
 
 _Alex Kim, Senior Software Architect_
 _"Code is read more than it's written. Make it maintainable."_
+_Last updated: 2026-02-18_
