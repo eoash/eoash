@@ -2,6 +2,7 @@
 
 from typing import Optional, Tuple
 from decimal import Decimal
+from difflib import SequenceMatcher
 import re
 
 
@@ -13,10 +14,28 @@ def validate_amount(amount: float, tolerance: float = 0.01) -> bool:
         return False
 
 
-def amounts_match(amount1: float, amount2: float, tolerance: float = 0.01) -> bool:
-    """Check if two amounts match within tolerance."""
+def calculate_tolerance(invoice_amount: float) -> float:
+    """
+    ACH 수수료 기반 허용 오차 계산.
+    규칙: MAX($2, 청구금액 × 0.1%), 최대 $50
+    - $2: ACH 최대 수수료 $1.50 + 안전 마진
+    - 0.1%: 대형 거래도 비율 커버
+    - $50: 너무 큰 차이는 수동 검토
+    """
+    pct_based = float(invoice_amount) * 0.001  # 0.1%
+    tolerance = max(2.0, pct_based)
+    return min(tolerance, 50.0)
+
+
+def amounts_match(amount1: float, amount2: float, tolerance: float = None) -> bool:
+    """
+    Check if two amounts match within tolerance.
+    tolerance가 None이면 calculate_tolerance로 동적 계산.
+    """
     if not validate_amount(amount1) or not validate_amount(amount2):
         return False
+    if tolerance is None:
+        tolerance = calculate_tolerance(max(float(amount1), float(amount2)))
     return abs(float(amount1) - float(amount2)) <= tolerance
 
 
@@ -60,25 +79,30 @@ def sanitize_string(text: str) -> str:
 def fuzzy_match_similarity(str1: str, str2: str) -> float:
     """
     Calculate similarity between two strings (0.0 to 1.0).
-    Simple implementation based on character overlap.
+    두 가지 방식을 결합해서 더 나은 점수를 반환:
+    1. SequenceMatcher: 문자 수준 유사도 ("SAMSUNG" vs "Samsung" 처리)
+    2. 단어 토큰 Jaccard: 단어 단위 공통 비율 ("Samsung Electronics" vs "Samsung Electronics Co Ltd")
     """
     if not str1 or not str2:
         return 0.0
 
-    str1 = str1.lower().strip()
-    str2 = str2.lower().strip()
+    s1 = str1.lower().strip()
+    s2 = str2.lower().strip()
 
-    if str1 == str2:
+    if s1 == s2:
         return 1.0
 
-    # Use simple character overlap metric
-    set1 = set(str1)
-    set2 = set(str2)
+    # Method 1: 문자 수준 SequenceMatcher
+    seq_ratio = SequenceMatcher(None, s1, s2).ratio()
 
-    if not set1 or not set2:
-        return 0.0
+    # Method 2: 단어 토큰 Jaccard
+    words1 = set(s1.split())
+    words2 = set(s2.split())
+    if words1 and words2:
+        intersection = len(words1 & words2)
+        union = len(words1 | words2)
+        word_ratio = intersection / union if union > 0 else 0.0
+    else:
+        word_ratio = 0.0
 
-    intersection = len(set1 & set2)
-    union = len(set1 | set2)
-
-    return intersection / union if union > 0 else 0.0
+    return max(seq_ratio, word_ratio)

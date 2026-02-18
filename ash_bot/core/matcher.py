@@ -1,7 +1,7 @@
 """Payment-to-invoice matching logic."""
 
 from typing import List, Optional, Tuple
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from ash_bot.integrations.bill_com import Invoice
 from ash_bot.integrations.plaid_client import Transaction
@@ -10,7 +10,8 @@ from ash_bot.utils.logger import get_logger
 from ash_bot.utils.validators import (
     amounts_match,
     fuzzy_match_similarity,
-    extract_invoice_number
+    extract_invoice_number,
+    calculate_tolerance
 )
 
 logger = get_logger(__name__)
@@ -26,17 +27,26 @@ class MatchResult:
     amount_diff: float  # Difference in amount if any
 
 
+@dataclass
+class CandidateMatch:
+    """매칭 실패한 입금에 대한 후보 청구서 목록."""
+    payment: Transaction
+    candidates: List[Tuple[Invoice, float]] = field(default_factory=list)
+    # candidates: [(invoice, confidence_score), ...] 상위 3개
+
+
 class PaymentMatcher:
     """Match bank transactions to unpaid invoices."""
 
-    def __init__(self, tolerance: float = ARConfig.AMOUNT_TOLERANCE):
+    def __init__(self, tolerance: float = None):
         """
         Initialize payment matcher.
 
         Args:
-            tolerance: Amount matching tolerance in dollars
+            tolerance: 고정 허용 오차(달러). None이면 청구 금액에 따라 동적 계산.
+                       동적 계산 규칙: MAX($2, 금액×0.1%), 최대 $50
         """
-        self.tolerance = tolerance
+        self.tolerance = tolerance  # None = dynamic per invoice
 
     def match_payment_to_invoice(
         self,
@@ -89,7 +99,7 @@ class PaymentMatcher:
         self,
         payments: List[Transaction],
         invoices: List[Invoice]
-    ) -> Tuple[List[MatchResult], List[Transaction]]:
+    ) -> Tuple[List[MatchResult], List[CandidateMatch]]:
         """
         Match multiple payments to invoices.
 
@@ -98,13 +108,15 @@ class PaymentMatcher:
             invoices: List of outstanding invoices
 
         Returns:
-            Tuple of (matches, unmatched_payments)
+            Tuple of (matches, unmatched_with_candidates)
+            - matches: 매칭 성공 목록
+            - unmatched_with_candidates: 매칭 실패 건 + 상위 3개 후보군
         """
         logger.info(f"Matching {len(payments)} payments to {len(invoices)} invoices")
 
         matches = []
         matched_invoice_ids = set()
-        unmatched = []
+        unmatched_with_candidates = []
 
         # Sort invoices by amount for more efficient matching
         sorted_invoices = sorted(invoices, key=lambda x: x.amount)
@@ -127,18 +139,31 @@ class PaymentMatcher:
                     f"(confidence: {result.confidence:.2%})"
                 )
             else:
-                unmatched.append(payment)
-                logger.debug(f"Could not match payment ${payment.amount} ({payment.date})")
+                # 매칭 실패 시 전체 청구서에서 상위 3개 후보군 추출
+                candidates = self._get_top_candidates(payment, sorted_invoices)
+                unmatched_with_candidates.append(
+                    CandidateMatch(payment=payment, candidates=candidates)
+                )
+                logger.debug(
+                    f"Could not match payment ${payment.amount} ({payment.date}), "
+                    f"found {len(candidates)} candidates"
+                )
 
-        logger.info(f"Successfully matched {len(matches)} payments, {len(unmatched)} unmatched")
-        return matches, unmatched
+        logger.info(
+            f"Successfully matched {len(matches)} payments, "
+            f"{len(unmatched_with_candidates)} unmatched"
+        )
+        return matches, unmatched_with_candidates
 
     def _get_amount_candidates(
         self,
         amount: float,
         invoices: List[Invoice]
     ) -> List[Invoice]:
-        """Get invoices with matching amounts (within tolerance)."""
+        """
+        Get invoices with matching amounts (within tolerance).
+        self.tolerance가 None이면 amounts_match가 동적 계산.
+        """
         candidates = []
         for invoice in invoices:
             if amounts_match(amount, invoice.amount, self.tolerance):
@@ -236,6 +261,50 @@ class PaymentMatcher:
             )
 
         return None
+
+    def _get_top_candidates(
+        self,
+        payment: Transaction,
+        invoices: List[Invoice],
+        n: int = 3
+    ) -> List[Tuple[Invoice, float]]:
+        """
+        매칭 실패한 입금에 대해 전체 청구서에서 유사도 상위 N개 후보 반환.
+
+        금액 필터 없이 모든 청구서를 대상으로 하되,
+        고객명 유사도 + 금액 근접도를 결합한 점수로 정렬.
+
+        Args:
+            payment: 매칭 실패한 입금 거래
+            invoices: 전체 미결 청구서 목록
+            n: 반환할 후보 수 (기본 3개)
+
+        Returns:
+            [(invoice, score), ...] 상위 N개
+        """
+        merchant = payment.merchant_name or payment.description
+        tolerance = calculate_tolerance(payment.amount)
+
+        scored = []
+        for invoice in invoices:
+            # 고객명 유사도 (0~1)
+            name_score = fuzzy_match_similarity(merchant, invoice.customer_name)
+
+            # 금액 근접도 점수: 오차가 허용 오차 이내면 보너스
+            amount_diff = abs(float(payment.amount) - float(invoice.amount))
+            if amount_diff <= tolerance:
+                amount_score = 1.0
+            elif amount_diff <= tolerance * 5:
+                amount_score = 0.5
+            else:
+                amount_score = 0.0
+
+            # 최종 점수: 이름 70% + 금액 30%
+            combined_score = (name_score * 0.7) + (amount_score * 0.3)
+            scored.append((invoice, round(combined_score, 3)))
+
+        # 점수 기준 내림차순 정렬, 상위 N개
+        return sorted(scored, key=lambda x: x[1], reverse=True)[:n]
 
     def get_match_summary(self, matches: List[MatchResult]) -> dict:
         """

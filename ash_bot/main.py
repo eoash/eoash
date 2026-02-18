@@ -244,7 +244,7 @@ class ARAutomationSystem:
                     "unmatched": payments
                 }
 
-            matches, unmatched = self.matcher.match_payments_to_invoices(
+            matches, unmatched_candidates = self.matcher.match_payments_to_invoices(
                 payments, invoices
             )
 
@@ -253,10 +253,10 @@ class ARAutomationSystem:
             return {
                 "status": "success",
                 "match_count": len(matches),
-                "unmatched_count": len(unmatched),
+                "unmatched_count": len(unmatched_candidates),
                 "summary": summary,
                 "matches": matches,
-                "unmatched": unmatched
+                "unmatched_candidates": unmatched_candidates
             }
 
         except Exception as e:
@@ -354,6 +354,15 @@ class ARAutomationSystem:
                     self.slack.send_weekly_report(message)
 
                 sent += 1
+
+                # 미매칭 건 후보군 알림 (daily만)
+                if report_type == "daily":
+                    unmatched_candidates = result["stages"]["matching"].get(
+                        "unmatched_candidates", []
+                    )
+                    if unmatched_candidates:
+                        self.slack.send_unmatched_alert(unmatched_candidates)
+                        sent += 1
 
             # Send to Notion
             if self.notion.client:

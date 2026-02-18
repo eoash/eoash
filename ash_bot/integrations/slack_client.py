@@ -141,6 +141,81 @@ class SlackClient:
 
         return self.send_message(channel, text)
 
+    def send_unmatched_alert(self, unmatched_candidates: list) -> bool:
+        """
+        매칭 실패한 입금 건과 상위 3개 후보군을 Slack에 전송.
+
+        Args:
+            unmatched_candidates: CandidateMatch 객체 목록
+
+        Returns:
+            True if successful
+        """
+        if not unmatched_candidates:
+            return True
+
+        blocks = [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": f"⚠️ 수동 확인 필요 - {len(unmatched_candidates)}건 미매칭"
+                }
+            },
+            {"type": "divider"}
+        ]
+
+        for cm in unmatched_candidates:
+            payment = cm.payment
+
+            # 입금 정보 헤더
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": (
+                        f"*💵 입금:* ${payment.amount:,.2f} "
+                        f"| {payment.date} "
+                        f"| `{payment.merchant_name or payment.description}`"
+                    )
+                }
+            })
+
+            # 후보군 목록
+            if cm.candidates:
+                candidate_lines = []
+                for i, (invoice, score) in enumerate(cm.candidates, 1):
+                    bar = "🟢" if score >= 0.7 else ("🟡" if score >= 0.4 else "🔴")
+                    candidate_lines.append(
+                        f"{i}. {bar} INV-{invoice.invoice_number} "
+                        f"| {invoice.customer_name} "
+                        f"| ${invoice.amount:,.2f} "
+                        f"| 신뢰도 {score:.0%}"
+                    )
+                blocks.append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "후보 청구서:\n" + "\n".join(candidate_lines)
+                    }
+                })
+            else:
+                blocks.append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "_후보 청구서 없음 - 신규 고객 입금일 수 있음_"
+                    }
+                })
+
+            blocks.append({"type": "divider"})
+
+        return self.send_message(
+            self.channel_alerts,
+            f"미매칭 입금 {len(unmatched_candidates)}건 확인 필요",
+            blocks=blocks
+        )
+
     def send_error_alert(self, error_message: str, context: str = "") -> bool:
         """
         Send error alert to Slack.
