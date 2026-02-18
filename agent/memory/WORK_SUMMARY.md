@@ -1,6 +1,6 @@
 # Windows Claude Code 작업 요약
 
-**기간**: 2026-02-08 ~ 2026-02-12
+**기간**: 2026-02-08 ~ 2026-02-18
 **담당자**: Seohyun Ahn (Finance Lead)
 **목적**: EO Studio 운영 자동화 및 Mac 마이그레이션
 
@@ -119,6 +119,24 @@
 - ✅ Gmail OAuth 인증 완료
 - ✅ ClickUp 작업 조회 가능
 - ✅ 일일 자동화 스케줄러 설정
+
+---
+
+### 7. AI Native Camp Skills (2026-02-16 ~ 18)
+**목표**: Claude Code 스킬 생태계 구축 및 멀티에이전트 학습
+
+**구현 내용**:
+- camp-1 플러그인 설치 (day1~4, day2-supplement-mcp)
+- my-context-sync 스킬 제작 (6개 소스 병렬 수집: Slack, Notion, ClickUp, Gmail, Calendar, GitHub)
+- my-session-wrap 스킬 제작 (멀티에이전트 2-Phase Pipeline)
+  - Phase 1: doc-updater, automation-scout, learning-extractor, followup-suggester (병렬)
+  - Phase 2: duplicate-checker (순차)
+- opusplan, agent-tower-plugin 설치
+
+**결과**:
+- ✅ "싱크해줘" 한 마디로 6개 도구 컨텍스트 통합
+- ✅ "wrap해줘" 한 마디로 세션 정리 자동화
+- ✅ 멀티에이전트 2-Phase Pipeline 패턴 체득
 
 ---
 
@@ -367,5 +385,5 @@ eoash/
 ---
 
 **문서 생성일**: 2026-02-12
-**마지막 업데이트**: 2026-02-12
-**작성자**: Claude Sonnet 4.5 (Windows)
+**마지막 업데이트**: 2026-02-18
+**작성자**: Claude Sonnet 4.6 (Windows)
