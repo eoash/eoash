@@ -131,12 +131,18 @@
 - my-session-wrap 스킬 제작 (멀티에이전트 2-Phase Pipeline)
   - Phase 1: doc-updater, automation-scout, learning-extractor, followup-suggester (병렬)
   - Phase 2: duplicate-checker (순차)
+- my-history-insight 스킬 제작 (세션 jsonl 파일 분석, 3개 에이전트 병렬)
+- my-session-analyzer 스킬 제작 (SKILL.md vs 실행 기록 PASS/FAIL 검증)
 - opusplan, agent-tower-plugin 설치
+- clarify:vague 실습: AR 자동화 요구사항 명확화 (Day 3 과제)
 
 **결과**:
 - ✅ "싱크해줘" 한 마디로 6개 도구 컨텍스트 통합
 - ✅ "wrap해줘" 한 마디로 세션 정리 자동화
 - ✅ 멀티에이전트 2-Phase Pipeline 패턴 체득
+- ✅ my-history-insight 스킬 제작 (과거 세션 패턴 분석)
+- ✅ my-session-analyzer 스킬 제작 (스킬 실행 검증)
+- ✅ AR 요구사항 모순 발견 → 신뢰도 기반 3단계 분기로 해소 방향 확정
 
 ---
 
