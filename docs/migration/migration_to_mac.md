@@ -6,7 +6,7 @@
 
 #### 1. Git 저장소 커밋 & 푸시
 ```bash
-cd "C:\Users\ash\새 폴더"
+cd "C:\Users\ash\ash"
 git add .
 git status
 git commit -m "Pre-migration: Save all changes"
@@ -35,7 +35,7 @@ copy "%USERPROFILE%\.claude\history.jsonl" .claude\
 #### 3. Credentials 백업 (.env 파일들)
 ```bash
 # 프로젝트 루트로 이동
-cd "C:\Users\ash\새 폴더"
+cd "C:\Users\ash\ash"
 
 # 백업 ZIP 생성 (비밀번호 보호 권장)
 # 다음 파일들을 USB나 안전한 클라우드에 저장:
@@ -184,12 +184,12 @@ crontab -e
 | Windows | Mac |
 |---------|-----|
 | `C:\Users\ash\.claude\` | `~/.claude/` |
-| `C:\Users\ash\새 폴더\` | `~/Documents/eo-studio-ar-automation/` |
+| `C:\Users\ash\ash\` | `~/Documents/eo-studio-ar-automation/` |
 | `%USERPROFILE%` | `$HOME` 또는 `~` |
 | `\` (백슬래시) | `/` (슬래시) |
 
 ### .env 파일 경로 확인
-- Windows: `C:\Users\ash\새 폴더\.env`
+- Windows: `C:\Users\ash\ash\.env`
 - Mac: `~/Documents/eo-studio-ar-automation/.env`
 
 ---

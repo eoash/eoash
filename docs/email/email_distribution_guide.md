@@ -133,7 +133,7 @@ Attachments:
 투자자들로부터 받은 서명 파일들을:
 
 ```
-C:\Users\ash\새 폴더\Signature_Packets_Signed\
+C:\Users\ash\ash\Signature_Packets_Signed\
 ├─ 01_KimTaeyong_Signed.pdf
 ├─ 02_FuturePlay_Signed.pdf
 ├─ 03_Datable_Signed.pdf

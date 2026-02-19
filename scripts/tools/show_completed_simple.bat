@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-cd /d "C:\Users\ash\새 폴더"
+cd /d "C:\Users\ash\ash"
 
 echo ========================================
 echo ✅ 오늘 완료한 작업 조회 중...

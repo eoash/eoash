@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PYTHONUTF8=1 python \"C:/Users/ash/새 폴더/.claude/hooks/session_start.py\""
+            "command": "PYTHONUTF8=1 python \"C:/Users/ash/ash/.claude/hooks/session_start.py\""
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PYTHONUTF8=1 python \"C:/Users/ash/새 폴더/.claude/hooks/first_message.py\""
+            "command": "PYTHONUTF8=1 python \"C:/Users/ash/ash/.claude/hooks/first_message.py\""
           }
         ]
       }

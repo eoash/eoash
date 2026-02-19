@@ -80,8 +80,8 @@ Slack DM으로 투두리스트가 도착하는지 확인합니다.
 
 ```powershell
 $action = New-ScheduledTaskAction -Execute "C:\Python314\python.exe" `
-    -Argument "C:\Users\ash\새 폴더\scripts\send_daily_todo.py" `
-    -WorkingDirectory "C:\Users\ash\새 폴더"
+    -Argument "C:\Users\ash\ash\scripts\send_daily_todo.py" `
+    -WorkingDirectory "C:\Users\ash\ash"
 
 $trigger = New-ScheduledTaskTrigger -Daily -At 9:00AM
 

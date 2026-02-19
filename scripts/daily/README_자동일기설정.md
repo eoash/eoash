@@ -9,7 +9,7 @@
 ### 단계 2: 아래 명령어 복사해서 실행
 
 ```powershell
-cd "C:\Users\ash\새 폴더\scripts"
+cd "C:\Users\ash\ash\scripts"
 .\setup_scheduler.ps1
 ```
 
@@ -44,7 +44,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 2. 동작: `프로그램 시작`
 3. **프로그램/스크립트**:
    ```
-   C:\Users\ash\새 폴더\scripts\run_journal.bat
+   C:\Users\ash\ash\scripts\run_journal.bat
    ```
 4. 확인
 
@@ -69,7 +69,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ### 수동 실행 (언제든지)
 ```bash
-cd "C:\Users\ash\새 폴더\scripts"
+cd "C:\Users\ash\ash\scripts"
 python daily_journal.py
 ```
 
@@ -93,13 +93,13 @@ python daily_journal.py
 ### Python을 찾을 수 없음
 `run_journal.bat` 파일 수정:
 ```batch
-"C:\Python314\python.exe" "C:\Users\ash\새 폴더\scripts\daily_journal.py"
+"C:\Python314\python.exe" "C:\Users\ash\ash\scripts\daily_journal.py"
 ```
 
 ### 일기가 생성되지 않음
 1. 수동으로 실행해서 오류 확인:
    ```bash
-   python "C:\Users\ash\새 폴더\scripts\daily_journal.py"
+   python "C:\Users\ash\ash\scripts\daily_journal.py"
    ```
 2. Obsidian vault 경로 확인
 3. 권한 확인

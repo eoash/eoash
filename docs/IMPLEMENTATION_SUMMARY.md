@@ -44,7 +44,7 @@
 ### 핵심 구성 (34개 파일, ~4000 LOC)
 
 ```
-C:\Users\ash\새 폴더/
+C:\Users\ash\ash/
 │
 ├── 🤖 ash_bot/                  # 메인 애플리케이션
 │   ├── config.py                # 설정 관리

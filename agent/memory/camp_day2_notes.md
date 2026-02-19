@@ -226,7 +226,7 @@ skills/
   - [ ] ar-automation/skill.md
   - [ ] ai-native-camp/skill.md
   - [ ] finance-operations/skill.md
-- [ ] CLAUDE.md 업데이트 (새 폴더 구조 반영)
+- [ ] CLAUDE.md 업데이트 (ash 구조 반영)
 - [ ] 코드에서 경로 참조 수정 (있다면)
 - [ ] Git commit & push
 

@@ -1,6 +1,6 @@
 @echo off
 REM Claude Code Mac 마이그레이션 백업 스크립트
-REM 실행 위치: C:\Users\ash\새 폴더
+REM 실행 위치: C:\Users\ash\ash
 
 echo ========================================
 echo Claude Code Mac 마이그레이션 백업

@@ -3,7 +3,7 @@
 
 param(
     [string]$pythonPath = "python",
-    [string]$scriptDir = "C:\Users\ash\새 폴더\scripts"
+    [string]$scriptDir = "C:\Users\ash\ash\scripts"
 )
 
 Write-Host "================================" -ForegroundColor Cyan

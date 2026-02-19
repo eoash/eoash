@@ -217,7 +217,7 @@ Timeline:
 ### 3단계: 답변 기록
 ```
 모든 Q&A를 다음 파일에 기록:
-C:\Users\ash\새 폴더\investor_qa_log.md
+C:\Users\ash\ash\investor_qa_log.md
 
 형식:
 [날짜] [투자자명] [질문 유형]
