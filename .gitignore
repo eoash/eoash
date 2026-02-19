@@ -59,6 +59,16 @@ token_send.json
 .claude/projects/
 .claude/settings.local.json
 
+# Flip legal documents (contracts, signature packets, trackers)
+docs/flip/EO - Flip Documents/
+docs/flip/EO - Flip Documents.zip
+docs/flip/EO - PDF Signature Packets*.zip
+docs/flip/EO - Post-Flip Capitalization Table.xlsx
+docs/flip/EO - Flip - Signature Tracker.xlsx
+docs/flip/Signature Packet*.pdf
+docs/flip/seum_attachments/
+docs/flip/image*.png
+
 # OS
 .DS_Store
 Thumbs.db
