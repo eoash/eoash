@@ -1,5 +1,16 @@
 # CLAUDE.md
 
+## 세션 시작 규칙 (MANDATORY)
+
+**모든 새 세션 시작 시, 사용자 첫 메시지 전에 반드시 실행:**
+1. `my-context-sync` 스킬을 자동 실행하여 오늘의 Slack/Notion/Calendar/ClickUp 컨텍스트를 가져온다
+2. 완료 후 "오늘 컨텍스트 로드 완료" 한 줄로 알린다
+3. 그 다음 사용자 메시지를 기다린다
+
+이 규칙은 사용자가 명시적으로 "sync 하지 마"라고 말하지 않는 한 항상 실행한다.
+
+---
+
 **작성자**: 안서현 (Seohyun Ahn)
 **역할**: Finance & Operations Lead at EO Studio
 **작성일**: 2026-02-16
