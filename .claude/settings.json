@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"C:/Users/ash/새 폴더/.claude/hooks/session_start.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
