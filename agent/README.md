@@ -11,7 +11,7 @@
 
 ```
 agent/
-├── projects/                    # 프로젝트별 에이전트
+├── projects/                    # 프로젝트별 에이전트 (자동화)
 │   ├── ar_automation/          # AR 자동화 에이전트
 │   │   ├── AGENT_README.md     # 에이전트 역할/책임
 │   │   ├── context/            # 프로젝트별 컨텍스트
@@ -24,6 +24,10 @@ agent/
 │   │   └── [동일 구조]
 │   └── operations/             # 운영 자동화 에이전트
 │       └── [동일 구조]
+├── advisors/                   # 어드바이저 페르소나 (판단)
+│   ├── senior_architect.md    # Alex — 코드 리뷰/아키텍처
+│   ├── legal_advisor.md       # Lisa — 법률/계약/컴플라이언스
+│   └── finance_advisor.md     # Chris — 재무/AR/FX/캐시플로우
 ├── shared/                     # 공유 컨텍스트
 │   ├── identity.md            # Seohyun 프로필
 │   ├── company.md             # EO Studio 정보
@@ -293,6 +297,8 @@ schtasks /query /TN "DailyJournal"
 - Operations 일부 자동화 (Daily Journal, TODO)
 
 ### Phase 2: 진행 중 🔄
+- ✅ Lisa 법률 어드바이저 스킬 완성 (`/legal`, Mode A/B 분기)
+- ✅ Chris 재무 어드바이저 스킬 완성 (`/finance`, Mode A/B 분기)
 - Finance Agent 구현 (캐시 모니터링, FX)
 - Legal Agent 완성 (계약서 관리, 주주명부)
 - Operations Agent 완성 (주간 리포트, Standup)
@@ -307,7 +313,7 @@ schtasks /query /TN "DailyJournal"
 
 **담당자**: Seohyun Ahn (Finance & Operations Lead)
 **프로젝트 시작**: 2026-02-09
-**마지막 업데이트**: 2026-02-11
+**마지막 업데이트**: 2026-02-19
 
 ---
 
