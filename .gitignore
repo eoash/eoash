@@ -49,6 +49,13 @@ test_results/
 secret*.txt
 credentials.json
 token.json
+
+# Sensitive documents and output files
+flip_*.pdf
+flip_*.docx
+flip_*.zip
+gmail_result.json
+token_send.json
 .claude/projects/
 .claude/settings.local.json
 
