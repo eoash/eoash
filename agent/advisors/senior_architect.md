@@ -476,4 +476,15 @@ When in doubt, ask Alex:
 
 ---
 
-_Last updated: 2026-02-11_
+## Skill 연동
+
+이 페르소나는 `/review` 스킬(`my-code-reviewer`)과 연동되어 있습니다.
+
+- **스킬 경로**: `.claude/skills/my-code-reviewer/SKILL.md`
+- **Mode A**: 짧은 질문 → Alex 페르소나로 즉시 답변
+- **Mode B**: 코드 블록/복합 설계 이슈 → 4-에이전트 2-Phase 파이프라인 (architecture-analyzer + quality-scanner → consistency-checker → refactoring-planner)
+- **라우팅 진입점**: `/consult` 메타 스킬에서 코드/아키텍처 키워드 감지 시 자동 라우팅
+
+---
+
+_Last updated: 2026-02-19_

@@ -299,6 +299,8 @@ schtasks /query /TN "DailyJournal"
 ### Phase 2: 진행 중 🔄
 - ✅ Lisa 법률 어드바이저 스킬 완성 (`/legal`, Mode A/B 분기)
 - ✅ Chris 재무 어드바이저 스킬 완성 (`/finance`, Mode A/B 분기)
+- ✅ Alex 코드 리뷰 어드바이저 스킬 완성 (`/review`, Mode A/B 분기, 4-에이전트 2-Phase)
+- ✅ `/consult` 자동 라우팅 메타 스킬 완성 (Alex/Lisa/Chris 키워드 감지 라우팅)
 - Finance Agent 구현 (캐시 모니터링, FX)
 - Legal Agent 완성 (계약서 관리, 주주명부)
 - Operations Agent 완성 (주간 리포트, Standup)
