@@ -84,12 +84,12 @@ RECIPIENTS = [
         "pdf": "Signature Packet (Base Dstring).pdf",
     },
     {
-        "key": "next_company",
+        "key": "nest_company",
         "name": "담당자",
-        "org": "Next Company",
+        "org": "Nest Company",
         "email": "FIXME",  # 이메일 확인 필요
         "type": "institutional",
-        "pdf": "Signature Packet (Next Company).pdf",
+        "pdf": "Signature Packet (Next Company).pdf",  # 변호사 원본 PDF 파일명 (오타)
     },
     {
         "key": "primer_sazze",

@@ -94,13 +94,13 @@ RECIPIENTS = [
         "packet_file": "Signature Packet (Base Metronome).pdf",
     },
     {
-        "id": "next_company",
+        "id": "nest_company",
         "type": "institutional_kr",
         "name_kr": "네스트컴퍼니 개인투자조합 1호",
-        "name_en": "Next Company",
+        "name_en": "Nest Company",
         "contact_name": "TBD",
         "email": None,
-        "packet_file": "Signature Packet (Next Company).pdf",
+        "packet_file": "Signature Packet (Next Company).pdf",  # 변호사 원본 PDF 파일명 (오타, 수정 요청 필요)
     },
     {
         "id": "cnt_tech_sports",
