@@ -157,12 +157,12 @@ RECIPIENTS = [
         "pdf": "Signature Page (Sungmoon Cho).pdf",
     },
     {
-        "key": "hyungjoon_yang",
+        "key": "hyungjoon_son_yang",
         "name": "양형준",
         "org": None,
         "email": "FIXME",  # 이메일 확인 필요
         "type": "individual",
-        "pdf": "Signature Page (Hyungjoon Yang).pdf",
+        "pdf": "Signature Page (Hyungjoon Son Yang).pdf",
     },
     {
         "key": "seungyoon_lee",

@@ -164,12 +164,12 @@ RECIPIENTS = [
         "packet_file": "Signature Page (Wonjun Chang).pdf",
     },
     {
-        "id": "hyungjoon_yang",
+        "id": "hyungjoon_son_yang",
         "type": "individual_resident",
         "name_kr": "양형준",
-        "name_en": "Hyungjoon Yang",
+        "name_en": "Hyungjoon Son Yang",
         "email": None,
-        "packet_file": "Signature Page (Hyungjoon Yang).pdf",
+        "packet_file": "Signature Page (Hyungjoon Son Yang).pdf",
     },
     {
         "id": "junyong_suh",
