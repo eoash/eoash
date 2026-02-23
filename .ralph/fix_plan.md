@@ -5,12 +5,16 @@
 
 ## 작업 목록
 
-- [x] todo/index.html 생성 - 기본 HTML 구조 (입력창, 추가 버튼, 목록)
-- [x] CSS 스타일링 - 깔끔한 UI (다크/라이트, 반응형)
-- [x] JS 기능 - 할 일 추가, 완료 체크, 삭제
-- [x] JS 기능 - localStorage 저장 (새로고침 후에도 유지)
-- [x] 전체 동작 확인 및 polish
+- [x] counter/index.html 생성 - 기본 HTML 구조
+- [x] CSS 스타일링 - 깔끔한 UI, 숫자 크게 표시
+- [x] JS 기능 - + 버튼(증가), - 버튼(감소), 숫자 표시
+- [x] 추가 기능 - 리셋 버튼, 음수일 때 빨간색 표시
 
 ## 완료 기록
-
-- 2026-02-23 Iteration 1: 단일 HTML 파일(todo/index.html)에 CSS+JS 인라인 포함 — 다크 테마, 반응형, localStorage 영속성, Enter 키 지원, 완료 항목 일괄 삭제 기능 포함하여 모든 항목 완료
+- counter/index.html 생성 완료 (2026-02-23)
+  - 다크 테마 UI (배경 #1a1a2e)
+  - 숫자 8rem 크게 중앙 표시
+  - + / - 버튼, RESET 버튼
+  - 양수: 초록(#64ffda), 음수: 빨간(#ff6b6b), 0: 흰색
+  - 키보드 지원: ↑/↓ 화살표, R 키
+  - 숫자 변경 시 bump 애니메이션
