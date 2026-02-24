@@ -146,6 +146,31 @@
 
 ---
 
+### 9. 온보딩 챗봇 안정성 확보 (2026-02-25)
+**목표**: Slack Bolt 온보딩 챗봇 버그 수정 및 운영 품질 향상
+
+**해결한 이슈 (app.py — 9건)**:
+- None 체크: `get_user()` 결과 None 시 TypeError 방지 (user_id fallback)
+- KeyError: `event["user"]` → `event.get("user")` + None 가드
+- 페이지네이션: `users.list` next_cursor 루프 추가 (201명+ 검색 누락 방지)
+- 완료 순서: DB 업데이트를 Slack 전송 성공 후로 이동 (데이터 일관성)
+- 레이스 컨디션: 체크리스트 already-completed 가드 추가
+- action_id 파싱: `replace` → `removeprefix` + `rpartition` 개선
+- N+1 쿼리 제거: `get_all_progress()` 1회 조회로 통합
+
+**개선한 항목 (db_manager.py — 4건)**:
+- `threading.Lock` 전체 쓰기 연산에 적용 (Slack Bolt 멀티스레드 충돌 방지)
+- `INSERT OR REPLACE` → `INSERT OR IGNORE + UPDATE` 분리 (최초 완료 시간 보존)
+- `idx_mission_attempts` 인덱스 추가 (체크리스트 항목 조회 성능)
+- `get_all_progress()` 신규 메서드 추가
+
+**결과**:
+- ✅ 4개 커밋, 전부 push 완료
+- ✅ 운영 중 크래시 위험 제거
+- ✅ DB 성능 및 데이터 무결성 확보
+
+---
+
 ### 8. 코드 품질 & 크로스 플랫폼 개선 (2026-02-19)
 **목표**: Alex Kim 2차 코드 리뷰 Phase 1 이슈 전부 해결 + Windows/Mac 호환성 확보
 
@@ -350,6 +375,7 @@ eoash/
 - ✅ GitHub 저장소 설정
 - ✅ Windows 백업 완료
 - ✅ 보안 가이드라인 수립
+- ✅ 온보딩 챗봇 안정성 확보 (2026-02-25)
 
 ### 진행 중
 - 🔄 Mac 환경 복원 및 검증
@@ -410,5 +436,5 @@ eoash/
 ---
 
 **문서 생성일**: 2026-02-12
-**마지막 업데이트**: 2026-02-19
+**마지막 업데이트**: 2026-02-25
 **작성자**: Claude Sonnet 4.6 (Windows)

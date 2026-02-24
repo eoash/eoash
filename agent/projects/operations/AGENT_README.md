@@ -53,6 +53,9 @@
 - `ash_bot/operations/task_manager.py`: ClickUp 태스크 관리
 - `ash_bot/operations/slack_automator.py`: Slack 자동화
 - `ash_bot/operations/report_generator.py`: 리포트 생성
+- `onboarding/app.py`: Slack Bolt 온보딩 챗봇 (missions.yaml 기반, thread-safe)
+- `onboarding/src/db_manager.py`: SQLite 진행 상황 관리 (threading.Lock, 인덱스)
+- `onboarding/src/mission_engine.py`: missions.yaml 기반 미션 순서 엔진
 
 ## 워크플로우 (Workflows)
 
@@ -232,6 +235,11 @@ reporter.generate_weekly_report()
 
 ## 에이전트 업데이트 로그
 
+### 2026-02-25: 온보딩 챗봇 버그 수정
+- app.py: None 체크, KeyError 방어, 페이지네이션, 완료 순서, 레이스 컨디션, action_id 파싱, N+1 쿼리 제거 (총 9건)
+- db_manager.py: threading.Lock, INSERT OR IGNORE, 인덱스, get_all_progress() 추가
+- 커밋 4개 / push 완료
+
 ### 2026-02-11: Operations Agent 초기 설정
 - 에이전트 역할 정의
 - 워크플로우 설계
@@ -256,4 +264,4 @@ reporter.generate_weekly_report()
 
 **담당자**: Seohyun Ahn (Operations Lead)
 **프로젝트 시작**: 2026-02-11
-**최종 업데이트**: 2026-02-11
+**최종 업데이트**: 2026-02-25
