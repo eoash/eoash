@@ -49,6 +49,11 @@ test_results/
 secret*.txt
 credentials.json
 token.json
+token_sheets.json
+
+# SQLite databases (runtime data)
+*.db
+onboarding/db/
 
 # Sensitive documents and output files
 flip_*.pdf
@@ -76,6 +81,9 @@ Thumbs.db
 # Output data (contains private business data)
 email_output/
 sync/
+
+# Separate git repositories (managed independently)
+dashboard/
 
 # Backup files
 claude_migration_backup_safe/
