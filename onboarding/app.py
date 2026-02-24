@@ -57,9 +57,10 @@ def send_next_mission(client, user_id: str, channel: str):
         user = db.get_user(user_id)
         hr_channel = engine.settings.get("hr_notify_channel", "hr-ops")
         try:
+            user_name = user["user_name"] if user else user_id
             client.chat_postMessage(
                 channel=hr_channel,
-                text=f"🎉 {user['user_name']}님이 온보딩을 완료했습니다!",
+                text=f"🎉 {user_name}님이 온보딩을 완료했습니다!",
             )
         except Exception as e:
             logger.warning(f"HR 알림 실패: {e}")
@@ -102,7 +103,9 @@ def handle_dm(event, client):
     """DM 메시지 수신 — 봇이 보낸 메시지는 무시."""
     if event.get("bot_id"):
         return
-    user_id = event["user"]
+    user_id = event.get("user")
+    if not user_id:
+        return
     channel = event["channel"]
     user = db.get_user(user_id)
     if user is None:
@@ -319,14 +322,24 @@ def handle_start_command(ack, body, respond, client):
         search_name = text.lstrip("@").strip()
         if search_name:
             try:
-                result = client.users_list()
-                for member in result["members"]:
-                    if member.get("deleted") or member.get("is_bot"):
-                        continue
-                    if (search_name.lower() in (member.get("name", "").lower(),
-                                                 member.get("real_name", "").lower(),
-                                                 member.get("profile", {}).get("display_name", "").lower())):
-                        target_user_id = member["id"]
+                cursor = None
+                while True:
+                    kwargs = {"limit": 200}
+                    if cursor:
+                        kwargs["cursor"] = cursor
+                    result = client.users_list(**kwargs)
+                    for member in result["members"]:
+                        if member.get("deleted") or member.get("is_bot"):
+                            continue
+                        if (search_name.lower() in (member.get("name", "").lower(),
+                                                     member.get("real_name", "").lower(),
+                                                     member.get("profile", {}).get("display_name", "").lower())):
+                            target_user_id = member["id"]
+                            break
+                    if target_user_id:
+                        break
+                    cursor = result.get("response_metadata", {}).get("next_cursor")
+                    if not cursor:
                         break
             except Exception as e:
                 logger.warning(f"유저 검색 실패: {e}")
