@@ -227,7 +227,7 @@ def handle_checklist(ack, body, client):
 # ── 슬래시 커맨드 ────────────────────────────────────
 
 @app.command("/onboarding-status")
-def handle_status(ack, body, client):
+def handle_status(ack, respond, client):
     ack()
     all_users = db.get_all_users()
     user_data = []
@@ -240,27 +240,39 @@ def handle_status(ack, body, client):
             "total": len(engine.get_all_mission_ids()),
         })
     blocks = MessageBuilder.hr_status(user_data)
-    client.chat_postEphemeral(
-        channel=body["channel_id"],
-        user=body["user_id"],
-        blocks=blocks,
-    )
+    respond(blocks=blocks)
 
 
 @app.command("/onboarding-start")
-def handle_start_command(ack, body, client):
+def handle_start_command(ack, body, respond, client):
     """HR이 /onboarding-start @유저 로 온보딩을 시작시킨다."""
     ack()
     text = body.get("text", "").strip()
-    match = re.search(r"<@(U[A-Z0-9]+)", text)
-    if not match:
-        client.chat_postEphemeral(
-            channel=body["channel_id"],
-            user=body["user_id"],
-            text="사용법: `/onboarding-start @신규입사자`",
-        )
+    logger.info(f"/onboarding-start 수신 text='{text}'")
+    # Slack 멘션 형식: <@U12345|name> 또는 <@U12345>
+    match = re.search(r"<@([UW][A-Za-z0-9]+)", text)
+    target_user_id = None
+    if match:
+        target_user_id = match.group(1)
+    else:
+        # 텍스트로 입력한 경우 (@name 또는 name) → users.list에서 검색
+        search_name = text.lstrip("@").strip()
+        if search_name:
+            try:
+                result = client.users_list()
+                for member in result["members"]:
+                    if member.get("deleted") or member.get("is_bot"):
+                        continue
+                    if (search_name.lower() in (member.get("name", "").lower(),
+                                                 member.get("real_name", "").lower(),
+                                                 member.get("profile", {}).get("display_name", "").lower())):
+                        target_user_id = member["id"]
+                        break
+            except Exception as e:
+                logger.warning(f"유저 검색 실패: {e}")
+    if not target_user_id:
+        respond(text="유저를 찾을 수 없어요. `/onboarding-start @신규입사자` 형태로 입력해주세요.")
         return
-    target_user_id = match.group(1)
     try:
         info = client.users_info(user=target_user_id)
         user_name = info["user"]["real_name"] or info["user"]["name"]
@@ -274,17 +286,9 @@ def handle_start_command(ack, body, client):
             channel=dm_channel,
             blocks=MessageBuilder.welcome(welcome_text),
         )
-        client.chat_postEphemeral(
-            channel=body["channel_id"],
-            user=body["user_id"],
-            text=f"✅ {user_name}님에게 온보딩 메시지를 발송했습니다.",
-        )
+        respond(text=f"✅ {user_name}님에게 온보딩 메시지를 발송했습니다.")
     except Exception as e:
-        client.chat_postEphemeral(
-            channel=body["channel_id"],
-            user=body["user_id"],
-            text=f"❌ 발송 실패: {e}",
-        )
+        respond(text=f"❌ 발송 실패: {e}")
 
 
 # ── 메인 ─────────────────────────────────────────────
