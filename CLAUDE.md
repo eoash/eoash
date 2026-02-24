@@ -1,203 +1,130 @@
-# CLAUDE.md
-
-## 세션 시작 규칙
-
-**컨텍스트 싱크는 자동 실행하지 않는다.**
-사용자가 명시적으로 "싱크", "sync", "컨텍스트 싱크" 등을 요청할 때만 `my-context-sync` 스킬을 실행한다.
-`[SYSTEM - 세션 첫 메시지 감지]` 메시지가 있어도 자동 싱크하지 않는다.
+# CLAUDE.md — EO Studio Operations OS
 
 ---
 
-**작성자**: 안서현 (Seohyun Ahn)
-**역할**: Finance & Operations Lead at EO Studio
-**작성일**: 2026-02-16
-**목적**: AI Native Camp 기간 동안 Claude와의 효과적인 협업을 위한 컨텍스트
+## 0. 운영 규칙
+
+**절대 자동 실행 금지**
+- `my-context-sync` 스킬: 사용자가 "싱크" / "sync" 명시 요청 시에만
+- 대외 이메일 발송 (`flip_send.py` 등): 반드시 확인 후
+- Production 전환 (`BILL_COM_UPDATE_ENABLED=true` 등): 반드시 확인 후
+- 법률 문서 수정 (계약서, 주주 서류): 반드시 확인 후
+- 데이터베이스 스키마 변경 / 대량 데이터 삭제: 반드시 확인 후
+
+**항상 해야 하는 것**
+- 결과물(코드/솔루션)을 설명보다 먼저 제시
+- 옵션 나열 시 추천 하나를 명시
+- 완료 후 "다음 단계" 제시
+- 모호하면 추측하지 말고 물어볼 것
+- 한국어로 대화, 코드·파일명은 영어
 
 ---
 
-## 나는 누구인가
+## 1. 사용자 프로필
 
-안녕하세요, 안서현입니다. EO Studio에서 한국, 미국, 베트남 3개 법인의 재무와 운영 업무를 총괄하고 있습니다. 재무, 회계, 인사, 총무, 법무 등 백오피스 전반을 다루며, "시스템이 없어서 매번 데이터를 재가공하는 비효율"을 없애는 것이 저의 최대 과제입니다.
+**안서현 (Seohyun Ahn)** — Finance & Operations Lead, EO Studio
+- 책임: 한국/미국/베트남 3개 법인 재무·운영·법무·인사 총괄
+- 도구: Notion, Slack, ClickUp, Bill.com (US), Google Sheets, Gmail, GitHub
+- 스타일: 70% 완성도로 먼저 작동 → 개선. 수작업보다 시스템. 빠른 실행.
+- 비개발자지만 API 연동·코드 리뷰·멀티에이전트 설계 직접 수행
 
-**핵심 역할**:
-- 3개국 재무 관리 및 현금 흐름 추적
-- 운영 시스템 설계 및 구축
-- 팀원들의 행정 업무 부담 최소화
-- AI-native 조직으로의 전환 리드
-
----
-
-## 나의 가치관
-
-### 1. 시스템 > 수작업
-매번 사람이 손으로 하는 일은 반복되면 안 됩니다. 한 번 만들어두면 계속 돌아가는 시스템이 훨씬 가치 있습니다.
-
-### 2. 빠른 실행 > 완벽한 계획
-70% 완성도로 먼저 작동시키고, 쓰면서 개선합니다. 완벽을 추구하다 출시 못 하는 것보다, 불완전해도 실제로 쓰이는 것이 낫습니다.
-
-### 3. 팀의 시간 > 나의 시간
-제가 시스템을 만드는 데 10시간을 쓰면, 팀원 5명이 각각 1시간씩 아낍니다. 이건 50시간의 가치입니다.
-
-### 4. 가시성 = 의사결정력
-돈이 어디 있고, 언제 들어오고, 얼마나 나가는지 실시간으로 보이면 회사는 훨씬 안정적으로 운영됩니다.
-
-### 5. AI Native하게 일하기
-AI는 보조 도구가 아니라, 조직의 OS가 되어야 합니다. 모든 팀원이 당연하게 AI와 일하는 문화를 만들고 싶습니다.
+상세 프로필: `agent/shared/identity.md` | 회사 정보: `agent/shared/company.md` | 워크플로우: `agent/shared/workflows.md`
 
 ---
 
-## 나의 업무 스타일
+## 2. 응답 프로토콜
 
-### 선호하는 방식
-- ✅ **빠른 프로토타입**: 완벽보다 작동하는 것 먼저
-- ✅ **직접 만들기**: 외주나 기성 툴보다 직접 구축
-- ✅ **데이터 기반 판단**: 직관보다 숫자와 데이터
-- ✅ **자동화 우선**: 반복 작업은 무조건 자동화
-- ✅ **실용성 중심**: 멋진 것보다 매일 쓸 수 있는 것
-
-### 회피하는 것
-- ❌ 너무 긴 회의 (결정은 빠르게)
-- ❌ 불필요한 문서 작업 (필요한 것만)
-- ❌ 레거시 프로세스 (유연하게 바꾸기)
-- ❌ 기술 장벽 (비개발자지만 포기 안 함)
+- 코드/솔루션을 설명보다 먼저 제시
+- 에러 발견 시 "이렇게 고치면 됩니다" 형태로 (문제 지적만 X)
+- 여러 옵션 제시 시 추천 하나를 명시
+- 기술 설명은 비개발자 수준으로 (원리보다 사용법)
+- 작업 완료 후 "다음은 이걸 하면 됩니다" 제시
 
 ---
 
-## Claude와 작업할 때 선호하는 방식
+## 3. 시스템 맵
 
-### 이렇게 해주세요 ✅
-1. **구체적인 결과물 바로 제시**: 긴 설명보다 작동하는 코드나 솔루션을 먼저 보여주세요.
-2. **실용성 우선**: 이론적으로 완벽한 것보다 지금 당장 쓸 수 있는 것을 주세요.
-3. **에러는 구체적으로**: "이 부분이 문제입니다"가 아니라 "이렇게 고치면 됩니다" 형식으로.
-4. **다음 단계 제시**: 지금 단계가 끝나면 "다음은 이걸 하면 됩니다" 알려주세요.
-5. **모호하면 질문**: 추측하지 말고 명확히 물어봐주세요.
+### 어드바이저 (판단·분석)
+```
+agent/advisors/senior_architect.md   → Alex  (코드/아키텍처/리팩터링)
+agent/advisors/legal_advisor.md      → Lisa  (법률/계약/주주/외국환)
+agent/advisors/finance_advisor.md    → Chris (재무/AR/FX/캐시플로우)
+```
+자동 라우팅: `/consult` → 키워드 감지 → Alex/Lisa/Chris 자동 분기
 
-### 이건 피해주세요 ❌
-1. 여러 옵션만 나열하고 선택 안 함 → 추천하는 것 명시해주세요
-2. 너무 기술적인 설명 → 비개발자도 이해할 수 있게
-3. "~할 수 있습니다"만 말하기 → 실제로 만들어주세요
-4. 문제만 지적 → 해결 방법까지
+### 스킬 (`.claude/skills/`)
+```
+my-context-sync       → 6개 소스 컨텍스트 통합 (수동 요청 시에만)
+my-session-wrap       → 세션 마무리 정리
+my-consult            → 어드바이저 자동 라우팅 (/consult)
+my-code-reviewer      → 코드 리뷰 (/review)
+my-legal-advisor      → 법률 상담 (/legal)
+my-finance-advisor    → 재무 상담 (/finance)
+my-plan-first         → 작업 전 3문서 수립 (/plan)
+my-fetch-tweet        → X/Twitter 요약·번역
+my-fetch-youtube      → YouTube 자막 추출·요약
+my-content-digest     → Quiz-First 콘텐츠 학습
+```
 
----
+### 자동화 스크립트 (`scripts/`)
+```
+scripts/daily/           → 일일 자동화 (AR 체크, TODO, 저널)
+scripts/flip_send.py     → Flip 투자자 이메일 발송 (17명)
+scripts/flip_send_packets.py → 서명 패킷 발송
+scripts/generate_*.py   → Flip 문서 자동 생성 (체크리스트, 이사회의사록)
+scripts/read_cash_*.py  → 캐시플로우 데이터 조회
+scripts/read_sheets*.py → Google Sheets 데이터 조회
+```
 
-## 현재 상황
+### 프로젝트별 메모리 (`agent/projects/`)
+```
+ar_automation/    → AR 매칭 자동화 (Bill.com + Plaid), 결정 로그 포함
+finance/          → 재무 대시보드, FX
+legal/            → 법무 문서 (Flip 등)
+operations/       → 운영 자동화, 온보딩
+```
 
-### 이미 만든 것들
-- **4년 전**: 에어테이블 + 슬랙으로 회사 그룹웨어 구축 (연차, 지출결의, 세금계산서 등)
-- **최근**: Claude Code로 미국 AR 자동화 시스템 개발 (Bill.com, Plaid API 연동)
-- **최근**: Slack 썸네일 평가 에이전트 개발
-- **Day 2 (2026-02-16)**: my-context-sync 스킬 제작 (Slack, Notion, ClickUp, Gmail, Calendar 통합)
-- **Day 3 (2026-02-18)**: clarify:vague 실습으로 AR 매칭 자동화 요구사항 명확화 (오매칭 처리 갭 발견)
-- **Day 4 (2026-02-18)**: my-session-wrap 스킬 제작 (멀티에이전트 2-Phase Pipeline 적용)
-- **Day 4 (2026-02-18)**: my-history-insight 스킬 제작 (세션 히스토리 3개 에이전트 병렬 분석)
-- **Day 4 (2026-02-18)**: my-session-analyzer 스킬 제작 (SKILL.md vs 실행 기록 PASS/FAIL 검증)
-- **Day 5 (2026-02-19)**: `my-fetch-tweet` 스킬 제작 (X/Twitter URL → 요약·인사이트·번역)
-- **Day 5 (2026-02-19)**: `my-fetch-youtube` 스킬 제작 (자막 추출 + Web Search 오류 보정 → 요약·번역)
-- **Day 5 (2026-02-19)**: `my-content-digest` 스킬 제작 (Quiz-First 방식 콘텐츠 학습)
-- **(2026-02-19 실무)**: Alex Kim 코드 리뷰 Phase 1 전체 해결 (Critical 2 + Major 4 + Minor 2), 크로스 플랫폼 호환성 확보
-- **(2026-02-19 실무)**: Lisa 법률 어드바이저 페르소나 + `/legal` 스킬 제작 (Mode A/B 분기, 4-에이전트 2-Phase 파이프라인)
-- **(2026-02-19 실무)**: Chris 재무 어드바이저 페르소나 + `/finance` 스킬 제작 (캐시플로우/AR/FX 분석)
-- **(2026-02-19 실무)**: Alex 코드 리뷰 어드바이저 `/review` 스킬 제작 (Mode A/B 분기, 4-에이전트 2-Phase: architecture-analyzer + quality-scanner → consistency-checker → refactoring-planner)
-- **(2026-02-19 실무)**: `/consult` 자동 라우팅 메타 스킬 제작 (키워드 감지 → Alex/Lisa/Chris 자동 라우팅)
-- **(2026-02-19 Flip 실무)**: Lisa 어드바이저와 Flip 주주 서류 요청 메일 시스템 착수 — Gmail API 연동, 4그룹 메일 초안 작성, 수신자 14명 이메일 수집, Gmail send 스코프 추가 및 발송 테스트 완료 (`scripts/gmail_send_test.py`)
-- **(2026-02-19 실무)**: GitHub MCP 수정 — `npx @modelcontextprotocol/server-github` (stdio) 단독 사용으로 정상화
-- **(2026-02-19 실무)**: `github_fetch.py` 제작 및 my-context-sync 연동 — GitHub Events API 빈값 이슈 → repos API 방식으로 대체
-- **(2026-02-20 Flip 실무)**: Flip 계약서 6개 전문 분석 완료 (A&R Certificate, Common/Preferred Stock Exchange, IRA, ROFR/Co-Sale, Voting Agreement) — 투자자 교환 테이블, 주요 조항, QSBS 체크리스트 확인
-- **(2026-02-20 Flip 실무)**: 이메일 템플릿 4종 업데이트 (기관/한국, 기관/미국, 개인/거주자, 개인/비거주자) + `flip_send.py` 전면 리팩토링 (4종 타입, 계약서 6개 docx 첨부, --test-to, 확인 프롬프트)
-- **(2026-02-20 Flip 실무)**: 서해나 변호사 답장 처리 — Lisa 어드바이저로 유상양도 구조 검증, 액면분할 변경보고 질문, 서준용 출입국증명서 확인
-- **(2026-02-20 Flip 실무)**: Flip 투자자 문서 자동화 — `generate_checklists.py`(세움 5열 테이블, 모두싸인 전자서명 통합, 17개 CHECKLIST.docx), `generate_board_resolutions.py`(8개 기관투자자 이사회의사록 초안), `organize_flip_folders.py`(17개 폴더 자동 생성), `flip_send.py`·`flip_send_packets.py` Nest Company 오타 수정
-- **(2026-02-21 Flip 실무)**: `generate_fx_checklists_from_seum.py` 신규 제작 — 세움 FX Checklist v3.0 기반 투자자별 체크리스트 재생성 (⚠️ FOLDER_SECTION 키 한글 폴더명으로 업데이트 필요)
-- **(2026-02-21 Flip 실무)**: `flip_send.py` 수정, `flip_review/` 폴더 영문→한글 리네이밍 완료 (00_taeyong_kim → 00_김태용 등 17개)
-- **(2026-02-21 실무)**: hr-evaluation Google Apps Script 4-에이전트 코드 리뷰 실행 — Critical 4 / Major 5 / Minor 4 이슈 도출 (수정은 직접 진행 예정)
-- **(2026-02-21)**: AI Native Camp Day 7 피날레 완료 — 일주일 회고, 전우조 피어리뷰, 캠프 성과 공유
-- **(2026-02-22)**: `/plan-first` 스킬 제작 — 작업 전 3문서(계획서·맥락노트·체크리스트) 수립 → 검토 → 실행+실시간 추적 방법론
-
-### 현재 상태
-- 비개발자지만 API 연동 + 코드 리뷰 기반 리팩토링까지 수행
-- AI Native Camp 통해 custom skill 9개 + github_fetch.py 제작 및 실제 운영에 적용
-- 멀티에이전트 패턴(병렬 분석 + 순차 검증) 직접 설계하고 체득
-- 어드바이저 팀 완성: Alex(코드/`/review`) + Lisa(법률/`/legal`) + Chris(재무/`/finance`) — 페르소나↔스킬 분리 구조
-- `/consult` 메타 스킬로 어드바이저 라우팅 자동화 완성
-- 프로젝트 에이전트(자동화)↔어드바이저(판단) 쌍 개념 정립
-- Flip 발송 시스템: 이메일 4종 초안 + 계약서 6개 첨부 + flip_send.py 완성 + flip_review 폴더 한글 리네이밍 완료, 17개 투자자별 체크리스트 & 8개 이사회의사록 Word 문서 자동 생성 완료, FX 체크리스트 세움 v3.0 기반 재생성 스크립트 추가, 정호석 변호사 검토 및 수신자 이메일 확정 대기 중
-
-### 가장 큰 페인 포인트
-- 매일 2시간씩 입금 매칭 수작업
-- 3개국 재무 데이터를 한눈에 못 봄
-- 팀원들이 행정 업무에 시간 많이 씀
-- 시스템이 없어서 매번 데이터 재가공
+### 주요 서브 프로젝트
+```
+onboarding/       → Slack Bolt 온보딩 챗봇 (missions.yaml 기반)
+dashboard/        → Streamlit 재무 대시보드 (별도 git repo: eoash/eo-finance-dashboard)
+ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
+```
 
 ---
 
-## AI Native Camp 목표
+## 4. 어드바이저 팀
 
-### 1주일 목표: 입금 매칭 자동화
-**무엇을**: 매일 2시간 걸리던 입금 매칭 작업을 10분 검토로 단축
-**어떻게**:
-- Bill.com 미수금 ↔ Plaid 입금 내역 자동 매칭
-- 자동으로 Slack/Notion 알림
-- Dry-run → Production 전환
-- Matching accuracy: 신뢰도 기반 3단계 분기 (고신뢰 자동반영 / 중신뢰 승인 필요 / 저신뢰 보류)
+| 어드바이저 | 전문 영역 | 호출 방법 |
+|-----------|---------|---------|
+| Alex | 코드, 아키텍처, SOLID, 리팩터링 | `/review`, `/consult` + 코드 키워드 |
+| Lisa | 법률, 계약, 외국환, 주주, 컴플라이언스 | `/legal`, `/consult` + 법률 키워드 |
+| Chris | 재무, AR, FX, 캐시플로우, 세무 | `/finance`, `/consult` + 재무 키워드 |
 
-**왜 중요한가**:
-- 가장 반복적이고 시간 많이 드는 업무
-- 완성되면 팀에게 "AI가 이 정도까지 한다"고 보여줄 수 있음
-- 이후 다른 자동화의 기반이 됨
-
-### 장기 목표: 1인 1어드민 AI 시스템
-- Slack에서 모든 요청과 답변 처리
-- 회사의 모든 맥락을 기억하는 세컨 브레인
-- 각 업무별 에이전트 (재무, 인사, 법무 등)
-- 행정부터 매출까지 모든 데이터 통합 대시보드
-
-### 최종 비전: AI Native 조직
-모든 팀원이 AI를 당연하게 쓰고, AI가 팀원들의 행정 부담을 줄여서 본업에 집중하게 만드는 것. "이 정도까지 가능하다"는 상상력을 확장시키고 싶습니다.
+판단 불가 시: "어느 어드바이저에게 물어볼까요?" 질문 출력
 
 ---
 
-## 현재 우려사항
+## 5. 현재 진행 상태
 
-### 기술적 복잡도 (가장 큰 걱정)
-- API 연동 제대로 할 수 있을까?
-- 에러 처리를 완벽하게 할 수 있을까?
-- 비개발자로서 한계에 부딪히지 않을까?
+**당면 과제**
+- [ ] AR 매칭 자동화 Production 전환 (dry-run 완료, Bill.com update 활성화 필요)
+- [ ] Flip 투자자 이메일 최종 발송 (정호석 변호사 검토 + 수신자 이메일 확정 대기)
+- [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
 
-### 해결 방법
-- Claude와 긴밀하게 협업
-- 작은 단위로 나눠서 하나씩 완성
-- 완벽하지 않아도 작동하면 OK
+**최근 완성된 시스템**
+- Slack 온보딩 챗봇 (`onboarding/`) — missions.yaml 기반, daily reminder 포함
+- Flip 발송 시스템 — `flip_send.py` + 17명 체크리스트 + 이사회의사록 자동 생성
+- 어드바이저 팀 — Alex/Lisa/Chris + `/consult` 자동 라우팅
 
----
+**알려진 블로커**
+- Flip: 정호석 변호사 검토 완료 전까지 발송 보류
+- AR Production: `BILL_COM_UPDATE_ENABLED=true` 전환 전 Dry-run 재검증 필요
 
-## 소통 스타일
-
-### 나는 이렇게 말합니다
-- 직설적이고 명확하게
-- "이거 되나요?" → "이렇게 만들어주세요"
-- 불필요한 예의 표현 최소화
-- 빠른 의사결정 선호
-
-### 이렇게 대해주세요
-- 존댓말 편하게 쓰세요 (반말도 OK)
-- 질문은 명확하게
-- 제안은 구체적으로
-- 추천하는 것 명시
+**작업 히스토리 상세**: `agent/memory/WORK_SUMMARY.md`
+**AR 결정 로그**: `agent/projects/ar_automation/memory/decision_log.md`
+**재무 상태**: `agent/projects/ar_automation/memory/financial_state.md`
 
 ---
 
-## 가장 마음에 드는 문장
-
-> "70% 완성도로 먼저 작동시키고, 쓰면서 개선합니다. 완벽을 추구하다 출시 못 하는 것보다, 불완전해도 실제로 쓰이는 것이 낫습니다."
-
----
-
-## 참고 문서
-
-- 프로젝트 가이드: `/CLAUDE.md` (프로젝트 루트)
-- 개인 메모리: `~/.claude/projects/*/memory/MEMORY.md`
-- 프로젝트 컨텍스트: `agent/` 디렉토리
-
----
-
-**마지막 업데이트**: 2026-02-21
-**다음 리뷰**: AI Native Camp 종료 후 (2026-02-23)
+*마지막 업데이트: 2026-02-25*
