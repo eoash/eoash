@@ -46,13 +46,13 @@ def send_next_mission(client, user_id: str, channel: str):
     """다음 미션을 전송하거나, 전체 완료 처리."""
     mission = engine.get_next_mission(user_id)
     if mission is None:
-        # 전체 완료
-        db.complete_onboarding(user_id)
+        # 전체 완료 — Slack 전송 먼저, DB는 성공 후 업데이트
         client.chat_postMessage(
             channel=channel,
             text="온보딩을 모두 완료했습니다!",
             blocks=MessageBuilder.all_complete(engine.settings.get("completion_message", "온보딩 완료!")),
         )
+        db.complete_onboarding(user_id)
         # HR 알림
         user = db.get_user(user_id)
         hr_channel = engine.settings.get("hr_notify_channel", "hr-ops")
@@ -255,6 +255,9 @@ def handle_checklist(ack, body, client):
         if not mission:
             return
         logger.info(f"체크리스트: user={user_id} mission={mission_id} item={value}")
+        # 이미 완료된 미션이면 중복 처리 차단
+        if mission_id in db.get_progress(user_id):
+            return
         db.record_attempt(user_id, f"{mission_id}__check__{value}")
         checked = set()
         for item in mission["items"]:
