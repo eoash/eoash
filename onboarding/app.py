@@ -290,6 +290,21 @@ def handle_start_command(ack, body, client):
 # ── 메인 ─────────────────────────────────────────────
 
 if __name__ == "__main__":
+    from apscheduler.schedulers.background import BackgroundScheduler
+    from src.reminder import send_reminders
+
     logger.info("온보딩 챗봇 시작...")
+
+    # 리마인더 스케줄러: 매일 오전 10시 (KST)
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        send_reminders,
+        "cron",
+        hour=1,  # UTC 01:00 = KST 10:00
+        args=[app.client, db, engine],
+    )
+    scheduler.start()
+    logger.info("리마인더 스케줄러 시작 (매일 KST 10:00)")
+
     handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])
     handler.start()
