@@ -1,0 +1,42 @@
+# 인증 정보 - 절대 커밋하지 않음
+.env
+
+# 수집된 데이터 - 로컬에만 보관
+data/
+
+# 생성된 출력 파일 - 로컬에만 보관
+output/
+
+# 실행 로그
+logs/
+
+# Python 관련
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# 가상환경
+venv/
+env/
+.venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
