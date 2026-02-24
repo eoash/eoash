@@ -68,14 +68,16 @@ def send_next_mission(client, user_id: str, channel: str):
 
     # 카테고리가 바뀌었으면 카테고리 소개
     cat = engine.get_mission_category(mission["id"])
-    prev_mission_ids = engine.get_all_mission_ids()
-    idx = prev_mission_ids.index(mission["id"])
-    if idx == 0 or engine.get_mission_category(prev_mission_ids[idx - 1])["id"] != cat["id"]:
-        client.chat_postMessage(
-            channel=channel,
-            text=f"{cat.get('emoji', '📌')} {cat['name']}",
-            blocks=MessageBuilder.category_intro(cat["name"], cat.get("emoji", "📌")),
-        )
+    if cat:
+        prev_mission_ids = engine.get_all_mission_ids()
+        idx = prev_mission_ids.index(mission["id"])
+        prev_cat = engine.get_mission_category(prev_mission_ids[idx - 1]) if idx > 0 else None
+        if idx == 0 or (prev_cat is None or prev_cat["id"] != cat["id"]):
+            client.chat_postMessage(
+                channel=channel,
+                text=f"{cat.get('emoji', '📌')} {cat['name']}",
+                blocks=MessageBuilder.category_intro(cat["name"], cat.get("emoji", "📌")),
+            )
 
     db.update_current_mission(user_id, mission["id"])
     client.chat_postMessage(
