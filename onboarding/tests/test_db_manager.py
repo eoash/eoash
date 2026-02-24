@@ -27,10 +27,10 @@ def test_start_onboarding(db):
 
 def test_complete_mission(db):
     db.start_onboarding("U123", "김철수")
-    db.complete_mission("U123", "join_channels")
+    result = db.complete_mission("U123", "join_channels")
+    assert result is True
     progress = db.get_progress("U123")
     assert "join_channels" in progress
-
 
 def test_update_current_mission(db):
     db.start_onboarding("U123", "김철수")
@@ -65,3 +65,29 @@ def test_increment_attempts(db):
     db.record_attempt("U123", "read_policy")
     attempts = db.get_attempts("U123", "read_policy")
     assert attempts == 2
+
+
+def test_complete_mission_idempotent(db):
+    """complete_mission 중복 호출 시 False 반환 (레이스 컨디션 방어)."""
+    db.start_onboarding("U123", "김철수")
+    first = db.complete_mission("U123", "join_channels")
+    second = db.complete_mission("U123", "join_channels")
+    assert first is True
+    assert second is False
+
+
+def test_thread_local_connection(db):
+    """thread-local 커넥션이 정상 동작하는지 확인."""
+    import threading
+    results = []
+
+    def worker():
+        db.start_onboarding("U_THREAD", "스레드테스트")
+        user = db.get_user("U_THREAD")
+        results.append(user is not None)
+        db.close()
+
+    t = threading.Thread(target=worker)
+    t.start()
+    t.join()
+    assert results == [True]

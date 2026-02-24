@@ -1,4 +1,5 @@
 """EO Studio 온보딩 챗봇 — Slack Bolt 앱."""
+
 import logging
 import logging.handlers
 import os
@@ -11,7 +12,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 from src.db_manager import DBManager
 from src.mission_engine import MissionEngine
-from src.message_builder import MessageBuilder
+from src.onboarding_service import OnboardingService
 
 # 환경 변수 로드
 load_dotenv()
@@ -36,58 +37,12 @@ logger = logging.getLogger(__name__)
 # 초기화
 db = DBManager(str(BASE_DIR / "db" / "onboarding.db"))
 engine = MissionEngine(str(BASE_DIR / "missions.yaml"), db)
+service = OnboardingService(db, engine)
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
 
-# ── 헬퍼 ─────────────────────────────────────────────
-
-def send_next_mission(client, user_id: str, channel: str):
-    """다음 미션을 전송하거나, 전체 완료 처리."""
-    mission = engine.get_next_mission(user_id)
-    if mission is None:
-        # 전체 완료 — Slack 전송 먼저, DB는 성공 후 업데이트
-        client.chat_postMessage(
-            channel=channel,
-            text="온보딩을 모두 완료했습니다!",
-            blocks=MessageBuilder.all_complete(engine.settings.get("completion_message", "온보딩 완료!")),
-        )
-        db.complete_onboarding(user_id)
-        # HR 알림
-        user = db.get_user(user_id)
-        hr_channel = engine.settings.get("hr_notify_channel", "hr-ops")
-        try:
-            user_name = user["user_name"] if user else user_id
-            client.chat_postMessage(
-                channel=hr_channel,
-                text=f"🎉 {user_name}님이 온보딩을 완료했습니다!",
-            )
-        except Exception as e:
-            logger.warning(f"HR 알림 실패: {e}")
-        return
-
-    # 카테고리가 바뀌었으면 카테고리 소개
-    cat = engine.get_mission_category(mission["id"])
-    if cat:
-        prev_mission_ids = engine.get_all_mission_ids()
-        idx = prev_mission_ids.index(mission["id"])
-        prev_cat = engine.get_mission_category(prev_mission_ids[idx - 1]) if idx > 0 else None
-        if idx == 0 or (prev_cat is None or prev_cat["id"] != cat["id"]):
-            client.chat_postMessage(
-                channel=channel,
-                text=f"{cat.get('emoji', '📌')} {cat['name']}",
-                blocks=MessageBuilder.category_intro(cat["name"], cat.get("emoji", "📌")),
-            )
-
-    db.update_current_mission(user_id, mission["id"])
-    client.chat_postMessage(
-        channel=channel,
-        text=mission["title"],
-        blocks=MessageBuilder.mission(mission),
-    )
-
-
-def _error_reply(client, channel: str, context: str):
+def _error_reply(client, channel: str, context: str) -> None:
     """핸들러 에러 시 사용자에게 알림."""
     try:
         client.chat_postMessage(
@@ -102,7 +57,7 @@ def _error_reply(client, channel: str, context: str):
 
 @app.event("message")
 def handle_dm(event, client):
-    """DM 메시지 수신 — 봇이 보낸 메시지는 무시."""
+    """DM 메시지 수신 — 봇 메시지 무시, 등록 유저만."""
     if event.get("bot_id"):
         return
     user_id = event.get("user")
@@ -127,22 +82,9 @@ def handle_start(ack, body, client):
     ack()
     channel = body["channel"]["id"]
     try:
-        user_id = body["user"]["id"]
-        user_name = body["user"].get("name", body["user"]["id"])
-        try:
-            info = client.users_info(user=user_id)
-            user_name = info["user"]["real_name"] or info["user"]["name"]
-        except Exception:
-            pass
-        logger.info(f"온보딩 시작: user={user_id} name={user_name}")
-        db.start_onboarding(user_id, user_name)
-        client.chat_postMessage(
-            channel=channel,
-            text=f"좋아요 {user_name}님! 첫 번째 미션을 시작합니다 🚀",
-        )
-        send_next_mission(client, user_id, channel)
+        service.start(client, body["user"]["id"], channel)
     except Exception as e:
-        logger.exception(f"handle_start 에러: {e}")
+        logger.exception("handle_start 에러")
         _error_reply(client, channel, str(e))
 
 
@@ -151,11 +93,9 @@ def handle_resume(ack, body, client):
     ack()
     channel = body["channel"]["id"]
     try:
-        user_id = body["user"]["id"]
-        logger.info(f"온보딩 이어하기: user={user_id}")
-        send_next_mission(client, user_id, channel)
+        service.resume(client, body["user"]["id"], channel)
     except Exception as e:
-        logger.exception(f"handle_resume 에러: {e}")
+        logger.exception("handle_resume 에러")
         _error_reply(client, channel, str(e))
 
 
@@ -165,29 +105,10 @@ def handle_confirm(ack, body, client):
     channel = body["channel"]["id"]
     try:
         user_id = body["user"]["id"]
-        action_id = body["actions"][0]["action_id"]
-        mission_id = action_id.removeprefix("confirm_")
-        mission = engine.get_mission(mission_id)
-        if not mission:
-            return
-        logger.info(f"미션 확인: user={user_id} mission={mission_id}")
-        db.complete_mission(user_id, mission_id)
-        client.chat_postMessage(
-            channel=channel,
-            text=mission.get("complete_message", "완료!"),
-            blocks=MessageBuilder.mission_complete(mission.get("complete_message", "완료!")),
-        )
-        summary = engine.get_progress_summary(user_id)
-        client.chat_postMessage(
-            channel=channel,
-            text=f"진행률: {summary['completed']}/{summary['total']}",
-            blocks=MessageBuilder.progress_update(
-                summary["completed"], summary["total"], summary["current_category"]
-            ),
-        )
-        send_next_mission(client, user_id, channel)
+        mission_id = body["actions"][0]["action_id"].removeprefix("confirm_")
+        service.confirm_mission(client, user_id, mission_id, channel)
     except Exception as e:
-        logger.exception(f"handle_confirm 에러: {e}")
+        logger.exception("handle_confirm 에러")
         _error_reply(client, channel, str(e))
 
 
@@ -199,44 +120,9 @@ def handle_quiz(ack, body, client):
         user_id = body["user"]["id"]
         action_id = body["actions"][0]["action_id"]
         body_part, _, chosen_str = action_id.removeprefix("quiz_").rpartition("_")
-        chosen = int(chosen_str)
-        mission_id = body_part
-        mission = engine.get_mission(mission_id)
-        if not mission:
-            return
-        logger.info(f"퀴즈 응답: user={user_id} mission={mission_id} chosen={chosen}")
-        db.record_attempt(user_id, mission_id)
-        if chosen == mission["answer"]:
-            db.complete_mission(user_id, mission_id)
-            client.chat_postMessage(
-                channel=channel,
-                text=mission.get("complete_message", "정답!"),
-                blocks=MessageBuilder.mission_complete(mission.get("complete_message", "정답!")),
-            )
-            summary = engine.get_progress_summary(user_id)
-            client.chat_postMessage(
-                channel=channel,
-                text=f"진행률: {summary['completed']}/{summary['total']}",
-                blocks=MessageBuilder.progress_update(
-                    summary["completed"], summary["total"], summary["current_category"]
-                ),
-            )
-            send_next_mission(client, user_id, channel)
-        else:
-            client.chat_postMessage(
-                channel=channel,
-                text=mission.get("wrong_message", "틀렸어요! 다시 시도해보세요."),
-                blocks=MessageBuilder.mission_wrong(
-                    mission.get("wrong_message", "틀렸어요! 다시 시도해보세요.")
-                ),
-            )
-            client.chat_postMessage(
-                channel=channel,
-                text=mission["title"],
-                blocks=MessageBuilder.mission(mission),
-            )
+        service.answer_quiz(client, user_id, body_part, int(chosen_str), channel)
     except Exception as e:
-        logger.exception(f"handle_quiz 에러: {e}")
+        logger.exception("handle_quiz 에러")
         _error_reply(client, channel, str(e))
 
 
@@ -249,42 +135,9 @@ def handle_checklist(ack, body, client):
         action_id = body["actions"][0]["action_id"]
         value = body["actions"][0]["value"]
         mission_id, _, _ = action_id.removeprefix("check_").rpartition(f"_{value}")
-        mission = engine.get_mission(mission_id)
-        if not mission:
-            return
-        logger.info(f"체크리스트: user={user_id} mission={mission_id} item={value}")
-        # 이미 완료된 미션이면 중복 처리 차단
-        if mission_id in db.get_progress(user_id):
-            return
-        db.record_attempt(user_id, f"{mission_id}__check__{value}")
-        checked = set()
-        for item in mission["items"]:
-            attempts = db.get_attempts(user_id, f"{mission_id}__check__{item}")
-            if attempts > 0:
-                checked.add(item)
-        if checked >= set(mission["items"]):
-            db.complete_mission(user_id, mission_id)
-            client.chat_postMessage(
-                channel=channel,
-                text=mission.get("complete_message", "완료!"),
-                blocks=MessageBuilder.mission_complete(mission.get("complete_message", "완료!")),
-            )
-            summary = engine.get_progress_summary(user_id)
-            client.chat_postMessage(
-                channel=channel,
-                text=f"진행률: {summary['completed']}/{summary['total']}",
-                blocks=MessageBuilder.progress_update(
-                    summary["completed"], summary["total"], summary["current_category"]
-                ),
-            )
-            send_next_mission(client, user_id, channel)
-        else:
-            client.chat_postMessage(
-                channel=channel,
-                text=f"✅ {value} 체크! (남은 항목: {len(mission['items']) - len(checked)}개)",
-            )
+        service.check_item(client, user_id, mission_id, value, channel)
     except Exception as e:
-        logger.exception(f"handle_checklist 에러: {e}")
+        logger.exception("handle_checklist 에러")
         _error_reply(client, channel, str(e))
 
 
@@ -293,20 +146,7 @@ def handle_checklist(ack, body, client):
 @app.command("/onboarding-status")
 def handle_status(ack, respond, client):
     ack()
-    all_users = db.get_all_users()
-    all_progress = db.get_all_progress()
-    total = len(engine.get_all_mission_ids())
-    user_data = [
-        {
-            "user_name": u["user_name"],
-            "completed_at": u["completed_at"],
-            "completed": len(all_progress.get(u["user_id"], set())),
-            "total": total,
-        }
-        for u in all_users
-    ]
-    blocks = MessageBuilder.hr_status(user_data)
-    respond(blocks=blocks, text="온보딩 현황")
+    respond(blocks=service.get_status_blocks(), text="온보딩 현황")
 
 
 @app.command("/onboarding-start")
@@ -314,60 +154,72 @@ def handle_start_command(ack, body, respond, client):
     """HR이 /onboarding-start @유저 로 온보딩을 시작시킨다."""
     ack()
     text = body.get("text", "").strip()
-    logger.info(f"/onboarding-start 수신 text='{text}'")
-    # Slack 멘션 형식: <@U12345|name> 또는 <@U12345>
-    match = re.search(r"<@([UW][A-Za-z0-9]+)", text)
-    target_user_id = None
-    if match:
-        target_user_id = match.group(1)
-    else:
-        # 텍스트로 입력한 경우 (@name 또는 name) → users.list에서 검색
-        search_name = text.lstrip("@").strip()
-        if search_name:
-            try:
-                cursor = None
-                while True:
-                    kwargs = {"limit": 200}
-                    if cursor:
-                        kwargs["cursor"] = cursor
-                    result = client.users_list(**kwargs)
-                    for member in result["members"]:
-                        if member.get("deleted") or member.get("is_bot"):
-                            continue
-                        if (search_name.lower() in (member.get("name", "").lower(),
-                                                     member.get("real_name", "").lower(),
-                                                     member.get("profile", {}).get("display_name", "").lower())):
-                            target_user_id = member["id"]
-                            break
-                    if target_user_id:
-                        break
-                    cursor = result.get("response_metadata", {}).get("next_cursor")
-                    if not cursor:
-                        break
-            except Exception as e:
-                logger.warning(f"유저 검색 실패: {e}")
+    logger.info("/onboarding-start 수신 text='%s'", text)
+
+    target_user_id = _resolve_target_user(client, text)
     if not target_user_id:
         respond(text="유저를 찾을 수 없어요. `/onboarding-start @신규입사자` 형태로 입력해주세요.")
         return
     try:
-        info = client.users_info(user=target_user_id)
-        user_name = info["user"]["real_name"] or info["user"]["name"]
-    except Exception:
-        user_name = target_user_id
-    try:
-        dm = client.conversations_open(users=[target_user_id])
-        dm_channel = dm["channel"]["id"]
-        welcome_text = engine.settings.get("welcome_message", "온보딩을 시작합니다!")
-        client.chat_postMessage(
-            channel=dm_channel,
-            text=welcome_text,
-            blocks=MessageBuilder.welcome(welcome_text),
-        )
-        logger.info(f"온보딩 메시지 발송: user={target_user_id} channel={dm_channel}")
+        user_name = service.initiate_for_user(client, target_user_id)
         respond(text=f"✅ {user_name}님에게 온보딩 메시지를 발송했습니다.")
     except Exception as e:
-        logger.exception(f"온보딩 발송 실패: {e}")
+        logger.exception("온보딩 발송 실패")
         respond(text=f"❌ 발송 실패: {e}")
+
+@app.command("/onboarding-reset")
+def handle_reset_command(ack, body, respond, client):
+    """HR이 /onboarding-reset @유저 로 온보딩 진행을 초기화한다."""
+    ack()
+    text = body.get("text", "").strip()
+    logger.info("/onboarding-reset 수신 text='%s'", text)
+
+    target_user_id = _resolve_target_user(client, text)
+    if not target_user_id:
+        respond(text="유저를 알 수 없어요. `/onboarding-reset @유저` 형태로 입력해주세요.")
+        return
+    try:
+        user_name = service.reset_user(client, target_user_id, None)
+        respond(text=f"♻️ {user_name}님의 온보딩 진행이 초기화되었습니다.\n`/onboarding-start @{user_name}`로 다시 시작하세요.")
+    except Exception as e:
+        logger.exception("온보딩 리셋 실패")
+        respond(text=f"❌ 리셋 실패: {e}")
+
+
+def _resolve_target_user(client, text: str) -> str | None:
+    """슬래시 커맨드 텍스트에서 타겟 유저 ID 추출."""
+    # Slack 멘션 형식: <@U12345|name> 또는 <@U12345>
+    match = re.search(r"<@([UW][A-Za-z0-9]+)", text)
+    if match:
+        return match.group(1)
+
+    # 텍스트로 입력한 경우 → users.list에서 검색
+    search_name = text.lstrip("@").strip()
+    if not search_name:
+        return None
+    try:
+        cursor = None
+        while True:
+            kwargs: dict = {"limit": 200}
+            if cursor:
+                kwargs["cursor"] = cursor
+            result = client.users_list(**kwargs)
+            for member in result["members"]:
+                if member.get("deleted") or member.get("is_bot"):
+                    continue
+                names = (
+                    member.get("name", "").lower(),
+                    member.get("real_name", "").lower(),
+                    member.get("profile", {}).get("display_name", "").lower(),
+                )
+                if search_name.lower() in names:
+                    return member["id"]
+            cursor = result.get("response_metadata", {}).get("next_cursor")
+            if not cursor:
+                break
+    except Exception:
+        logger.warning("유저 검색 실패: search_name=%s", search_name)
+    return None
 
 
 # ── 메인 ─────────────────────────────────────────────

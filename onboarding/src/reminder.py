@@ -25,6 +25,6 @@ def send_reminders(client, db: DBManager, engine: MissionEngine):
             dm_channel = dm["channel"]["id"]
             blocks = MessageBuilder.reminder(user["user_name"], remaining)
             client.chat_postMessage(channel=dm_channel, blocks=blocks)
-            logger.info(f"리마인더 발송: {user['user_name']} ({remaining}개 남음)")
+            logger.info("리마인더 발송: %s (%d개 남음)", user["user_name"], remaining)
         except Exception as e:
-            logger.warning(f"리마인더 발송 실패 ({user_id}): {e}")
+            logger.warning("리마인더 발송 실패 (%s): %s", user_id, e)
