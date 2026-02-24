@@ -36,6 +36,7 @@ class DBManager:
                 mission_id TEXT NOT NULL,
                 attempted_at TEXT NOT NULL
             );
+            CREATE INDEX IF NOT EXISTS idx_mission_attempts ON mission_attempts (user_id, mission_id);
         """)
         self.conn.commit()
 
@@ -118,6 +119,15 @@ class DBManager:
             (user_id, mission_id),
         ).fetchone()
         return row["cnt"] if row else 0
+
+    def get_all_progress(self) -> dict[str, set]:
+        rows = self.conn.execute(
+            "SELECT user_id, mission_id FROM mission_progress"
+        ).fetchall()
+        result: dict[str, set] = {}
+        for row in rows:
+            result.setdefault(row["user_id"], set()).add(row["mission_id"])
+        return result
 
     def get_all_users(self) -> list[dict]:
         rows = self.conn.execute("SELECT * FROM users ORDER BY started_at DESC").fetchall()

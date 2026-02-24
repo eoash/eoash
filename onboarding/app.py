@@ -164,7 +164,7 @@ def handle_confirm(ack, body, client):
     try:
         user_id = body["user"]["id"]
         action_id = body["actions"][0]["action_id"]
-        mission_id = action_id.replace("confirm_", "")
+        mission_id = action_id.removeprefix("confirm_")
         mission = engine.get_mission(mission_id)
         if not mission:
             return
@@ -196,9 +196,9 @@ def handle_quiz(ack, body, client):
     try:
         user_id = body["user"]["id"]
         action_id = body["actions"][0]["action_id"]
-        parts = action_id.split("_")
-        chosen = int(parts[-1])
-        mission_id = "_".join(parts[1:-1])
+        body_part, _, chosen_str = action_id.removeprefix("quiz_").rpartition("_")
+        chosen = int(chosen_str)
+        mission_id = body_part
         mission = engine.get_mission(mission_id)
         if not mission:
             return
@@ -246,11 +246,7 @@ def handle_checklist(ack, body, client):
         user_id = body["user"]["id"]
         action_id = body["actions"][0]["action_id"]
         value = body["actions"][0]["value"]
-        prefix = "check_"
-        suffix = f"_{value}"
-        mission_id = action_id[len(prefix):]
-        if mission_id.endswith(suffix):
-            mission_id = mission_id[:-len(suffix)]
+        mission_id, _, _ = action_id.removeprefix("check_").rpartition(f"_{value}")
         mission = engine.get_mission(mission_id)
         if not mission:
             return
@@ -296,15 +292,17 @@ def handle_checklist(ack, body, client):
 def handle_status(ack, respond, client):
     ack()
     all_users = db.get_all_users()
-    user_data = []
-    for u in all_users:
-        progress = db.get_progress(u["user_id"])
-        user_data.append({
+    all_progress = db.get_all_progress()
+    total = len(engine.get_all_mission_ids())
+    user_data = [
+        {
             "user_name": u["user_name"],
             "completed_at": u["completed_at"],
-            "completed": len(progress),
-            "total": len(engine.get_all_mission_ids()),
-        })
+            "completed": len(all_progress.get(u["user_id"], set())),
+            "total": total,
+        }
+        for u in all_users
+    ]
     blocks = MessageBuilder.hr_status(user_data)
     respond(blocks=blocks, text="온보딩 현황")
 
