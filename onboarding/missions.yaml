@@ -88,7 +88,7 @@ categories:
 settings:
   reminder_after_days: 2
   deadline_days: 14
-  hr_notify_channel: "hr-ops"
+  hr_notify_channel: "team-operation"
   welcome_message: |
     안녕하세요! EO Studio 온보딩 봇입니다 🎉
     입사를 진심으로 환영합니다!
