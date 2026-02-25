@@ -2,66 +2,70 @@
   {
     "slide": 1,
     "type": "cover",
-    "headline": "AI에게 매번\n자기소개하는\n당신에게",
-    "subtext": "AI Native 로드맵 EP.02"
+    "headline": "AI 하나로\n다 하려는\n당신에게",
+    "subtext": "AI Native 로드맵 EP.03"
   },
   {
     "slide": 2,
     "type": "content-badge",
-    "badge_text": "매일 반복",
-    "headline": "오늘도 이렇게 시작했죠?",
-    "body": "\"나는 OO회사 마케팅 담당이고\n우리 회사는 이런 일을 하고...\"\n매번 처음부터 다시 설명",
+    "badge_text": "혼자서 전부",
+    "headline": "하나의 AI에게\n다 시키고 있죠?",
+    "body": "코딩도 글쓰기도 번역도 분석도\n하나의 채팅창에서 전부 해결\n맥락이 섞이고 품질이 떨어집니다",
     "subtext": ""
   },
   {
     "slide": 3,
     "type": "content",
-    "headline": "대화 대신\n파일로 설계합니다",
-    "body": "AI가 매번 자동으로 읽는 문서를\n직접 작성하는 겁니다\nCLAUDE.md 파일 하나가\n모든 대화의 시작점이 됩니다"
+    "headline": "회사에서도\n혼자 다 하면 망합니다",
+    "body": "일 잘하는 직원 한 명에게\n모든 업무를 몰아주면\n그 사람도 회사도 무너집니다\nAI도 똑같습니다"
   },
   {
     "slide": 4,
     "type": "content-split",
-    "headline": "같은 AI, 완전히 다른 시작",
-    "left_title": "매번 대화로",
-    "left_body": "\"너는 CFO야\"\n배경 설명 반복\n매번 5분 낭비",
-    "right_title": "CLAUDE.md로",
-    "right_body": "파일에 한 번 써두면\nAI가 자동으로 읽음\n첫 마디부터 맥락을 안다",
+    "headline": "같은 AI, 완전히 다른 구조",
+    "left_title": "올라운더 1명",
+    "left_body": "매번 역할 설명\n맥락 전환 반복\n깊이가 얕아진다",
+    "right_title": "전문가 팀",
+    "right_body": "각자 역할이 있고\n맥락이 설계되어 있고\n한 줄이면 움직인다",
     "subtext": ""
   },
   {
     "slide": 5,
     "type": "content-steps",
-    "headline": "맥락 설계의 <span class='highlight'>3가지 층</span>",
-    "step1": "나는 누구인가 — 역할, 회사, 스타일",
-    "step2": "내 업무는 뭔가 — 워크플로우, 도구",
-    "step3": "지침은 뭔가 — 규칙, 주의사항"
+    "headline": "에이전트, <span class='highlight'>이렇게</span> 만듭니다",
+    "step1": "역할을 정한다 — 코드, 법률, 재무...",
+    "step2": "전문지식을 준다 — 판단 기준과 규칙",
+    "step3": "한 줄로 부른다 — \"법률 검토해줘\""
   },
   {
     "slide": 6,
-    "type": "content-highlight",
-    "headline": "이렇게 설계된 맥락은",
-    "emphasis": "복리처럼 쌓입니다",
-    "body": "대화는 쓰고 버리는 현금\n설계된 맥락은 복리 투자\n쓸수록 AI가 똑똑해집니다",
-    "subtext": ""
+    "type": "content-list",
+    "headline": "나만의 <span class='highlight'>팀</span>을\n만들어보세요",
+    "item1": "코드 전문가 — 설계, 리뷰, 리팩터링",
+    "item2": "법률 전문가 — 계약서, 컴플라이언스",
+    "item3": "재무 전문가 — 캐시플로우, 세무",
+    "item4": "마케팅 전문가 — 카피, SNS, 브랜딩",
+    "item5": "당신의 업무에 맞는 전문가를 세우세요"
   },
   {
     "slide": 7,
-    "type": "content",
-    "headline": "쓰고 끝이 아닙니다",
-    "body": "대화 중 좋은 결과가 나오면\nCLAUDE.md에 바로 반영합니다\n쓰레기는 버리고 핵심만 남기니\n쓸수록 더 정확한 서류가 됩니다"
+    "type": "content-highlight",
+    "headline": "EP.02의 맥락 설계가\n여기서 빛납니다",
+    "emphasis": "맥락 위에 역할을 세운다",
+    "body": "설계된 맥락이 있으니\n전문가를 세울 수 있고\n전문가가 있으니 팀이 됩니다",
+    "subtext": ""
   },
   {
     "slide": 8,
     "type": "content-stat",
     "headline": "오늘 기억할 한 가지",
-    "emphasis": "프롬프트 < 맥락",
-    "body": "프롬프트를 잘 쓰는 게 아니라\n맥락을 잘 설계하는 겁니다"
+    "emphasis": "1명 < 팀",
+    "body": "AI 하나를 잘 쓰는 게 아니라\n전문가 팀을 설계하는 겁니다"
   },
   {
     "slide": 9,
     "type": "cta",
     "headline": "다음 편 예고",
-    "cta_text": "EP.03 맥락이 설계되면, 다음은 분신을 만들 차례다"
+    "cta_text": "EP.04 팀이 만들어지면 여러 AI를 동시에 지휘할 차례다"
   }
 ]
