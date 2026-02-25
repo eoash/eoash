@@ -98,3 +98,4 @@ agent/memory/*_run.json
 
 # Script logs
 scripts/daily/journal_log.txt
+instagram-card-news/node_modules/
