@@ -64,6 +64,7 @@ my-plan-first         → 작업 전 3문서 수립 (/plan)
 my-fetch-tweet        → X/Twitter 요약·번역
 my-fetch-youtube      → YouTube 자막 추출·요약
 my-content-digest     → Quiz-First 콘텐츠 학습
+my-townhall-agency    → 타운홀 슬라이드 4-Agent 자동 생성 (/townhall)
 ```
 
 ### 자동화 스크립트 (`scripts/`)
