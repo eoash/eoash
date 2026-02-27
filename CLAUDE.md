@@ -115,7 +115,7 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 - [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
 
 **최근 완성된 시스템**
-- 타운홀 슬라이드 에이전시 (`my-townhall-agency`) — 4-Agent 파이프라인, EO Town Hall 덱에 3장 자동 삽입
+- 타운홀 슬라이드 (`townhall/make_pptx_editable.py`) — editable PPTX 확정, 슬라이드 1~4 레이아웃/텍스트 최적화 완료 (2026-02-27)
 - Slack 온보딩 챗봇 (`onboarding/`) — missions.yaml 기반, daily reminder 포함
 - Flip 발송 시스템 — `flip_send.py` + 17명 체크리스트 + 이사회의사록 자동 생성
 - 어드바이저 팀 — Alex/Lisa/Chris + `/consult` 자동 라우팅
@@ -131,4 +131,4 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 
 ---
 
-*마지막 업데이트: 2026-02-26*
+*마지막 업데이트: 2026-02-27*

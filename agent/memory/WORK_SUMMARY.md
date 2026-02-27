@@ -435,6 +435,27 @@ eoash/
 
 ---
 
+---
+
+## 10. 타운홀 슬라이드 고도화 (2026-02-27)
+
+**목표**: 타운홀 재무 슬라이드 레이아웃/텍스트 최종 확정
+
+**구현 내용**:
+- Slide 1 (Cash Position): NET CHANGE 박스 → Korea/US/Vietnam/Total 4행 균등 분배
+- Slide 2 (Revenue): YoY 카드에 2025 절대값 추가(GL ₩319M, KR Content ₩63M, KR Planet ₩87M), BU명 통일(KR Content/KR Planet), Monthly Revenue Total 컬럼 추가
+- Slide 3: 제목 "BU Goal Achievement" → "Revenue Goal Achievement", KR Content에 KTO Production 각주 추가
+- Slide 4: 전체 텍스트 교체 — "The Tsunami is Coming" → "The Era of 10x Leverage" (empowerment 톤)
+
+**기술 인사이트**:
+- openpyxl 소계 행 직접 셀 참조로 2025 Jan-Feb 누적 매출 추출 (행 9, 19, 29, 38)
+- python-pptx 4행 균등 분배: `(CH-40)//4`, 수직 중앙정렬: `ry+(rowH-textH)//2`
+- PermissionDenied 에러 = 파일 열려있음 → 닫고 재실행
+
+**결과물**: `townhall/townhall_finance_editable.pptx`
+
+---
+
 **문서 생성일**: 2026-02-12
-**마지막 업데이트**: 2026-02-25
+**마지막 업데이트**: 2026-02-27
 **작성자**: Claude Sonnet 4.6 (Windows)
