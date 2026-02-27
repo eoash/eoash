@@ -1,7 +1,7 @@
 // ============================================================
-// EO Town Hall — Finance Slides Generator
-// 재무 현황 2026.02 (현금/매출/목표달성률 3장)
-// 마지막 업데이트: 2026-02-27
+// EO Town Hall - Finance Slides Generator v2
+// \uc7ac\ubb34 \ud604\ud669 2026.02 (\ud604\uae08/\ub9e4\ucd9c/\ubaa9\ud45c\ub2ec\uc131\ub960 3\uc7a5)
+// \ub9c8\uc9c0\ub9c9 \uc5c5\ub370\uc774\ud2b8: 2026-02-27 (v2 \u2014 \uac00\ub3c5\uc131 \uac1c\uc120)
 // ============================================================
 
 var DECK_ID = "1LSW7jCnaxExn3sgp84gVRQdLCjBEUzJUNAPtb1RWabM";
@@ -9,17 +9,18 @@ var DECK_ID = "1LSW7jCnaxExn3sgp84gVRQdLCjBEUzJUNAPtb1RWabM";
 var C = {
   BLACK:     "#0D0D0D",
   WHITE:     "#FFFFFF",
-  GRAY_DARK: "#1E1E1E",
-  GRAY_MID:  "#2E2E2E",
+  GRAY_DARK: "#1A1A1A",
+  GRAY_MID:  "#2A2A2A",
+  GRAY_LINE: "#333333",
   ACCENT:    "#E8FF47",
-  MUTED:     "#888888",
+  MUTED:     "#999999",
   DIMMED:    "#555555",
   GREEN:     "#4CAF50",
   RED:       "#FF5252"
 };
 
 // ──────────────────────────────────────────────────────────
-// 공통 유틸 함수
+// \uacf5\ud1b5 \uc720\ud2f8 \ud568\uc218
 // ──────────────────────────────────────────────────────────
 
 function addText(slide, text, x, y, w, h, opts) {
@@ -54,375 +55,318 @@ function addLine(slide, x, y, length, color) {
 }
 
 // ──────────────────────────────────────────────────────────
-// 공통 슬라이드 헤더
+// \uacf5\ud1b5 \uc2ac\ub77c\uc774\ub4dc \ud5e4\ub354
 // ──────────────────────────────────────────────────────────
 
-function addSlideHeader(slide, section, W) {
-  var today = "2026.02";
-  // 배경: 완전 블랙
+function addSlideHeader(slide, label, W) {
+  var PAD = 32;
   addRect(slide, 0, 0, W, 405, C.BLACK);
-  // 좌상단: 섹션명
-  addText(slide, "FINANCE \u00B7 " + today, 28, 18, 250, 16,
-    {size: 8, color: C.DIMMED});
-  // 우상단: 날짜
-  addText(slide, today, W - 128, 18, 100, 16,
-    {size: 8, color: C.DIMMED, align: "right"});
-  // 구분선
-  addLine(slide, 28, 38, W - 56, C.GRAY_MID);
+  // ACCENT \uc138\ub85c \ub9c8\ucee4
+  addRect(slide, PAD, 12, 3, 20, C.ACCENT);
+  // \uc139\uc158 \ub808\uc774\ube14
+  addText(slide, label, PAD + 10, 12, 280, 20,
+    {size: 11, bold: true, color: C.ACCENT});
+  // \ub0a0\uc9dc (\uc6b0\uce21)
+  addText(slide, "FINANCE  \u00B7  2026.02", W - PAD - 160, 12, 160, 20,
+    {size: 10, color: C.DIMMED});
+  // \uad6c\ubd84\uc120
+  addLine(slide, PAD, 40, W - PAD * 2, C.GRAY_LINE);
 }
 
 // ──────────────────────────────────────────────────────────
-// SLIDE 1: 현금 현황 (Cash Position)
+// SLIDE 1: \ud604\uae08 \ud604\ud669 (Cash Position)
 // ──────────────────────────────────────────────────────────
 
 function buildSlide1(presentation) {
   var slide = presentation.appendSlide();
   slide.getBackground().setSolidFill(C.BLACK);
   var W = 720;
+  var PAD = 32;
 
   addSlideHeader(slide, "CASH POSITION", W);
 
-  // L1 헤드라인 수치: 38pt, Bold, WHITE
-  addText(slide, "\u20A9209,384,380", 28, 52, 420, 46,
-    {size: 38, bold: true, color: C.WHITE});
+  // KPI \ud5e4\ub4dc\ub77c\uc778: 54pt
+  addText(slide, "\u20A9209,384,380", PAD, 50, 460, 64,
+    {size: 54, bold: true, color: C.WHITE});
 
-  // L2 서브 요약 (억 단위) — 헤드라인 하단 좌
-  addText(slide, "2.09\uC5B5 \uC6D0", 28, 97, 160, 16,
+  // \uc11c\ube0c \uc815\ubcf4
+  addText(slide, "2.09\uC5B5 \uC6D0", PAD, 116, 140, 18,
+    {size: 13, color: C.MUTED});
+  addText(slide,
+    "3\uAC1C \uBC95\uC778 2\uC6D4 \uB9D0 \uD604\uAE08  \u00B7  \uC804\uC6D4 \uB300\uBE44  \u25BC154,010,405",
+    190, 116, 498, 18,
     {size: 13, color: C.MUTED});
 
-  // L2 서브타이틀 — 우측
-  addText(slide,
-    "3\uAC1C \uBC95\uC778 2\uC6D4 \uB9D0 \uD604\uAE08 \uC794\uACE0  |  \uC804\uC6D4 \uB300\uBE44  \u25BC154,010,405",
-    200, 97, 492, 16,
+  addLine(slide, PAD, 140, W - PAD * 2, C.GRAY_LINE);
+
+  // ── \uc88c\uce21 \ube14\ub85d: By Entity ──
+  var BY = 152;
+  var BH = 196;
+  addRect(slide, PAD, BY, 308, BH, C.GRAY_DARK);
+
+  addText(slide, "By Entity", PAD + 14, BY + 12, 260, 18,
+    {size: 13, bold: true, color: C.ACCENT});
+  addLine(slide, PAD + 14, BY + 34, 280, C.GRAY_LINE);
+
+  addText(slide, "Korea", PAD + 14, BY + 44, 120, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "\u20A994,596,329", PAD + 14, BY + 62, 270, 16,
     {size: 13, color: C.MUTED});
 
-  // 구분선
-  addLine(slide, 28, 118, W - 56, C.GRAY_MID);
+  addText(slide, "United States", PAD + 14, BY + 86, 140, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "$70,599  \u2248  \u20A9103,075,752", PAD + 14, BY + 104, 270, 16,
+    {size: 13, color: C.MUTED});
 
-  // ── 좌측 블록: By Entity ──
-  addRect(slide, 28, 128, 310, 185, C.GRAY_DARK);
+  addText(slide, "Vietnam", PAD + 14, BY + 128, 120, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "\u20A911,712,299", PAD + 14, BY + 146, 270, 16,
+    {size: 13, color: C.MUTED});
 
-  // L3 블록 제목: 10pt, Bold, ACCENT
-  addText(slide, "By Entity", 44, 140, 200, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, 44, 157, 278, C.GRAY_MID);
+  // ── \uc6b0\uce21 \ube14\ub85d: Net Change ──
+  addRect(slide, 352, BY, 336, BH, C.GRAY_DARK);
 
-  // Korea — L4: 9pt, WHITE
-  addText(slide, "Korea", 44, 163, 140, 13,
-    {size: 9, color: C.WHITE});
-  // L4 수치: 9pt, MUTED (서브 정보)
-  addText(slide, "\u20A994,596,329", 44, 176, 280, 13,
-    {size: 9, color: C.MUTED});
+  addText(slide, "Net Change (Jan \u2192 Feb)", 366, BY + 12, 306, 18,
+    {size: 13, bold: true, color: C.ACCENT});
+  addLine(slide, 366, BY + 34, 308, C.GRAY_LINE);
 
-  // United States
-  addText(slide, "United States", 44, 196, 140, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "$70,599  \u2248  \u20A9103,075,752", 44, 209, 280, 13,
-    {size: 9, color: C.MUTED});
+  addText(slide, "Korea", 366, BY + 44, 120, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "\u25BC 47,157,104", 490, BY + 44, 154, 16,
+    {size: 13, color: C.RED});
 
-  // Vietnam
-  addText(slide, "Vietnam", 44, 229, 140, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "\u20A911,712,299", 44, 242, 280, 13,
-    {size: 9, color: C.MUTED});
+  addText(slide, "United States", 366, BY + 72, 140, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "\u25BC 93,744,162", 490, BY + 72, 154, 16,
+    {size: 13, color: C.RED});
 
-  // ── 우측 블록: Net Change ──
-  addRect(slide, 352, 128, 340, 185, C.GRAY_DARK);
+  addText(slide, "Vietnam", 366, BY + 100, 120, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "\u25BC 13,109,139", 490, BY + 100, 154, 16,
+    {size: 13, color: C.RED});
 
-  // L3 블록 제목
-  addText(slide, "Net Change (Jan \u2192 Feb)", 368, 140, 300, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, 368, 157, 308, C.GRAY_MID);
+  addLine(slide, 366, BY + 128, 308, C.GRAY_LINE);
+  addText(slide, "Total", 366, BY + 136, 100, 18,
+    {size: 13, bold: true, color: C.WHITE});
+  addText(slide, "\u25BC 154,010,405", 490, BY + 136, 154, 18,
+    {size: 15, bold: true, color: C.RED});
 
-  // Korea — L4
-  addText(slide, "Korea", 368, 163, 140, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "\u25BC 47,157,104", 368, 176, 200, 13,
-    {size: 9, color: C.RED});
-
-  // United States
-  addText(slide, "United States", 368, 196, 140, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "\u25BC 93,744,162", 368, 209, 200, 13,
-    {size: 9, color: C.RED});
-
-  // Vietnam
-  addText(slide, "Vietnam", 368, 229, 140, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "\u25BC 13,109,139", 368, 242, 200, 13,
-    {size: 9, color: C.RED});
-
-  // Total — 구분선 + 합계
-  addLine(slide, 368, 262, 308, C.GRAY_MID);
-  addText(slide, "Total", 368, 268, 140, 13,
-    {size: 9, bold: true, color: C.WHITE});
-  addText(slide, "\u25BC 154,010,405", 368, 281, 200, 14,
-    {size: 10, bold: true, color: C.RED});
-
-  // ── 하단 메시지 바 ──
-  addRect(slide, 28, 320, 664, 28, C.GRAY_MID);
-  // L5 캡션: 8pt, DIMMED
+  // ── \ud558\ub2e8 Footer ──
+  addRect(slide, PAD, 356, W - PAD * 2, 28, C.GRAY_MID);
   addText(slide,
-    "\u2192  3\uC6D4 GL \ucf58\ud150\uce20 5.49\uC5B5 \uC785\uAE08 \uC608\uC815  \u00B7  \uD604\uAE08 \uD68C\uBCF5 \uC804\uB9DD",
-    40, 328, 640, 14,
-    {size: 8, color: C.DIMMED});
+    "\u2192  3\uC6D4 GL\ucf58\ud150\uce20 5.49\uC5B5 \uC785\uAE08 \uC608\uC815  \u00B7  \uD604\uAE08 \uD68C\uBCF5 \uC804\uB9DD",
+    PAD + 12, 363, 640, 16,
+    {size: 10, color: C.DIMMED});
 
   return slide;
 }
 
 // ──────────────────────────────────────────────────────────
-// SLIDE 2: 매출 실적 & YoY 비교
+// SLIDE 2: \ub9e4\ucd9c \uc2e4\uc801 & YoY \ube44\uad50
 // ──────────────────────────────────────────────────────────
 
 function buildSlide2(presentation) {
   var slide = presentation.appendSlide();
   slide.getBackground().setSolidFill(C.BLACK);
   var W = 720;
+  var PAD = 32;
 
   addSlideHeader(slide, "REVENUE", W);
 
-  // L1 헤드라인: 38pt, Bold, WHITE
-  addText(slide, "\u20A9432,176,391", 28, 52, 420, 46,
-    {size: 38, bold: true, color: C.WHITE});
+  // KPI \ud5e4\ub4dc\ub77c\uc778
+  addText(slide, "\u20A9432,176,391", PAD, 50, 460, 64,
+    {size: 54, bold: true, color: C.WHITE});
 
-  // L2 요약
-  addText(slide, "1-2\uC6D4 \uB204\uC801 \uB9E4\uCD9C", 28, 97, 200, 16,
+  addText(slide, "1-2\uC6D4 \uB204\uC801 \uB9E4\uCD9C", PAD, 116, 160, 18,
     {size: 13, color: C.MUTED});
-
-  // L2 서브타이틀
   addText(slide,
-    "GL \uAE00\uB85C\uBC8C 94% \uACAC\uC778  |  \uB3D9\uC77C BU \uAE30\uC900 YoY -8%",
-    240, 97, 452, 16,
+    "GL \uAE00\uB85C\uBC8C 94% \uACAC\uC778  \u00B7  \uB3D9\uC77C BU \uAE30\uC900 YoY -8%",
+    210, 116, 478, 18,
     {size: 13, color: C.MUTED});
 
-  // 구분선
-  addLine(slide, 28, 118, W - 56, C.GRAY_MID);
+  addLine(slide, PAD, 140, W - PAD * 2, C.GRAY_LINE);
 
-  // ── 좌측 블록: Monthly Revenue ──
-  addRect(slide, 28, 128, 310, 185, C.GRAY_DARK);
+  // ── \uc88c\uce21 \ube14\ub85d: Monthly Revenue ──
+  var BY = 152;
+  var BH = 196;
+  addRect(slide, PAD, BY, 308, BH, C.GRAY_DARK);
 
-  // L3 블록 제목
-  addText(slide, "Monthly Revenue", 44, 140, 260, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, 44, 157, 278, C.GRAY_MID);
+  addText(slide, "Monthly Revenue", PAD + 14, BY + 12, 260, 18,
+    {size: 13, bold: true, color: C.ACCENT});
+  addLine(slide, PAD + 14, BY + 34, 280, C.GRAY_LINE);
 
-  // 헤더 행 — L5 캡션 수준
-  addText(slide, "BU", 44, 163, 90, 13,
-    {size: 9, color: C.DIMMED});
-  addText(slide, "1\uC6D4", 152, 163, 70, 13,
-    {size: 9, color: C.DIMMED, align: "right"});
-  addText(slide, "2\uC6D4", 230, 163, 74, 13,
-    {size: 9, color: C.DIMMED, align: "right"});
+  // \ud5e4\ub354 \ud589
+  addText(slide, "BU", PAD + 14, BY + 42, 80, 14,
+    {size: 10, color: C.DIMMED});
+  addText(slide, "1\uC6D4", PAD + 134, BY + 42, 70, 14,
+    {size: 10, color: C.DIMMED});
+  addText(slide, "2\uC6D4", PAD + 214, BY + 42, 70, 14,
+    {size: 10, color: C.DIMMED});
 
-  // KR 한국 — L4
-  addText(slide, "KR \uD55C\uAD6D", 44, 178, 100, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "1.6M", 152, 178, 70, 13,
-    {size: 9, color: C.MUTED, align: "right"});
-  addText(slide, "13.1M", 230, 178, 74, 13,
-    {size: 9, color: C.WHITE, align: "right"});
+  // KR \ud55c\uad6d
+  addText(slide, "KR \uD55C\uAD6D", PAD + 14, BY + 62, 110, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "1.6M", PAD + 134, BY + 62, 70, 16,
+    {size: 12, color: C.MUTED});
+  addText(slide, "13.1M", PAD + 214, BY + 62, 70, 16,
+    {size: 12, color: C.WHITE});
 
-  // 플래닛
-  addText(slide, "\uD50C\uB798\uB2DB", 44, 193, 100, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "6.5M", 152, 193, 70, 13,
-    {size: 9, color: C.MUTED, align: "right"});
-  addText(slide, "5.0M", 230, 193, 74, 13,
-    {size: 9, color: C.WHITE, align: "right"});
+  // \ud50c\ub798\ub2db
+  addText(slide, "\uD50C\uB798\uB2DB", PAD + 14, BY + 84, 110, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "6.5M", PAD + 134, BY + 84, 70, 16,
+    {size: 12, color: C.MUTED});
+  addText(slide, "5.0M", PAD + 214, BY + 84, 70, 16,
+    {size: 12, color: C.WHITE});
 
-  // GL 글로벌
-  addText(slide, "GL \uAE00\uB85C\uBC8C", 44, 208, 100, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "320.7M", 152, 208, 70, 13,
-    {size: 9, color: C.MUTED, align: "right"});
-  addText(slide, "85.2M", 230, 208, 74, 13,
-    {size: 9, color: C.WHITE, align: "right"});
+  // GL \uae00\ub85c\ubc8c
+  addText(slide, "GL \uAE00\uB85C\uBC8C", PAD + 14, BY + 106, 110, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "320.7M", PAD + 134, BY + 106, 70, 16,
+    {size: 12, color: C.MUTED});
+  addText(slide, "85.2M", PAD + 214, BY + 106, 70, 16,
+    {size: 12, color: C.WHITE});
 
-  // 합계 구분선 + 행
-  addLine(slide, 44, 226, 278, C.GRAY_MID);
-  addText(slide, "\uD569\uACC4", 44, 232, 100, 13,
-    {size: 9, bold: true, color: C.WHITE});
-  addText(slide, "328.9M", 152, 232, 70, 13,
-    {size: 9, bold: true, color: C.WHITE, align: "right"});
-  addText(slide, "103.3M", 230, 232, 74, 13,
-    {size: 9, bold: true, color: C.WHITE, align: "right"});
+  // \ud569\uacc4
+  addLine(slide, PAD + 14, BY + 130, 280, C.GRAY_LINE);
+  addText(slide, "\uD569\uACC4", PAD + 14, BY + 138, 110, 16,
+    {size: 12, bold: true, color: C.WHITE});
+  addText(slide, "328.9M", PAD + 134, BY + 138, 70, 16,
+    {size: 12, bold: true, color: C.WHITE});
+  addText(slide, "103.3M", PAD + 214, BY + 138, 70, 16,
+    {size: 12, bold: true, color: C.WHITE});
 
-  // ── 우측 블록: YoY ──
-  addRect(slide, 352, 128, 340, 185, C.GRAY_DARK);
+  // ── \uc6b0\uce21 \ube14\ub85d: YoY ──
+  addRect(slide, 352, BY, 336, BH, C.GRAY_DARK);
 
-  // L3 블록 제목
-  addText(slide, "YoY (2025 vs 2026 \uB3D9\uC77CBU)", 368, 140, 300, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, 368, 157, 308, C.GRAY_MID);
+  addText(slide, "YoY (2025 vs 2026 \uB3D9\uC77CBU)", 366, BY + 12, 306, 18,
+    {size: 13, bold: true, color: C.ACCENT});
+  addLine(slide, 366, BY + 34, 308, C.GRAY_LINE);
 
-  // GL 글로벌 — L4
-  addText(slide, "GL \uAE00\uB85C\uBC8C", 368, 163, 200, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "+27%", 560, 163, 80, 13,
-    {size: 9, color: C.GREEN, align: "right"});
+  addText(slide, "GL \uAE00\uB85C\uBC8C", 366, BY + 50, 210, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "+27%", 590, BY + 50, 70, 16,
+    {size: 14, bold: true, color: C.GREEN});
 
-  // KR 한국
-  addText(slide, "KR \uD55C\uAD6D", 368, 183, 200, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "-77%", 560, 183, 80, 13,
-    {size: 9, color: C.RED, align: "right"});
+  addText(slide, "KR \uD55C\uAD6D", 366, BY + 80, 210, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "-77%", 590, BY + 80, 70, 16,
+    {size: 14, bold: true, color: C.RED});
 
-  // 플래닛 한국
-  addText(slide, "\uD50C\uB798\uB2DB \uD55C\uAD6D", 368, 203, 200, 13,
-    {size: 9, color: C.WHITE});
-  addText(slide, "-87%", 560, 203, 80, 13,
-    {size: 9, color: C.RED, align: "right"});
+  addText(slide, "\uD50C\uB798\uB2DB \uD55C\uAD6D", 366, BY + 110, 210, 16,
+    {size: 12, color: C.WHITE});
+  addText(slide, "-87%", 590, BY + 110, 70, 16,
+    {size: 14, bold: true, color: C.RED});
 
-  // 전체 (동일BU)
-  addLine(slide, 368, 222, 308, C.GRAY_MID);
-  addText(slide, "\uC804\uCCB4 (\uB3D9\uC77CBU)", 368, 229, 200, 13,
-    {size: 9, bold: true, color: C.WHITE});
-  addText(slide, "-8%", 560, 229, 80, 13,
-    {size: 9, bold: true, color: C.RED, align: "right"});
+  addLine(slide, 366, BY + 138, 308, C.GRAY_LINE);
+  addText(slide, "\uC804\uCCB4 (\uB3D9\uC77CBU)", 366, BY + 146, 200, 18,
+    {size: 12, bold: true, color: C.WHITE});
+  addText(slide, "-8%", 590, BY + 146, 70, 18,
+    {size: 15, bold: true, color: C.RED});
 
-  // ── 하단 메시지 바 ──
-  addRect(slide, 28, 320, 664, 28, C.GRAY_MID);
+  // ── \ud558\ub2e8 Footer ──
+  addRect(slide, PAD, 356, W - PAD * 2, 28, C.GRAY_MID);
   addText(slide,
     "\u2192  \uD30C\uC774\uD504\uB77C\uC778: 3\uC6D4 5.49\uC5B5 (GL\ucf58\ud150\uce20) + 5\uC6D4 11.4\uC5B5 (\uD504\uB85C\uB355\uC158+\uD50C\uB798\uB2DB\uAD50\uC721) \uD655\uC815",
-    40, 328, 640, 14,
-    {size: 8, color: C.DIMMED});
+    PAD + 12, 363, 640, 16,
+    {size: 10, color: C.DIMMED});
 
   return slide;
 }
 
 // ──────────────────────────────────────────────────────────
-// SLIDE 3: 사업부별 목표 달성률
+// SLIDE 3: \uc0ac\uc5c5\ubd80\ubcc4 \ubaa9\ud45c \ub2ec\uc131\ub960
 // ──────────────────────────────────────────────────────────
 
 function buildSlide3(presentation) {
   var slide = presentation.appendSlide();
   slide.getBackground().setSolidFill(C.BLACK);
   var W = 720;
+  var PAD = 32;
 
   addSlideHeader(slide, "BU GOALS", W);
 
-  // L1 헤드라인: 38pt, Bold, WHITE
-  addText(slide, "17.8%", 28, 52, 400, 46,
-    {size: 38, bold: true, color: C.WHITE});
+  // KPI
+  addText(slide, "17.8%", PAD, 50, 380, 64,
+    {size: 54, bold: true, color: C.WHITE});
 
-  // L2 요약
-  addText(slide, "\uC804\uC0AC \uC5F0\uAC04 \uBAA9\uD45C \uB2EC\uC131\uB960 (\uD655\uC815 \uB525 \uAE30\uC900)", 28, 97, 400, 16,
+  addText(slide, "\uC804\uC0AC \uC5F0\uAC04 \uBAA9\uD45C \uB2EC\uC131\uB960 (\uD655\uC815 \uB525 \uAE30\uC900)", PAD, 116, 430, 18,
+    {size: 13, color: C.MUTED});
+  addText(slide,
+    "\uC5F0\uAC04 \uBAA9\uD45C 120\uC5B5  \u00B7  \uD655\uC815 21.4\uC5B5  \u00B7  \uC794\uC5EC 98.6\uC5B5",
+    490, 116, 198, 18,
     {size: 13, color: C.MUTED});
 
-  // L2 서브타이틀
+  addLine(slide, PAD, 140, W - PAD * 2, C.GRAY_LINE);
+
+  // ── \uce74\ub4dc 3\uac1c ──
+  var CW   = 210;
+  var CH   = 196;
+  var CY   = 150;
+  var CGAP = 12;
+  var BARW = 182;
+  var BARH = 10;
+  var BARY = CY + 144;
+
+  var x1 = PAD;
+  var x2 = x1 + CW + CGAP;
+  var x3 = x2 + CW + CGAP;
+
+  addRect(slide, x1, CY, CW, CH, C.GRAY_DARK);
+  addRect(slide, x2, CY, CW, CH, C.GRAY_DARK);
+  addRect(slide, x3, CY, CW, CH, C.GRAY_DARK);
+
+  var cards = [
+    {x: x1, title: "KR \uD55C\uAD6D",          goal: "13\uC5B5", deal: "3.3\uC5B5", pct: 0.254, pctStr: "25.4%", gap: "-9.7\uC5B5"},
+    {x: x2, title: "\uD50C\uB798\uB2DB \uD55C\uAD6D", goal: "22\uC5B5", deal: "8.5\uC5B5", pct: 0.388, pctStr: "38.8%", gap: "-13.5\uC5B5"},
+    {x: x3, title: "GL \uAE00\uB85C\uBC8C",     goal: "85\uC5B5", deal: "9.6\uC5B5", pct: 0.112, pctStr: "11.2%", gap: "-75.4\uC5B5"}
+  ];
+
+  for (var i = 0; i < cards.length; i++) {
+    var c  = cards[i];
+    var cx = c.x;
+
+    // \uce74\ub4dc \uc81c\ubaa9
+    addText(slide, c.title, cx + 14, CY + 12, CW - 28, 18,
+      {size: 13, bold: true, color: C.ACCENT});
+    addLine(slide, cx + 14, CY + 34, CW - 28, C.GRAY_LINE);
+
+    // \ubaa9\ud45c
+    addText(slide, "\uBAA9\uD45C", cx + 14, CY + 44, 60, 14,
+      {size: 10, color: C.DIMMED});
+    addText(slide, c.goal, cx + 14, CY + 58, CW - 28, 26,
+      {size: 20, bold: true, color: C.WHITE});
+
+    // \ud655\uc815 \ub525
+    addText(slide, "\uD655\uC815 \uB525", cx + 14, CY + 90, 60, 14,
+      {size: 10, color: C.DIMMED});
+    addText(slide, c.deal, cx + 14, CY + 104, CW - 28, 22,
+      {size: 16, color: C.WHITE});
+
+    // \ub2ec\uc131\ub960 \ubc14
+    addRect(slide, cx + 14, BARY, BARW, BARH, C.GRAY_MID);
+    addRect(slide, cx + 14, BARY, Math.round(BARW * c.pct), BARH, C.ACCENT);
+
+    // \ub2ec\uc131\ub960 %
+    addText(slide, c.pctStr, cx + 14, BARY + 14, 100, 20,
+      {size: 14, bold: true, color: C.ACCENT});
+
+    // \ubaa9\ud45c\ub300\ube44
+    addText(slide, "\ubaa9\ud45c\ub300\ube44 " + c.gap, cx + 14, BARY + 38, CW - 28, 14,
+      {size: 10, color: C.DIMMED});
+  }
+
+  // ── \ud558\ub2e8 Footer ──
   addText(slide,
-    "\uC5F0\uAC04 \uBAA9\uD45C 120\uC5B5  |  \uD655\uC815 21.4\uC5B5  |  \uC794\uC5EC 98.6\uC5B5",
-    28, 112, 664, 16,
-    {size: 13, color: C.MUTED});
-
-  // 구분선
-  addLine(slide, 28, 132, W - 56, C.GRAY_MID);
-
-  // ── 카드 레이아웃 ──
-  // (720 - 56 - 24) / 3 = 640/3 = 213.3 → 213pt
-  var cardW  = 213;
-  var cardH  = 158;
-  var cardY  = 144;
-  var barBgY = 250;   // 달성률 바 배경 y
-  var barH   = 7;
-  var barW   = 180;   // 달성률 바 최대 너비
-
-  // ── 카드 1: KR 한국 ──
-  var x1 = 28;
-  addRect(slide, x1, cardY, cardW, cardH, C.GRAY_DARK);
-
-  // L3 제목: 10pt, Bold, ACCENT
-  addText(slide, "KR \uD55C\uAD6D", x1 + 14, cardY + 10, 185, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, x1 + 14, cardY + 27, cardW - 28, C.GRAY_MID);
-
-  // L5 레이블: 8pt, DIMMED
-  addText(slide, "\uBAA9\uD45C", x1 + 14, cardY + 33, 80, 12,
-    {size: 8, color: C.DIMMED});
-  // 수치: 14pt — L1(38pt)보다 작게, Bold, WHITE
-  addText(slide, "13\uC5B5", x1 + 14, cardY + 44, 140, 18,
-    {size: 14, bold: true, color: C.WHITE});
-
-  addText(slide, "\uD655\uC815 \uB525", x1 + 14, cardY + 66, 80, 12,
-    {size: 8, color: C.DIMMED});
-  addText(slide, "3.3\uC5B5", x1 + 14, cardY + 77, 140, 14,
-    {size: 11, color: C.WHITE});
-
-  // 달성률 바
-  addRect(slide, x1 + 14, barBgY, barW, barH, C.GRAY_MID);
-  addRect(slide, x1 + 14, barBgY, Math.round(barW * 0.254), barH, C.ACCENT);
-
-  // L3 달성률 수치: 10pt, Bold, ACCENT
-  addText(slide, "25.4%", x1 + 14, barBgY + 11, 100, 13,
-    {size: 10, bold: true, color: C.ACCENT});
-  // L5 캡션: 8pt, DIMMED
-  addText(slide, "\uBAA9\uD45C\uB300\uBE44 -9.7\uC5B5", x1 + 14, barBgY + 25, 185, 12,
-    {size: 8, color: C.DIMMED});
-
-  // ── 카드 2: 플래닛 한국 ──
-  var x2 = x1 + cardW + 12;  // 253
-  addRect(slide, x2, cardY, cardW, cardH, C.GRAY_DARK);
-
-  addText(slide, "\uD50C\uB798\uB2DB \uD55C\uAD6D", x2 + 14, cardY + 10, 185, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, x2 + 14, cardY + 27, cardW - 28, C.GRAY_MID);
-
-  addText(slide, "\uBAA9\uD45C", x2 + 14, cardY + 33, 80, 12,
-    {size: 8, color: C.DIMMED});
-  addText(slide, "22\uC5B5", x2 + 14, cardY + 44, 140, 18,
-    {size: 14, bold: true, color: C.WHITE});
-
-  addText(slide, "\uD655\uC815 \uB525", x2 + 14, cardY + 66, 80, 12,
-    {size: 8, color: C.DIMMED});
-  addText(slide, "8.5\uC5B5", x2 + 14, cardY + 77, 140, 14,
-    {size: 11, color: C.WHITE});
-
-  addRect(slide, x2 + 14, barBgY, barW, barH, C.GRAY_MID);
-  addRect(slide, x2 + 14, barBgY, Math.round(barW * 0.388), barH, C.ACCENT);
-
-  addText(slide, "38.8%", x2 + 14, barBgY + 11, 100, 13,
-    {size: 10, bold: true, color: C.ACCENT});
-  addText(slide, "\uBAA9\uD45C\uB300\uBE44 -13.5\uC5B5", x2 + 14, barBgY + 25, 185, 12,
-    {size: 8, color: C.DIMMED});
-
-  // ── 카드 3: GL 글로벌 ──
-  var x3 = x2 + cardW + 12;  // 478
-  addRect(slide, x3, cardY, cardW, cardH, C.GRAY_DARK);
-
-  addText(slide, "GL \uAE00\uB85C\uBC8C", x3 + 14, cardY + 10, 185, 14,
-    {size: 10, bold: true, color: C.ACCENT});
-  addLine(slide, x3 + 14, cardY + 27, cardW - 28, C.GRAY_MID);
-
-  addText(slide, "\uBAA9\uD45C", x3 + 14, cardY + 33, 80, 12,
-    {size: 8, color: C.DIMMED});
-  addText(slide, "85\uC5B5", x3 + 14, cardY + 44, 140, 18,
-    {size: 14, bold: true, color: C.WHITE});
-
-  addText(slide, "\uD655\uC815 \uB525", x3 + 14, cardY + 66, 80, 12,
-    {size: 8, color: C.DIMMED});
-  addText(slide, "9.6\uC5B5", x3 + 14, cardY + 77, 140, 14,
-    {size: 11, color: C.WHITE});
-
-  // 달성률 바 — 11.2%: 180 * 0.112 = 20.2pt
-  addRect(slide, x3 + 14, barBgY, barW, barH, C.GRAY_MID);
-  addRect(slide, x3 + 14, barBgY, Math.round(barW * 0.112), barH, C.ACCENT);
-
-  addText(slide, "11.2%", x3 + 14, barBgY + 11, 100, 13,
-    {size: 10, bold: true, color: C.ACCENT});
-  addText(slide, "\uBAA9\uD45C\uB300\uBE44 -75.4\uC5B5", x3 + 14, barBgY + 25, 185, 12,
-    {size: 8, color: C.DIMMED});
-
-  // ── 하단 메시지 ──
-  addText(slide,
-    "\u2192  \uD50C\uB798\uB2DB\uC774 \uB2EC\uC131\uB960 1\uC704(38.8%)  |  GL\uC740 \uC808\uB300 \uAE08\uC561 \uCD5C\uB300(9.6\uC5B5)  |  \uC804\uCCB4 98.6\uC5B5 \uCD94\uAC00 \uC218\uC8FC \uD544\uC694",
-    28, 310, 664, 14,
-    {size: 8, color: C.DIMMED});
+    "\u2192  \uD50C\uB798\uB2DB\uC774 \uB2EC\uC131\uB960 1\uC704(38.8%)  \u00B7  GL\uC740 \uC808\uB300 \uAE08\uC561 \uCD5C\uB300(9.6\uC5B5)  \u00B7  \uC804\uCCB4 98.6\uC5B5 \uCD94\uAC00 \uC218\uC8FC \uD544\uC694",
+    PAD, 358, W - PAD * 2, 16,
+    {size: 10, color: C.DIMMED});
 
   return slide;
 }
 
 // ──────────────────────────────────────────────────────────
-// 메인 함수
+// \uba54\uc778 \ud568\uc218
 // ──────────────────────────────────────────────────────────
 
 function addSlides() {
@@ -430,31 +374,28 @@ function addSlides() {
   var slides = presentation.getSlides();
   var totalSlides = slides.length;
 
-  Logger.log("\uD604\uC7AC \uC2AC\uB77C\uC774\uB4DC \uC218: " + totalSlides);
+  Logger.log("\ud604\uc7ac \uc2ac\ub77c\uc774\ub4dc \uc218: " + totalSlides);
 
-  // 마지막 3개 슬라이드 삭제 (이전에 추가한 슬라이드 교체)
+  // \ub9c8\uc9c0\ub9c9 3\uac1c \uc2ac\ub77c\uc774\ub4dc \uc0ad\uc81c (\uc774\uc804\uc5d0 \ucd94\uac00\ud55c \uc2ac\ub77c\uc774\ub4dc \uad50\uccb4)
   if (totalSlides >= 3) {
     for (var i = 0; i < 3; i++) {
       var allSlides = presentation.getSlides();
       allSlides[allSlides.length - 1].remove();
     }
-    Logger.log("\uAE30\uC874 \uB9C8\uC9C0\uB9C9 3\uC7A5 \uC0AD\uC81C \uC644\uB8CC");
+    Logger.log("\uae30\uc874 \ub9c8\uc9c0\ub9c9 3\uc7a5 \uc0ad\uc81c \uc644\ub8cc");
   }
 
-  // SLIDE 1: 현금 현황
   buildSlide1(presentation);
-  Logger.log("SLIDE 1 \uCD94\uAC00: \uD604\uAE08 \uD604\uD669 (Cash Position)");
+  Logger.log("SLIDE 1 \ucd94\uac00: \ud604\uae08 \ud604\ud669 (Cash Position)");
 
-  // SLIDE 2: 매출 실적 & YoY 비교
   buildSlide2(presentation);
-  Logger.log("SLIDE 2 \uCD94\uAC00: \uB9E4\uCD9C \uC2E4\uC801 & YoY \uBE44\uAD50");
+  Logger.log("SLIDE 2 \ucd94\uac00: \ub9e4\ucd9c \uc2e4\uc801 & YoY \ube44\uad50");
 
-  // SLIDE 3: 사업부별 목표 달성률
   buildSlide3(presentation);
-  Logger.log("SLIDE 3 \uCD94\uAC00: \uC0AC\uC5C5\uBD80\uBCC4 \uBAA9\uD45C \uB2EC\uC131\uB960");
+  Logger.log("SLIDE 3 \ucd94\uac00: \uc0ac\uc5c5\ubd80\ubcc4 \ubaa9\ud45c \ub2ec\uc131\ub960");
 
   Logger.log("==============================");
-  Logger.log("\uC644\uB8CC: \uC2AC\uB77C\uC774\uB4DC 3\uC7A5 \uCD94\uAC00\uB428");
+  Logger.log("\uc644\ub8cc: \uc2ac\ub77c\uc774\ub4dc 3\uc7a5 \uc628\ub85c\ub4dc");
   Logger.log("URL: https://docs.google.com/presentation/d/" + DECK_ID + "/edit");
   Logger.log("==============================");
 }

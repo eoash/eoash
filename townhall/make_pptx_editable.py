@@ -110,23 +110,23 @@ def slide1(prs):
     rect(s, RX, CY, CW, CH, C.CARD)
     card_header(s, RX, CY, CW, "NET CHANGE  JAN → FEB")
 
-    for i, (name, val) in enumerate([
-        ("Korea",   "▼ ₩47M"),
-        ("US",      "▼ ₩94M"),
-        ("Vietnam", "▼ ₩13M"),
-    ]):
-        ry = CY + 40 + i * RH
-        txt(s, name, RX + 16,       ry + 16, 240, 24, 16, C.MUTED,    bold=True)
-        txt(s, val,  RX + CW - 260, ry + 10, 244, 44, 32, C.NEON_RED, bold=True,
-            align=PP_ALIGN.RIGHT)
-        if i < 2: hline(s, RX + 16, ry + RH, CW - 32)
+    ROWY = (CH - 40) // 4  # 4 equal rows filling the card
 
-    # Total row
-    ty = CY + 40 + 3 * RH
-    hline(s, RX + 16, ty, CW - 32, C.GRAY_MID)
-    txt(s, "Total",   RX + 16,       ty + 10, 200, 30, 20, C.WHITE,    bold=True)
-    txt(s, "▼ ₩154M", RX + CW - 240, ty + 6,  224, 38, 28, C.NEON_RED, bold=True,
-        align=PP_ALIGN.RIGHT)
+    for i, (name, val, name_col) in enumerate([
+        ("Korea",   "▼ ₩47M",  C.MUTED),
+        ("US",      "▼ ₩94M",  C.MUTED),
+        ("Vietnam", "▼ ₩13M",  C.MUTED),
+        ("Total",   "▼ ₩154M", C.WHITE),
+    ]):
+        ry     = CY + 40 + i * ROWY
+        name_y = ry + (ROWY - 24) // 2
+        val_y  = ry + (ROWY - 44) // 2
+        txt(s, name, RX + 16,       name_y, 200, 24, 16, name_col,   bold=True)
+        txt(s, val,  RX + CW - 220, val_y,  204, 44, 32, C.NEON_RED, bold=True,
+            align=PP_ALIGN.RIGHT)
+        if i < 3:
+            div_color = C.GRAY_MID if i == 2 else None
+            hline(s, RX + 16, ry + ROWY, CW - 32, div_color)
 
 # ─────────────────────────────────────────────────────
 # SLIDE 2 — Revenue
@@ -203,7 +203,7 @@ def slide2(prs):
 # ─────────────────────────────────────────────────────
 def slide3(prs):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s); slide_header(s, "BU Goal Achievement", 3)
+    bg(s); slide_header(s, "Revenue Goal Achievement", 3)
 
     txt(s, "Annual Goal Achievement (Confirmed Deals)",               PAD, 82,  700, 20, 12, C.MUTED)
     txt(s, "17.8%",                                                   PAD, 100, 500, 80, 72, C.WHITE, bold=True)
@@ -244,6 +244,11 @@ def slide3(prs):
         # Gap
         txt(s, f"Gap  {c['gap']}", cx + 14, BARY + 90, CW - 28, 22, 14, C.DIMMED, bold=True)
 
+        # KR Content footnote
+        if i == 0:
+            txt(s, "* Includes \u20a9300M KTO Production",
+                cx + 14, BARY + 116, CW - 28, 18, 9, C.DIMMED)
+
 # ─────────────────────────────────────────────────────
 # SLIDE 4 — AI Native
 # ─────────────────────────────────────────────────────
@@ -252,23 +257,23 @@ def slide4(prs):
     bg(s); slide_header(s, "AI Native", 4)
 
     # Giant headline — ~40% of slide height
-    txt(s, "The Tsunami",  PAD + 40,  76, 1000, 136, 102, C.WHITE,  bold=True)
-    txt(s, "is Coming.",   PAD + 40, 208, 1000, 136, 102, C.ACCENT, bold=True)
+    txt(s, "The Era of",     PAD + 40,  76, 1000, 136, 102, C.WHITE,  bold=True)
+    txt(s, "10x Leverage.",  PAD + 40, 208, 1000, 136, 102, C.ACCENT, bold=True)
 
     # Body
     txt(s,
-        "Running a 10-person AI team 24/7 while you sleep.  That is AI Native.",
+        "AI is not here to replace you. It's a lever to amplify your capabilities.",
         PAD + 40, 362, 960, 36, 20, C.MUTED, bold=True, wrap=True)
     txt(s,
-        "If you don't find a way to use AI, someone else will find a way to replace you with it.",
+        "Build your own 24/7 AI team to clone your workflow. That is AI Native.",
         PAD + 40, 406, 960, 46, 20, C.WHITE, bold=True, wrap=True)
 
     # CTA button
-    cta = s.shapes.add_shape(1, px(PAD + 40), px(472), px(760), px(60))
+    cta = s.shapes.add_shape(1, px(PAD + 40), px(472), px(880), px(60))
     cta.fill.background()
     cta.line.color.rgb = C.ACCENT
     cta.line.width     = Pt(1)
-    txt(s, "→   Install Claude Code Right Now", PAD + 72, 488, 720, 34, 20, C.ACCENT, bold=True)
+    txt(s, "\u2192   Install Claude Code & Build Your AI Team", PAD + 72, 488, 840, 34, 20, C.ACCENT, bold=True)
 
 # ─────────────────────────────────────────────────────
 # MAIN
