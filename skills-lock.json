@@ -1,10 +1,70 @@
 {
   "version": 1,
   "skills": {
+    "biz-email-writer": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "588a7fa57f9c61aaa8a000dfa54a484fe99ae8897e01f2f47a87fbe4cdd28535"
+    },
+    "data-report-generator": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "934700c5f3bf0ef7fe80b2b2cfd99e0cbb1d54177045c10943515ec2f727d88d"
+    },
+    "excel-automation": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "005311ff82d645168a8fe5976156f138974ee6ec9acf6c1ba506f983313ca760"
+    },
+    "korean-biz-docs": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "4a4f01edfaf252d6cd8764aeafdd67901a11438989adcdd400f700c2a6f77979"
+    },
+    "korean-translator": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "0c41b5b1ca91f192edb4a45d1f9fb308efd3d15f281d18e73e6fa7269c7cd9c2"
+    },
+    "meeting-minutes": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "8ed8040f0f4604b77e590acf0bb7596a197ff7fd25750496f1c87c6404c49d1e"
+    },
+    "portfolio-builder": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "f3d43f21b22c4f8effda888775ed256a00eec06793d1cf089fca0be66eb96f92"
+    },
+    "ppt-design-system": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "a12abf5cfa4d6b3dcf46ad80378677ba56d01df586cf853e30d1d12244f3c8d0"
+    },
+    "project-tracker": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "ca2e8c3098f3bc3773be1aa3bb36310c702cbed3077edbdb5ac63aad738d179f"
+    },
+    "prompt-engineer": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "df210856ffef51e20c2a7109aaf13f02a931a4fd1e5a44dde0e1148ab8f886a7"
+    },
+    "proposal-maker": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "3c034a4ec0bd0e778f052ee770ef421e3c9880942451ff19b121a555366ef11c"
+    },
     "remotion-best-practices": {
       "source": "remotion-dev/skills",
       "sourceType": "github",
       "computedHash": "46a55d68886d6c104bde7803c55a479f91b45ae01441e37c800373bcb0bf3719"
+    },
+    "svg-diagram": {
+      "source": "modu-ai/smart-cowork-life",
+      "sourceType": "github",
+      "computedHash": "9a2f6f976e8f1cbdd06ac85d116520d3ac15eaad46ec7970015fc4fff0b54f4d"
     }
   }
 }

@@ -94,6 +94,8 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 - [ ] AR 매칭 자동화 Production 전환 (dry-run 완료, Bill.com update 활성화 필요)
 - [ ] Flip 투자자 이메일 최종 발송 (정호석 변호사 검토 + 수신자 이메일 확정 대기)
 - [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
+- [x] smart-cowork-life 스킬 12개 설치 (`npx skills add modu-ai/smart-cowork-life`)
+- [x] AI Native 교육 PPTX 디자인 개선 (`training/ai_native_intro_v2.pptx`, PptxGenJS + Pretendard, 9장 재디자인)
 
 **알려진 블로커**
 - Flip: 정호석 변호사 검토 완료 전까지 발송 보류
@@ -105,4 +107,4 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 
 ---
 
-*마지막 업데이트: 2026-03-01*
+*마지막 업데이트: 2026-03-02*
