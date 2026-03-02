@@ -96,6 +96,8 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 - [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
 - [x] smart-cowork-life 스킬 12개 설치 (`npx skills add modu-ai/smart-cowork-life`)
 - [x] AI Native 교육 PPTX 14장 확대 고도화 (`training/ai_native_intro_v2.pptx`, python-pptx, METR벤치마크·해커톤·토큰전쟁·4단계진화·공유지능 추가)
+- [x] eo-onboarding-bot 코드 개선 — 환경변수 검증, 에러 로깅, Home Tab 대시보드 (일반 유저 + HR 전용), 테스트 85개
+- [ ] eo-onboarding-bot 배포 — missions.yaml 실제 정책 내용 작성, Slack 앱 설정, E2E 테스트
 
 **알려진 블로커**
 - Flip: 정호석 변호사 검토 완료 전까지 발송 보류
