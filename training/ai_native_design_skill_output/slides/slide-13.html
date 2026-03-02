@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 720pt;
+  height: 405pt;
+  font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 28pt 34pt;
+}
+:root {
+  --bg-primary: #f7f8fc;
+  --bg-secondary: #ffffff;
+  --bg-dark: #1A1A1A;
+  --text-primary: #1A1A1A;
+  --text-secondary: #5d6472;
+  --indigo: #5B6CF9;
+  --alert: #FF5C35;
+  --line: #dfe3ef;
+}
+h1 { font-size: 38pt; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+h2 { font-size: 20pt; font-weight: 700; letter-spacing: -0.01em; }
+p { font-size: 14pt; line-height: 1.45; }
+.small { font-size: 10pt; color: var(--text-secondary); }
+.muted { color: var(--text-secondary); }
+.alert { color: var(--alert); }
+.indigo { color: var(--indigo); }
+.section { display: flex; flex-direction: column; gap: 10pt; }
+.row { display: flex; gap: 14pt; }
+.col { flex: 1; }
+.card {
+  background: var(--bg-secondary);
+  border: 1.5pt solid var(--line);
+  border-radius: 10pt;
+  padding: 14pt;
+  display: flex;
+  flex-direction: column;
+  gap: 8pt;
+}
+.card-red { border-color: var(--alert); }
+.card-indigo { border-color: var(--indigo); }
+.badge {
+  display: inline-block;
+  border: 1pt solid var(--line);
+  border-radius: 999pt;
+  padding: 3pt 10pt;
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+hr { border: none; height: 1pt; background: var(--line); }
+.dark {
+  background: var(--bg-dark);
+  color: #ffffff;
+}
+.dark p, .dark .muted, .dark .small { color: #d6d6d6; }
+.dark .card { background: #262626; border-color: #3a3a3a; }
+.dark .badge { border-color: #5a5a5a; }
+</style>
+</head>
+
+<body>
+  <section class="section">
+    <h2>이렇게 쌓인다</h2>
+    <div class="card" style="background:#1A1A1A; border-color:#1A1A1A;">
+      <p style="font-family:Consolas, monospace; color:#fff;">팀 공용 오답노트 (Anti-patterns)</p>
+      <p style="font-family:Consolas, monospace; color:#fff;">[03.15] 2022년 이전 경쟁사 데이터 인용 금지</p>
+      <p style="font-family:Consolas, monospace; color:#fff;">[03.20] 회의록 요약: 결정사항 + 다음 할 일만</p>
+      <p style="font-family:Consolas, monospace; color:#fff;">[04.02] 코드 작성: 가짜 API 엔드포인트 생성 금지</p>
+    </div>
+    <p class="alert">한 명이 발견하면 팀 전체가 같은 실수를 피한다</p>
+  </section>
+</body>
+
+</html>
