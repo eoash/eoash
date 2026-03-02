@@ -95,7 +95,74 @@ def make_pptx():
          '임계점을 넘은 팀원과\n못 넘은 팀원은\n\n"대화가 되지 않습니다"',
          tc=WARN, bc=DARK)
 
-    # ── Slide 3: 기억 못한다 ─────────────────────────────────
+    # ── Slide 3: 4단계 진화 ───────────────────────────────────
+    s3x = blank(); bar(s3x)
+    title(s3x, "AI 활용은 4단계로 진화하고 있다")
+
+    # 4 columns
+    EW = 2.88          # card width
+    EH = 4.65          # card height
+    EY = 1.38
+    EXS = [0.6 + i * (EW + 0.25) for i in range(4)]
+
+    stages = [
+        ("1", "Prompt\nEngineering",
+         "채팅창에 질문하기",
+         '"이 코드 에러 원인이 뭐야?"',
+         "단발성 질의 · 창 닫으면 끝"),
+        ("2", "Context\nEngineering",
+         "CLAUDE.md로 맞춤 세팅",
+         "프로젝트 규칙·스타일을\nAI가 매번 기억",
+         "한 번 설정 → 계속 적용"),
+        ("3", "Compound\nEngineering",
+         "팀 공유 + 외부 도구 결합",
+         "Slack·Notion·DB 스크립트를\nAI가 직접 실행·조합",
+         "개인 → 조직 레벨 자동화"),
+        ("4", "Harness\nEngineering",
+         "자율 에이전틱 루프",
+         "코드 작성 → 테스트 → 에러 수정\n루프를 AI가 스스로 반복",
+         "24시간 풀 자동화 · CI/CD 결합"),
+    ]
+
+    for i, (num, name, sub, desc, bottom) in enumerate(stages):
+        is_first = (i == 0)
+        cbg   = RGBColor(0xFF, 0xF0, 0xEB) if is_first else CARD
+        cline = WARN if is_first else None
+        c = box(s3x, EXS[i], EY, EW, EH, cbg, line_color=cline)
+
+        # stage number circle
+        num_color = WARN if is_first else INDIGO
+        tb(s3x, num, EXS[i]+0.15, EY+0.15, 0.5, 0.5, 22, bold=True, color=num_color)
+
+        # stage name
+        name_color = WARN if is_first else INDIGO
+        tb(s3x, name, EXS[i]+0.15, EY+0.65, EW-0.3, 0.85, 16, bold=True, color=name_color)
+
+        # subtitle
+        tb(s3x, sub, EXS[i]+0.15, EY+1.55, EW-0.3, 0.5, 11, bold=True, color=DARK)
+
+        # description
+        tb(s3x, desc, EXS[i]+0.15, EY+2.15, EW-0.3, 1.2, 11, color=GRAY)
+
+        # bottom label
+        tb(s3x, bottom, EXS[i]+0.15, EY+3.55, EW-0.3, 0.9, 10, color=GRAY)
+
+        # arrow between cards
+        if i < 3:
+            tb(s3x, "→", EXS[i]+EW+0.02, EY+EH/2-0.25, 0.21, 0.5, 14,
+               bold=True, color=GRAY, align=PP_ALIGN.CENTER)
+
+    # "YOU ARE HERE" marker on stage 1
+    box(s3x, EXS[0], EY+EH+0.12, EW, 0.55, WARN)
+    tb(s3x, "대부분이 여기에 있다", EXS[0], EY+EH+0.18, EW, 0.42,
+       12, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
+
+    # bottom message
+    box(s3x, 0.6, 6.55, 12.13, 0.7, IND_L)
+    tb(s3x, "채팅 AI에 머물면 임계점을 넘을 수 없다",
+       0.6, 6.65, 12.13, 0.5, 16, bold=True, color=INDIGO, align=PP_ALIGN.CENTER)
+
+    # ── Slide 4 (was 3): 기억 못한다 ──────────────────────────
     s3 = blank(); bar(s3)
     title(s3, "AI도, 슬랙도 — 기억하지 못한다")
     card(s3, 0.6, 1.38, 5.93, 4.6, "🤖",
