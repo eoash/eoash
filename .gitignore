@@ -85,6 +85,10 @@ sync/
 # Separate git repositories (managed independently)
 dashboard/
 
+# Duplicate skill folders (canonical: .claude/skills/)
+.agent/
+.agents/
+
 # Backup files
 claude_migration_backup_safe/
 
