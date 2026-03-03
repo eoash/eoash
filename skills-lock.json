@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "computedHash": "a7235898c50422ed8d3cf43cb640ecb591cce3220cf88d31256a59c16a20d8ea"
+    },
     "biz-email-writer": {
       "source": "modu-ai/smart-cowork-life",
       "sourceType": "github",
@@ -11,10 +16,30 @@
       "sourceType": "github",
       "computedHash": "934700c5f3bf0ef7fe80b2b2cfd99e0cbb1d54177045c10943515ec2f727d88d"
     },
+    "design-md": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "computedHash": "44af3e6e89a42a765d9cebf943f1e2ff3cdf43d1958341eb43fb7b74116f6691"
+    },
+    "docx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "150be87ff7b18f273ad07da303adb1cf2ca21cc3e76db7a2cf0373405178a278"
+    },
     "excel-automation": {
       "source": "modu-ai/smart-cowork-life",
       "sourceType": "github",
       "computedHash": "005311ff82d645168a8fe5976156f138974ee6ec9acf6c1ba506f983313ca760"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "computedHash": "25872a21881a950edc3db1f3329664d60405d539660ce05b3265db2de06a7dfd"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "516bd2154eb843a8240e43d5b285229129853114ad7075a5e141e1c08e408c84"
     },
     "korean-biz-docs": {
       "source": "modu-ai/smart-cowork-life",
@@ -31,6 +56,11 @@
       "sourceType": "github",
       "computedHash": "8ed8040f0f4604b77e590acf0bb7596a197ff7fd25750496f1c87c6404c49d1e"
     },
+    "pdf": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "37226d4220d844377e6b2a386c51a011df4cd130855ff0b80bcc22f9c28abd57"
+    },
     "portfolio-builder": {
       "source": "modu-ai/smart-cowork-life",
       "sourceType": "github",
@@ -40,6 +70,11 @@
       "source": "modu-ai/smart-cowork-life",
       "sourceType": "github",
       "computedHash": "a12abf5cfa4d6b3dcf46ad80378677ba56d01df586cf853e30d1d12244f3c8d0"
+    },
+    "pptx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "2275e4d8dba1790d52f6619b3e2fed04edc948beef545a2ad18e4a1be644426d"
     },
     "project-tracker": {
       "source": "modu-ai/smart-cowork-life",
@@ -65,6 +100,21 @@
       "source": "modu-ai/smart-cowork-life",
       "sourceType": "github",
       "computedHash": "9a2f6f976e8f1cbdd06ac85d116520d3ac15eaad46ec7970015fc4fff0b54f4d"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "3ff06f0712886f7c2660d6746856c22d3127bd6568ddde29ddad8b72dbaaa226"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
+    },
+    "xlsx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "cb7fba2177d0d35d14b3244272b25d1b05246e99b3468a087fe06c84193dbd20"
     }
   }
 }
