@@ -19,6 +19,7 @@
 - 기술 설명은 비개발자 수준으로 (원리보다 사용법)
 - 모호하면 추측하지 말고 물어볼 것
 - 한국어로 대화, 코드·파일명은 영어
+- 작업 전 오답노트 확인: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
@@ -26,7 +27,6 @@
 
 **안서현 (Seohyun Ahn)** — Finance & Operations Lead, EO Studio
 - 책임: 한국/미국/베트남 3개 법인 재무·운영·법무·인사 총괄
-- 도구: Notion, Slack, ClickUp, Bill.com (US), Google Sheets, Gmail, GitHub
 - 스타일: 70% 완성도로 먼저 작동 → 개선. 수작업보다 시스템. 빠른 실행.
 - 비개발자지만 API 연동·코드 리뷰·멀티에이전트 설계 직접 수행
 
@@ -43,36 +43,32 @@ agent/advisors/legal_advisor.md      → Lisa  (법률/계약/주주/외국환)
 agent/advisors/finance_advisor.md    → Chris (재무/AR/FX/캐시플로우)
 ```
 자동 라우팅: `/consult` → 키워드 감지 → Alex/Lisa/Chris 자동 분기
-판단 불가 시: "어느 어드바이저에게 물어볼까요?" 질문 출력
 
 ### 스킬 (`.claude/skills/`)
+핵심 커스텀 스킬 (`my-*`):
 ```
 my-context-sync       → 6개 소스 컨텍스트 통합 (수동 요청 시에만)
 my-session-wrap       → 세션 마무리 정리
 my-consult            → 어드바이저 자동 라우팅 (/consult)
-my-code-reviewer      → 코드 리뷰 (/review)
-my-legal-advisor      → 법률 상담 (/legal)
-my-finance-advisor    → 재무 상담 (/finance)
-my-plan-first         → 작업 전 3문서 수립 (/plan)
 my-fetch-tweet        → X/Twitter 요약·번역
 my-fetch-youtube      → YouTube 자막 추출·요약
 my-content-digest     → Quiz-First 콘텐츠 학습
 my-townhall-agency    → 타운홀 슬라이드 4-Agent 자동 생성 (/townhall)
 ```
+전체 스킬 목록: `.claude/skills/` 디렉토리 참조
 
 ### 자동화 스크립트 (`scripts/`)
 ```
 scripts/daily/           → 일일 자동화 (AR 체크, TODO, 저널)
 scripts/flip_send.py     → Flip 투자자 이메일 발송 (17명)
-scripts/flip_send_packets.py → 서명 패킷 발송
-scripts/generate_*.py   → Flip 문서 자동 생성 (체크리스트, 이사회의사록)
-scripts/read_cash_*.py  → 캐시플로우 데이터 조회
-scripts/read_sheets*.py → Google Sheets 데이터 조회
+scripts/generate_*.py    → Flip 문서 자동 생성
+scripts/read_cash_*.py   → 캐시플로우 데이터 조회
+scripts/read_sheets*.py  → Google Sheets 데이터 조회
 ```
 
 ### 프로젝트별 메모리 (`agent/projects/`)
 ```
-ar_automation/    → AR 매칭 자동화 (Bill.com + Plaid), 결정 로그 포함
+ar_automation/    → AR 매칭 자동화 (Bill.com + Plaid)
 finance/          → 재무 대시보드, FX
 legal/            → 법무 문서 (Flip 등)
 operations/       → 운영 자동화, 온보딩
@@ -81,36 +77,19 @@ operations/       → 운영 자동화, 온보딩
 ### 주요 서브 프로젝트
 ```
 onboarding/       → Slack Bolt 온보딩 챗봇 (missions.yaml 기반)
-dashboard/        → Streamlit 재무 대시보드 (별도 git repo: eoash/eo-finance-dashboard)
+dashboard/        → Streamlit 재무 대시보드 (별도 repo: eoash/eo-finance-dashboard)
 ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
-townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, slides.gs)
-ai-native-camp/   → AI Native 교육 캠프 (Summary, 숙제, 노트, PPTX, 슬라이드)
+townhall/         → 타운홀 슬라이드 산출물
+ai-native-camp/   → AI Native 교육 캠프 (교육자료, 숙제, PPTX)
 ```
 
 ---
 
-## 3. 현재 진행 상태
+## 3. 오답노트
 
-**당면 과제**
-- [ ] AR 매칭 자동화 Production 전환 (dry-run 완료, Bill.com update 활성화 필요)
-  - ⚠️ **AR 코드는 `eoash/eo-ar-automation` (private) 레포로 분리 완료** (2026-03-03)
-  - 원본 `ash_bot/`의 AR 코드는 참조용으로 유지, 신규 개발은 새 레포에서 진행
-- [ ] Flip 투자자 이메일 최종 발송 (정호석 변호사 검토 + 수신자 이메일 확정 대기)
-- [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
-- [x] smart-cowork-life 스킬 12개 설치 (`npx skills add modu-ai/smart-cowork-life`)
-- [x] AI Native 교육 PPTX 14장 확대 고도화 (`ai-native-camp/training/ai_native_intro_v2.pptx`, python-pptx, METR벤치마크·해커톤·토큰전쟁·4단계진화·공유지능 추가)
-- [x] 레포지토리 정리 — 중복 스킬 폴더(`.agent/`, `.agents/`) 삭제, AI Native Camp 파일 통합, 심볼릭 링크→실제 파일 전환
-- [x] eo-onboarding-bot 코드 개선 — 환경변수 검증, 에러 로깅, Home Tab 대시보드 (일반 유저 + HR 전용), 테스트 85개
-- [ ] eo-onboarding-bot 배포 — missions.yaml 실제 정책 내용 작성, Slack 앱 설정, E2E 테스트
-
-**알려진 블로커**
-- Flip: 정호석 변호사 검토 완료 전까지 발송 보류
-- AR Production: `BILL_COM_UPDATE_ENABLED=true` 전환 전 Dry-run 재검증 필요
-
-**작업 히스토리 상세**: `agent/memory/WORK_SUMMARY.md`
-**AR 결정 로그**: `agent/projects/ar_automation/memory/decision_log.md`
-**재무 상태**: `agent/projects/ar_automation/memory/financial_state.md`
+AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
+작업 전 반드시 참조할 것.
 
 ---
 
-*마지막 업데이트: 2026-03-03*
+*마지막 업데이트: 2026-03-04*
