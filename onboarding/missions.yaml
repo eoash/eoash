@@ -1,0 +1,545 @@
+# EO Studio Onboarding Missions
+# 31 Slack channels + 19 Notion pages 기반 (2026-03-03)
+# HR이 직접 편집 가능한 미션 정의 파일
+
+categories:
+  # ──────────────────────────────────────
+  # CATEGORY 1: 계정/도구 세팅
+  # ──────────────────────────────────────
+  - id: setup
+    name: "계정/도구 세팅"
+    emoji: "🔧"
+    order: 1
+    description: "입사 첫날~이틀 안에 완료해주세요. 모든 업무의 시작점입니다."
+    missions:
+
+      - id: google_workspace
+        title: "Google Workspace 계정 확인"
+        description: >
+          운영팀에서 발급한 `이름@eoeoeo.net` 계정으로 Gmail, Drive, Calendar에 접속해보세요.
+          이메일 서명 설정이 필요하면 `#all-운영` 채널에서 운영팀에 문의하세요.
+        type: confirm
+        link: "https://mail.google.com"
+        complete_message: "Google Workspace 접속 완료! 이메일 서명도 꼭 설정해주세요."
+
+      - id: slack_essential_channels
+        title: "필수 Slack 채널 가입하기 (전사)"
+        description: >
+          EO의 모든 소통은 Slack에서 이루어집니다.
+          아래 6개 채널은 전 직원 필수 가입입니다.
+        type: checklist
+        items:
+          - "#all-공지사항 — 회사 공지, 정책 변경"
+          - "#all-운영 — 운영 요청 (계정, 장비, 명함, 라이선스)"
+          - "#all-스탠드업 — Geekbot 데일리 스탠드업 (매일 참여!)"
+          - "#all-잡담 — 자유 대화 (General)"
+          - "#all-무엇이든물어보살 — 뭐든 질문 OK! 모르면 여기!"
+          - "#all-소식이오 — 경조사, 신규입사자 환영, 새 채널 공지"
+        complete_message: "필수 채널 가입 완료! 모르는 게 있으면 `#all-무엇이든물어보살`에 부담 없이 질문하세요."
+
+      - id: slack_korea_channels
+        title: "한국팀 Slack 채널 가입하기"
+        description: >
+          한국 오피스에서 근무하신다면 아래 채널에도 가입해주세요.
+        type: checklist
+        items:
+          - "#kr-all-chat — 한국팀 전체 소통"
+          - "#all-seoul-office — 서울 오피스 일상 (점심, 물품, 좌석)"
+        complete_message: "한국팀 채널 가입 완료! 점심은 `#all-seoul-office`에서 동료를 찾아보세요."
+
+      - id: slack_global_channels
+        title: "글로벌팀 Slack 채널 가입하기"
+        description: >
+          글로벌팀에서 근무하신다면 아래 채널에 가입해주세요.
+          글로벌팀은 **DM 금지 문화**! 업무 소통은 반드시 채널에 공개합니다.
+        type: checklist
+        items:
+          - "#gl-all-chat — 글로벌팀 전체 소통 (DM 금지! 업무는 채널에)"
+          - "#all-gl-san-francisco — SF EO House 생활/네트워킹 (SF 거주자)"
+        complete_message: "글로벌팀 채널 가입 완료! 채널에 공개 소통하는 문화 기억하세요."
+
+      - id: slack_request_channels
+        title: "업무 요청 채널 확인하기"
+        description: >
+          지출, 외주, 썸네일 등 업무 요청은 전용 채널에서 합니다.
+          모든 채널에 가입할 필요는 없지만, 존재를 알아두세요.
+        type: checklist
+        items:
+          - "#request-지출요청 — 경비 청구 (Airtable 양식)"
+          - "#request-외주계약요청 — 프리랜서/외주 계약"
+          - "#request-썸네일 — 썸네일 제작 요청"
+          - "#request-컷편집 — 영상 컷편집 요청"
+          - "#request-드래프트 — 강의 편집 (이오스쿨)"
+        complete_message: "요청 채널 파악 완료! 지출 요청은 항상 Airtable 양식으로 제출하세요."
+
+      - id: slack_team_channel
+        title: "내 팀 채널 가입하기"
+        description: >
+          본인이 속한 팀의 채널에 가입하세요.
+          팀 채널 목록: #team-design, #team-product, #team-gl-media, #team-kr-media,
+          #team-gl-business, #team-이오플래닛, #kr-비즈니스
+        type: confirm
+        complete_message: "팀 채널 가입 완료! 팀 채널에서 적극적으로 소통해주세요."
+
+      - id: notion_access
+        title: "Notion 워크스페이스 접속하기"
+        description: >
+          EO의 문서/위키/프로젝트 관리는 Notion에서 이루어집니다.
+          접속 후 아래 페이지를 확인해보세요:
+          • EO STUDIO 홈 → EO 가이드 → 행동양식 → 업무 매뉴얼 순서로 읽기
+          • EO Team SOT (Single Source of Truth) — 회사 핵심 정보 허브
+        type: confirm
+        link: "https://www.notion.so/eoeoeo/7fb36f8933944aecae3855ebb9b7d42c"
+        complete_message: "Notion 접속 완료! SOT 문서는 반복적으로 참고하게 될 거예요."
+
+      - id: notion_sot
+        title: "EO Team SOT (Single Source of Truth) 읽기"
+        description: >
+          SOT는 회사 핵심 정보를 한 곳에 모은 문서입니다.
+          한국법인/미국법인 기본 정보, 정책, FAQ 등이 포함되어 있습니다.
+          팀 내 반복 문의를 줄이기 위한 단일 기준 문서예요.
+        type: confirm
+        link: "https://www.notion.so/eoeoeo/EO-Team-SOT-Single-Source-of-Truth-29a74768ec3780d69516df0e19ba4199"
+        complete_message: "SOT 확인 완료! 궁금한 건 SOT 먼저 확인 → 없으면 `#all-무엇이든물어보살`에 질문하세요."
+
+      - id: google_drive_access
+        title: "Google 공유 드라이브 접근 확인"
+        description: >
+          Google Drive 공유 드라이브 접근 권한이 필요합니다.
+          접근이 안 되면 운영팀(윤환준님)에게 `#all-운영`에서 요청하세요.
+          파일명 규칙: `날짜_프로젝트명_문서종류_v1` (예: 2026-03-03_TestBox_Invoice_v1)
+        type: confirm
+        link: "https://drive.google.com"
+        complete_message: "Google Drive 접근 완료! 파일은 항상 공유 드라이브에 저장하세요 (개인 PC 저장 금지)."
+
+      - id: airtable_access
+        title: "Airtable 지출요청 양식 접근 확인"
+        description: >
+          경비/지출 요청은 모두 이 Airtable 양식으로 제출합니다.
+          링크를 클릭해서 접근 가능한지 확인해주세요.
+        type: confirm
+        link: "https://airtable.com/apphaMgCZMSN3ysHk/pagg4CzxDLLtYRbjq"
+        complete_message: "Airtable 접근 완료! 지출 요청 시 이 양식을 사용하세요."
+
+      - id: two_factor_auth
+        title: "2단계 보안인증 설정하기"
+        description: >
+          Google Workspace 계정에 2단계 인증(2FA)을 반드시 설정해주세요.
+          보안은 개인 정보뿐 아니라 회사 데이터를 보호하는 가장 기본적인 조치입니다.
+        type: confirm
+        complete_message: "2FA 설정 완료! 보안 첫 번째 방어선이 완성되었습니다."
+
+      - id: equipment_setup
+        title: "장비 수령 & 사무실 등록"
+        description: >
+          • 노트북, 모니터 등 필요 장비 수령
+          • 서울 압구정 사무실 출입 등록 (지문 인식) → 운영팀에 요청
+          • 자리 배치는 `#all-seoul-office` 채널에서 안내
+          • 명함 신청: `#all-운영` 채널에서 명함 신청 워크플로우 실행
+        type: confirm
+        complete_message: "장비 & 사무실 세팅 완료!"
+
+      - id: install_software
+        title: "필수 프로그램 설치 확인"
+        description: >
+          팀에 따라 설치할 프로그램이 다릅니다. Notion 설치 리스트를 확인하세요.
+          공통: Slack, Google Chrome, Zoom
+          제작 직군: Final Cut Pro, Figma, Red Giants, Tiro(노트테이킹), Instrument Sans 폰트
+          개발 직군: VS Code, GitHub, Linear
+          FCP 설치: eofc-001@eoeoeo.net으로 다운, 보안코드는 2553 전화번호로 수신
+        type: confirm
+        link: "https://www.notion.so/25b74768ec37807eb5acc83a0f5c04aa"
+        complete_message: "프로그램 설치 완료! 라이선스 추가 필요 시 `#all-운영`에서 요청하세요."
+
+  # ──────────────────────────────────────
+  # CATEGORY 2: 회사 문화 & 정책
+  # ──────────────────────────────────────
+  - id: culture
+    name: "회사 문화 & 정책"
+    emoji: "🌟"
+    order: 2
+    description: "EO의 문화와 핵심 정책을 이해합니다."
+    missions:
+
+      - id: company_overview
+        title: "EO Studio 알아보기"
+        description: >
+          EO Studio는 한국·미국·베트남 3개 법인을 운영하는 글로벌 미디어 스타트업입니다.
+          주요 사업: YouTube 콘텐츠 (KR/GL), EO Magazine, EO School, BOLD Seoul, B2B 멘토링
+          2026년 매출 목표: $7M
+        type: quiz
+        question: "EO Studio가 운영하는 법인은 총 몇 개 국가에 있나요?"
+        options:
+          - "2개국 (한국, 미국)"
+          - "3개국 (한국, 미국, 베트남)"
+          - "4개국 (한국, 미국, 베트남, 일본)"
+        answer: 1
+        wrong_message: "다시 확인해보세요! EO는 한국, 미국, 베트남에 법인을 두고 있습니다."
+        complete_message: "정답! 한국(이오스튜디오), 미국(EO STUDIO INC), 베트남(EO Vietnam) 3개 법인입니다."
+
+      - id: communication_culture
+        title: "EO 커뮤니케이션 문화 이해하기"
+        description: >
+          EO에서 가장 중요한 소통 원칙을 알아봅시다.
+          • 채널 우선: DM 최소화, 업무 소통은 반드시 채널에 공개
+          • 영어 사용: 글로벌팀은 영어 소통 기본
+          • 투명성: 정보가 채널에 쌓여야 팀 전체가 컨텍스트를 공유
+        type: quiz
+        question: "EO에서 업무 관련 소통의 기본 원칙은?"
+        options:
+          - "DM으로 빠르게 소통"
+          - "이메일로 공식 소통"
+          - "Slack 채널에 공개 소통"
+        answer: 2
+        wrong_message: "EO에서는 DM이 아닌 Slack 채널에서 공개 소통하는 것이 원칙입니다!"
+        complete_message: "정답! 채널에 공개 소통해야 팀 전체가 컨텍스트를 공유할 수 있어요."
+
+      - id: daily_standup
+        title: "데일리 스탠드업 참여하기"
+        description: >
+          매일 오전 Geekbot이 Slack DM으로 질문을 보냅니다.
+          오늘 할 일 / 어제 한 일 / 블로커를 답변하면 `#all-스탠드업`에 자동 공유됩니다.
+          현재 참여율은 약 25-32% — 가급적 매일 참여해주세요!
+        type: confirm
+        complete_message: "스탠드업 참여 완료! 매일 참여하면 팀 전체가 서로의 진행 상황을 파악할 수 있어요."
+
+      - id: ai_native_culture
+        title: "AI Native 문화 이해하기"
+        description: >
+          EO는 전사적으로 AI Native를 지향합니다.
+          • Claude Code, ChatGPT, Figma MCP 등 AI를 실무에 즉시 적용
+          • AI 활용을 성과 평가에 반영 예정
+          • "어떤 문제를 발견하고 정의했느냐"가 첫번째 평가 항목
+          • `#share-ai-info`에서 최신 AI 도구/뉴스 공유
+          • AI Agent "Waddle Dee"가 Linear 이슈를 자동 처리하기도 합니다
+        type: quiz
+        question: "EO의 AI 활용 철학으로 가장 적절한 것은?"
+        options:
+          - "AI는 참고만 하되 결과물은 직접 작성"
+          - "AI를 실무에 즉시 적용하고, 우리가 레퍼런스가 된다"
+          - "특정 팀만 AI를 사용한다"
+        answer: 1
+        wrong_message: "EO는 '우리가 레퍼런스가 되어야지, 레퍼런스를 따라가면 안 된다'는 마인드입니다!"
+        complete_message: "정답! `#share-ai-info` 채널에 가입해서 최신 AI 도구도 함께 공유해보세요."
+
+      - id: expense_process
+        title: "지출 요청 프로세스 확인하기"
+        description: >
+          지출/경비 요청은 다음 절차를 따릅니다:
+          1. Airtable 양식 작성 → `#request-지출요청` 채널에 자동 알림
+          2. 운영팀 확인 → 매주 금요일 일괄 이체
+          양식 필수 항목: 항목, 분류, 연관 프로젝트, 금액, 구매 링크, 특이사항
+          제출 마감: 목요일까지 → 금요일 이체
+          법인카드 한도 초과 시: 개인카드 결제 후 "법인카드 한도 제한" 기재
+        type: quiz
+        question: "지출 요청은 어떤 도구로 제출하나요?"
+        options:
+          - "Slack DM으로 운영팀에 직접 요청"
+          - "Airtable 양식으로 제출"
+          - "이메일로 영수증 첨부 발송"
+        answer: 1
+        wrong_message: "지출 요청은 반드시 Airtable 양식으로 제출합니다! 목요일까지 제출하면 금요일에 이체돼요."
+        complete_message: "정답! Airtable 양식 → `#request-지출요청` 자동 알림 → 금요일 이체입니다."
+
+      - id: benefits_overview
+        title: "복리후생 확인하기"
+        description: >
+          • 운동해EO: 월 10만원 운동비 지원 (챌린저스 앱, 가입 시 1,000원 결제 필요)
+          • 도서구매비: Airtable 지출요청 양식으로 제출
+          • 교육비: 개인 선결제 → 교육 완료 후 후기 작성 → Airtable 지출요청
+          • 미국 거주자 운동비: 운영팀에 별도 문의
+          상세 정책은 Notion Benefits/Vacation 페이지를 확인하세요.
+        type: confirm
+        link: "https://www.notion.so/17374768ec37814baf29cc1c49861b26"
+        complete_message: "복리후생 확인 완료! 운동해EO로 건강한 EO 생활을 시작하세요."
+
+      - id: content_philosophy
+        title: "EO 콘텐츠 철학 이해하기"
+        description: >
+          EO 콘텐츠의 핵심 가치를 알아봅시다.
+          • 콘텐츠 전략: Premium (심층 인터뷰) + Standard (주간 포맷) 2-tier 구조
+          • 핵심 가치: 지적 긴장감(intellectual tension) — 시청자가 생각하게 만드는 콘텐츠
+          • 인터뷰 후 24시간 내 편집 시작 (기억 감퇴 방지)
+          • "우리가 레퍼런스가 되어야지, 레퍼런스를 따라가면 안 된다"
+        type: quiz
+        question: "EO 콘텐츠의 가장 핵심적인 가치는?"
+        options:
+          - "최대한 많은 조회수"
+          - "지적 긴장감 (intellectual tension)"
+          - "짧고 빠른 정보 전달"
+        answer: 1
+        wrong_message: "EO는 '지적 긴장감'을 가장 중요하게 생각합니다. 시청자가 생각하게 만드는 콘텐츠!"
+        complete_message: "정답! Intellectual tension — 이것이 EO 콘텐츠의 핵심 DNA입니다."
+
+  # ──────────────────────────────────────
+  # CATEGORY 3: 팀 & 사람 알기
+  # ──────────────────────────────────────
+  - id: people
+    name: "팀 & 사람 알기"
+    emoji: "👥"
+    order: 3
+    description: "EO의 사람들과 조직 구조를 파악합니다."
+    missions:
+
+      - id: leadership_quiz
+        title: "리더십 팀 알아보기"
+        description: >
+          EO의 핵심 리더십을 알아봅시다.
+          • CEO: 김태용 (TY) — 비즈니스 전략, AI 파이프라인
+          • CCO: 유건욱 (Gunwook Yoo) — 콘텐츠 전략, 인터뷰, 디자인 피드백, 클라이언트 관리
+          • Product Lead: 최성흠 — 개발 인프라 총괄
+          • Design Lead: Jay Jemin Park — EO 홈페이지, 디자인-개발 브릿지
+          • Finance & Ops Lead: 안서현 (ASH) — 3개 법인 재무/운영/법무/인사 총괄
+        type: quiz
+        question: "EO Studio의 CCO(Chief Content Officer)는 누구인가요?"
+        options:
+          - "김태용"
+          - "유건욱 (Gunwook Yoo)"
+          - "최성흠"
+        answer: 1
+        wrong_message: "유건욱님이 CCO로서 콘텐츠 전략, 인터뷰, 디자인 피드백, 클라이언트 관리를 총괄합니다."
+        complete_message: "정답! Gunwook Yoo(유건욱)님이 CCO입니다."
+
+      - id: team_structure
+        title: "조직 구조 파악하기"
+        description: >
+          EO의 주요 팀을 확인하세요:
+          • 글로벌 미디어팀 (#team-gl-media) — 인터뷰, 편집, 숏폼
+          • 한국 미디어팀 (#team-kr-media) — 번역/로컬라이징
+          • 디자인팀 (#team-design) — Figma, Frame.io
+          • 프로덕트팀 (#team-product) — EO Magazine, Homepage, School
+          • 글로벌 비즈니스팀 (#team-gl-business) — 계약, ClickUp
+          • 한국 비즈니스팀 (#kr-비즈니스) — B2B/B2G
+          • 운영팀 — 재무, 인사, 법무 (안서현 + 윤환준)
+          • 베트남팀 (#proj-eo-vietnam) — EO Asia
+        type: confirm
+        complete_message: "조직 구조 파악 완료! 내 팀의 Slack 채널과 Notion 페이지를 자주 확인하세요."
+
+      - id: key_contacts
+        title: "주요 연락처 확인하기"
+        description: >
+          주요 업무 담당자와 요청 채널을 알아두세요:
+          • 운영 총괄: 안서현 (ASH) → #all-운영
+          • 운영 매니저: 윤환준 → #all-운영 (계정, 장비, 공유드라이브)
+          • CEO: 김태용 (TY)
+          • CCO: 유건욱 (Gunwook) → #gl-all-chat
+          • KR 비즈니스: 김중철 → #kr-all-chat
+          • 프로덕트: 최성흠 → #team-product
+          • 디자인: Jay Jemin Park → #team-design
+          • 법률: 이혜윤 변호사 → #all-법률자문 (ASH를 통해)
+          • PR/보도자료: 이제우 → #all-보도자료
+        type: confirm
+        complete_message: "연락처 파악 완료! 뭔가 모를 때는 `#all-무엇이든물어보살`에 질문하세요."
+
+      - id: self_introduction
+        title: "자기소개하기"
+        description: >
+          `#all-소식이오` 채널에 입사 환영 메시지가 올라옵니다.
+          동료들의 환영 댓글에 인사를 남기고, 팀 채널에도 간단히 자기소개를 해주세요.
+          EO의 "뤽자 소환" 문화: 감사 인사를 Slack 폼으로 제출하면 `#all-소식이오`에 자동 게시됩니다.
+        type: confirm
+        complete_message: "자기소개 완료! EO 팀에 오신 것을 환영합니다! 🎉"
+
+      - id: team_onboarding_docs
+        title: "내 팀 온보딩 문서 확인하기"
+        description: >
+          팀별로 별도 온보딩 자료가 있습니다:
+          • 글로벌팀: GL Onboarding (4주 커리큘럼: 모니터링→편집→썸네일→기획)
+          • 촬영팀: Filming Onboarding (카메라 높이 가이드 등)
+          • 디자인팀: Global design team onboarding (AI 도입 필수)
+          해당하는 문서를 확인해주세요.
+        type: confirm
+        link: "https://www.notion.so/25b74768ec3780b28eb0e303bd324d5f"
+        complete_message: "팀 온보딩 문서 확인 완료!"
+
+  # ──────────────────────────────────────
+  # CATEGORY 4: 업무 프로세스 이해
+  # ──────────────────────────────────────
+  - id: process
+    name: "업무 프로세스 이해"
+    emoji: "⚙️"
+    order: 4
+    description: "EO의 핵심 업무 프로세스를 이해합니다."
+    missions:
+
+      - id: project_tools
+        title: "프로젝트 관리 도구 확인하기"
+        description: >
+          EO에서 사용하는 주요 도구:
+          • Notion — 문서, 위키, SOT
+          • Slack — 커뮤니케이션 (채널 우선!)
+          • ClickUp — 프로젝트 상태 + 예산 트래킹 (글로벌 비즈니스)
+          • Linear — 이슈 트래킹 (프로덕트, 매거진 SEO)
+          • Frame.io — 영상 피드백
+          • Figma — 디자인, 썸네일 템플릿
+          • Airtable — 지출요청, 프리랜서 정산
+          • Google Drive — 파일 관리 (파일명에 날짜 포함 필수!)
+        type: quiz
+        question: "EO에서 프로젝트 예산과 상태를 트래킹하는 도구는?"
+        options:
+          - "Notion"
+          - "ClickUp"
+          - "Google Sheets"
+        answer: 1
+        wrong_message: "글로벌 비즈니스팀은 ClickUp에서 프로젝트 상태와 예산을 트래킹합니다."
+        complete_message: "정답! ClickUp으로 프로젝트 관리, Notion으로 문서/위키를 관리합니다."
+
+      - id: outsource_contract
+        title: "외주 계약 요청 프로세스 이해하기"
+        description: >
+          프리랜서/외주 계약이 필요할 때:
+          1. `#request-외주계약요청` 채널에서 폼 제출
+          2. 접수 후 ASH(안서현)가 계약서 처리
+          3. 새로운 외주업체는 ASH 승인 필요
+          4. 반복 프리랜서: 최초 계약서 1장, 조건 변경 시 재계약
+          주요 프리랜서: 썸네일(건당 4만원), 컷편집, 모션그래픽, 번역, 시나리오
+        type: quiz
+        question: "외주 계약 요청은 어디서 하나요?"
+        options:
+          - "ASH에게 직접 DM"
+          - "#request-외주계약요청 채널에서 폼 제출"
+          - "ClickUp에서 태스크 생성"
+        answer: 1
+        wrong_message: "`#request-외주계약요청` 채널에서 폼을 제출합니다. DM이 아니에요!"
+        complete_message: "정답! 채널에서 폼 제출 → ASH가 계약서 처리 → 완료 알림 순서입니다."
+
+      - id: content_workflow
+        title: "콘텐츠 제작 워크플로우 이해하기"
+        description: >
+          영상 제작 플로우:
+          인터뷰 → 스토리라인 작성 → 편집 → Frame.io 피드백 → 수정 → 발행
+          핵심 원칙:
+          • 인터뷰 후 24시간 내 편집 시작
+          • B-roll은 사전 요청
+          • IP 구분 중요: KR vs GL — 작업자와 채널이 다름
+          • 숏폼: 3개씩 묶어 스케줄 업로드
+          • 촬영 일정: `#all-타임테이블` 채널에서 확인
+          • 편집 도구: Final Cut Pro + Red Giant
+          • 피드백: Frame.io (상세 피드백 중요!)
+        type: quiz
+        question: "EO에서 영상 피드백을 주고받는 플랫폼은?"
+        options:
+          - "Google Drive 댓글"
+          - "Frame.io"
+          - "Slack 스레드"
+        answer: 1
+        wrong_message: "Frame.io에서 영상 피드백을 주고받습니다. 상세하게 남기는 것이 중요해요!"
+        complete_message: "정답! Frame.io에 상세 피드백을 남기는 것이 EO 편집 프로세스의 핵심입니다."
+
+      - id: legal_process
+        title: "법률 자문 프로세스 이해하기"
+        description: >
+          법률 자문이 필요할 때:
+          1. 먼저 ASH(안서현)에게 확인
+          2. 확인 후 `#all-법률자문` 채널에서 이혜윤 변호사(법무법인 영)에게 문의
+          3. 자문 기록은 채널에 아카이빙
+          주의: 불필요한 자문 자제 (변호사 비용!)
+          주요 사례: 해외 크리에이터 계약서, 출연 계약서, 브랜디드 콘텐츠 계약서, 도서 출판권 계약
+        type: quiz
+        question: "법률 자문이 필요할 때 첫 번째 단계는?"
+        options:
+          - "#all-법률자문 채널에 바로 질문"
+          - "ASH(안서현)에게 먼저 확인"
+          - "이혜윤 변호사에게 직접 연락"
+        answer: 1
+        wrong_message: "법률 자문은 반드시 ASH에게 먼저 확인 후 진행합니다!"
+        complete_message: "정답! ASH 확인 → #all-법률자문 채널 → 이혜윤 변호사 순서입니다."
+
+      - id: file_naming
+        title: "파일 관리 규칙 확인하기"
+        description: >
+          EO의 파일 관리 규칙:
+          • 파일명 규칙: `날짜_프로젝트명_문서종류_v1`
+          • 예시: `2026-03-03_TestBox_Invoice_v1`
+          • Google Drive: 프로젝트별 폴더 정리, Final 폴더 분리
+          • 계약서/견적서/인보이스: 공유폴더(`거래처 발송서류들`)에서만 관리
+          • 개인 PC에 저장 금지!
+        type: quiz
+        question: "올바른 파일명 형식은?"
+        options:
+          - "TestBox 인보이스 최종.pdf"
+          - "2026-03-03_TestBox_Invoice_v1.pdf"
+          - "invoice_testbox_final.pdf"
+        answer: 1
+        wrong_message: "파일명은 `날짜_프로젝트명_문서종류_버전` 형식을 따릅니다!"
+        complete_message: "정답! 날짜를 포함한 규칙적인 파일명이 중요합니다."
+
+      - id: business_card
+        title: "명함 신청 방법 확인하기"
+        description: >
+          명함 신청 절차:
+          1. `#all-운영` 채널에서 명함 신청 워크플로우 실행
+          2. 입력: 명함 종류(국문/영문), 이름, 직함, 이메일/전화번호
+          3. 운영팀이 시안 공유 → 정보 더블체크 후 확정
+          4. 영업일 기준 7일 이내 배송
+        type: confirm
+        complete_message: "명함 신청 방법 확인 완료! 필요하면 `#all-운영`에서 바로 신청하세요."
+
+      - id: notion_workspace_tour
+        title: "Notion 워크스페이스 구조 파악하기"
+        description: >
+          EO Notion의 핵심 페이지 구조:
+          • EO STUDIO (홈) — 전체 진입점
+          • 📈 비즈니스 챕터 — 사업계획, 타운홀 자료
+          • ⚙️ 시스템 운영 — Bill.com, Brex, 온보딩 문서
+          • 🛫 GL-Media&Business — 글로벌 미디어/비즈니스 허브
+          • 🛸 Magazine — EO Magazine (Veda CMS)
+          • 🇰🇷 EO Korea — 한국 콘텐츠
+          • 🏫 이오스쿨 — 교육 플랫폼
+          • 🌎 GL-EO School — 글로벌 교육 (Kajabi)
+          Notion 홈에서 "EO 가이드" → "행동양식" → "업무 매뉴얼" 순서로 읽기를 추천합니다.
+        type: confirm
+        link: "https://www.notion.so/7fb36f8933944aecae3855ebb9b7d42c"
+        complete_message: "Notion 구조 파악 완료! 각 챕터 페이지를 즐겨찾기에 추가해두면 편리합니다."
+
+      - id: thumbnail_request
+        title: "썸네일 요청 프로세스 확인하기"
+        description: >
+          썸네일 제작 요청 시:
+          • `#request-썸네일` 채널에서 Slack 폼 + Frame.io 링크 필수 제출
+          • IP 구분 중요! KR vs GL — 각각 다른 디자인 가이드라인 적용
+          • Photoshop 배경 제거 시 drop shadow 미적용 상태로 저장
+          • Figma/Drive에 클린 파일 업로드
+          • 프리랜서 단가: 건당 40,000원
+        type: confirm
+        complete_message: "썸네일 요청 프로세스 확인 완료!"
+
+      - id: onboarding_complete
+        title: "온보딩 완료! 다음 단계 확인하기"
+        description: >
+          축하합니다! 기본 온보딩이 완료되었습니다.
+          다음 단계:
+          • SOT 문서를 수시로 참고하세요
+          • 매일 Geekbot 스탠드업에 참여하세요
+          • `#share-ai-info`에서 AI 도구를 탐색해보세요
+          • 팀별 온보딩 문서를 정독하세요 (GL/촬영/디자인)
+          • 모르는 게 있으면 `#all-무엇이든물어보살`에 질문하세요!
+          • 위클리 미팅 참석: GL 위클리, KR 위클리, 팀별 주간 sync
+        type: confirm
+        complete_message: >
+          🎉 온보딩 완료! EO에 오신 것을 진심으로 환영합니다!
+          "우리가 레퍼런스가 되어야지, 레퍼런스를 따라가면 안 된다"
+          — EO와 함께 성장해나가요!
+
+# ──────────────────────────────────────
+# 설정
+# ──────────────────────────────────────
+settings:
+  reminder_after_days: 2
+  deadline_days: 14
+  hr_notify_channel: "all-운영"
+  welcome_message: >
+    안녕하세요! EO Studio에 오신 것을 환영합니다! 🎉
+    저는 온보딩을 도와줄 EO 봇이에요.
+    지금부터 4개 카테고리, 약 30개의 미션을 함께 진행하며 EO에 적응할 거예요.
+    미션은 자유 페이스로 진행되지만, 2주 안에 완료하는 것을 목표로 해주세요.
+    준비되셨나요? "시작" 버튼을 눌러주세요!
+  complete_message: >
+    🎉 축하합니다! 모든 온보딩 미션을 완료했습니다!
+    이제 EO의 일원으로서 업무를 시작할 준비가 되었어요.
+    모르는 게 있으면 언제든 #all-무엇이든물어보살에 질문하세요.
+    EO와 함께 멋진 여정을 시작해봐요! 🚀
+  nudge_messages:
+    - "안녕하세요! 온보딩 진행하고 계신가요? 이어서 해볼까요? 😊"
+    - "아직 완료하지 않은 미션이 있어요! 잠깐 시간 내서 이어가볼까요?"
+    - "온보딩이 거의 다 끝나갑니다! 마지막 미션까지 화이팅! 💪"

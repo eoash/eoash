@@ -84,6 +84,7 @@ onboarding/       → Slack Bolt 온보딩 챗봇 (missions.yaml 기반)
 dashboard/        → Streamlit 재무 대시보드 (별도 git repo: eoash/eo-finance-dashboard)
 ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
 townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, slides.gs)
+ai-native-camp/   → AI Native 교육 캠프 (Summary, 숙제, 노트, PPTX, 슬라이드)
 ```
 
 ---
@@ -95,7 +96,8 @@ townhall/         → 타운홀 슬라이드 산출물 (DATA.md, OUTLINE.md, sli
 - [ ] Flip 투자자 이메일 최종 발송 (정호석 변호사 검토 + 수신자 이메일 확정 대기)
 - [ ] 재무 대시보드 고도화 (`dashboard/` — Streamlit, Google Sheets 연동)
 - [x] smart-cowork-life 스킬 12개 설치 (`npx skills add modu-ai/smart-cowork-life`)
-- [x] AI Native 교육 PPTX 14장 확대 고도화 (`training/ai_native_intro_v2.pptx`, python-pptx, METR벤치마크·해커톤·토큰전쟁·4단계진화·공유지능 추가)
+- [x] AI Native 교육 PPTX 14장 확대 고도화 (`ai-native-camp/training/ai_native_intro_v2.pptx`, python-pptx, METR벤치마크·해커톤·토큰전쟁·4단계진화·공유지능 추가)
+- [x] 레포지토리 정리 — 중복 스킬 폴더(`.agent/`, `.agents/`) 삭제, AI Native Camp 파일 통합, 심볼릭 링크→실제 파일 전환
 - [x] eo-onboarding-bot 코드 개선 — 환경변수 검증, 에러 로깅, Home Tab 대시보드 (일반 유저 + HR 전용), 테스트 85개
 - [ ] eo-onboarding-bot 배포 — missions.yaml 실제 정책 내용 작성, Slack 앱 설정, E2E 테스트
 
