@@ -81,6 +81,7 @@ dashboard/        → Streamlit 재무 대시보드 (별도 repo: eoash/eo-finan
 ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
 townhall/         → 타운홀 슬라이드 산출물
 ai-native-camp/   → AI Native 교육 캠프 (교육자료, 숙제, PPTX)
+token-dashboard/  → Anthropic API 토큰 사용량 대시보드 (Next.js)
 ```
 
 ---
