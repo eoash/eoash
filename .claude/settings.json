@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PYTHONUTF8=1 python \"C:/Users/ash/ash/.claude/hooks/session_start.py\""
+            "command": "python3 ~/.claude/hooks/session_start.py 2>/dev/null || PYTHONUTF8=1 python \"%USERPROFILE%/.claude/hooks/session_start.py\""
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PYTHONUTF8=1 python \"C:/Users/ash/ash/.claude/hooks/first_message.py\""
+            "command": "python3 ~/.claude/hooks/first_message.py 2>/dev/null || PYTHONUTF8=1 python \"%USERPROFILE%/.claude/hooks/first_message.py\""
           }
         ]
       }
