@@ -81,7 +81,7 @@ dashboard/        → Streamlit 재무 대시보드 (별도 repo: eoash/eo-finan
 ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
 townhall/         → 타운홀 슬라이드 산출물
 ai-native-camp/   → AI Native 교육 캠프 (교육자료, 숙제, PPTX)
-token-dashboard/  → Anthropic API 토큰 사용량 대시보드 (Next.js)
+token-dashboard/  → Anthropic API 토큰 사용량 대시보드 (Next.js + OTel → Prometheus → Vercel)
 ```
 
 ---
@@ -91,6 +91,13 @@ token-dashboard/  → Anthropic API 토큰 사용량 대시보드 (Next.js)
 AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 작업 전 반드시 참조할 것.
 
+### token-dashboard 파이프라인 함정 (2026-03-05)
+- **Railway COPY 경로**: `railway up`은 프로젝트 루트를 빌드 컨텍스트로 사용 → Dockerfile의 COPY는 루트 기준 경로 필수 (예: `COPY docker/prom/entrypoint.sh`)
+- **Railway PORT**: 공개 HTTPS 포워딩 포트 — 앱 리슨 포트와 반드시 일치해야 함, 불일치 시 502
+- **환경별 설정 하드코딩 금지**: prometheus.yml scrape target 등은 `__PLACEHOLDER__` + `sed` 치환으로 분리
+- **Anthropic Admin API 파라미터**: `start_date` → `starting_at`, `end_date` → `ending_at`, `group_by` → `group_by[]`
+- **managed-settings.json env**: Claude Code 프로세스에만 적용됨, Bash 자식 프로세스에는 전달 안 됨
+
 ---
 
-*마지막 업데이트: 2026-03-04*
+*마지막 업데이트: 2026-03-05*
