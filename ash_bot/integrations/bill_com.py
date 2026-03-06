@@ -1,12 +1,23 @@
 """Bill.com API integration."""
 
+from enum import Enum
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 from datetime import datetime
 import json
 import requests
 from ash_bot.config import BillComConfig
+from ash_bot.exceptions import BillComAuthError, InvoiceFetchError, InvoiceUpdateError
 from ash_bot.utils.logger import get_logger
+
+# Bill.com v2 API 상수
+MAX_PAGE_SIZE = 999  # List API 최대 반환 건수
+
+
+class PaymentStatus(str, Enum):
+    """Bill.com paymentStatus 필드 값."""
+    PAID = "1"
+    UNPAID = "4"
 
 logger = get_logger(__name__)
 
@@ -137,7 +148,7 @@ class BillComClient:
         """Ensure we have a valid session, login if needed."""
         if not self.session_id:
             if not self.login():
-                raise Exception("Failed to login to Bill.com")
+                raise BillComAuthError("Bill.com 로그인 실패 — 크리덴셜 및 네트워크 상태를 확인하세요.")
 
     def _make_request(
         self,
@@ -209,7 +220,7 @@ class BillComClient:
                 "List/Invoice.json",
                 data={
                     "start": 0,
-                    "max": 999,  # Max results per page
+                    "max": MAX_PAGE_SIZE,
                 }
             )
 
@@ -238,9 +249,14 @@ class BillComClient:
             logger.info(f"Found {len(invoices)} outstanding invoices")
             return invoices
 
+        except BillComAuthError:
+            raise
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Bill.com 네트워크 오류 (outstanding invoices): {e}")
+            raise InvoiceFetchError(f"청구서 조회 실패 (네트워크): {e}") from e
         except Exception as e:
-            logger.error(f"Error fetching invoices: {str(e)}")
-            return []
+            logger.error(f"Bill.com 청구서 조회 오류: {e}")
+            raise InvoiceFetchError(f"청구서 조회 실패: {e}") from e
 
     def update_invoice_status(
         self,
@@ -266,7 +282,7 @@ class BillComClient:
                 "obj": {
                     "entity": "Invoice",
                     "id": invoice_id,
-                    "paymentStatus": "1" if status == "paid" else "4",
+                    "paymentStatus": PaymentStatus.PAID if status == "paid" else PaymentStatus.UNPAID,
                 }
             }
 
@@ -367,9 +383,14 @@ class BillComClient:
 
             return invoices
 
+        except BillComAuthError:
+            raise
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Bill.com 네트워크 오류 (paid invoices): {e}")
+            raise InvoiceFetchError(f"납부 청구서 조회 실패 (네트워크): {e}") from e
         except Exception as e:
-            logger.error(f"Error fetching paid invoices: {str(e)}")
-            return []
+            logger.error(f"Bill.com 납부 청구서 조회 오류: {e}")
+            raise InvoiceFetchError(f"납부 청구서 조회 실패: {e}") from e
 
     def get_recently_paid_invoices(self, days_back: int = 7) -> List[Invoice]:
         """
@@ -420,6 +441,11 @@ class BillComClient:
             logger.info(f"Found {len(paid_invoices)} paid invoices")
             return paid_invoices
 
+        except BillComAuthError:
+            raise
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Bill.com 네트워크 오류 (recently paid): {e}")
+            raise InvoiceFetchError(f"최근 납부 청구서 조회 실패 (네트워크): {e}") from e
         except Exception as e:
-            logger.error(f"Error fetching paid invoices: {str(e)}")
-            return []
+            logger.error(f"Bill.com 최근 납부 청구서 조회 오류: {e}")
+            raise InvoiceFetchError(f"최근 납부 청구서 조회 실패: {e}") from e

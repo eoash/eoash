@@ -1,8 +1,7 @@
 """Data validation utilities."""
 
-from typing import Optional, Tuple
-from decimal import Decimal
 from difflib import SequenceMatcher
+from typing import Optional
 import re
 
 
@@ -22,12 +21,11 @@ def calculate_tolerance(invoice_amount: float) -> float:
     - 0.1%: 대형 거래도 비율 커버
     - $50: 너무 큰 차이는 수동 검토
     """
-    pct_based = float(invoice_amount) * 0.001  # 0.1%
-    tolerance = max(2.0, pct_based)
-    return min(tolerance, 50.0)
+    pct_based: float = float(invoice_amount) * 0.001  # 0.1%
+    return min(max(2.0, pct_based), 50.0)
 
 
-def amounts_match(amount1: float, amount2: float, tolerance: float = None) -> bool:
+def amounts_match(amount1: float, amount2: float, tolerance: Optional[float] = None) -> bool:
     """
     Check if two amounts match within tolerance.
     tolerance가 None이면 calculate_tolerance로 동적 계산.
@@ -86,22 +84,20 @@ def fuzzy_match_similarity(str1: str, str2: str) -> float:
     if not str1 or not str2:
         return 0.0
 
-    s1 = str1.lower().strip()
-    s2 = str2.lower().strip()
+    s1: str = str1.lower().strip()
+    s2: str = str2.lower().strip()
 
     if s1 == s2:
         return 1.0
 
-    # Method 1: 문자 수준 SequenceMatcher
-    seq_ratio = SequenceMatcher(None, s1, s2).ratio()
+    seq_ratio: float = SequenceMatcher(None, s1, s2).ratio()
 
-    # Method 2: 단어 토큰 Jaccard
     words1 = set(s1.split())
     words2 = set(s2.split())
     if words1 and words2:
         intersection = len(words1 & words2)
         union = len(words1 | words2)
-        word_ratio = intersection / union if union > 0 else 0.0
+        word_ratio: float = intersection / union if union > 0 else 0.0
     else:
         word_ratio = 0.0
 

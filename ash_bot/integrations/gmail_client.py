@@ -6,7 +6,7 @@ Handles email retrieval and management via Gmail API
 import os
 import base64
 import logging
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timedelta
 
 from google.auth.transport.requests import Request
@@ -24,19 +24,36 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 class GmailClient:
     """Gmail API client for reading and searching emails"""
 
-    def __init__(self, credentials_path: str = 'credentials.json',
-                 token_path: str = 'token.json'):
+    def __init__(
+        self,
+        credentials_path: str = 'credentials.json',
+        token_path: str = 'token.json',
+        service: Optional[Any] = None,
+    ):
         """
-        Initialize Gmail client
+        Initialize Gmail client.
 
         Args:
             credentials_path: Path to OAuth credentials JSON
             token_path: Path to store/load access token
+            service: 주입된 Gmail API service 객체 (테스트용 mock 주입 시 사용)
+                     None이면 최초 API 호출 시점에 lazy 인증 실행
         """
         self.credentials_path = credentials_path
         self.token_path = token_path
-        self.service = None
-        self._authenticate()
+        self._service = service  # None이면 lazy 인증, 아니면 주입된 객체 사용
+
+    @property
+    def service(self) -> Any:
+        """Gmail API service — 최초 접근 시 OAuth 인증 실행 (lazy initialization)."""
+        if self._service is None:
+            self._authenticate()
+        return self._service
+
+    @classmethod
+    def create_with_mock(cls, mock_service: Any) -> "GmailClient":
+        """테스트용 팩토리 — mock service를 주입한 인스턴스 반환."""
+        return cls(service=mock_service)
 
     def _authenticate(self):
         """Authenticate with Gmail API using OAuth 2.0"""
@@ -79,7 +96,7 @@ class GmailClient:
                 logger.info(f"Saved credentials to {self.token_path}")
 
         # Build Gmail service
-        self.service = build('gmail', 'v1', credentials=creds)
+        self._service = build('gmail', 'v1', credentials=creds)
         logger.info("Gmail API service initialized")
 
     def list_messages(self, query: str = '', max_results: int = 10,
@@ -218,8 +235,10 @@ class GmailClient:
                 full_message = self.get_message(msg['id'])
                 parsed = self.parse_message(full_message)
                 parsed_messages.append(parsed)
-            except Exception as e:
-                logger.error(f"Failed to parse message {msg['id']}: {e}")
+            except HttpError as e:
+                logger.error(f"Gmail API 오류 (message {msg['id']}): {e}")
+            except (KeyError, ValueError) as e:
+                logger.warning(f"메시지 파싱 실패 (message {msg['id']}): {e}")
 
         return parsed_messages
 

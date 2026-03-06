@@ -117,11 +117,29 @@ class LoggingConfig:
         return str(LOGS_DIR / f"{name}.log")
 
 
+class ClickUpConfig:
+    """ClickUp API configuration."""
+    TEAM_ID = os.getenv("CLICKUP_TEAM_ID")
+    USER_ID = os.getenv("CLICKUP_USER_ID")
+    DEFAULT_LIST_ID = os.getenv("CLICKUP_DEFAULT_LIST_ID")
+
+    @staticmethod
+    def validate():
+        """Validate ClickUp configuration."""
+        missing = [k for k, v in {
+            "CLICKUP_TEAM_ID": ClickUpConfig.TEAM_ID,
+            "CLICKUP_USER_ID": ClickUpConfig.USER_ID,
+            "CLICKUP_DEFAULT_LIST_ID": ClickUpConfig.DEFAULT_LIST_ID,
+        }.items() if not v]
+        if missing:
+            raise ValueError(f"ClickUp 설정 누락: {', '.join(missing)}")
+
+
 class ClaudeConfig:
     """Claude API configuration for AI-powered features."""
     API_KEY = os.getenv("ANTHROPIC_API_KEY")
-    MODEL = "claude-opus-4-6"
-    MAX_TOKENS = 4096
+    MODEL = os.getenv("CLAUDE_MODEL", "claude-opus-4-6")
+    MAX_TOKENS = int(os.getenv("CLAUDE_MAX_TOKENS", "4096"))
 
     @staticmethod
     def validate():
