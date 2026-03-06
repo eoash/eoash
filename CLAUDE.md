@@ -21,6 +21,16 @@
 - 한국어로 대화, 코드·파일명은 영어
 - 작업 전 오답노트 확인: `agent/memory/ANTI_PATTERNS.md`
 
+**스킬 동기화 규칙**
+- GitHub `eoash/ash-skills`가 Windows ↔ Mac 동기화 기준점 (로컬 클론: `/Users/ash/Documents/ash-skills`)
+- `.claude/skills/` 에 스킬을 새로 만들거나 수정한 경우, 작업 완료 후 반드시 아래 순서로 실행:
+  1. ash-skills 최신화: `cd /Users/ash/Documents/ash-skills && git pull`
+  2. 스킬 복사: `cp -r /Users/ash/Documents/eoash/.claude/skills/<스킬명> /Users/ash/Documents/ash-skills/`
+  3. GitHub push: `cd /Users/ash/Documents/ash-skills && git add <스킬명> && git commit -m "feat: <스킬명> 스킬 추가/수정" && git push`
+  4. 로컬 재설치: `npx skills add eoash/ash-skills --skill '*' --agent claude-code -y`
+- 스킬 삭제 시: ash-skills에서도 동일하게 삭제 후 push
+- 다른 PC에서 최신 스킬을 받을 때: `git pull` 후 step 4만 실행
+
 ---
 
 ## 1. 사용자 프로필
