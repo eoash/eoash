@@ -143,27 +143,13 @@ def get_reactors_emails(channel: str, message_ts: str) -> list[dict]:
 # ── Google Calendar: 참석자 추가 ──────────────────────────────────────────
 def add_to_gcal(attendees: list[dict], event_id: str, calendar_id: str):
     """Google Calendar 이벤트에 참석자 추가"""
+    import google.auth
     from google.auth.transport.requests import Request
-    from google.oauth2.credentials import Credentials
-    from google_auth_oauthlib.flow import InstalledAppFlow
     from googleapiclient.discovery import build
 
     SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
-    TOKEN_PATH = Path(__file__).parents[2] / "token_calendar.json"
-    CREDS_PATH = Path(__file__).parents[2] / "credentials.json"
-
-    creds = None
-    if TOKEN_PATH.exists():
-        creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            print("\n🔐 Google Calendar 권한이 필요합니다. 브라우저가 열립니다...")
-            flow = InstalledAppFlow.from_client_secrets_file(str(CREDS_PATH), SCOPES)
-            creds = flow.run_local_server(port=0)
-        TOKEN_PATH.write_text(creds.to_json())
-
+    creds, _ = google.auth.default(scopes=SCOPES)
+    creds.refresh(Request())
     service = build("calendar", "v3", credentials=creds)
 
     # 현재 이벤트 조회

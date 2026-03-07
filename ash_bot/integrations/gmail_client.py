@@ -9,9 +9,8 @@ import logging
 from typing import List, Dict, Optional, Any
 from datetime import datetime, timedelta
 
+import google.auth
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -24,28 +23,19 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 class GmailClient:
     """Gmail API client for reading and searching emails"""
 
-    def __init__(
-        self,
-        credentials_path: str = 'credentials.json',
-        token_path: str = 'token.json',
-        service: Optional[Any] = None,
-    ):
+    def __init__(self, service: Optional[Any] = None):
         """
         Initialize Gmail client.
 
         Args:
-            credentials_path: Path to OAuth credentials JSON
-            token_path: Path to store/load access token
             service: 주입된 Gmail API service 객체 (테스트용 mock 주입 시 사용)
-                     None이면 최초 API 호출 시점에 lazy 인증 실행
+                     None이면 최초 API 호출 시점에 ADC 인증 실행
         """
-        self.credentials_path = credentials_path
-        self.token_path = token_path
-        self._service = service  # None이면 lazy 인증, 아니면 주입된 객체 사용
+        self._service = service
 
     @property
     def service(self) -> Any:
-        """Gmail API service — 최초 접근 시 OAuth 인증 실행 (lazy initialization)."""
+        """Gmail API service — 최초 접근 시 ADC 인증 실행 (lazy initialization)."""
         if self._service is None:
             self._authenticate()
         return self._service
@@ -56,48 +46,11 @@ class GmailClient:
         return cls(service=mock_service)
 
     def _authenticate(self):
-        """Authenticate with Gmail API using OAuth 2.0"""
-        creds = None
-
-        # Load existing token if available
-        if os.path.exists(self.token_path):
-            try:
-                creds = Credentials.from_authorized_user_file(self.token_path, SCOPES)
-                logger.info("Loaded existing Gmail credentials")
-            except Exception as e:
-                logger.warning(f"Failed to load existing credentials: {e}")
-
-        # Refresh or get new credentials
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                try:
-                    creds.refresh(Request())
-                    logger.info("Refreshed Gmail credentials")
-                except Exception as e:
-                    logger.warning(f"Failed to refresh credentials: {e}")
-                    creds = None
-
-            if not creds:
-                if not os.path.exists(self.credentials_path):
-                    raise FileNotFoundError(
-                        f"Credentials file not found: {self.credentials_path}\n"
-                        f"Please download credentials.json from Google Cloud Console"
-                    )
-
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.credentials_path, SCOPES
-                )
-                creds = flow.run_local_server(port=0)
-                logger.info("Successfully authenticated with Gmail")
-
-            # Save credentials for next run
-            with open(self.token_path, 'w') as token:
-                token.write(creds.to_json())
-                logger.info(f"Saved credentials to {self.token_path}")
-
-        # Build Gmail service
+        """Authenticate with Gmail API using Application Default Credentials."""
+        creds, _ = google.auth.default(scopes=SCOPES)
+        creds.refresh(Request())
         self._service = build('gmail', 'v1', credentials=creds)
-        logger.info("Gmail API service initialized")
+        logger.info("Gmail API service initialized via ADC")
 
     def list_messages(self, query: str = '', max_results: int = 10,
                      user_id: str = 'me') -> List[Dict]:

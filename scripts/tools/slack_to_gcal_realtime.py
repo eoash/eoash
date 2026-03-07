@@ -50,27 +50,13 @@ def parse_cal_link(url: str) -> tuple[str, str]:
 
 # ── Google Calendar ────────────────────────────────────────────────────────
 def get_calendar_service():
+    import google.auth
     from google.auth.transport.requests import Request
-    from google.oauth2.credentials import Credentials
-    from google_auth_oauthlib.flow import InstalledAppFlow
     from googleapiclient.discovery import build
 
     SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
-    TOKEN_PATH = Path(__file__).parents[2] / "token_calendar.json"
-    CREDS_PATH = Path(__file__).parents[2] / "credentials.json"
-
-    creds = None
-    if TOKEN_PATH.exists():
-        creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            print("🔐 Google Calendar 권한 필요 — 브라우저가 열립니다...")
-            flow = InstalledAppFlow.from_client_secrets_file(str(CREDS_PATH), SCOPES)
-            creds = flow.run_local_server(port=0)
-        TOKEN_PATH.write_text(creds.to_json())
-
+    creds, _ = google.auth.default(scopes=SCOPES)
+    creds.refresh(Request())
     return build("calendar", "v3", credentials=creds)
 
 

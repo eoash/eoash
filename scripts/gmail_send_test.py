@@ -1,44 +1,23 @@
 """
 Gmail 발송 테스트 스크립트
 """
-import os
 import base64
-import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from pathlib import Path
 
+import google.auth
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-# 읽기 + 발송 스코프
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.send',
 ]
 
-PROJECT_ROOT = Path(__file__).parent.parent
-
 
 def get_service():
-    token_path = PROJECT_ROOT / 'token_send.json'
-    creds_path = PROJECT_ROOT / 'credentials.json'
-
-    creds = None
-    if token_path.exists():
-        creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(str(creds_path), SCOPES)
-            creds = flow.run_local_server(port=0)
-        token_path.write_text(creds.to_json())
-        print(f"✅ 인증 완료, 토큰 저장: {token_path}")
-
+    creds, _ = google.auth.default(scopes=SCOPES)
+    creds.refresh(Request())
     return build('gmail', 'v1', credentials=creds)
 
 

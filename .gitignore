@@ -43,6 +43,9 @@ logs/
 test_results/
 .tmp/
 
+# MCP configuration (contains API keys)
+.mcp.json
+
 # Credentials and secrets
 *.key
 *.pem

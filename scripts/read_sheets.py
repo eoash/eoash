@@ -1,38 +1,21 @@
 """
 Google Sheets 데이터 읽기 스크립트
 """
-import os
 import sys
+import google.auth
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/spreadsheets.readonly',
 ]
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CREDENTIALS_FILE = os.path.join(BASE_DIR, 'credentials.json')
-TOKEN_FILE = os.path.join(BASE_DIR, 'token_sheets.json')
 
 SPREADSHEET_ID = '1Vw4_IszfjrxGa1z51LZ2WmvJ71I5eWPghR-uSr3f0pM'
 
 
 def get_credentials():
-    creds = None
-    if os.path.exists(TOKEN_FILE):
-        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open(TOKEN_FILE, 'w', encoding='utf-8') as token:
-            token.write(creds.to_json())
-        print(f"토큰 저장 완료: {TOKEN_FILE}", file=sys.stderr)
+    creds, _ = google.auth.default(scopes=SCOPES)
+    creds.refresh(Request())
     return creds
 
 
