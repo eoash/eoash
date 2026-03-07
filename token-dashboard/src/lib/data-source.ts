@@ -11,7 +11,14 @@ export function getDataSource(): DataSource {
   return "mock";
 }
 
-/** backfill/ 디렉토리의 모든 JSON을 읽어서 병합 */
+/** 이메일 정규화: 이중 도메인(a@b@c) 방지 + lowercase */
+function sanitizeEmail(email: string): string {
+  const parts = email.toLowerCase().split("@");
+  if (parts.length >= 2) return `${parts[0]}@${parts[1]}`;
+  return email.toLowerCase();
+}
+
+/** backfill/ 디렉토리의 모든 JSON을 읽어서 병합 + sanitize */
 function loadAllBackfill(): ClaudeCodeDataPoint[] {
   const dir = path.join(process.cwd(), "src/lib/backfill");
   if (!fs.existsSync(dir)) return [];
@@ -24,10 +31,19 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
       const raw = fs.readFileSync(path.join(dir, file), "utf-8");
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.data)) {
-        all.push(...parsed.data);
+        for (const d of parsed.data) {
+          // sanitize emails
+          if (d.actor?.email_address) {
+            d.actor.email_address = sanitizeEmail(d.actor.email_address);
+          }
+          if (d.actor?.id) {
+            d.actor.id = sanitizeEmail(d.actor.id);
+          }
+          all.push(d);
+        }
       }
     } catch (e) {
-      console.warn(`[backfill] Failed to parse ${file}:`, e);
+      console.warn(`backfill: failed to parse ${file}:`, e);
     }
   }
 
@@ -36,24 +52,35 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
 
 const backfillData = loadAllBackfill();
 
-/** 유저별 backfill 마지막 날짜 — 해당 날짜까지 JSON, 이후 Prometheus */
-function buildPerUserBackfillEnd(data: ClaudeCodeDataPoint[]): Map<string, string> {
-  const map = new Map<string, string>();
-  for (const d of data) {
-    const email = d.actor?.email_address || "";
-    if (!email) continue;
-    const current = map.get(email) || "";
-    if (d.date > current) map.set(email, d.date);
+/** 유저별 backfill 마지막 날짜 계산 */
+function buildPerUserCutoff(): Map<string, string> {
+  const cutoffs = new Map<string, string>();
+  for (const d of backfillData) {
+    const email = d.actor?.email_address ?? d.actor?.id ?? "";
+    const existing = cutoffs.get(email) ?? "";
+    if (d.date > existing) cutoffs.set(email, d.date);
   }
-  return map;
+  return cutoffs;
 }
 
-const userBackfillEnd = buildPerUserBackfillEnd(backfillData);
+const perUserCutoff = buildPerUserCutoff();
+
+/** 글로벌 backfill end (가장 최근 날짜) — 호환용 */
+const BACKFILL_END = (() => {
+  const dates = backfillData.map((d) => d.date);
+  return dates.length > 0 ? dates.sort().pop()! : "";
+})();
 
 export function getBackfillEnd(): string {
-  // 전체 backfill 중 가장 늦은 날짜 (호환용)
-  const dates = [...userBackfillEnd.values()];
-  return dates.length > 0 ? dates.sort().pop()! : "";
+  return BACKFILL_END;
+}
+
+/** <synthetic> 태그 제거 전처리 */
+function filterSynthetic(data: ClaudeCodeDataPoint[]): ClaudeCodeDataPoint[] {
+  return data.filter((d) => {
+    const email = d.actor?.email_address ?? d.actor?.id ?? "";
+    return !email.includes("<synthetic>");
+  });
 }
 
 export async function fetchAnalytics(params: {
@@ -67,28 +94,28 @@ export async function fetchAnalytics(params: {
     return getMockAnalytics();
   }
 
-  // Prometheus + backfill JSON 병합 (유저별 구간 분리)
-  // 유저의 backfill 마지막 날짜까지 → backfill JSON
-  // 유저의 backfill 마지막 날짜 이후 → Prometheus
-  // backfill이 없는 유저 → Prometheus 전체 사용
+  // Prometheus + backfill JSON 병합 (유저별 cutoff)
   const promData = await fetchFromPrometheus(params);
 
+  // Prometheus 데이터: 해당 유저의 cutoff 이후만
   const promPoints = promData.data.filter((d) => {
-    const email = d.actor?.email_address || "";
-    const end = userBackfillEnd.get(email);
-    return !end || d.date > end;
+    const email = d.actor?.email_address ?? d.actor?.id ?? "";
+    const cutoff = perUserCutoff.get(email) ?? "";
+    return !cutoff || d.date > cutoff;
   });
 
+  // Backfill 데이터: 날짜 범위 내 + 해당 유저의 cutoff 이전
   const backfillPoints = backfillData.filter((d) => {
-    const email = d.actor?.email_address || "";
-    const end = userBackfillEnd.get(email) || "";
-    return d.date >= params.start_date && d.date <= params.end_date && d.date <= end;
+    const email = d.actor?.email_address ?? d.actor?.id ?? "";
+    const cutoff = perUserCutoff.get(email) ?? "";
+    return (
+      d.date >= params.start_date &&
+      d.date <= params.end_date &&
+      d.date <= cutoff
+    );
   });
 
-  const merged = [...backfillPoints, ...promPoints];
+  const merged = filterSynthetic([...backfillPoints, ...promPoints]);
 
-  // <synthetic> 모델 제거 (모델명 미파싱, 토큰 0) — 전처리로 1회 필터링
-  const cleaned = merged.filter((d) => d.model !== "<synthetic>");
-
-  return { data: cleaned };
+  return { data: merged };
 }

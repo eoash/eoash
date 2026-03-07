@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { formatTokens, formatPercent } from "@/lib/utils";
-import { getMockGeminiData, type AiMemberRow } from "@/lib/mock-ai-tools";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
-import { NAME_TO_AVATAR, COLORS } from "@/lib/constants";
+import { NAME_TO_AVATAR } from "@/lib/constants";
+import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
+import type { CodexMemberRow } from "@/app/api/codex-usage/route";
 
-type AiTool = "claude" | "gemini" | "gpt";
+type AiTool = "claude" | "gemini" | "codex";
 type Period = "today" | "7d" | "30d" | "all";
 
 const PERIOD_DAYS: Record<Period, number> = { today: 1, "7d": 7, "30d": 30, all: 365 };
@@ -55,6 +56,7 @@ function ClaudeTable({ period }: { period: Period }) {
 
   useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => {
+    if (typeof document === "undefined") return;
     const t = setInterval(fetchData, 30_000);
     const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
     document.addEventListener("visibilitychange", onVis);
@@ -63,7 +65,6 @@ function ClaudeTable({ period }: { period: Period }) {
 
   const maxTotal = rows.length > 0 ? rows[0].total : 1;
   const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;
-  // 평균 이하인 첫 번째 인덱스 찾기
   const avgLineIndex = rows.findIndex((r) => r.total < avgTotal);
 
   return (
@@ -85,12 +86,11 @@ function ClaudeTable({ period }: { period: Period }) {
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE R</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium min-w-[180px]">TOTAL</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE HIT</th>
-              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">SINCE</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={8} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
             ) : rows.map((row, i) => {
               const isTop3 = i < 3;
               const isBelowAvg = row.total < avgTotal;
@@ -101,7 +101,7 @@ function ClaudeTable({ period }: { period: Period }) {
                 <React.Fragment key={row.name}>
                   {showAvgLine && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-0">
+                      <td colSpan={7} className="px-4 py-0">
                         <div className="flex items-center gap-2 py-1">
                           <div className="flex-1 border-t border-dashed border-yellow-500/40" />
                           <span className="text-[10px] text-yellow-500/60 font-medium whitespace-nowrap">TEAM AVG — {formatTokens(avgTotal)}</span>
@@ -110,11 +110,11 @@ function ClaudeTable({ period }: { period: Period }) {
                       </td>
                     </tr>
                   )}
-                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-accent/[0.03] hover:bg-accent/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
+                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-[#E8FF47]/[0.03] hover:bg-[#E8FF47]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
                     <td className="px-4 py-4 text-sm">{isTop3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        <Avatar name={row.name} initial={row.initial} color={isTop3 ? COLORS.accent : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                        <Avatar name={row.name} initial={row.initial} color={isTop3 ? "#E8FF47" : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
                         <span className={`font-medium ${isTop3 ? "text-white" : "text-neutral-300"}`}>{row.name}</span>
                       </div>
                     </td>
@@ -128,7 +128,7 @@ function ClaudeTable({ period }: { period: Period }) {
                             className="h-full rounded-full transition-all duration-500"
                             style={{
                               width: `${barWidth}%`,
-                              backgroundColor: isTop3 ? COLORS.accent : isBelowAvg ? "#555" : "#888",
+                              backgroundColor: isTop3 ? "#E8FF47" : isBelowAvg ? "#555" : "#888",
                             }}
                           />
                         </div>
@@ -136,12 +136,9 @@ function ClaudeTable({ period }: { period: Period }) {
                       </div>
                     </td>
                     <td className="px-4 py-4 text-right">
-                      <span className="font-mono text-sm font-bold text-accent">
+                      <span className="font-mono text-sm font-bold text-[#E8FF47]">
                         {formatPercent(row.cacheHitRate)}
                       </span>
-                    </td>
-                    <td className="px-4 py-4 text-right text-neutral-500 text-xs">
-                      {row.firstSeen ? row.firstSeen.slice(5).replace("-", "/") : "—"}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -158,100 +155,45 @@ function ClaudeTable({ period }: { period: Period }) {
   );
 }
 
-// ── Gemini / GPT 공통 테이블 ─────────────────────────
-function AiTable({ rows, accentColor }: { rows: AiMemberRow[]; accentColor: string }) {
-  const sorted = [...rows].sort((a, b) => b.totalTokens - a.totalTokens);
-  const colors = [accentColor, accentColor + "cc", accentColor + "99", "#6B7280", "#6B7280"];
-
-  return (
-    <>
-      <div className="mx-6 mt-4 mb-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-yellow-400 text-xs">
-        ⚠️ Mock 데이터입니다 — 실제 사용량이 아닙니다
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[#1e1e1e]">
-              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium w-10">#</th>
-              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium">DEVELOPER</th>
-              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">INPUT</th>
-              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">OUTPUT</th>
-              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">TOTAL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((row, i) => (
-              <tr key={row.name} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
-                <td className="px-4 py-4 text-sm">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
-                <td className="px-4 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
-                      style={{ backgroundColor: colors[i] }}>
-                      {row.initial}
-                    </div>
-                    <span className="font-medium text-white">{row.name}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.inputTokens)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.outputTokens)}</td>
-                <td className="px-4 py-4 text-right">
-                  <span className="font-mono text-sm font-bold" style={{ color: accentColor }}>
-                    {formatTokens(row.totalTokens)}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
-        <span>{sorted.length}명 · 30 Days</span>
-        <span>Mock Data</span>
-      </div>
-    </>
-  );
-}
-
-// ── Codex (ChatGPT) 실데이터 테이블 ──────────────────
-interface CodexRow {
-  name: string;
-  initial: string;
-  inputTokens: number;
-  outputTokens: number;
-  cachedInputTokens: number;
-  reasoningTokens: number;
-  totalTokens: number;
-  sessions: number;
-  model: string;
-}
-
-function CodexTable({ period }: { period: Period }) {
-  const [rows, setRows] = useState<CodexRow[]>([]);
+// ── Codex 테이블 (실데이터) ──────────────────────────
+function CodexTable() {
+  const [rows, setRows] = useState<CodexMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch(`/api/codex-usage?days=${PERIOD_DAYS[period]}`)
-      .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then((json) => { setRows(json.data ?? []); setError(null); })
-      .catch(() => { setError("데이터를 불러오지 못했습니다."); setRows([]); })
-      .finally(() => setLoading(false));
-  }, [period]);
-
+  const [lastUpdated, setLastUpdated] = useState("");
   const accentColor = "#10A37F";
-  const colors = [accentColor, accentColor + "cc", accentColor + "99", "#6B7280", "#6B7280"];
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/codex-usage");
+      if (!res.ok) throw new Error(`서버 오류 (${res.status})`);
+      const json = await res.json();
+      setRows(json.data ?? []);
+      setLastUpdated(new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    } catch (e) {
+      console.error("codex leaderboard fetch failed:", e);
+      setError("데이터를 불러오지 못했습니다.");
+      setRows([]);
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const t = setInterval(fetchData, 30_000);
+    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(t); document.removeEventListener("visibilitychange", onVis); };
+  }, [fetchData]);
 
   return (
     <>
+      {lastUpdated && <p className="text-xs text-neutral-600 px-6 pb-2">Updated {lastUpdated}</p>}
       {error && (
-        <div className="mx-6 mt-4 mb-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-xs">
+        <div className="mx-6 mb-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-xs">
           {error}
-        </div>
-      )}
-      {rows.length === 0 && !loading && !error && (
-        <div className="mx-6 mt-4 mb-2 rounded-lg border border-neutral-700 bg-neutral-800/50 px-4 py-2 text-neutral-400 text-xs">
-          아직 Codex 사용 데이터가 없습니다. ~/.codex/config.toml에 OTel 설정을 추가하면 자동 수집됩니다.
         </div>
       )}
       <div className="overflow-x-auto">
@@ -270,25 +212,24 @@ function CodexTable({ period }: { period: Period }) {
           <tbody>
             {loading ? (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
+            ) : rows.length === 0 ? (
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">Codex 사용 데이터가 없습니다</td></tr>
             ) : rows.map((row, i) => (
-              <tr key={row.name} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
+              <tr key={row.email} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
                 <td className="px-4 py-4 text-sm">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <Avatar name={row.name} initial={row.initial} color={colors[i] ?? "#6B7280"} />
-                    <div>
-                      <span className="font-medium text-white">{row.name}</span>
-                      <p className="text-[10px] text-neutral-600">{row.model}</p>
-                    </div>
+                    <Avatar name={row.name} initial={row.name[0]} color={AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                    <span className="font-medium text-white">{row.name}</span>
                   </div>
                 </td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.inputTokens)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.outputTokens)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cachedInputTokens)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.reasoningTokens)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.input)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.output)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cached)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.reasoning)}</td>
                 <td className="px-4 py-4 text-right">
                   <span className="font-mono text-sm font-bold" style={{ color: accentColor }}>
-                    {formatTokens(row.totalTokens)}
+                    {formatTokens(row.total)}
                   </span>
                 </td>
               </tr>
@@ -297,8 +238,98 @@ function CodexTable({ period }: { period: Period }) {
         </table>
       </div>
       <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
-        <span>{rows.length}명 · {PERIOD_LABELS[period]}</span>
-        <span>Codex CLI Sessions</span>
+        <span>{rows.length}명 · All Time</span>
+        <span>Auto-refresh: 30s</span>
+      </div>
+    </>
+  );
+}
+
+// ── Gemini CLI 테이블 (실데이터) ─────────────────────
+function GeminiTable() {
+  const [rows, setRows] = useState<GeminiMemberRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState("");
+  const accentColor = "#4285F4";
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/gemini-usage");
+      if (!res.ok) throw new Error(`서버 오류 (${res.status})`);
+      const json = await res.json();
+      setRows(json.data ?? []);
+      setLastUpdated(new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    } catch (e) {
+      console.error("gemini leaderboard fetch failed:", e);
+      setError("데이터를 불러오지 못했습니다.");
+      setRows([]);
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const t = setInterval(fetchData, 30_000);
+    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(t); document.removeEventListener("visibilitychange", onVis); };
+  }, [fetchData]);
+
+  return (
+    <>
+      {lastUpdated && <p className="text-xs text-neutral-600 px-6 pb-2">Updated {lastUpdated}</p>}
+      {error && (
+        <div className="mx-6 mb-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-xs">
+          {error}
+        </div>
+      )}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[#1e1e1e]">
+              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium w-10">#</th>
+              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium">DEVELOPER</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">INPUT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">OUTPUT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">THOUGHT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
+            ) : rows.length === 0 ? (
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">Gemini CLI 사용 데이터가 없습니다</td></tr>
+            ) : rows.map((row, i) => (
+              <tr key={row.email} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
+                <td className="px-4 py-4 text-sm">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
+                <td className="px-4 py-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={row.name} initial={row.name[0]} color={AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                    <span className="font-medium text-white">{row.name}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.input)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.output)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cache)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.thought)}</td>
+                <td className="px-4 py-4 text-right">
+                  <span className="font-mono text-sm font-bold" style={{ color: accentColor }}>
+                    {formatTokens(row.total)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
+        <span>{rows.length}명 · All Time</span>
+        <span>Auto-refresh: 30s</span>
       </div>
     </>
   );
@@ -310,9 +341,9 @@ export default function LeaderboardTable() {
   const [period, setPeriod] = useState<Period>("30d");
 
   const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
-    { key: "claude", label: "Claude Code", color: COLORS.accent },
+    { key: "claude", label: "Claude Code", color: "#E8FF47" },
     { key: "gemini", label: "Gemini",      color: "#4285F4" },
-    { key: "gpt",    label: "Codex",        color: "#10A37F" },
+    { key: "codex",  label: "Codex",       color: "#10A37F" },
   ];
 
   return (
@@ -329,7 +360,7 @@ export default function LeaderboardTable() {
           ))}
         </div>
 
-        {(tool === "claude" || tool === "gpt") && (
+        {tool === "claude" && (
           <div className="flex rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] p-1 gap-1">
             {(Object.keys(PERIOD_LABELS) as Period[]).map((p) => (
               <button key={p} onClick={() => setPeriod(p)}
@@ -342,8 +373,8 @@ export default function LeaderboardTable() {
       </div>
 
       {tool === "claude" && <ClaudeTable period={period} />}
-      {tool === "gemini" && <AiTable rows={getMockGeminiData()} accentColor="#4285F4" />}
-      {tool === "gpt"    && <CodexTable period={period} />}
+      {tool === "gemini" && <GeminiTable />}
+      {tool === "codex"  && <CodexTable />}
     </div>
   );
 }

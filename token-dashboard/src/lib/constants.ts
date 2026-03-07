@@ -20,7 +20,6 @@ export const TEAM_MEMBERS: TeamMember[] = [
   { email: "izzy@eoeoeo.net", name: "Izzy", avatar: "https://avatars.slack-edge.com/2025-09-17/9548321478705_9b12a80b514c735c69cc_72.jpg" },
   { email: "grace@eoeoeo.net", name: "Grace", avatar: "https://avatars.slack-edge.com/2025-09-18/9539341183558_899f08971fcc43011541_72.png" },
   { email: "jemin@eoeoeo.net", name: "Jemin", avatar: "https://avatars.slack-edge.com/2025-10-01/9613131790421_9390231d8d42154c0c05_72.png" },
-  { email: "jemin@eoeoeo.net@eoeoeo.net", name: "Jemin", avatar: "https://avatars.slack-edge.com/2025-10-01/9613131790421_9390231d8d42154c0c05_72.png" },
   { email: "chaenn@eoeoeo.net", name: "Chaeeun", avatar: "https://avatars.slack-edge.com/2025-10-01/9611034420181_4809053162293d2c0555_72.png" },
   { email: "yjk@eoeoeo.net", name: "Jade", avatar: "https://avatars.slack-edge.com/2026-01-20/10358470225072_afbf3243899078eae211_72.jpg" },
   { email: "jhghood25@eoeoeo.net", name: "Jihwan", avatar: "https://avatars.slack-edge.com/2025-10-31/9805109735011_14de538b1dcad6f5f3fd_72.png" },
@@ -59,12 +58,6 @@ export const UNIQUE_MEMBERS: TeamMember[] = TEAM_MEMBERS.filter(
   (m, i, arr) => arr.findIndex((x) => x.name === m.name) === i
 );
 
-// 테마 색상 (JS에서 직접 사용 — recharts stroke/fill 등)
-export const COLORS = {
-  accent: "#E8FF47",
-  accentFaded: "#E8FF4730",
-} as const;
-
 // 모델 표시명 + 색상
 export interface ModelConfig {
   label: string;
@@ -72,7 +65,7 @@ export interface ModelConfig {
 }
 
 export const MODEL_CONFIG: Record<string, ModelConfig> = {
-  "claude-opus-4-6":           { label: "Opus 4.6",   color: COLORS.accent },
+  "claude-opus-4-6":           { label: "Opus 4.6",   color: "#E8FF47" },
   "claude-sonnet-4-6":         { label: "Sonnet 4.6", color: "#3B82F6" },
   "claude-haiku-4-5-20251001": { label: "Haiku 4.5",  color: "#10B981" },
   "claude-sonnet-4-5-20250929":  { label: "Sonnet 4.5", color: "#8B5CF6" },

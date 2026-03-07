@@ -1,87 +1,67 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { EMAIL_TO_NAME } from "@/lib/constants";
 import fs from "fs";
 import path from "path";
-import { EMAIL_TO_NAME } from "@/lib/constants";
 
-interface CodexDayRecord {
+export interface CodexMemberRow {
+  name: string;
+  email: string;
+  input: number;
+  output: number;
+  cached: number;
+  reasoning: number;
+  total: number;
+}
+
+interface BackfillEntry {
   date: string;
   input_tokens: number;
   output_tokens: number;
   cached_input_tokens: number;
   reasoning_output_tokens: number;
-  sessions: number;
-  model: string;
+  sessions?: number;
+  model?: string;
 }
 
-interface CodexMemberRow {
-  name: string;
-  initial: string;
-  inputTokens: number;
-  outputTokens: number;
-  cachedInputTokens: number;
-  reasoningTokens: number;
-  totalTokens: number;
-  sessions: number;
-  model: string;
-}
-
-export async function GET(req: NextRequest) {
-  const days = Number(req.nextUrl.searchParams.get("days") ?? "30");
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - days);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-
-  const backfillDir = path.join(process.cwd(), "src/lib/backfill/codex");
-
-  let files: string[] = [];
+export async function GET() {
   try {
-    files = fs.readdirSync(backfillDir).filter((f) => f.endsWith(".json"));
-  } catch {
+    const codexDir = path.join(process.cwd(), "src/lib/backfill/codex");
+
+    if (!fs.existsSync(codexDir)) {
+      return NextResponse.json({ data: [] });
+    }
+
+    const files = fs.readdirSync(codexDir).filter((f) => f.endsWith(".json"));
+    const data: CodexMemberRow[] = [];
+
+    for (const file of files) {
+      const username = file.replace(".json", "");
+      const raw = JSON.parse(fs.readFileSync(path.join(codexDir, file), "utf-8"));
+      const entries: BackfillEntry[] = raw.data ?? [];
+
+      let input = 0, output = 0, cached = 0, reasoning = 0;
+      for (const e of entries) {
+        input += e.input_tokens ?? 0;
+        output += e.output_tokens ?? 0;
+        cached += e.cached_input_tokens ?? 0;
+        reasoning += e.reasoning_output_tokens ?? 0;
+      }
+
+      const total = input + output + cached + reasoning;
+      if (total === 0) continue;
+
+      // username → email → name 매핑
+      const email = `${username}@eoeoeo.net`;
+      const name = EMAIL_TO_NAME[email] ?? username;
+
+      data.push({ name, email, input, output, cached, reasoning, total });
+    }
+
+    data.sort((a, b) => b.total - a.total);
+
+    return NextResponse.json({ data });
+  } catch (error) {
+    console.warn("codex-usage API error:", error);
     return NextResponse.json({ data: [] });
   }
-
-  const members: CodexMemberRow[] = [];
-
-  for (const file of files) {
-    const username = file.replace(".json", "");
-    const name = EMAIL_TO_NAME[username] ?? username;
-
-    try {
-      const raw = fs.readFileSync(path.join(backfillDir, file), "utf-8");
-      const { data } = JSON.parse(raw) as { data: CodexDayRecord[] };
-
-      const filtered = data.filter((d) => d.date >= cutoffStr);
-      if (filtered.length === 0) continue;
-
-      const agg = filtered.reduce(
-        (acc, d) => ({
-          inputTokens: acc.inputTokens + d.input_tokens,
-          outputTokens: acc.outputTokens + d.output_tokens,
-          cachedInputTokens: acc.cachedInputTokens + d.cached_input_tokens,
-          reasoningTokens: acc.reasoningTokens + d.reasoning_output_tokens,
-          sessions: acc.sessions + d.sessions,
-          model: d.model || acc.model,
-        }),
-        { inputTokens: 0, outputTokens: 0, cachedInputTokens: 0, reasoningTokens: 0, sessions: 0, model: "" },
-      );
-
-      members.push({
-        name,
-        initial: name[0]?.toUpperCase() ?? "?",
-        inputTokens: agg.inputTokens,
-        outputTokens: agg.outputTokens,
-        cachedInputTokens: agg.cachedInputTokens,
-        reasoningTokens: agg.reasoningTokens,
-        totalTokens: agg.inputTokens + agg.outputTokens,
-        sessions: agg.sessions,
-        model: agg.model,
-      });
-    } catch (e) {
-      console.warn(`codex backfill parse error: ${file}`, e);
-    }
-  }
-
-  members.sort((a, b) => b.totalTokens - a.totalTokens);
-
-  return NextResponse.json({ data: members });
 }

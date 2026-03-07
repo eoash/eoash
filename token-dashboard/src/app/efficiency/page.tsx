@@ -15,10 +15,14 @@ import {
 } from "recharts";
 import KpiCard from "@/components/cards/KpiCard";
 import DateRangePicker from "@/components/layout/DateRangePicker";
-import { formatPercent, formatTokens, formatDate } from "@/lib/utils";
-import { COLORS } from "@/lib/constants";
+import { formatPercent, formatTokens } from "@/lib/utils";
 import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import { aggregateEfficiency } from "@/lib/aggregators/efficiency";
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  return `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
+}
 
 function formatPct(value: number): string {
   return `${(value * 100).toFixed(0)}%`;
@@ -75,7 +79,7 @@ export default function EfficiencyPage() {
               title="Output Ratio"
               value={`${eff.avgOutputRatio.toFixed(1)}x`}
               subtitle="output / input"
-              tooltip="입력 토큰 대비 출력 토큰 비율. 높으면 코드 생성 중심(Claude가 많이 작성), 낮으면 탐색·리뷰 중심(파일 읽기, 설정 확인 등). 역할에 따라 자연스럽게 달라집니다."
+              tooltip="입력 토큰 대비 출력 토큰 비율. 높을수록 적은 프롬프트로 많은 결과를 얻고 있다는 뜻입니다."
             />
             <KpiCard
               title="Cache Efficiency"
@@ -110,7 +114,7 @@ export default function EfficiencyPage() {
                       return (
                         <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-3 shadow-lg">
                           <p className="mb-2 text-sm text-neutral-400">{label}</p>
-                          <p className="text-sm text-accent">
+                          <p className="text-sm text-[#E8FF47]">
                             Cache Hit: {formatPct(payload[0].value as number)}
                           </p>
                           {payload[1] && (
@@ -125,9 +129,9 @@ export default function EfficiencyPage() {
                   <Line
                     type="monotone"
                     dataKey="cacheHitRate"
-                    stroke={COLORS.accent}
+                    stroke="#E8FF47"
                     strokeWidth={2}
-                    dot={{ fill: COLORS.accent, r: 3 }}
+                    dot={{ fill: "#E8FF47", r: 3 }}
                     name="Cache Hit Rate"
                   />
                 </LineChart>
@@ -169,7 +173,7 @@ export default function EfficiencyPage() {
                         return (
                           <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-3 shadow-lg">
                             <p className="font-medium text-sm mb-1">{m.name}</p>
-                            <p className="text-sm text-accent">Cache Hit: {formatPct(m.cacheHitRate)}</p>
+                            <p className="text-sm text-[#E8FF47]">Cache Hit: {formatPct(m.cacheHitRate)}</p>
                             <p className="text-sm text-gray-400">Total: {formatTokens(m.totalTokens)}</p>
                           </div>
                         );
@@ -179,7 +183,7 @@ export default function EfficiencyPage() {
                       {eff.members.map((m, i) => (
                         <Cell
                           key={m.name}
-                          fill={COLORS.accent}
+                          fill={i === 0 ? "#E8FF47" : "#E8FF47"}
                           fillOpacity={1 - i * (0.6 / Math.max(eff.members.length - 1, 1))}
                         />
                       ))}
@@ -263,7 +267,7 @@ export default function EfficiencyPage() {
                     <tr key={m.name} className="border-b border-[#1a1a1a]">
                       <td className="py-3 font-medium">{m.name}</td>
                       <td className="text-right text-gray-400">{formatTokens(m.totalTokens)}</td>
-                      <td className="text-right text-accent">{formatPct(m.cacheHitRate)}</td>
+                      <td className="text-right text-[#E8FF47]">{formatPct(m.cacheHitRate)}</td>
                       <td className="text-right text-[#3B82F6]">{m.outputRatio.toFixed(1)}x</td>
                       <td className="text-right text-[#10B981]">{m.cacheEfficiency.toFixed(1)}x</td>
                     </tr>
