@@ -93,6 +93,7 @@ townhall/         → 타운홀 슬라이드 산출물
 ai-native-camp/   → AI Native 교육 캠프 (교육자료, 숙제, PPTX)
 token-dashboard/      → Anthropic API 토큰 사용량 대시보드 (Next.js + OTel → Prometheus → Vercel)
 finance-dashboard/    → 경영진 재무 대시보드 (Next.js + Google Sheets API → Vercel)
+leave-dashboard/      → 연차 관리 대시보드 (Next.js + Airtable API, 근로기준법 자동 계산)
 ```
 
 ---
