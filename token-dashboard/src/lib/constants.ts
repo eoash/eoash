@@ -20,6 +20,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   { email: "izzy@eoeoeo.net", name: "Izzy", avatar: "https://avatars.slack-edge.com/2025-09-17/9548321478705_9b12a80b514c735c69cc_72.jpg" },
   { email: "grace@eoeoeo.net", name: "Grace", avatar: "https://avatars.slack-edge.com/2025-09-18/9539341183558_899f08971fcc43011541_72.png" },
   { email: "jemin@eoeoeo.net", name: "Jemin", avatar: "https://avatars.slack-edge.com/2025-10-01/9613131790421_9390231d8d42154c0c05_72.png" },
+  { email: "jemin@eoeoeo.net@eoeoeo.net", name: "Jemin", avatar: "https://avatars.slack-edge.com/2025-10-01/9613131790421_9390231d8d42154c0c05_72.png" },
   { email: "chaenn@eoeoeo.net", name: "Chaeeun", avatar: "https://avatars.slack-edge.com/2025-10-01/9611034420181_4809053162293d2c0555_72.png" },
   { email: "yjk@eoeoeo.net", name: "Jade", avatar: "https://avatars.slack-edge.com/2026-01-20/10358470225072_afbf3243899078eae211_72.jpg" },
   { email: "jhghood25@eoeoeo.net", name: "Jihwan", avatar: "https://avatars.slack-edge.com/2025-10-31/9805109735011_14de538b1dcad6f5f3fd_72.png" },
