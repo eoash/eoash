@@ -44,7 +44,7 @@ export function aggregateUtilization(data: ClaudeCodeDataPoint[]): UtilizationAg
       memberMap.set(name, existing);
     }
 
-    if (d.model) {
+    if (d.model && d.model !== "<synthetic>") {
       const tokens = d.input_tokens + d.output_tokens + d.cache_read_tokens;
       modelMap.set(d.model, (modelMap.get(d.model) ?? 0) + tokens);
     }
