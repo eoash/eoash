@@ -19,6 +19,15 @@ from collections import defaultdict
 TRANSCRIPT_BASE = os.path.expanduser("~/.claude/projects")
 
 
+def sanitize_email(email: str) -> str:
+    """중복 도메인 제거 (예: user@eoeoeo.net@eoeoeo.net → user@eoeoeo.net)"""
+    at_count = email.count("@")
+    if at_count > 1:
+        parts = email.split("@")
+        return f"{parts[0]}@{parts[-1]}"
+    return email
+
+
 def detect_user_email() -> str:
     try:
         result = subprocess.run(
@@ -26,7 +35,7 @@ def detect_user_email() -> str:
             capture_output=True, text=True, timeout=5,
         )
         if result.returncode == 0 and result.stdout.strip():
-            return result.stdout.strip()
+            return sanitize_email(result.stdout.strip())
     except Exception:
         pass
     return "unknown"
