@@ -87,7 +87,7 @@ EOF
 
 | 이름 | 이메일 | 설정 |
 |------|--------|------|
-| Seohyun | ash@eostudio.tv | ✅ 완료 |
+| Seohyun | ash@eoeoeo.net | ✅ 완료 |
 | Jay | jay@eostudio.tv | ⬜ |
 | Alex | alex@eostudio.tv | ⬜ |
 | Yuna | yuna@eostudio.tv | ⬜ |
