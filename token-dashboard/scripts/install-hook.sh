@@ -15,6 +15,8 @@ SETTINGS="$HOME/.claude/settings.json"
 HOOK_FILE="$HOOKS_DIR/otel_push.py"
 BASE_URL="https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts"
 DASHBOARD_API="https://token-dashboard-iota.vercel.app/api/backfill"
+# 자동 업데이트 hook 명령: 매 실행마다 GitHub에서 최신 otel_push.py를 다운로드 후 실행
+HOOK_CMD="bash -c 'D=\$(cat);curl -sL $BASE_URL/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;echo \"\$D\"|python3 ~/.claude/hooks/otel_push.py'"
 
 echo "=== EO Studio Token Dashboard - Hook Installer ==="
 echo ""
@@ -62,62 +64,48 @@ curl -sL "$BASE_URL/otel_push.py" -o "$HOOK_FILE"
 chmod +x "$HOOK_FILE"
 echo "      -> $HOOK_FILE"
 
-# 3. settings.json에 Stop hook 등록
+# 3. settings.json에 Stop hook 등록 (자동 업데이트 명령)
 echo "[2/3] settings.json에 Stop hook 등록 중..."
 
-if [ ! -f "$SETTINGS" ]; then
-  cat > "$SETTINGS" << 'ENDJSON'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/otel_push.py"
-          }
-        ]
-      }
-    ]
-  }
-}
-ENDJSON
-  echo "      -> settings.json 새로 생성됨"
-else
-  if grep -q "otel_push" "$SETTINGS" 2>/dev/null; then
-    echo "      -> 이미 등록되어 있습니다. 건너뜁니다."
-  else
-    python3 -c "
+python3 -c "
 import json, os
 
 path = os.path.expanduser('~/.claude/settings.json')
+hook_cmd = '''$HOOK_CMD'''
 
-with open(path, 'r') as f:
-    data = json.load(f)
-
-hook_entry = {
-    'hooks': [
-        {
-            'type': 'command',
-            'command': 'python3 ~/.claude/hooks/otel_push.py'
-        }
-    ]
-}
+# settings.json 읽기 (없으면 빈 객체)
+data = {}
+if os.path.exists(path):
+    with open(path, 'r') as f:
+        data = json.load(f)
 
 if 'hooks' not in data:
     data['hooks'] = {}
 if 'Stop' not in data['hooks']:
     data['hooks']['Stop'] = []
 
-data['hooks']['Stop'].append(hook_entry)
+# 기존 otel_push 항목 찾아서 command 업데이트, 없으면 추가
+updated = False
+for entry in data['hooks']['Stop']:
+    for hook in entry.get('hooks', []):
+        if 'otel_push' in hook.get('command', ''):
+            old_cmd = hook['command']
+            hook['command'] = hook_cmd
+            updated = True
+            if old_cmd != hook_cmd:
+                print('      -> 기존 hook 명령 업데이트 완료 (자동 업데이트 활성화)')
+            else:
+                print('      -> 이미 최신 상태입니다.')
+
+if not updated:
+    data['hooks']['Stop'].append({
+        'hooks': [{'type': 'command', 'command': hook_cmd}]
+    })
+    print('      -> Stop hook 새로 추가 완료')
 
 with open(path, 'w') as f:
     json.dump(data, f, indent=2)
-
-print('      -> Stop hook 추가 완료')
 "
-  fi
-fi
 
 # 4. 과거 transcript backfill → JSON 생성 → Dashboard API로 전송
 echo "[3/3] 과거 transcript backfill 중..."

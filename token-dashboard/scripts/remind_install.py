@@ -71,16 +71,21 @@ curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/in
 
 UPDATE_MESSAGE = """안녕하세요! :sparkles:
 
-Claude Code 대시보드 hook이 업데이트되었습니다. (commits/sessions 추적 개선)
+누구보다 빨리 설치해주셔서 정말 감사합니다! :pray:
 
-이전과 동일한 명령어를 한 번만 다시 실행해주세요:
+여러분 데이터가 제대로 들어오는지 하나하나 확인해보면서, 사소한 부분들을 계속 수정하고 업데이트하고 있는데요 — 이번에 commits, sessions 추적이 더 정확하게 잡히도록 개선했습니다.
+
+다만 이 업데이트가 적용되려면 아래 명령어를 한 번만 다시 실행해주셔야 해서 부탁드립니다 :folded_hands:
 ```
 curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.sh | bash
 ```
 
-기존 설정은 그대로 유지되고, 과거 데이터만 다시 수집됩니다.
+기존 설정은 그대로 유지되고, 과거 데이터만 새로 수집됩니다.
+그리고 이번 업데이트 이후로는 자동 업데이트가 적용돼서 다시 수동으로 실행하실 일 없습니다! :rocket:
 
-:link: 대시보드: https://token-dashboard-iota.vercel.app"""
+:link: 대시보드: https://token-dashboard-iota.vercel.app
+
+항상 감사합니다! 문제 있으면 편하게 DM 주세요 :blush:"""
 
 
 def check_backfill_files() -> tuple[set[str], set[str]]:
