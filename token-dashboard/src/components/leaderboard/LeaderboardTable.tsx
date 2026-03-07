@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { formatTokens, formatPercent } from "@/lib/utils";
-import { getMockGeminiData, getMockGptData, type AiMemberRow } from "@/lib/mock-ai-tools";
+import { getMockGeminiData, type AiMemberRow } from "@/lib/mock-ai-tools";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
 import { NAME_TO_AVATAR, COLORS } from "@/lib/constants";
 
@@ -212,6 +212,98 @@ function AiTable({ rows, accentColor }: { rows: AiMemberRow[]; accentColor: stri
   );
 }
 
+// ── Codex (ChatGPT) 실데이터 테이블 ──────────────────
+interface CodexRow {
+  name: string;
+  initial: string;
+  inputTokens: number;
+  outputTokens: number;
+  cachedInputTokens: number;
+  reasoningTokens: number;
+  totalTokens: number;
+  sessions: number;
+  model: string;
+}
+
+function CodexTable({ period }: { period: Period }) {
+  const [rows, setRows] = useState<CodexRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/codex-usage?days=${PERIOD_DAYS[period]}`)
+      .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then((json) => { setRows(json.data ?? []); setError(null); })
+      .catch(() => { setError("데이터를 불러오지 못했습니다."); setRows([]); })
+      .finally(() => setLoading(false));
+  }, [period]);
+
+  const accentColor = "#10A37F";
+  const colors = [accentColor, accentColor + "cc", accentColor + "99", "#6B7280", "#6B7280"];
+
+  return (
+    <>
+      {error && (
+        <div className="mx-6 mt-4 mb-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-xs">
+          {error}
+        </div>
+      )}
+      {rows.length === 0 && !loading && !error && (
+        <div className="mx-6 mt-4 mb-2 rounded-lg border border-neutral-700 bg-neutral-800/50 px-4 py-2 text-neutral-400 text-xs">
+          아직 Codex 사용 데이터가 없습니다. ~/.codex/config.toml에 OTel 설정을 추가하면 자동 수집됩니다.
+        </div>
+      )}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[#1e1e1e]">
+              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium w-10">#</th>
+              <th className="px-4 py-3 text-left text-xs text-neutral-600 font-medium">DEVELOPER</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">INPUT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">OUTPUT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHED</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">REASONING</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
+            ) : rows.map((row, i) => (
+              <tr key={row.name} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
+                <td className="px-4 py-4 text-sm">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
+                <td className="px-4 py-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={row.name} initial={row.initial} color={colors[i] ?? "#6B7280"} />
+                    <div>
+                      <span className="font-medium text-white">{row.name}</span>
+                      <p className="text-[10px] text-neutral-600">{row.model}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.inputTokens)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.outputTokens)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cachedInputTokens)}</td>
+                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.reasoningTokens)}</td>
+                <td className="px-4 py-4 text-right">
+                  <span className="font-mono text-sm font-bold" style={{ color: accentColor }}>
+                    {formatTokens(row.totalTokens)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
+        <span>{rows.length}명 · {PERIOD_LABELS[period]}</span>
+        <span>Codex CLI Sessions</span>
+      </div>
+    </>
+  );
+}
+
 // ── 메인 컴포넌트 ────────────────────────────────────
 export default function LeaderboardTable() {
   const [tool, setTool] = useState<AiTool>("claude");
@@ -220,7 +312,7 @@ export default function LeaderboardTable() {
   const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
     { key: "claude", label: "Claude Code", color: COLORS.accent },
     { key: "gemini", label: "Gemini",      color: "#4285F4" },
-    { key: "gpt",    label: "ChatGPT",     color: "#10A37F" },
+    { key: "gpt",    label: "Codex",        color: "#10A37F" },
   ];
 
   return (
@@ -237,7 +329,7 @@ export default function LeaderboardTable() {
           ))}
         </div>
 
-        {tool === "claude" && (
+        {(tool === "claude" || tool === "gpt") && (
           <div className="flex rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] p-1 gap-1">
             {(Object.keys(PERIOD_LABELS) as Period[]).map((p) => (
               <button key={p} onClick={() => setPeriod(p)}
@@ -251,7 +343,7 @@ export default function LeaderboardTable() {
 
       {tool === "claude" && <ClaudeTable period={period} />}
       {tool === "gemini" && <AiTable rows={getMockGeminiData()} accentColor="#4285F4" />}
-      {tool === "gpt"    && <AiTable rows={getMockGptData()}    accentColor="#10A37F" />}
+      {tool === "gpt"    && <CodexTable period={period} />}
     </div>
   );
 }

@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "date": "2026-03-08",
+      "input_tokens": 228789,
+      "output_tokens": 3000,
+      "cached_input_tokens": 217856,
+      "reasoning_output_tokens": 996,
+      "sessions": 1,
+      "model": "gpt-5.3-codex"
+    }
+  ]
+}
