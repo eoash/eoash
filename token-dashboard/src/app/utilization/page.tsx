@@ -81,7 +81,7 @@ export default function UtilizationPage() {
                       </div>
                       <div className="h-2 rounded-full bg-[#1a1a1a]">
                         <div
-                          className="h-full rounded-full bg-accent"
+                          className="h-full rounded-full bg-[#E8FF47]"
                           style={{ width: `${pct}%` }}
                         />
                       </div>

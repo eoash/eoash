@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { TooltipContentProps } from "recharts/types/component/Tooltip";
-import { formatDate, formatTokensCompact } from "@/lib/utils";
 
 interface DailyUsageData {
   date: string;
@@ -21,6 +20,19 @@ interface DailyUsageData {
 
 interface DailyUsageChartProps {
   data: DailyUsageData[];
+}
+
+function formatTokenAxis(value: number): string {
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
+  return String(value);
+}
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${month}/${day}`;
 }
 
 function CustomTooltip({ active, payload, label }: TooltipContentProps<number, string>) {
@@ -66,7 +78,7 @@ export default function DailyUsageChart({ data }: DailyUsageChartProps) {
               tick={{ fill: "#999", fontSize: 12 }}
             />
             <YAxis
-              tickFormatter={formatTokensCompact}
+              tickFormatter={formatTokenAxis}
               stroke="#666"
               tick={{ fill: "#999", fontSize: 12 }}
             />

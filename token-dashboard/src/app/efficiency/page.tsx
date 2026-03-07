@@ -28,15 +28,15 @@ function formatPct(value: number): string {
   return `${(value * 100).toFixed(0)}%`;
 }
 
-function InfoTip({ text, wide }: { text: string; wide?: boolean }) {
+function InfoTip({ text, wide, below }: { text: string; wide?: boolean; below?: boolean }) {
   return (
     <div className="relative inline-flex ml-1.5">
       <svg className="w-3.5 h-3.5 text-gray-600 cursor-help peer" viewBox="0 0 16 16" fill="currentColor">
         <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm1 12H7V7h2v5zM8 6a1 1 0 110-2 1 1 0 010 2z"/>
       </svg>
-      <div className={`invisible peer-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 ${wide ? "w-64" : "w-56"} rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2 text-xs text-gray-300 leading-relaxed shadow-xl z-50 font-normal`}>
+      <div className={`invisible peer-hover:visible absolute left-1/2 -translate-x-1/2 ${below ? "top-full mt-2" : "bottom-full mb-2"} ${wide ? "w-64" : "w-56"} rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2 text-xs text-gray-300 leading-relaxed shadow-xl z-50 font-normal`}>
         {text}
-        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-x-[5px] border-x-transparent border-t-[5px] border-t-[#333]"/>
+        <div className={`absolute left-1/2 -translate-x-1/2 w-0 h-0 border-x-[5px] border-x-transparent ${below ? "bottom-full border-b-[5px] border-b-[#333]" : "top-full border-t-[5px] border-t-[#333]"}`}/>
       </div>
     </div>
   );
@@ -256,10 +256,10 @@ export default function EfficiencyPage() {
                 <thead>
                   <tr className="text-gray-500 border-b border-[#222]">
                     <th className="text-left py-2 font-medium">Member</th>
-                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Total Tokens<InfoTip text="input + output + cache_read + cache_creation 합계" /></span></th>
-                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Cache Hit<InfoTip text="cache_read / (cache_read + cache_creation + input). 높을수록 좋음" /></span></th>
-                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Output Ratio<InfoTip text="output / input 비율. 역할에 따라 다름" /></span></th>
-                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Cache Efficiency<InfoTip text="cache_read / cache_creation. 캐시를 얼마나 재활용하는지" /></span></th>
+                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Total Tokens<InfoTip below text="input + output + cache_read + cache_creation 합계" /></span></th>
+                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Cache Hit<InfoTip below text="cache_read / (cache_read + cache_creation + input). 높을수록 좋음" /></span></th>
+                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Output Ratio<InfoTip below text="output / input 비율. 역할에 따라 다름" /></span></th>
+                    <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">Cache Efficiency<InfoTip below text="cache_read / cache_creation. 캐시를 얼마나 재활용하는지" /></span></th>
                   </tr>
                 </thead>
                 <tbody>

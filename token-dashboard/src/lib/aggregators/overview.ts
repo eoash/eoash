@@ -1,5 +1,4 @@
 import { resolveActorName, getModelLabel, getModelColor } from "@/lib/constants";
-import { calcCacheHitRate } from "@/lib/utils";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
 
 export interface OverviewAggregation {
@@ -85,7 +84,7 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
 
   return {
     totalTokens,
-    cacheHitRate: calcCacheHitRate(totalCacheRead, totalCacheCreation, totalInput),
+    cacheHitRate: (totalCacheRead + totalInput) > 0 ? totalCacheRead / (totalCacheRead + totalCacheCreation + totalInput) : 0,
     activeUsers: userSet.size,
     avgDailySessions: Math.round(totalSessions / days),
     totalLines,
@@ -104,7 +103,7 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
       .map(([name, v]) => ({
         name,
         tokens: v.tokens,
-        cacheHitRate: calcCacheHitRate(v.cacheRead, v.cacheCreation, v.input),
+        cacheHitRate: (v.cacheRead + v.cacheCreation + v.input) > 0 ? v.cacheRead / (v.cacheRead + v.cacheCreation + v.input) : 0,
         lines: v.lines,
         commits: v.commits,
         prs: v.prs,

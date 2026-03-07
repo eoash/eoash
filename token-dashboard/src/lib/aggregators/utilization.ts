@@ -1,5 +1,4 @@
 import { resolveActorName, getModelLabel, getModelColor } from "@/lib/constants";
-import { calcCacheHitRate } from "@/lib/utils";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
 
 export interface UtilizationAggregation {
@@ -61,10 +60,11 @@ export function aggregateUtilization(data: ClaudeCodeDataPoint[]): UtilizationAg
 
   const memberTokens = Array.from(memberMap.entries())
     .map(([name, v]) => {
+      const allInput = v.input + v.cacheRead + v.cacheCreation;
       return {
         name,
         tokens: v.input + v.output + v.cacheRead,
-        cacheHitRate: calcCacheHitRate(v.cacheRead, v.cacheCreation, v.input),
+        cacheHitRate: allInput > 0 ? v.cacheRead / allInput : 0,
       };
     })
     .sort((a, b) => b.tokens - a.tokens);
@@ -79,7 +79,7 @@ export function aggregateUtilization(data: ClaudeCodeDataPoint[]): UtilizationAg
 
   return {
     totalTokens,
-    cacheHitRate: calcCacheHitRate(totalCacheRead, totalCacheCreation, totalInput),
+    cacheHitRate: totalAllInput > 0 ? totalCacheRead / totalAllInput : 0,
     outputRatio: totalTokens > 0 ? totalOutput / totalTokens : 0,
     avgDailyTokens: Math.round(totalTokens / days),
     daily,

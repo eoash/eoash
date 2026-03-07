@@ -10,8 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { TooltipContentProps } from "recharts/types/component/Tooltip";
-import { formatDate, formatTokensCompact } from "@/lib/utils";
-import { COLORS } from "@/lib/constants";
 
 interface TokenTrendData {
   date: string;
@@ -22,6 +20,19 @@ interface TokenTrendChartProps {
   data: TokenTrendData[];
   label?: string;
   color?: string;
+}
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${month}/${day}`;
+}
+
+function formatTokenAxis(value: number): string {
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
+  return String(value);
 }
 
 function CustomTooltip({ active, payload, label }: TooltipContentProps<number, string>) {
@@ -39,7 +50,7 @@ function CustomTooltip({ active, payload, label }: TooltipContentProps<number, s
 }
 
 export default function TokenTrendChart({ data, label, color }: TokenTrendChartProps) {
-  const lineColor = color ?? COLORS.accent;
+  const lineColor = color ?? "#E8FF47";
   return (
     <div className="rounded-xl bg-[#111111] p-6">
       <h3 className="mb-4 text-lg font-semibold text-white flex items-center gap-2">
@@ -57,7 +68,7 @@ export default function TokenTrendChart({ data, label, color }: TokenTrendChartP
               tick={{ fill: "#999", fontSize: 12 }}
             />
             <YAxis
-              tickFormatter={formatTokensCompact}
+              tickFormatter={formatTokenAxis}
               stroke="#666"
               tick={{ fill: "#999", fontSize: 12 }}
             />

@@ -75,11 +75,11 @@ export function getBackfillEnd(): string {
   return BACKFILL_END;
 }
 
-/** <synthetic> 태그 제거 전처리 */
+/** <synthetic> 태그 제거 전처리 (이메일 + 모델) */
 function filterSynthetic(data: ClaudeCodeDataPoint[]): ClaudeCodeDataPoint[] {
   return data.filter((d) => {
     const email = d.actor?.email_address ?? d.actor?.id ?? "";
-    return !email.includes("<synthetic>");
+    return !email.includes("<synthetic>") && d.model !== "<synthetic>";
   });
 }
 

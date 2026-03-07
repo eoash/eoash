@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const menuItems = [
   { label: "Overview", href: "/" },
   { label: "Leaderboard", href: "/leaderboard" },
-  { label: "Members", href: "/team" },
+  { label: "Team", href: "/team" },
   { label: "Models", href: "/models" },
   { label: "Utilization", href: "/utilization" },
   { label: "Efficiency", href: "/efficiency" },
@@ -30,7 +30,7 @@ export default function Sidebar() {
               href={item.href}
               className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-accent/10 text-accent"
+                  ? "bg-[#E8FF47]/10 text-[#E8FF47]"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >

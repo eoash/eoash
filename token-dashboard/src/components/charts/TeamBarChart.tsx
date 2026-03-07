@@ -10,8 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { TooltipContentProps } from "recharts/types/component/Tooltip";
-import { formatTokensCompact } from "@/lib/utils";
-import { COLORS } from "@/lib/constants";
 
 interface TeamData {
   name: string;
@@ -22,13 +20,19 @@ interface TeamBarChartProps {
   data: TeamData[];
 }
 
+function formatTokenAxis(value: number): string {
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
+  return String(value);
+}
+
 function CustomTooltip({ active, payload, label }: TooltipContentProps<number, string>) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
   return (
     <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-3 shadow-lg">
       <p className="mb-1 text-sm font-medium text-white">{label}</p>
-      <p className="text-sm text-accent">
+      <p className="text-sm text-[#E8FF47]">
         Tokens: {Number(entry.value).toLocaleString()}
       </p>
     </div>
@@ -49,7 +53,7 @@ export default function TeamBarChart({ data }: TeamBarChartProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="#222" horizontal={false} />
             <XAxis
               type="number"
-              tickFormatter={formatTokensCompact}
+              tickFormatter={formatTokenAxis}
               stroke="#666"
               tick={{ fill: "#999", fontSize: 12 }}
             />
@@ -61,7 +65,7 @@ export default function TeamBarChart({ data }: TeamBarChartProps) {
               width={50}
             />
             <Tooltip content={CustomTooltip} cursor={{ fill: "rgba(255,255,255,0.05)" }} />
-            <Bar dataKey="tokens" fill={COLORS.accent} radius={[0, 4, 4, 0]} barSize={24} />
+            <Bar dataKey="tokens" fill="#E8FF47" radius={[0, 4, 4, 0]} barSize={24} />
           </BarChart>
         </ResponsiveContainer>
       </div>

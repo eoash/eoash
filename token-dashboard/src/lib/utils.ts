@@ -28,13 +28,6 @@ export function getDateRange(days: number): { start: string; end: string } {
   };
 }
 
-/** 토큰 수를 축약 포맷 — 차트 축/컴팩트 표시용 (1234567 → "1.2M") */
-export function formatTokensCompact(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
-  return String(n);
-}
-
 /** 숫자를 쉼표로 포맷 */
 export function formatNumber(n: number): string {
   return n.toLocaleString();
@@ -43,20 +36,4 @@ export function formatNumber(n: number): string {
 /** 퍼센트 포맷 */
 export function formatPercent(n: number): string {
   return (n * 100).toFixed(1) + "%";
-}
-
-/** 캐시 히트율 계산 (공통) */
-export function calcCacheHitRate(cacheRead: number, cacheCreation: number, input: number): number {
-  const denom = cacheRead + cacheCreation + input;
-  return denom > 0 ? cacheRead / denom : 0;
-}
-
-/** 출력 비율 계산 */
-export function calcOutputRatio(output: number, input: number): number {
-  return input > 0 ? output / input : 0;
-}
-
-/** 캐시 효율 계산 (cache_read / cache_creation) */
-export function calcCacheEfficiency(cacheRead: number, cacheCreation: number): number {
-  return cacheCreation > 0 ? cacheRead / cacheCreation : 0;
 }

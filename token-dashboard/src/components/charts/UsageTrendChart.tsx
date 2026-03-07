@@ -9,8 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { formatDate, formatTokensCompact } from "@/lib/utils";
-import { COLORS } from "@/lib/constants";
 
 interface UsageTrendData {
   date: string;
@@ -23,6 +21,17 @@ interface UsageTrendChartProps {
   data: UsageTrendData[];
 }
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  return `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function formatTokens(v: number): string {
+  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
+  if (v >= 1_000) return (v / 1_000).toFixed(0) + "K";
+  return String(v);
+}
+
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
@@ -30,7 +39,7 @@ function CustomTooltip({ active, payload, label }: any) {
       <p className="mb-2 text-sm text-neutral-400">{label}</p>
       {payload.map((entry: any) => (
         <p key={entry.dataKey} className="text-sm" style={{ color: entry.color }}>
-          {entry.name}: {formatTokensCompact(Number(entry.value))}
+          {entry.name}: {formatTokens(Number(entry.value))}
         </p>
       ))}
     </div>
@@ -52,7 +61,7 @@ export default function UsageTrendChart({ data }: UsageTrendChartProps) {
               tick={{ fill: "#999", fontSize: 12 }}
             />
             <YAxis
-              tickFormatter={formatTokensCompact}
+              tickFormatter={formatTokens}
               stroke="#666"
               tick={{ fill: "#999", fontSize: 12 }}
             />
@@ -77,8 +86,8 @@ export default function UsageTrendChart({ data }: UsageTrendChartProps) {
               type="monotone"
               dataKey="output"
               stackId="1"
-              stroke={COLORS.accent}
-              fill={COLORS.accentFaded}
+              stroke="#E8FF47"
+              fill="#E8FF4730"
               name="Output"
             />
           </AreaChart>
