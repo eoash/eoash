@@ -162,9 +162,26 @@ print(json.dumps(data))
   fi
 fi
 
+# 5. Codex CLI 세션 데이터 수집
+echo "[4/4] Codex CLI 데이터 수집 중..."
+
+CODEX_SESSIONS="$HOME/.codex/sessions"
+if [ -d "$CODEX_SESSIONS" ]; then
+  CODEX_SCRIPT=$(mktemp)
+  curl -sL "$BASE_URL/codex_push.py" -o "$CODEX_SCRIPT"
+  python3 "$CODEX_SCRIPT" --email "$GIT_EMAIL" 2>&1 | sed 's/^/      /'
+  rm -f "$CODEX_SCRIPT"
+else
+  echo "      ~/.codex/sessions/ 없음. Codex를 사용하면 자동 수집됩니다."
+fi
+
 echo ""
 echo "=== 설치 완료 ==="
 echo "사용자: $GIT_EMAIL"
 echo "대시보드: https://token-dashboard-iota.vercel.app"
 echo ""
-echo "이제 Claude Code 세션이 끝날 때마다 토큰 사용량이 자동으로 수집됩니다."
+echo "Claude Code: 세션 종료 시 자동 수집"
+echo "Codex CLI:   install-hook.sh 재실행 또는 codex_push.py 수동 실행으로 수집"
+echo ""
+echo "Codex 데이터 수동 업데이트:"
+echo "  curl -sL $BASE_URL/codex_push.py | python3 - --email $GIT_EMAIL"
