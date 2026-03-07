@@ -54,15 +54,20 @@ RESULT=$(curl -s -X POST "$OTEL_URL/v1/metrics" \
   }")
 echo "  응답: $RESULT"
 
-# 3. Prometheus에서 확인 (batch timeout 대기)
-echo "[3/3] Prometheus 수신 확인 (15초 대기)..."
-sleep 15
-QUERY_RESULT=$(curl -s "$PROM_URL/api/v1/query?query=${TEST_METRIC}_total")
-COUNT=$(echo "$QUERY_RESULT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d.get('data',{}).get('result',[])))" 2>/dev/null)
+# 3. Prometheus에서 확인 (polling)
+DASHBOARD_URL="${3:-https://token-dashboard-iota.vercel.app}"
+echo "[3/4] Prometheus 수신 확인 (polling, 최대 30초)..."
+COUNT=0
+for i in $(seq 1 6); do
+  QUERY_RESULT=$(curl -s "$PROM_URL/api/v1/query?query=${TEST_METRIC}_total")
+  COUNT=$(echo "$QUERY_RESULT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d.get('data',{}).get('result',[])))" 2>/dev/null)
+  [ "$COUNT" -gt "0" ] 2>/dev/null && break
+  sleep 5
+done
 
 echo ""
 if [ "$COUNT" -gt "0" ] 2>/dev/null; then
-  echo "✅ 파이프라인 정상 — 메트릭 수신 확인!"
+  echo "✅ Prometheus 수신 확인!"
   echo "$QUERY_RESULT" | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
@@ -72,4 +77,18 @@ for r in d.get('data',{}).get('result',[]):
 else
   echo "❌ 메트릭 미수신 — OTel Collector 또는 Prometheus scrape 설정 확인 필요"
   echo "   Prometheus 타겟 상태: $PROM_URL/api/v1/targets"
+  exit 1
+fi
+
+# 4. 대시보드 API 헬스체크
+echo "[4/4] 대시보드 API 헬스체크..."
+API_RESULT=$(curl -s "$DASHBOARD_URL/api/analytics?days=1")
+DATA_COUNT=$(echo "$API_RESULT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d.get('data',[])))" 2>/dev/null)
+SOURCE=$(echo "$API_RESULT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('_source','?'))" 2>/dev/null)
+
+echo ""
+if [ "$DATA_COUNT" -gt "0" ] 2>/dev/null; then
+  echo "✅ 대시보드 API 정상 — source=$SOURCE, data=$DATA_COUNT건"
+else
+  echo "⚠️  대시보드 API data=0 — source=$SOURCE (테스트 데이터 없으면 정상일 수 있음)"
 fi
