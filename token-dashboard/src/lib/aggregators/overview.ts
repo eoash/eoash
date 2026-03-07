@@ -74,7 +74,7 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
       memberMap.set(name, existing);
     }
 
-    if (d.model && d.model !== "<synthetic>") {
+    if (d.model) {
       modelMap.set(d.model, (modelMap.get(d.model) ?? 0) + tokens);
     }
   }

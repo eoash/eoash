@@ -85,5 +85,10 @@ export async function fetchAnalytics(params: {
     return d.date >= params.start_date && d.date <= params.end_date && d.date <= end;
   });
 
-  return { data: [...backfillPoints, ...promPoints] };
+  const merged = [...backfillPoints, ...promPoints];
+
+  // <synthetic> 모델 제거 (모델명 미파싱, 토큰 0) — 전처리로 1회 필터링
+  const cleaned = merged.filter((d) => d.model !== "<synthetic>");
+
+  return { data: cleaned };
 }

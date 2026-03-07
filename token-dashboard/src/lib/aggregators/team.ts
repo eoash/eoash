@@ -53,9 +53,7 @@ export function aggregateMember(data: ClaudeCodeDataPoint[], name: string): Memb
     existing.cache += d.cache_read_tokens;
     dailyMap.set(d.date, existing);
 
-    if (d.model !== "<synthetic>") {
-      modelMap.set(d.model, (modelMap.get(d.model) ?? 0) + tokens);
-    }
+    modelMap.set(d.model, (modelMap.get(d.model) ?? 0) + tokens);
   }
 
   const allInput = totalInput + totalCacheRead + totalCacheCreation;

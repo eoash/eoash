@@ -26,9 +26,7 @@ export function aggregateModels(data: ClaudeCodeDataPoint[]): {
     }
   >();
 
-  const filtered = data.filter((d) => d.model !== "<synthetic>");
-
-  for (const d of filtered) {
+  for (const d of data) {
     const existing = modelMap.get(d.model) ?? {
       input: 0,
       output: 0,
