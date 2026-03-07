@@ -14,6 +14,10 @@ import json
 import os
 import urllib.request
 import urllib.error
+from datetime import date
+
+# 발송 시작일 — 이 날짜 이전에는 실행해도 발송하지 않음
+SEND_START_DATE = date(2026, 3, 9)
 
 # --- 설정 ---
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN", "")
@@ -135,6 +139,10 @@ def send_slack_dm(user_id: str, message: str) -> bool:
 def main():
     import sys
     do_send = "--send" in sys.argv
+
+    if do_send and date.today() < SEND_START_DATE:
+        print(f"⏳ 발송 시작일({SEND_START_DATE}) 전이므로 건너뜁니다.")
+        return
 
     print(f"{'📨 SEND 모드' if do_send else '👀 DRY-RUN 모드 (--send로 실제 발송)'}")
     print()

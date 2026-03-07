@@ -50,6 +50,34 @@ def parse_transcript(transcript_path: str) -> list[dict]:
     return entries
 
 
+def count_bash_commands(transcript_path: str):
+    """transcript에서 git commit / gh pr create 실행 횟수 카운트"""
+    commits = 0
+    prs = 0
+    try:
+        with open(transcript_path, "r", encoding="utf-8", errors="replace") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if record.get("type") != "assistant":
+                    continue
+                for block in record.get("message", {}).get("content", []):
+                    if block.get("type") == "tool_use" and block.get("name") == "Bash":
+                        cmd = block.get("input", {}).get("command", "")
+                        if "git commit" in cmd:
+                            commits += 1
+                        if "gh pr create" in cmd:
+                            prs += 1
+    except (IOError, OSError):
+        pass
+    return commits, prs
+
+
 def aggregate_tokens(entries: list[dict]) -> dict:
     """모델별, 토큰 타입별 합산"""
     # key: (model, token_type) -> sum
@@ -87,7 +115,7 @@ def estimate_cost(totals: dict) -> dict:
     return dict(costs)
 
 
-def build_otlp_payload(totals: dict, costs: dict, user_email: str, session_id: str) -> dict:
+def build_otlp_payload(totals: dict, costs: dict, user_email: str, session_id: str, commits: int = 0, prs: int = 0) -> dict:
     """OTLP JSON 형식의 메트릭 payload 생성"""
     import time
 
@@ -141,6 +169,60 @@ def build_otlp_payload(totals: dict, costs: dict, user_email: str, session_id: s
             "description": "Claude Code estimated cost per session (USD)",
             "sum": {
                 "dataPoints": cost_data_points,
+                "aggregationTemporality": 1,
+                "isMonotonic": True,
+            },
+        })
+
+    # 세션 카운트: otel_push.py 1회 실행 = 1 세션
+    metrics.append({
+        "name": "claude_code_session_count_total",
+        "description": "Claude Code session count",
+        "sum": {
+            "dataPoints": [{
+                "attributes": [
+                    {"key": "user_email", "value": {"stringValue": user_email}},
+                ],
+                "timeUnixNano": str(now_ns),
+                "startTimeUnixNano": str(now_ns),
+                "asInt": "1",
+            }],
+            "aggregationTemporality": 1,
+            "isMonotonic": True,
+        },
+    })
+
+    if commits > 0:
+        metrics.append({
+            "name": "claude_code_commit_count_total",
+            "description": "Git commits made during Claude Code sessions",
+            "sum": {
+                "dataPoints": [{
+                    "attributes": [
+                        {"key": "user_email", "value": {"stringValue": user_email}},
+                    ],
+                    "timeUnixNano": str(now_ns),
+                    "startTimeUnixNano": str(now_ns),
+                    "asInt": str(commits),
+                }],
+                "aggregationTemporality": 1,
+                "isMonotonic": True,
+            },
+        })
+
+    if prs > 0:
+        metrics.append({
+            "name": "claude_code_pull_request_count_total",
+            "description": "Pull requests created during Claude Code sessions",
+            "sum": {
+                "dataPoints": [{
+                    "attributes": [
+                        {"key": "user_email", "value": {"stringValue": user_email}},
+                    ],
+                    "timeUnixNano": str(now_ns),
+                    "startTimeUnixNano": str(now_ns),
+                    "asInt": str(prs),
+                }],
                 "aggregationTemporality": 1,
                 "isMonotonic": True,
             },
@@ -233,11 +315,14 @@ def main():
     # 3. 비용 추정
     costs = estimate_cost(totals)
 
-    # 4. 사용자 이메일
+    # 4. 커밋/PR 카운트
+    commits, prs = count_bash_commands(transcript_path)
+
+    # 5. 사용자 이메일
     user_email = detect_user_email()
 
-    # 5. OTLP payload 생성 & 전송
-    payload = build_otlp_payload(totals, costs, user_email, session_id)
+    # 6. OTLP payload 생성 & 전송
+    payload = build_otlp_payload(totals, costs, user_email, session_id, commits, prs)
     push_metrics(payload)
 
 

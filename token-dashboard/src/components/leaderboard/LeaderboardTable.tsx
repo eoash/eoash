@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { getMockGeminiData, getMockGptData, type AiMemberRow } from "@/lib/mock-ai-tools";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
+import { NAME_TO_AVATAR } from "@/lib/constants";
 
 type AiTool = "claude" | "gemini" | "gpt";
 type Period = "today" | "7d" | "30d" | "all";
@@ -13,7 +14,14 @@ const PERIOD_LABELS: Record<Period, string> = { today: "Today", "7d": "7 Days", 
 const AVATAR_COLORS = ["#7C3AED", "#DB2777", "#059669", "#D97706", "#2563EB"];
 const MEDAL = ["🥇", "🥈", "🥉"];
 
-function Avatar({ initial, color }: { initial: string; color: string }) {
+function Avatar({ name, initial, color }: { name: string; initial: string; color: string }) {
+  const avatarUrl = NAME_TO_AVATAR[name];
+  if (avatarUrl) {
+    return (
+      <img src={avatarUrl} alt={name}
+        className="w-8 h-8 rounded-full object-cover shrink-0" />
+    );
+  }
   return (
     <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
       style={{ backgroundColor: color }}>
@@ -48,6 +56,11 @@ function ClaudeTable({ period }: { period: Period }) {
   useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => { const t = setInterval(fetchData, 30_000); return () => clearInterval(t); }, [fetchData]);
 
+  const maxTotal = rows.length > 0 ? rows[0].total : 1;
+  const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;
+  // 평균 이하인 첫 번째 인덱스 찾기
+  const avgLineIndex = rows.findIndex((r) => r.total < avgTotal);
+
   return (
     <>
       {lastUpdated && <p className="text-xs text-neutral-600 px-6 pb-2">Updated {lastUpdated}</p>}
@@ -65,33 +78,66 @@ function ClaudeTable({ period }: { period: Period }) {
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">INPUT</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">OUTPUT</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE R</th>
-              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">TOTAL</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium min-w-[180px]">TOTAL</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE HIT</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
-            ) : rows.map((row, i) => (
-              <tr key={row.name} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
-                <td className="px-4 py-4 text-sm">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
-                <td className="px-4 py-4">
-                  <div className="flex items-center gap-3">
-                    <Avatar initial={row.initial} color={AVATAR_COLORS[i % AVATAR_COLORS.length]} />
-                    <span className="font-medium text-white">{row.name}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.input)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.output)}</td>
-                <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cacheRead)}</td>
-                <td className="px-4 py-4 text-right text-white font-mono text-sm font-medium">{formatTokens(row.total)}</td>
-                <td className="px-4 py-4 text-right">
-                  <span className="font-mono text-sm font-bold text-[#E8FF47]">
-                    {formatPercent(row.cacheHitRate)}
-                  </span>
-                </td>
-              </tr>
-            ))}
+            ) : rows.map((row, i) => {
+              const isTop3 = i < 3;
+              const isBelowAvg = row.total < avgTotal;
+              const barWidth = maxTotal > 0 ? (row.total / maxTotal) * 100 : 0;
+              const showAvgLine = i === avgLineIndex && avgLineIndex > 0;
+
+              return (
+                <React.Fragment key={row.name}>
+                  {showAvgLine && (
+                    <tr>
+                      <td colSpan={7} className="px-4 py-0">
+                        <div className="flex items-center gap-2 py-1">
+                          <div className="flex-1 border-t border-dashed border-yellow-500/40" />
+                          <span className="text-[10px] text-yellow-500/60 font-medium whitespace-nowrap">TEAM AVG — {formatTokens(avgTotal)}</span>
+                          <div className="flex-1 border-t border-dashed border-yellow-500/40" />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-[#E8FF47]/[0.03] hover:bg-[#E8FF47]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
+                    <td className="px-4 py-4 text-sm">{isTop3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar name={row.name} initial={row.initial} color={isTop3 ? "#E8FF47" : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                        <span className={`font-medium ${isTop3 ? "text-white" : "text-neutral-300"}`}>{row.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.input)}</td>
+                    <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.output)}</td>
+                    <td className="px-4 py-4 text-right text-neutral-400 font-mono text-sm">{formatTokens(row.cacheRead)}</td>
+                    <td className="px-4 py-4 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="w-24 h-2 rounded-full bg-[#1a1a1a] overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${barWidth}%`,
+                              backgroundColor: isTop3 ? "#E8FF47" : isBelowAvg ? "#555" : "#888",
+                            }}
+                          />
+                        </div>
+                        <span className="text-white font-mono text-sm font-medium min-w-[60px] text-right">{formatTokens(row.total)}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 text-right">
+                      <span className="font-mono text-sm font-bold text-[#E8FF47]">
+                        {formatPercent(row.cacheHitRate)}
+                      </span>
+                    </td>
+                  </tr>
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>

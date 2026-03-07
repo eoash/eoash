@@ -36,14 +36,24 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
 
 const backfillData = loadAllBackfill();
 
-/** backfill의 마지막 날짜 — 이 날짜 이전은 JSON에서, 이후는 Prometheus에서 */
-const BACKFILL_END = process.env.BACKFILL_END || (() => {
-  const dates = backfillData.map((d) => d.date);
-  return dates.length > 0 ? dates.sort().pop()! : "";
-})();
+/** 유저별 backfill 마지막 날짜 — 해당 날짜까지 JSON, 이후 Prometheus */
+function buildPerUserBackfillEnd(data: ClaudeCodeDataPoint[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const d of data) {
+    const email = d.actor?.email_address || "";
+    if (!email) continue;
+    const current = map.get(email) || "";
+    if (d.date > current) map.set(email, d.date);
+  }
+  return map;
+}
+
+const userBackfillEnd = buildPerUserBackfillEnd(backfillData);
 
 export function getBackfillEnd(): string {
-  return BACKFILL_END;
+  // 전체 backfill 중 가장 늦은 날짜 (호환용)
+  const dates = [...userBackfillEnd.values()];
+  return dates.length > 0 ? dates.sort().pop()! : "";
 }
 
 export async function fetchAnalytics(params: {
@@ -57,22 +67,23 @@ export async function fetchAnalytics(params: {
     return getMockAnalytics();
   }
 
-  // Prometheus + backfill JSON 병합
-  // BACKFILL_END 이전 → backfill JSON만 사용
-  // BACKFILL_END 이후 → Prometheus만 사용
-  // (OTel deltatocumulative가 과거 데이터를 오늘에 합산하므로 구간을 분리)
+  // Prometheus + backfill JSON 병합 (유저별 구간 분리)
+  // 유저의 backfill 마지막 날짜까지 → backfill JSON
+  // 유저의 backfill 마지막 날짜 이후 → Prometheus
+  // backfill이 없는 유저 → Prometheus 전체 사용
   const promData = await fetchFromPrometheus(params);
 
-  const promPoints = BACKFILL_END
-    ? promData.data.filter((d) => d.date > BACKFILL_END)
-    : promData.data;
+  const promPoints = promData.data.filter((d) => {
+    const email = d.actor?.email_address || "";
+    const end = userBackfillEnd.get(email);
+    return !end || d.date > end;
+  });
 
-  const backfillPoints = backfillData.filter(
-    (d) =>
-      d.date >= params.start_date &&
-      d.date <= params.end_date &&
-      d.date <= BACKFILL_END
-  );
+  const backfillPoints = backfillData.filter((d) => {
+    const email = d.actor?.email_address || "";
+    const end = userBackfillEnd.get(email) || "";
+    return d.date >= params.start_date && d.date <= params.end_date && d.date <= end;
+  });
 
   return { data: [...backfillPoints, ...promPoints] };
 }

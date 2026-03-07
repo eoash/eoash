@@ -65,7 +65,7 @@ export default function EfficiencyPage() {
               title="Output Ratio"
               value={`${eff.avgOutputRatio.toFixed(1)}x`}
               subtitle="output / input"
-              tooltip="입력 토큰 대비 출력 토큰 비율. 높을수록 적은 프롬프트로 많은 결과를 얻고 있다는 뜻입니다."
+              tooltip="입력 토큰 대비 출력 토큰 비율. 높으면 코드 생성 중심(Claude가 많이 작성), 낮으면 탐색·리뷰 중심(파일 읽기, 설정 확인 등). 역할에 따라 자연스럽게 달라집니다."
             />
             <KpiCard
               title="Cache Efficiency"
