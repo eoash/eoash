@@ -90,7 +90,7 @@ export default function OverviewPage() {
                       <span className="text-2xl">{medals[i]}</span>
                       <span className="text-white font-semibold text-lg">{m.name}</span>
                     </div>
-                    <p className="text-2xl font-bold text-[#E8FF47] font-mono">{formatTokens(m.tokens)}</p>
+                    <p className="text-2xl font-bold text-accent font-mono">{formatTokens(m.tokens)}</p>
                     <p className="text-xs text-gray-500 mt-1">tokens · {m.commits} commits</p>
                   </div>
                 );

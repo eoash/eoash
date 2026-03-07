@@ -94,7 +94,7 @@ export default function ModelsPage() {
                       <td className="text-right text-gray-400">
                         {formatTokens(m.cacheTokens)}
                       </td>
-                      <td className="text-right font-medium text-[#E8FF47]">
+                      <td className="text-right font-medium text-accent">
                         {formatTokens(m.totalTokens)}
                       </td>
                     </tr>

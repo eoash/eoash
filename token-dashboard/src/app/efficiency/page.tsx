@@ -15,14 +15,10 @@ import {
 } from "recharts";
 import KpiCard from "@/components/cards/KpiCard";
 import DateRangePicker from "@/components/layout/DateRangePicker";
-import { formatPercent, formatTokens } from "@/lib/utils";
+import { formatPercent, formatTokens, formatDate } from "@/lib/utils";
+import { COLORS } from "@/lib/constants";
 import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import { aggregateEfficiency } from "@/lib/aggregators/efficiency";
-
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
-  return `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
-}
 
 function formatPct(value: number): string {
   return `${(value * 100).toFixed(0)}%`;
@@ -114,7 +110,7 @@ export default function EfficiencyPage() {
                       return (
                         <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-3 shadow-lg">
                           <p className="mb-2 text-sm text-neutral-400">{label}</p>
-                          <p className="text-sm text-[#E8FF47]">
+                          <p className="text-sm text-accent">
                             Cache Hit: {formatPct(payload[0].value as number)}
                           </p>
                           {payload[1] && (
@@ -129,9 +125,9 @@ export default function EfficiencyPage() {
                   <Line
                     type="monotone"
                     dataKey="cacheHitRate"
-                    stroke="#E8FF47"
+                    stroke={COLORS.accent}
                     strokeWidth={2}
-                    dot={{ fill: "#E8FF47", r: 3 }}
+                    dot={{ fill: COLORS.accent, r: 3 }}
                     name="Cache Hit Rate"
                   />
                 </LineChart>
@@ -173,7 +169,7 @@ export default function EfficiencyPage() {
                         return (
                           <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-3 shadow-lg">
                             <p className="font-medium text-sm mb-1">{m.name}</p>
-                            <p className="text-sm text-[#E8FF47]">Cache Hit: {formatPct(m.cacheHitRate)}</p>
+                            <p className="text-sm text-accent">Cache Hit: {formatPct(m.cacheHitRate)}</p>
                             <p className="text-sm text-gray-400">Total: {formatTokens(m.totalTokens)}</p>
                           </div>
                         );
@@ -183,7 +179,7 @@ export default function EfficiencyPage() {
                       {eff.members.map((m, i) => (
                         <Cell
                           key={m.name}
-                          fill={i === 0 ? "#E8FF47" : "#E8FF47"}
+                          fill={COLORS.accent}
                           fillOpacity={1 - i * (0.6 / Math.max(eff.members.length - 1, 1))}
                         />
                       ))}
@@ -267,7 +263,7 @@ export default function EfficiencyPage() {
                     <tr key={m.name} className="border-b border-[#1a1a1a]">
                       <td className="py-3 font-medium">{m.name}</td>
                       <td className="text-right text-gray-400">{formatTokens(m.totalTokens)}</td>
-                      <td className="text-right text-[#E8FF47]">{formatPct(m.cacheHitRate)}</td>
+                      <td className="text-right text-accent">{formatPct(m.cacheHitRate)}</td>
                       <td className="text-right text-[#3B82F6]">{m.outputRatio.toFixed(1)}x</td>
                       <td className="text-right text-[#10B981]">{m.cacheEfficiency.toFixed(1)}x</td>
                     </tr>

@@ -1,3 +1,6 @@
+import { formatTokensCompact } from "@/lib/utils";
+import { COLORS } from "@/lib/constants";
+
 interface TeamMemberRank {
   name: string;
   tokens: number;
@@ -13,13 +16,7 @@ interface TeamRankingCardProps {
 }
 
 const MEDALS = ["🥇", "🥈", "🥉"];
-const RANK_COLORS = ["#E8FF47", "#C0C0C0", "#CD7F32", "#6B7280", "#6B7280"];
-
-function formatTokens(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
-  return String(n);
-}
+const RANK_COLORS = [COLORS.accent, "#C0C0C0", "#CD7F32", "#6B7280", "#6B7280"];
 
 export default function TeamRankingCard({ data }: TeamRankingCardProps) {
   const total = data.reduce((sum, m) => sum + m.tokens, 0);
@@ -53,7 +50,7 @@ export default function TeamRankingCard({ data }: TeamRankingCardProps) {
               {/* 토큰 */}
               <div>
                 <span className="text-xl font-bold font-mono" style={{ color }}>
-                  {formatTokens(member.tokens)}
+                  {formatTokensCompact(member.tokens)}
                 </span>
                 <span className="ml-1 text-xs text-neutral-500">tokens</span>
               </div>
@@ -104,7 +101,7 @@ export default function TeamRankingCard({ data }: TeamRankingCardProps) {
       <div className="pt-4 border-t border-[#222]">
         <div className="flex justify-between text-xs text-neutral-500 mb-2">
           <span>Team Total</span>
-          <span>{formatTokens(total)} tokens</span>
+          <span>{formatTokensCompact(total)} tokens</span>
         </div>
         <div className="flex h-2 w-full rounded-full overflow-hidden gap-0.5">
           {data.map((member, i) => {

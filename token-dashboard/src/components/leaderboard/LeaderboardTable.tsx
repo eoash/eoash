@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { getMockGeminiData, getMockGptData, type AiMemberRow } from "@/lib/mock-ai-tools";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
-import { NAME_TO_AVATAR } from "@/lib/constants";
+import { NAME_TO_AVATAR, COLORS } from "@/lib/constants";
 
 type AiTool = "claude" | "gemini" | "gpt";
 type Period = "today" | "7d" | "30d" | "all";
@@ -110,11 +110,11 @@ function ClaudeTable({ period }: { period: Period }) {
                       </td>
                     </tr>
                   )}
-                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-[#E8FF47]/[0.03] hover:bg-[#E8FF47]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
+                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-accent/[0.03] hover:bg-accent/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
                     <td className="px-4 py-4 text-sm">{isTop3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        <Avatar name={row.name} initial={row.initial} color={isTop3 ? "#E8FF47" : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                        <Avatar name={row.name} initial={row.initial} color={isTop3 ? COLORS.accent : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
                         <span className={`font-medium ${isTop3 ? "text-white" : "text-neutral-300"}`}>{row.name}</span>
                       </div>
                     </td>
@@ -128,7 +128,7 @@ function ClaudeTable({ period }: { period: Period }) {
                             className="h-full rounded-full transition-all duration-500"
                             style={{
                               width: `${barWidth}%`,
-                              backgroundColor: isTop3 ? "#E8FF47" : isBelowAvg ? "#555" : "#888",
+                              backgroundColor: isTop3 ? COLORS.accent : isBelowAvg ? "#555" : "#888",
                             }}
                           />
                         </div>
@@ -136,7 +136,7 @@ function ClaudeTable({ period }: { period: Period }) {
                       </div>
                     </td>
                     <td className="px-4 py-4 text-right">
-                      <span className="font-mono text-sm font-bold text-[#E8FF47]">
+                      <span className="font-mono text-sm font-bold text-accent">
                         {formatPercent(row.cacheHitRate)}
                       </span>
                     </td>
@@ -218,7 +218,7 @@ export default function LeaderboardTable() {
   const [period, setPeriod] = useState<Period>("30d");
 
   const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
-    { key: "claude", label: "Claude Code", color: "#E8FF47" },
+    { key: "claude", label: "Claude Code", color: COLORS.accent },
     { key: "gemini", label: "Gemini",      color: "#4285F4" },
     { key: "gpt",    label: "ChatGPT",     color: "#10A37F" },
   ];

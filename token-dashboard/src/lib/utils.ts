@@ -28,6 +28,13 @@ export function getDateRange(days: number): { start: string; end: string } {
   };
 }
 
+/** 토큰 수를 축약 포맷 — 차트 축/컴팩트 표시용 (1234567 → "1.2M") */
+export function formatTokensCompact(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
+  return String(n);
+}
+
 /** 숫자를 쉼표로 포맷 */
 export function formatNumber(n: number): string {
   return n.toLocaleString();
