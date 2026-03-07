@@ -91,7 +91,8 @@ dashboard/        → Streamlit 재무 대시보드 (별도 repo: eoash/eo-finan
 ash_bot/          → 핵심 자동화 로직 (Bill.com, Plaid, Slack, Notion 연동)
 townhall/         → 타운홀 슬라이드 산출물
 ai-native-camp/   → AI Native 교육 캠프 (교육자료, 숙제, PPTX)
-token-dashboard/  → Anthropic API 토큰 사용량 대시보드 (Next.js + OTel → Prometheus → Vercel)
+token-dashboard/      → Anthropic API 토큰 사용량 대시보드 (Next.js + OTel → Prometheus → Vercel)
+finance-dashboard/    → 경영진 재무 대시보드 (Next.js + Google Sheets API → Vercel)
 ```
 
 ---
@@ -108,6 +109,11 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **Anthropic Admin API 파라미터**: `start_date` → `starting_at`, `end_date` → `ending_at`, `group_by` → `group_by[]`
 - **managed-settings.json env**: Claude Code 프로세스에만 적용됨, Bash 자식 프로세스에는 전달 안 됨
 
+### Vercel + Google Service Account 함정 (2026-03-07)
+- **Private Key newline 손상**: Vercel env var에 줄바꿈 있는 키 직접 넣으면 `invalid_grant` 에러 → **SA JSON 전체를 Base64 인코딩**해서 `GOOGLE_SA_KEY_BASE64`로 저장, 코드에서 `Buffer.from(env, "base64")` 디코딩
+- **Service Account Sheets 공유 필수**: SA 이메일을 Google Sheets에 뷰어로 공유 안 하면 `Requested entity was not found` 에러
+- **recharts v3 Tooltip 타입**: `TooltipContentProps<number, string>` 제네릭이 `content` prop에서 타입 에러 → `any` 타입 사용이 실용적
+
 ---
 
-*마지막 업데이트: 2026-03-05*
+*마지막 업데이트: 2026-03-07*
