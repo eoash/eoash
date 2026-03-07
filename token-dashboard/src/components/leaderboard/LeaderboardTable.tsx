@@ -80,11 +80,12 @@ function ClaudeTable({ period }: { period: Period }) {
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE R</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium min-w-[180px]">TOTAL</th>
               <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">CACHE HIT</th>
+              <th className="px-4 py-3 text-right text-xs text-neutral-600 font-medium">SINCE</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
+              <tr><td colSpan={8} className="px-4 py-12 text-center text-neutral-600">불러오는 중...</td></tr>
             ) : rows.map((row, i) => {
               const isTop3 = i < 3;
               const isBelowAvg = row.total < avgTotal;
@@ -95,7 +96,7 @@ function ClaudeTable({ period }: { period: Period }) {
                 <React.Fragment key={row.name}>
                   {showAvgLine && (
                     <tr>
-                      <td colSpan={7} className="px-4 py-0">
+                      <td colSpan={8} className="px-4 py-0">
                         <div className="flex items-center gap-2 py-1">
                           <div className="flex-1 border-t border-dashed border-yellow-500/40" />
                           <span className="text-[10px] text-yellow-500/60 font-medium whitespace-nowrap">TEAM AVG — {formatTokens(avgTotal)}</span>
@@ -133,6 +134,9 @@ function ClaudeTable({ period }: { period: Period }) {
                       <span className="font-mono text-sm font-bold text-[#E8FF47]">
                         {formatPercent(row.cacheHitRate)}
                       </span>
+                    </td>
+                    <td className="px-4 py-4 text-right text-neutral-500 text-xs">
+                      {row.firstSeen ? row.firstSeen.slice(5).replace("-", "/") : "—"}
                     </td>
                   </tr>
                 </React.Fragment>

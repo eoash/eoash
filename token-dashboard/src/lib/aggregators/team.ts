@@ -9,6 +9,8 @@ export interface MemberData {
   commits: number;
   pullRequests: number;
   toolAcceptanceRate: number;
+  firstSeen: string;
+  activeDays: number;
   daily: { date: string; input_tokens: number; output_tokens: number; cache_read_tokens: number }[];
   models: { name: string; value: number; color: string }[];
 }
@@ -58,6 +60,10 @@ export function aggregateMember(data: ClaudeCodeDataPoint[], name: string): Memb
 
   const allInput = totalInput + totalCacheRead + totalCacheCreation;
 
+  const sortedDates = Array.from(dailyMap.keys()).sort();
+  const firstSeen = sortedDates[0] ?? "";
+  const activeDays = sortedDates.length;
+
   return {
     totalTokens,
     cacheHitRate: allInput > 0 ? totalCacheRead / allInput : 0,
@@ -66,6 +72,8 @@ export function aggregateMember(data: ClaudeCodeDataPoint[], name: string): Memb
     commits,
     pullRequests,
     toolAcceptanceRate: toolAccCount > 0 ? toolAccSum / toolAccCount : 0,
+    firstSeen,
+    activeDays,
     daily: Array.from(dailyMap.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([date, v]) => ({

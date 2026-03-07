@@ -60,12 +60,18 @@ export default function TeamPage() {
           </div>
 
           {/* Productivity */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <KpiCard
               title="Pull Requests"
               value={String(memberData.pullRequests)}
               subtitle={`by ${memberName}`}
               tooltip="이 팀원의 Claude Code 세션 중 생성된 PR 수입니다."
+            />
+            <KpiCard
+              title="Started"
+              value={memberData.firstSeen ? memberData.firstSeen.slice(5).replace("-", "/") : "—"}
+              subtitle={memberData.firstSeen ? `${memberData.activeDays}일 활동` : "데이터 없음"}
+              tooltip="이 팀원이 Claude Code를 처음 사용한 날짜와 활동 일수입니다."
             />
           </div>
 

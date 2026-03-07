@@ -11,6 +11,7 @@ export interface ClaudeMemberRow {
   cacheHitRate: number;
   acceptanceRate: number;
   avgDailySessions: number;
+  firstSeen: string;
 }
 
 export function aggregateMembers(data: ClaudeCodeDataPoint[]): ClaudeMemberRow[] {
@@ -36,6 +37,7 @@ export function aggregateMembers(data: ClaudeCodeDataPoint[]): ClaudeMemberRow[]
   return Array.from(map.entries())
     .map(([name, v]) => {
       const allInput = v.input + v.cacheRead + v.cacheCreation;
+      const sortedDays = Array.from(v.days).sort();
       return {
         name,
         initial: name[0].toUpperCase(),
@@ -43,6 +45,7 @@ export function aggregateMembers(data: ClaudeCodeDataPoint[]): ClaudeMemberRow[]
         cacheHitRate: allInput > 0 ? v.cacheRead / allInput : 0,
         acceptanceRate: v.acceptCount > 0 ? v.acceptSum / v.acceptCount : 0,
         avgDailySessions: v.days.size > 0 ? Math.round(v.sessions / v.days.size) : 0,
+        firstSeen: sortedDays[0] ?? "",
       };
     })
     .sort((a, b) => b.total - a.total);
