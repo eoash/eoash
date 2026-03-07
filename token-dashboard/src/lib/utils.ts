@@ -37,3 +37,19 @@ export function formatNumber(n: number): string {
 export function formatPercent(n: number): string {
   return (n * 100).toFixed(1) + "%";
 }
+
+/** 캐시 히트율 계산 (공통) */
+export function calcCacheHitRate(cacheRead: number, cacheCreation: number, input: number): number {
+  const denom = cacheRead + cacheCreation + input;
+  return denom > 0 ? cacheRead / denom : 0;
+}
+
+/** 출력 비율 계산 */
+export function calcOutputRatio(output: number, input: number): number {
+  return input > 0 ? output / input : 0;
+}
+
+/** 캐시 효율 계산 (cache_read / cache_creation) */
+export function calcCacheEfficiency(cacheRead: number, cacheCreation: number): number {
+  return cacheCreation > 0 ? cacheRead / cacheCreation : 0;
+}

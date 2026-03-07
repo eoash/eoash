@@ -54,7 +54,12 @@ function ClaudeTable({ period }: { period: Period }) {
   }, [period]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
-  useEffect(() => { const t = setInterval(fetchData, 30_000); return () => clearInterval(t); }, [fetchData]);
+  useEffect(() => {
+    const t = setInterval(fetchData, 30_000);
+    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(t); document.removeEventListener("visibilitychange", onVis); };
+  }, [fetchData]);
 
   const maxTotal = rows.length > 0 ? rows[0].total : 1;
   const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;

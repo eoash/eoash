@@ -1,4 +1,5 @@
 import { resolveActorName } from "@/lib/constants";
+import { calcCacheHitRate } from "@/lib/utils";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
 
 export interface ClaudeMemberRow {
@@ -36,13 +37,12 @@ export function aggregateMembers(data: ClaudeCodeDataPoint[]): ClaudeMemberRow[]
 
   return Array.from(map.entries())
     .map(([name, v]) => {
-      const allInput = v.input + v.cacheRead + v.cacheCreation;
       const sortedDays = Array.from(v.days).sort();
       return {
         name,
         initial: name[0].toUpperCase(),
         input: v.input, output: v.output, cacheRead: v.cacheRead, total: v.total,
-        cacheHitRate: allInput > 0 ? v.cacheRead / allInput : 0,
+        cacheHitRate: calcCacheHitRate(v.cacheRead, v.cacheCreation, v.input),
         acceptanceRate: v.acceptCount > 0 ? v.acceptSum / v.acceptCount : 0,
         avgDailySessions: v.days.size > 0 ? Math.round(v.sessions / v.days.size) : 0,
         firstSeen: sortedDays[0] ?? "",

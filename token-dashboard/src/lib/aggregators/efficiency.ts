@@ -1,4 +1,5 @@
 import { resolveActorName } from "@/lib/constants";
+import { calcCacheHitRate, calcOutputRatio, calcCacheEfficiency } from "@/lib/utils";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
 
 export interface MemberEfficiency {
@@ -59,19 +60,6 @@ export function aggregateEfficiency(data: ClaudeCodeDataPoint[]): EfficiencyAggr
       dailyMap.set(d.date, day);
     }
   }
-
-  const calcCacheHitRate = (cacheRead: number, cacheCreation: number, input: number) => {
-    const denom = cacheRead + cacheCreation + input;
-    return denom > 0 ? cacheRead / denom : 0;
-  };
-
-  const calcOutputRatio = (output: number, input: number) => {
-    return input > 0 ? output / input : 0;
-  };
-
-  const calcCacheEfficiency = (cacheRead: number, cacheCreation: number) => {
-    return cacheCreation > 0 ? cacheRead / cacheCreation : 0;
-  };
 
   const members: MemberEfficiency[] = Array.from(memberMap.entries())
     .map(([name, v]) => ({

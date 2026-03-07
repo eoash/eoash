@@ -26,8 +26,8 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
       if (Array.isArray(parsed.data)) {
         all.push(...parsed.data);
       }
-    } catch {
-      // skip invalid files
+    } catch (e) {
+      console.warn(`[backfill] Failed to parse ${file}:`, e);
     }
   }
 
