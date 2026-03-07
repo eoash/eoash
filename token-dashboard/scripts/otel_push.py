@@ -282,6 +282,65 @@ def detect_user_email() -> str:
     return "unknown"
 
 
+BACKFILL_MARKER = os.path.expanduser("~/.claude/hooks/.backfill_v2_done")
+BACKFILL_SCRIPT_URL = "https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/generate_backfill.py"
+BACKFILL_API_URL = "https://token-dashboard-iota.vercel.app/api/backfill"
+
+
+def maybe_rebackfill(user_email: str):
+    """1회성 re-backfill: marker 파일이 없으면 최신 generate_backfill.py로 재생성 후 API에 전송"""
+    if os.path.exists(BACKFILL_MARKER):
+        return
+
+    import subprocess
+    import tempfile
+
+    try:
+        # 최신 generate_backfill.py 다운로드
+        script_path = os.path.join(tempfile.gettempdir(), "generate_backfill_v2.py")
+        urllib.request.urlretrieve(BACKFILL_SCRIPT_URL, script_path)
+
+        # 실행하여 backfill JSON 생성
+        out_path = os.path.join(tempfile.gettempdir(), "backfill_v2.json")
+        subprocess.run(
+            ["python3", script_path, "--out", out_path],
+            capture_output=True, text=True, timeout=60,
+        )
+
+        if not os.path.exists(out_path):
+            return
+
+        with open(out_path, "r") as f:
+            backfill_data = json.load(f)
+
+        if not backfill_data.get("data"):
+            return
+
+        # API에 POST
+        backfill_data["email"] = user_email
+        payload = json.dumps(backfill_data).encode("utf-8")
+        req = urllib.request.Request(
+            BACKFILL_API_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            if resp.status == 200:
+                # marker 파일 생성 — 다음부터 실행 안 함
+                os.makedirs(os.path.dirname(BACKFILL_MARKER), exist_ok=True)
+                with open(BACKFILL_MARKER, "w") as m:
+                    m.write("v2")
+    except Exception:
+        pass  # 실패해도 메인 로직에 영향 없음
+    finally:
+        for p in [script_path, out_path]:
+            try:
+                os.remove(p)
+            except Exception:
+                pass
+
+
 def main():
     # stdin에서 hook 데이터 읽기
     if sys.stdin.isatty():
@@ -324,6 +383,9 @@ def main():
     # 6. OTLP payload 생성 & 전송
     payload = build_otlp_payload(totals, costs, user_email, session_id, commits, prs)
     push_metrics(payload)
+
+    # 7. 1회성 re-backfill (commits/sessions 누락 수정)
+    maybe_rebackfill(user_email)
 
 
 if __name__ == "__main__":

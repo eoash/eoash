@@ -69,10 +69,25 @@ curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/in
 
 문제가 있으면 서현에게 DM 주세요!"""
 
+UPDATE_MESSAGE = """안녕하세요! :sparkles:
 
-def check_backfill_files() -> set[str]:
-    """GitHub repo의 backfill/ 디렉토리에서 설치된 사용자 이메일 추출"""
+Claude Code 대시보드 hook이 업데이트되었습니다. (commits/sessions 추적 개선)
+
+이전과 동일한 명령어를 한 번만 다시 실행해주세요:
+```
+curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.sh | bash
+```
+
+기존 설정은 그대로 유지되고, 과거 데이터만 다시 수집됩니다.
+
+:link: 대시보드: https://token-dashboard-iota.vercel.app"""
+
+
+def check_backfill_files() -> tuple[set[str], set[str]]:
+    """GitHub repo의 backfill/ 디렉토리에서 설치된 사용자 이메일 추출.
+    Returns: (installed_emails, needs_update_emails)"""
     installed = set()
+    needs_update = set()
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/src/lib/backfill"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "remind-script"})
@@ -80,15 +95,33 @@ def check_backfill_files() -> set[str]:
             files = json.loads(resp.read())
             for f in files:
                 name = f.get("name", "")
-                if name.endswith(".json"):
-                    username = name.replace(".json", "")
-                    # username → email 매칭
-                    for email, _ in TEAM:
-                        if email.split("@")[0] == username:
-                            installed.add(email)
+                if not name.endswith(".json"):
+                    continue
+                username = name.replace(".json", "")
+                email = ""
+                for e, _ in TEAM:
+                    if e.split("@")[0] == username:
+                        email = e
+                        break
+                if not email:
+                    continue
+                installed.add(email)
+                # backfill 내용 확인: commits/sessions 전부 0이면 업데이트 필요
+                try:
+                    dl_url = f.get("download_url", "")
+                    if dl_url:
+                        req2 = urllib.request.Request(dl_url, headers={"User-Agent": "remind-script"})
+                        with urllib.request.urlopen(req2, timeout=10) as resp2:
+                            data = json.loads(resp2.read()).get("data", [])
+                            total_commits = sum(d.get("commits", 0) for d in data)
+                            total_sessions = sum(d.get("session_count", 0) for d in data)
+                            if len(data) > 5 and total_commits == 0 and total_sessions == 0:
+                                needs_update.add(email)
+                except Exception:
+                    pass
     except Exception:
         pass
-    return installed
+    return installed, needs_update
 
 
 def check_prometheus() -> set[str]:
@@ -148,35 +181,52 @@ def main():
     print()
 
     # 설치 여부 확인
-    installed_backfill = check_backfill_files()
+    installed_backfill, needs_update = check_backfill_files()
     installed_prom = check_prometheus()
     installed = installed_backfill | installed_prom
 
     print(f"설치 확인됨 (backfill): {installed_backfill or '없음'}")
     print(f"설치 확인됨 (prometheus): {installed_prom or '없음'}")
+    print(f"업데이트 필요 (backfill commits=0): {needs_update or '없음'}")
     print()
+
+    # 업데이트 필요한 사용자에게 DM
+    update_targets = [(email, sid) for email, sid in TEAM if email in needs_update]
+    if update_targets:
+        print(f"업데이트 대상: {len(update_targets)}명")
+        for email, sid in update_targets:
+            status = ""
+            if do_send:
+                if not SLACK_BOT_TOKEN:
+                    status = "❌ SLACK_BOT_TOKEN 미설정"
+                else:
+                    ok = send_slack_dm(sid, UPDATE_MESSAGE)
+                    status = "✅ 발송" if ok else "❌ 실패"
+            print(f"  [UPDATE] {email} ({sid}) {status}")
+        print()
 
     # 미설치자 추출
     not_installed = [(email, sid) for email, sid in TEAM if email not in installed]
 
-    if not not_installed:
-        print("✅ 모든 팀원이 설치 완료!")
+    if not not_installed and not update_targets:
+        print("✅ 모든 팀원이 설치 완료 & 최신 상태!")
         return
 
-    print(f"미설치 팀원: {len(not_installed)}명")
-    for email, sid in not_installed:
-        status = ""
-        if do_send:
-            if not SLACK_BOT_TOKEN:
-                status = "❌ SLACK_BOT_TOKEN 미설정"
-            else:
-                ok = send_slack_dm(sid, REMINDER_MESSAGE)
-                status = "✅ 발송" if ok else "❌ 실패"
-        print(f"  {email} ({sid}) {status}")
+    if not_installed:
+        print(f"미설치 팀원: {len(not_installed)}명")
+        for email, sid in not_installed:
+            status = ""
+            if do_send:
+                if not SLACK_BOT_TOKEN:
+                    status = "❌ SLACK_BOT_TOKEN 미설정"
+                else:
+                    ok = send_slack_dm(sid, REMINDER_MESSAGE)
+                    status = "✅ 발송" if ok else "❌ 실패"
+            print(f"  {email} ({sid}) {status}")
 
-    if do_send:
-        sent = sum(1 for _, sid in not_installed if send_slack_dm)
-        print(f"\n발송 완료: {len(not_installed)}명")
+    total_sent = len(not_installed) + len(update_targets)
+    if do_send and total_sent > 0:
+        print(f"\n발송 완료: {total_sent}명 (신규 {len(not_installed)} + 업데이트 {len(update_targets)})")
 
 
 if __name__ == "__main__":
