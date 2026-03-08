@@ -5,7 +5,7 @@ import { formatKRW } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 import type { ClientRevenue } from "@/lib/types";
 
-export default function ClientsDashboard({ clients }: { clients: ClientRevenue[] }) {
+export default function ClientsDashboard({ clients, months }: { clients: ClientRevenue[]; months: string[] }) {
   const { t } = useT();
 
   const totalRevenue = clients.reduce((s, c) => s + c.totalAmount, 0);
@@ -14,11 +14,17 @@ export default function ClientsDashboard({ clients }: { clients: ClientRevenue[]
   const avgDays = clients.filter((c) => c.avgCollectionDays > 0);
   const overallAvgDays = avgDays.length > 0 ? Math.round(avgDays.reduce((s, c) => s + c.avgCollectionDays, 0) / avgDays.length) : 0;
 
+  const periodLabel = months.length > 0
+    ? `${months[0]} ~ ${months[months.length - 1]}`
+    : "";
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">{t("clients.title")}</h1>
-        <span className="text-xs text-gray-500">{t("clients.subtitle")}</span>
+        <span className="text-xs text-gray-500">
+          {t("clients.subtitle.source")}{periodLabel && ` · ${periodLabel}`}
+        </span>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">

@@ -56,7 +56,7 @@ async function readSheet(sheetName: string, range: string): Promise<string[][]> 
 // Row 3: ["","KR 한국","KR콘텐츠","0","12,000,000",...]   ← 세그먼트별 데이터
 // Row 8: ["","","소계","1,611,557","13,146,838",...]       ← 사업부 소계
 // Row 33: ["","","합계","328,878,450","103,297,941",...]    ← 전체 합계
-export async function fetchRevenue(): Promise<{
+export async function fetchRevenue(year: number = 2026): Promise<{
   monthly: RevenueMonthly[];
   months: string[];
   segments: RevenueSegment[];
@@ -64,7 +64,7 @@ export async function fetchRevenue(): Promise<{
   totalActual: number;
   totalTarget: number;
 }> {
-  const rows = await readSheet("2026 매출", "A1:T45");
+  const rows = await readSheet(`${year} 매출`, "A1:T45");
 
   // 월 헤더 찾기 (첫 번째 "1월"이 있는 행)
   const months: string[] = [];
@@ -187,14 +187,14 @@ export async function fetchRevenue(): Promise<{
 // Row 13-16: Total (KR + US + VN) — same
 // Row 18-22: U.S. (USD) detail + exchange rate
 // Row 33-37: Vietnam (VND) detail + exchange rate
-export async function fetchCashPosition(): Promise<{
+export async function fetchCashPosition(year: number = 2026): Promise<{
   months: string[];
   monthlyData: import("./types").CashMonthly[];
   exchangeRates: { usdKrw: number; usdVnd: number };
   burnRate: number;
   runway: number;
 }> {
-  const rows = await readSheet("2026 Cash Position Summary", "A1:Z45");
+  const rows = await readSheet(`${year} Cash Position Summary`, "A1:Z45");
 
   // 월 헤더 (Row 0)
   const monthHeaders = rows[0] || [];
@@ -542,10 +542,15 @@ export async function fetchYoY(): Promise<import("./types").YoYRow[]> {
 }
 
 // --- 클라이언트별 매출 (A/R 데이터 활용) ---
-export async function fetchClientRevenue(): Promise<import("./types").ClientRevenue[]> {
+export async function fetchClientRevenue(): Promise<{
+  clients: import("./types").ClientRevenue[];
+  months: string[];
+}> {
   const { invoices } = await fetchAR();
   const map = new Map<string, import("./types").ClientRevenue>();
+  const monthSet = new Set<string>();
   for (const inv of invoices) {
+    if (inv.month) monthSet.add(inv.month);
     const cur = map.get(inv.client) || { client: inv.client, totalAmount: 0, invoiceCount: 0, paidAmount: 0, unpaidAmount: 0, paidCount: 0, unpaidCount: 0, avgCollectionDays: 0 };
     cur.totalAmount += inv.amount;
     cur.invoiceCount += 1;
@@ -553,9 +558,12 @@ export async function fetchClientRevenue(): Promise<import("./types").ClientReve
     else { cur.unpaidAmount += inv.amount; cur.unpaidCount += 1; }
     map.set(inv.client, cur);
   }
-  return Array.from(map.values())
+  // Sort months numerically (e.g., "1월", "2월", "12월")
+  const months = Array.from(monthSet).sort((a, b) => parseInt(a) - parseInt(b));
+  const clients = Array.from(map.values())
     .map((c) => ({ ...c, avgCollectionDays: c.paidCount > 0 ? Math.round(c.avgCollectionDays / c.paidCount) : 0 }))
     .sort((a, b) => b.totalAmount - a.totalAmount);
+  return { clients, months };
 }
 
 function parseDate(str: string): Date | null {

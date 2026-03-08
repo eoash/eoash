@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import KpiCard from "@/components/cards/KpiCard";
 import RevenueTrendChart from "@/components/charts/RevenueTrendChart";
 import RevenueSegmentChart from "@/components/charts/RevenueSegmentChart";
@@ -17,8 +18,9 @@ interface RevenueData {
   totalTarget: number;
 }
 
-export default function RevenueDashboard({ data }: { data: RevenueData }) {
-  const { t } = useT();
+export default function RevenueDashboard({ data, year }: { data: RevenueData; year: number }) {
+  const { t, locale } = useT();
+  const router = useRouter();
 
   const { monthly, months, segments, segmentDetails, totalActual, totalTarget } = data;
   const achievementRate = totalTarget > 0 ? totalActual / totalTarget : 0;
@@ -32,11 +34,32 @@ export default function RevenueDashboard({ data }: { data: RevenueData }) {
     momGrowth = previous > 0 ? ((current - previous) / previous) * 100 : 0;
   }
 
+  // Dynamic period display
+  const activeMonths = months.filter((_, i) => monthly[i] && monthly[i].actual > 0);
+  const periodLabel = activeMonths.length > 0
+    ? locale === "ko"
+      ? `${year}년 ${activeMonths[0]} ~ ${activeMonths[activeMonths.length - 1]}`
+      : `${year} ${activeMonths[0]} - ${activeMonths[activeMonths.length - 1]}`
+    : locale === "ko"
+      ? `${year}년`
+      : `${year}`;
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">{t("rev.title")}</h1>
-        <span className="text-xs text-gray-500">{t("rev.subtitle")}</span>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">{t("rev.title")}</h1>
+          <select
+            value={year}
+            onChange={(e) => router.push(`/?year=${e.target.value}`)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer"
+          >
+            {[2026, 2025, 2024, 2023, 2022, 2021, 2020].map((y) => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+        </div>
+        <span className="text-xs text-gray-500">{periodLabel}</span>
       </div>
 
       {/* KPI Cards */}
@@ -44,7 +67,7 @@ export default function RevenueDashboard({ data }: { data: RevenueData }) {
         <KpiCard
           title={t("rev.totalRevenue")}
           value={formatKRW(totalActual)}
-          subtitle={t("rev.totalRevenue.sub")}
+          subtitle={`${year} YTD`}
           tooltip={t("rev.totalRevenue.tip")}
         />
         <KpiCard

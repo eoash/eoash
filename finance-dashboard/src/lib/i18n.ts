@@ -153,6 +153,7 @@ const translations = {
   // ── Clients page ──
   "clients.title": { ko: "클라이언트별 매출", en: "Client Revenue" },
   "clients.subtitle": { ko: "홈택스 기준 (거래처별 미수금 시트)", en: "Based on HomeTax (A/R sheet by client)" },
+  "clients.subtitle.source": { ko: "홈택스 기준", en: "HomeTax" },
   "clients.totalRevenue": { ko: "총 매출", en: "Total Revenue" },
   "clients.totalRevenue.tip": { ko: "홈택스 세금계산서 기준 전 거래처 매출 합계", en: "Sum of all client revenue based on HomeTax invoices" },
   "clients.settled": { ko: "정산 완료", en: "Settled" },

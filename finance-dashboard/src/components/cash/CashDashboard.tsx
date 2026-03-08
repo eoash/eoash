@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import KpiCard from "@/components/cards/KpiCard";
 import InfoTip from "@/components/common/InfoTip";
 import CashTrendChart from "@/components/charts/CashTrendChart";
@@ -38,8 +39,19 @@ function formatCurrency(amount: number, unit: CurrencyUnit): string {
   return formatNumber(amount);
 }
 
-export default function CashDashboard({ data }: { data: CashData }) {
+const YEAR_OPTIONS = [2026, 2025, 2024, 2023, 2022];
+
+function derivePeriodLabel(months: string[], year: number): string {
+  if (months.length === 0) return `${year}년`;
+  // months are like ["2026.01", "2026.02", "2026.03"]
+  const firstMonth = parseInt(months[0].split(".")[1] || "1", 10);
+  const lastMonth = parseInt(months[months.length - 1].split(".")[1] || "12", 10);
+  return `${year}년 ${firstMonth}월 ~ ${lastMonth}월`;
+}
+
+export default function CashDashboard({ data, year }: { data: CashData; year: number }) {
   const { t } = useT();
+  const router = useRouter();
   const [currency, setCurrency] = useState<CurrencyUnit>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("cash-currency");
@@ -67,8 +79,21 @@ export default function CashDashboard({ data }: { data: CashData }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">{t("cash.title")}</h1>
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">{t("cash.title")}</h1>
+          <select
+            value={year}
+            onChange={(e) => router.push(`/cash?year=${e.target.value}`)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-[#E8FF47] transition-colors cursor-pointer appearance-none"
+            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 8px center", paddingRight: "28px" }}
+          >
+            {YEAR_OPTIONS.map((y) => (
+              <option key={y} value={y}>{y}년</option>
+            ))}
+          </select>
+          <span className="text-xs text-gray-500">{derivePeriodLabel(data.months, year)}</span>
+        </div>
         <div className="flex items-center gap-3">
           <div className="flex bg-[#111] border border-[#222] rounded-lg p-0.5">
             {CURRENCY_BUTTONS.map((btn) => (

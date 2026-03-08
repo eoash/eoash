@@ -5,8 +5,11 @@ export const revalidate = 300;
 
 export default async function ClientsPage() {
   let clients;
+  let months: string[] = [];
   try {
-    clients = await fetchClientRevenue();
+    const data = await fetchClientRevenue();
+    clients = data.clients;
+    months = data.months;
   } catch (error) {
     console.error("[ClientsPage] failed:", error);
     return (
@@ -19,5 +22,5 @@ export default async function ClientsPage() {
     );
   }
 
-  return <ClientsDashboard clients={clients} />;
+  return <ClientsDashboard clients={clients} months={months} />;
 }
