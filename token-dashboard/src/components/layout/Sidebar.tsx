@@ -8,7 +8,7 @@ import type { TranslationKey } from "@/lib/i18n";
 const menuItems: { labelKey: TranslationKey; href: string }[] = [
   { labelKey: "nav.overview", href: "/" },
   { labelKey: "nav.leaderboard", href: "/leaderboard" },
-  { labelKey: "nav.team", href: "/team" },
+  { labelKey: "nav.members", href: "/members" },
   { labelKey: "nav.models", href: "/models" },
   { labelKey: "nav.utilization", href: "/utilization" },
   { labelKey: "nav.efficiency", href: "/efficiency" },

@@ -20,7 +20,7 @@ export default function TeamPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold">{t("nav.team")}</h1>
+        <h1 className="text-2xl font-bold">{t("nav.members")}</h1>
         <div className="flex items-center gap-3 flex-wrap">
           <DateRangePicker />
           <select

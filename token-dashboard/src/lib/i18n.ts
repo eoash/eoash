@@ -4,7 +4,7 @@ const translations = {
   // ── Sidebar ──
   "nav.overview": { ko: "Overview", en: "Overview" },
   "nav.leaderboard": { ko: "Leaderboard", en: "Leaderboard" },
-  "nav.team": { ko: "Team", en: "Team" },
+  "nav.members": { ko: "Members", en: "Members" },
   "nav.models": { ko: "Models", en: "Models" },
   "nav.utilization": { ko: "Utilization", en: "Utilization" },
   "nav.efficiency": { ko: "Efficiency", en: "Efficiency" },
