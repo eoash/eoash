@@ -1,6 +1,7 @@
 import KpiCard from "@/components/cards/KpiCard";
 import RevenueTrendChart from "@/components/charts/RevenueTrendChart";
 import RevenueSegmentChart from "@/components/charts/RevenueSegmentChart";
+import RevenueDetailTable from "@/components/charts/RevenueDetailTable";
 import { fetchRevenue } from "@/lib/sheets";
 import { formatKRW, formatPercent } from "@/lib/utils";
 
@@ -25,7 +26,7 @@ export default async function RevenuePage() {
     );
   }
 
-  const { monthly, segments, totalActual, totalTarget } = data;
+  const { monthly, months, segments, segmentDetails, totalActual, totalTarget } = data;
   const achievementRate = totalTarget > 0 ? totalActual / totalTarget : 0;
 
   // MoM growth (last 2 months with data)
@@ -36,6 +37,9 @@ export default async function RevenuePage() {
     const previous = monthsWithData[monthsWithData.length - 2].actual;
     momGrowth = previous > 0 ? ((current - previous) / previous) * 100 : 0;
   }
+
+  // Top segment
+  const topSegment = segments[0];
 
   return (
     <div>
@@ -50,16 +54,19 @@ export default async function RevenuePage() {
           title="총 매출"
           value={formatKRW(totalActual)}
           subtitle="2026 YTD"
+          tooltip="올해 1월부터 현재까지 전 사업부 매출 합계"
         />
         <KpiCard
           title="데이터 월수"
           value={`${monthsWithData.length}개월`}
           subtitle={`총 ${monthly.length}개월 중`}
+          tooltip="실적 데이터가 입력된 월 수. 0원인 미래 월은 제외"
         />
         <KpiCard
           title="달성률"
           value={totalTarget > 0 ? formatPercent(achievementRate) : "목표 미설정"}
           subtitle="목표 대비 실적"
+          tooltip="연간 목표 대비 실적 비율. 목표 시트 미연동 시 '목표 미설정' 표시"
           trend={
             achievementRate > 0
               ? { value: Math.round(achievementRate * 100), isPositive: achievementRate >= 1 }
@@ -70,6 +77,7 @@ export default async function RevenuePage() {
           title="MoM 성장률"
           value={`${momGrowth >= 0 ? "+" : ""}${momGrowth.toFixed(1)}%`}
           subtitle="전월 대비 (데이터 있는 월)"
+          tooltip="실적이 있는 직전 2개월을 비교한 전월 대비 증감률"
           trend={
             momGrowth !== 0
               ? { value: Math.abs(Math.round(momGrowth)), isPositive: momGrowth > 0 }
@@ -79,14 +87,19 @@ export default async function RevenuePage() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2">
-          <RevenueTrendChart data={monthly} />
+          <RevenueTrendChart details={segmentDetails} months={months} />
         </div>
         <div>
           <RevenueSegmentChart data={segments} />
         </div>
       </div>
+
+      {/* Revenue Detail Table */}
+      {segmentDetails.length > 0 && (
+        <RevenueDetailTable details={segmentDetails} months={months} />
+      )}
     </div>
   );
 }

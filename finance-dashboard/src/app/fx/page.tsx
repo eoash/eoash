@@ -39,6 +39,7 @@ export default async function FxPage() {
           title="USD/KRW"
           value={krwRate?.rate ? `${formatNumber(krwRate.rate)}원` : "N/A"}
           subtitle="미국 달러 → 한국 원"
+          tooltip="Cash Position 시트 기준 USD/KRW 환율. 실시간 아님"
           trend={
             krwRate?.change
               ? { value: Math.abs(krwRate.change), isPositive: krwRate.change < 0 }
@@ -49,6 +50,7 @@ export default async function FxPage() {
           title="USD/VND"
           value={vndRate?.rate ? `${formatNumber(vndRate.rate)}` : "N/A"}
           subtitle="미국 달러 → 베트남 동"
+          tooltip="Cash Position 시트 기준 USD/VND 환율. 실시간 아님"
           trend={
             vndRate?.change
               ? { value: Math.abs(vndRate.change), isPositive: vndRate.change < 0 }

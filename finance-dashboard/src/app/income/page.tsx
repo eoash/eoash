@@ -40,16 +40,19 @@ export default async function IncomePage() {
           title="총 수익"
           value={formatKRW(totalRevenue)}
           subtitle="2026 YTD"
+          tooltip="2026년 누적 매출(Revenue) 합계"
         />
         <KpiCard
           title="총 비용"
           value={formatKRW(totalExpense)}
           subtitle="2026 YTD"
+          tooltip="급여, 사무실, 4대보험 등 모든 비용 합계"
         />
         <KpiCard
           title="순이익"
           value={formatKRW(netIncome)}
           subtitle="수익 - 비용"
+          tooltip="총 수익에서 총 비용을 뺀 영업이익"
           trend={
             netIncome !== 0
               ? { value: Math.abs(Math.round(netMargin * 100)), isPositive: netIncome > 0 }
@@ -60,6 +63,7 @@ export default async function IncomePage() {
           title="순이익률"
           value={formatPercent(netMargin)}
           subtitle="순이익 / 수익"
+          tooltip="순이익 ÷ 총 수익. 양수면 흑자, 음수면 적자"
           trend={
             netMargin !== 0
               ? { value: Math.abs(Math.round(netMargin * 100)), isPositive: netMargin > 0 }

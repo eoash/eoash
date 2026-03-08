@@ -2,6 +2,7 @@ import { google } from "googleapis";
 import type {
   RevenueMonthly,
   RevenueSegment,
+  RevenueSegmentDetail,
   CashRegionSummary,
   IncomeMonthly,
   ExpenseCategory,
@@ -37,11 +38,16 @@ const SPREADSHEET_ID = process.env.SPREADSHEET_ID!;
 
 async function readSheet(sheetName: string, range: string): Promise<string[][]> {
   const sheets = getSheets();
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: `'${sheetName}'!${range}`,
-  });
-  return (res.data.values as string[][]) ?? [];
+  try {
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `'${sheetName}'!${range}`,
+    });
+    return (res.data.values as string[][]) ?? [];
+  } catch (err) {
+    console.warn(`[readSheet] Failed to read '${sheetName}'!${range}:`, err);
+    throw err;
+  }
 }
 
 // --- Revenue ---
@@ -52,7 +58,9 @@ async function readSheet(sheetName: string, range: string): Promise<string[][]> 
 // Row 33: ["","","합계","328,878,450","103,297,941",...]    ← 전체 합계
 export async function fetchRevenue(): Promise<{
   monthly: RevenueMonthly[];
+  months: string[];
   segments: RevenueSegment[];
+  segmentDetails: RevenueSegmentDetail[];
   totalActual: number;
   totalTarget: number;
 }> {
@@ -60,66 +68,104 @@ export async function fetchRevenue(): Promise<{
 
   // 월 헤더 찾기 (첫 번째 "1월"이 있는 행)
   const months: string[] = [];
-  let monthStartCol = 3; // col D (index 3)
+  const monthStartCol = 3; // col D (index 3)
 
   for (const row of rows) {
     if (row[monthStartCol] === "1월") {
       for (let c = monthStartCol; c < row.length; c++) {
-        if (row[c]) months.push(row[c]);
+        const label = (row[c] || "").trim();
+        // "1월"~"12월" 형태만 수집, "합계"/"목표" 등 비월 컬럼 제외
+        if (label && /^\d{1,2}월$/.test(label)) months.push(label);
+        else break;
       }
       break;
     }
   }
 
-  // 사업부별 소계 행 수집 (세그먼트)
-  const segmentMap = new Map<string, number>();
-  const segmentMonthly = new Map<string, number[]>();
+  const monthCount = months.length;
 
-  // 합계 행에서 월별 합계 추출
+  function parseRow(row: string[]): number[] {
+    const vals: number[] = [];
+    for (let c = monthStartCol; c < monthStartCol + monthCount; c++) {
+      vals.push(parseNumber(row[c] || "0"));
+    }
+    return vals;
+  }
+
+  // 사업부 블록 파싱: 사업부명 행 → 세부 항목들 → 소계 → 인원수 → 인당매출
+  const segmentDetails: RevenueSegmentDetail[] = [];
+  const segmentMap = new Map<string, number>();
   const monthly: RevenueMonthly[] = [];
   let totalActual = 0;
 
+  let currentSegment = "";
+  let currentItems: { name: string; monthly: number[]; total: number }[] = [];
+
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
-    if (!row) continue;
+    if (!row || row.length === 0) continue;
 
-    const col2 = (row[2] || "").trim();
     const col1 = (row[1] || "").trim();
+    const col2 = (row[2] || "").trim();
 
-    // 사업부 소계 행: col[2] === "소계"
-    if (col2 === "소계") {
-      // 사업부 이름은 해당 블록의 col[1]에 있음
-      // 이전 행들을 거슬러 올라가 사업부명 찾기
-      let segmentName = "";
-      for (let j = i - 1; j >= 0; j--) {
-        if (rows[j]?.[1]?.trim()) {
-          segmentName = rows[j][1].trim();
-          break;
-        }
-      }
-      if (!segmentName) segmentName = `사업부 ${segmentMap.size + 1}`;
-
-      const monthlyValues: number[] = [];
-      let segTotal = 0;
-      for (let c = monthStartCol; c < monthStartCol + months.length; c++) {
-        const val = parseNumber(row[c] || "0");
-        monthlyValues.push(val);
-        segTotal += val;
-      }
-      segmentMap.set(segmentName, segTotal);
-      segmentMonthly.set(segmentName, monthlyValues);
+    // 사업부명 행: col[1]에 이름이 있고 col[2]에 세부항목명이 있는 행
+    if (col1 && col2 && col2 !== "소계" && col2 !== "인원수" && col2 !== "인당 매출" && col2 !== "합계") {
+      currentSegment = col1;
+      currentItems = [];
+      // 이 행 자체도 세부 항목
+      const vals = parseRow(row);
+      const total = vals.reduce((s, v) => s + v, 0);
+      currentItems.push({ name: col2, monthly: vals, total });
+      continue;
     }
 
-    // 합계 행: col[2] === "합계"
+    // 세부 항목 행: col[1] 비어있고 col[2]에 항목명
+    if (!col1 && col2 && col2 !== "소계" && col2 !== "인원수" && col2 !== "인당 매출" && col2 !== "합계" && currentSegment) {
+      const vals = parseRow(row);
+      const total = vals.reduce((s, v) => s + v, 0);
+      currentItems.push({ name: col2, monthly: vals, total });
+      continue;
+    }
+
+    // 소계 행
+    if (col2 === "소계" && currentSegment) {
+      const subtotal = parseRow(row);
+      const segTotal = subtotal.reduce((s, v) => s + v, 0);
+      segmentMap.set(currentSegment, segTotal);
+
+      // 인원수, 인당 매출은 다음 행들
+      const headcountRow = rows[i + 1];
+      const perPersonRow = rows[i + 2];
+      const headcount = headcountRow && (headcountRow[2] || "").trim() === "인원수"
+        ? parseRow(headcountRow)
+        : new Array(monthCount).fill(0);
+      const perPerson = perPersonRow && (perPersonRow[2] || "").trim() === "인당 매출"
+        ? parseRow(perPersonRow)
+        : new Array(monthCount).fill(0);
+
+      segmentDetails.push({
+        segment: currentSegment,
+        items: currentItems.filter((it) => it.total > 0),
+        subtotal,
+        headcount,
+        perPerson,
+        total: segTotal,
+      });
+      currentSegment = "";
+      currentItems = [];
+      continue;
+    }
+
+    // 합계 행
     if (col2 === "합계") {
-      for (let c = monthStartCol; c < monthStartCol + months.length; c++) {
-        const val = parseNumber(row[c] || "0");
+      const vals = parseRow(row);
+      for (let m = 0; m < monthCount; m++) {
         monthly.push({
-          month: months[c - monthStartCol] || `${c - monthStartCol + 1}월`,
-          actual: val,
-          target: 0, // 목표 데이터는 별도 시트에 있을 수 있음
+          month: months[m] || `${m + 1}월`,
+          actual: vals[m],
+          target: 0,
         });
-        totalActual += val;
+        totalActual += vals[m];
       }
     }
   }
@@ -129,7 +175,7 @@ export async function fetchRevenue(): Promise<{
     .filter((s) => s.amount > 0)
     .sort((a, b) => b.amount - a.amount);
 
-  return { monthly, segments, totalActual, totalTarget: 0 };
+  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: 0 };
 }
 
 // --- Cash Position ---

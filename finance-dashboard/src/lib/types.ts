@@ -16,6 +16,21 @@ export interface RevenueSegment {
   amount: number;
 }
 
+export interface RevenueSubItem {
+  name: string;
+  monthly: number[];
+  total: number;
+}
+
+export interface RevenueSegmentDetail {
+  segment: string;
+  items: RevenueSubItem[];
+  subtotal: number[];
+  headcount: number[];
+  perPerson: number[];
+  total: number;
+}
+
 export interface CashPositionRow {
   region: string;
   bank: string;

@@ -37,6 +37,7 @@ export default async function CashPage() {
           title="Total Cash (KRW)"
           value={formatKRW(totalKrw)}
           subtitle="전 지역 합산"
+          tooltip="한국·미국·베트남 3개 법인 현금 잔고의 KRW 환산 합계"
         />
         {regions.map((r) => (
           <KpiCard
@@ -44,6 +45,7 @@ export default async function CashPage() {
             title={`${r.regionLabel}`}
             value={formatKRW(r.totalUsd)}
             subtitle="KRW 환산"
+            tooltip={`${r.regionLabel} 법인의 최신 월말 잔고 (KRW 환산)`}
           />
         ))}
       </div>
