@@ -50,12 +50,38 @@ async function readSheet(sheetName: string, range: string): Promise<string[][]> 
   }
 }
 
-// --- Revenue ---
-// 시트 구조:
-// Row 2: ["","","","1월","2월","3월","4월","5월"]   ← 월 헤더 (col D~)
-// Row 3: ["","KR 한국","KR콘텐츠","0","12,000,000",...]   ← 세그먼트별 데이터
-// Row 8: ["","","소계","1,611,557","13,146,838",...]       ← 사업부 소계
-// Row 33: ["","","합계","328,878,450","103,297,941",...]    ← 전체 합계
+// ─── Sync Tab 헬퍼 ────────────────────────────
+// _SYNC_ 탭 구조: Row1=메타데이터, Row2=헤더, Row3+=데이터
+
+const SYNC_PREFIX = "_SYNC_";
+const CURRENT_YEAR = new Date().getFullYear();
+
+function toNum(val: unknown): number {
+  if (typeof val === "number") return val;
+  return parseNumber(String(val ?? "0"));
+}
+
+interface SyncTab {
+  headers: string[];
+  data: unknown[][];
+}
+
+async function readSyncTab(tabName: string): Promise<SyncTab | null> {
+  try {
+    const rows = await readSheet(SYNC_PREFIX + tabName, "A1:Z500");
+    if (rows.length < 3) return null;
+    if (String(rows[0]?.[1] || "") !== "OK") return null;
+    return {
+      headers: (rows[1] || []).map((h) => String(h || "").trim()),
+      data: rows.slice(2).filter((r) => r && r.some((cell) => cell !== "" && cell != null)),
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ─── Revenue ──────────────────────────────────
+
 export async function fetchRevenue(year: number = 2026): Promise<{
   monthly: RevenueMonthly[];
   months: string[];
@@ -64,17 +90,89 @@ export async function fetchRevenue(year: number = 2026): Promise<{
   totalActual: number;
   totalTarget: number;
 }> {
+  if (year === CURRENT_YEAR) {
+    const sync = await readSyncTab("Revenue");
+    if (sync) return revenueFromSync(sync);
+  }
+  return revenueFromOriginal(year);
+}
+
+function revenueFromSync(sync: SyncTab) {
+  // headers: [division, category, 1월, 2월, ...]
+  const months = sync.headers.slice(2);
+  const mc = months.length;
+
+  const segmentDetails: RevenueSegmentDetail[] = [];
+  const segmentMap = new Map<string, number>();
+  const monthly: RevenueMonthly[] = [];
+  let totalActual = 0;
+
+  // 사업부별 그룹핑
+  const groups = new Map<string, unknown[][]>();
+  for (const row of sync.data) {
+    const div = String(row[0] || "");
+    if (!groups.has(div)) groups.set(div, []);
+    groups.get(div)!.push(row);
+  }
+
+  for (const [division, rows] of groups) {
+    if (division === "전체") {
+      const totalRow = rows.find((r) => String(r[1]) === "합계");
+      if (totalRow) {
+        for (let m = 0; m < mc; m++) {
+          const val = toNum(totalRow[m + 2]);
+          monthly.push({ month: months[m] || `${m + 1}월`, actual: val, target: 0 });
+          totalActual += val;
+        }
+      }
+      continue;
+    }
+
+    const subtotalRow = rows.find((r) => String(r[1]) === "소계");
+    const headcountRow = rows.find((r) => String(r[1]) === "인원수");
+    const perPersonRow = rows.find((r) => String(r[1]) === "인당 매출");
+    const itemRows = rows.filter((r) => !["소계", "인원수", "인당 매출"].includes(String(r[1])));
+
+    const vals = (row: unknown[] | undefined) =>
+      row ? Array.from({ length: mc }, (_, m) => toNum(row[m + 2])) : new Array(mc).fill(0);
+
+    const subtotal = vals(subtotalRow);
+    const segTotal = subtotal.reduce((s, v) => s + v, 0);
+    segmentMap.set(division, segTotal);
+
+    segmentDetails.push({
+      segment: division,
+      items: itemRows
+        .map((r) => {
+          const v = vals(r);
+          return { name: String(r[1] || ""), monthly: v, total: v.reduce((s, n) => s + n, 0) };
+        })
+        .filter((it) => it.total > 0),
+      subtotal,
+      headcount: vals(headcountRow),
+      perPerson: vals(perPersonRow),
+      total: segTotal,
+    });
+  }
+
+  const segments = Array.from(segmentMap.entries())
+    .map(([segment, amount]) => ({ segment, amount }))
+    .filter((s) => s.amount > 0)
+    .sort((a, b) => b.amount - a.amount);
+
+  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: 0 };
+}
+
+async function revenueFromOriginal(year: number) {
   const rows = await readSheet(`${year} 매출`, "A1:T45");
 
-  // 월 헤더 찾기 (첫 번째 "1월"이 있는 행)
   const months: string[] = [];
-  const monthStartCol = 3; // col D (index 3)
+  const monthStartCol = 3;
 
   for (const row of rows) {
     if (row[monthStartCol] === "1월") {
       for (let c = monthStartCol; c < row.length; c++) {
         const label = (row[c] || "").trim();
-        // "1월"~"12월" 형태만 수집, "합계"/"목표" 등 비월 컬럼 제외
         if (label && /^\d{1,2}월$/.test(label)) months.push(label);
         else break;
       }
@@ -92,7 +190,6 @@ export async function fetchRevenue(year: number = 2026): Promise<{
     return vals;
   }
 
-  // 사업부 블록 파싱: 사업부명 행 → 세부 항목들 → 소계 → 인원수 → 인당매출
   const segmentDetails: RevenueSegmentDetail[] = [];
   const segmentMap = new Map<string, number>();
   const monthly: RevenueMonthly[] = [];
@@ -108,18 +205,15 @@ export async function fetchRevenue(year: number = 2026): Promise<{
     const col1 = (row[1] || "").trim();
     const col2 = (row[2] || "").trim();
 
-    // 사업부명 행: col[1]에 이름이 있고 col[2]에 세부항목명이 있는 행
     if (col1 && col2 && col2 !== "소계" && col2 !== "인원수" && col2 !== "인당 매출" && col2 !== "합계") {
       currentSegment = col1;
       currentItems = [];
-      // 이 행 자체도 세부 항목
       const vals = parseRow(row);
       const total = vals.reduce((s, v) => s + v, 0);
       currentItems.push({ name: col2, monthly: vals, total });
       continue;
     }
 
-    // 세부 항목 행: col[1] 비어있고 col[2]에 항목명
     if (!col1 && col2 && col2 !== "소계" && col2 !== "인원수" && col2 !== "인당 매출" && col2 !== "합계" && currentSegment) {
       const vals = parseRow(row);
       const total = vals.reduce((s, v) => s + v, 0);
@@ -127,21 +221,21 @@ export async function fetchRevenue(year: number = 2026): Promise<{
       continue;
     }
 
-    // 소계 행
     if (col2 === "소계" && currentSegment) {
       const subtotal = parseRow(row);
       const segTotal = subtotal.reduce((s, v) => s + v, 0);
       segmentMap.set(currentSegment, segTotal);
 
-      // 인원수, 인당 매출은 다음 행들
       const headcountRow = rows[i + 1];
       const perPersonRow = rows[i + 2];
-      const headcount = headcountRow && (headcountRow[2] || "").trim() === "인원수"
-        ? parseRow(headcountRow)
-        : new Array(monthCount).fill(0);
-      const perPerson = perPersonRow && (perPersonRow[2] || "").trim() === "인당 매출"
-        ? parseRow(perPersonRow)
-        : new Array(monthCount).fill(0);
+      const headcount =
+        headcountRow && (headcountRow[2] || "").trim() === "인원수"
+          ? parseRow(headcountRow)
+          : new Array(monthCount).fill(0);
+      const perPerson =
+        perPersonRow && (perPersonRow[2] || "").trim() === "인당 매출"
+          ? parseRow(perPersonRow)
+          : new Array(monthCount).fill(0);
 
       segmentDetails.push({
         segment: currentSegment,
@@ -156,7 +250,6 @@ export async function fetchRevenue(year: number = 2026): Promise<{
       continue;
     }
 
-    // 합계 행
     if (col2 === "합계") {
       const vals = parseRow(row);
       for (let m = 0; m < monthCount; m++) {
@@ -178,15 +271,8 @@ export async function fetchRevenue(year: number = 2026): Promise<{
   return { monthly, months, segments, segmentDetails, totalActual, totalTarget: 0 };
 }
 
-// --- Cash Position ---
-// 시트 구조 ("2026 Cash Position Summary"):
-// Row 0: ["","","","2026.01","2026.02"]           ← 월 헤더
-// Row 1-4: Korea (KRW) — Balance, Inflows, Outflows, Net Change
-// Row 5-8: U.S. (KRW) — same
-// Row 9-12: Vietnam (KRW) — same
-// Row 13-16: Total (KR + US + VN) — same
-// Row 18-22: U.S. (USD) detail + exchange rate
-// Row 33-37: Vietnam (VND) detail + exchange rate
+// ─── Cash Position ────────────────────────────
+
 export async function fetchCashPosition(year: number = 2026): Promise<{
   months: string[];
   monthlyData: import("./types").CashMonthly[];
@@ -194,9 +280,120 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
   burnRate: number;
   runway: number;
 }> {
+  if (year === CURRENT_YEAR) {
+    const sync = await readSyncTab("Cash");
+    if (sync) return cashFromSync(sync);
+  }
+  return cashFromOriginal(year);
+}
+
+function cashFromSync(sync: SyncTab) {
+  // headers: [region, currency, metric, month1, month2, ...]
+  const months = sync.headers.slice(3);
+
+  // 행 검색 헬퍼
+  function findRow(region: string, currency: string, metric: string): unknown[] | undefined {
+    return sync.data.find(
+      (r) => String(r[0]) === region && String(r[1]) === currency && String(r[2]) === metric,
+    );
+  }
+
+  function getVal(row: unknown[] | undefined, monthIdx: number): number {
+    return row ? toNum(row[monthIdx + 3]) : 0;
+  }
+
+  // 환율
+  const fxUsdRow = findRow("FX", "USD/KRW", "rate");
+  const fxVndRow = findRow("FX", "USD/VND", "rate");
+  const latestMonthIdx = months.length - 1;
+  const usdKrw = fxUsdRow ? toNum(fxUsdRow[latestMonthIdx + 3]) || toNum(fxUsdRow[3]) || 1460 : 1460;
+  const usdVnd = fxVndRow ? toNum(fxVndRow[latestMonthIdx + 3]) || toNum(fxVndRow[3]) || 0 : 0;
+
+  // 지역별 행
+  const krRow = findRow("Korea", "KRW", "Balance");
+  const krInRow = findRow("Korea", "KRW", "Inflows");
+  const krOutRow = findRow("Korea", "KRW", "Outflows");
+  const krNetRow = findRow("Korea", "KRW", "Net Change");
+
+  const usKrwRow = findRow("U.S.", "KRW", "Balance");
+  const usKrwInRow = findRow("U.S.", "KRW", "Inflows");
+  const usKrwOutRow = findRow("U.S.", "KRW", "Outflows");
+  const usKrwNetRow = findRow("U.S.", "KRW", "Net Change");
+  const usUsdRow = findRow("U.S.", "USD", "Balance");
+
+  const vnKrwRow = findRow("Vietnam", "KRW", "Balance");
+  const vnKrwInRow = findRow("Vietnam", "KRW", "Inflows");
+  const vnKrwOutRow = findRow("Vietnam", "KRW", "Outflows");
+  const vnKrwNetRow = findRow("Vietnam", "KRW", "Net Change");
+  const vnVndRow = findRow("Vietnam", "VND", "Balance");
+
+  const totalBalRow = findRow("Total", "KRW", "Balance");
+  const totalInRow = findRow("Total", "KRW", "Inflows");
+  const totalOutRow = findRow("Total", "KRW", "Outflows");
+  const totalNetRow = findRow("Total", "KRW", "Net Change");
+
+  const monthlyData: import("./types").CashMonthly[] = [];
+  for (let m = 0; m < months.length; m++) {
+    const regionKR: import("./types").CashRegionData = {
+      region: "KR",
+      regionLabel: "한국",
+      balanceKrw: getVal(krRow, m),
+      inflowsKrw: getVal(krInRow, m),
+      outflowsKrw: getVal(krOutRow, m),
+      netChangeKrw: getVal(krNetRow, m),
+      balanceLocal: getVal(krRow, m),
+      localCurrency: "KRW",
+    };
+    const regionUS: import("./types").CashRegionData = {
+      region: "US",
+      regionLabel: "미국",
+      balanceKrw: getVal(usKrwRow, m),
+      inflowsKrw: getVal(usKrwInRow, m),
+      outflowsKrw: getVal(usKrwOutRow, m),
+      netChangeKrw: getVal(usKrwNetRow, m),
+      balanceLocal: getVal(usUsdRow, m),
+      localCurrency: "USD",
+    };
+    const regionVN: import("./types").CashRegionData = {
+      region: "VN",
+      regionLabel: "베트남",
+      balanceKrw: getVal(vnKrwRow, m),
+      inflowsKrw: getVal(vnKrwInRow, m),
+      outflowsKrw: getVal(vnKrwOutRow, m),
+      netChangeKrw: getVal(vnKrwNetRow, m),
+      balanceLocal: getVal(vnVndRow, m),
+      localCurrency: "VND",
+    };
+
+    const totalBalance = getVal(totalBalRow, m) || regionKR.balanceKrw + regionUS.balanceKrw + regionVN.balanceKrw;
+    const totalInflows = getVal(totalInRow, m);
+    const totalOutflows = getVal(totalOutRow, m);
+    const totalNetChange = getVal(totalNetRow, m);
+
+    monthlyData.push({
+      month: months[m],
+      regions: [regionKR, regionUS, regionVN],
+      totalBalanceKrw: totalBalance,
+      totalInflowsKrw: totalInflows,
+      totalOutflowsKrw: totalOutflows,
+      totalNetChangeKrw: totalNetChange,
+    });
+  }
+
+  const monthsWithOutflows = monthlyData.filter((m) => m.totalOutflowsKrw > 0);
+  const burnRate =
+    monthsWithOutflows.length > 0
+      ? monthsWithOutflows.reduce((s, m) => s + m.totalOutflowsKrw, 0) / monthsWithOutflows.length
+      : 0;
+  const latestBalance = monthlyData.length > 0 ? monthlyData[monthlyData.length - 1].totalBalanceKrw : 0;
+  const runway = burnRate > 0 ? latestBalance / burnRate : 0;
+
+  return { months, monthlyData, exchangeRates: { usdKrw, usdVnd }, burnRate, runway };
+}
+
+async function cashFromOriginal(year: number) {
   const rows = await readSheet(`${year} Cash Position Summary`, "A1:Z45");
 
-  // 월 헤더 (Row 0)
   const monthHeaders = rows[0] || [];
   const months: string[] = [];
   for (let c = 3; c < monthHeaders.length; c++) {
@@ -204,7 +401,6 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
     if (label) months.push(label);
   }
 
-  // KRW 섹션 파싱 (Row 0-16)
   function findRegionRows(searchKey: string, maxRow: number): number {
     for (let i = 0; i < Math.min(rows.length, maxRow); i++) {
       if ((rows[i]?.[1] || "").trim().includes(searchKey) && (rows[i]?.[2] || "").trim() === "Balance") return i;
@@ -217,18 +413,15 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
   const vnKrwRow = findRegionRows("Vietnam", 17);
   const totalRow = findRegionRows("Total", 17);
 
-  // USD/VND 원본 — detail 섹션
   let usUsdRow = -1;
   let vnVndRow = -1;
   for (let i = 17; i < rows.length; i++) {
-    const col0 = (rows[i]?.[0] || "").trim();
     const col1 = (rows[i]?.[1] || "").trim();
     const col2 = (rows[i]?.[2] || "").trim();
     if (col1.includes("U.S.") && col1.includes("USD") && col2 === "Balance") usUsdRow = i;
     if (col1.includes("Vietnam") && col1.includes("VND") && col2 === "Balance") vnVndRow = i;
   }
 
-  // 환율
   let usdKrw = 1460;
   let usdVnd = 0;
   for (let i = 17; i < rows.length; i++) {
@@ -236,19 +429,19 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
       const col1 = (rows[i]?.[1] || "").trim();
       const latestCol = months.length > 0 ? months.length + 2 : 3;
       const val = parseNumber(rows[i]?.[latestCol] || rows[i]?.[3] || "0");
-      if (col1 === "" && i < 30 && val > 0) usdKrw = val; // USD section
-      if (i > 30 && val > 0) usdVnd = val; // VND section
+      if (col1 === "" && i < 30 && val > 0) usdKrw = val;
+      if (i > 30 && val > 0) usdVnd = val;
     }
   }
 
-  // 월별 데이터 조립
   const monthlyData: import("./types").CashMonthly[] = [];
   for (let m = 0; m < months.length; m++) {
     const c = m + 3;
     const getVal = (rowIdx: number, offset: number) => parseNumber(rows[rowIdx + offset]?.[c] || "0");
 
     const regionKR: import("./types").CashRegionData = {
-      region: "KR", regionLabel: "한국",
+      region: "KR",
+      regionLabel: "한국",
       balanceKrw: krRow >= 0 ? getVal(krRow, 0) : 0,
       inflowsKrw: krRow >= 0 ? getVal(krRow, 1) : 0,
       outflowsKrw: krRow >= 0 ? getVal(krRow, 2) : 0,
@@ -257,7 +450,8 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
       localCurrency: "KRW",
     };
     const regionUS: import("./types").CashRegionData = {
-      region: "US", regionLabel: "미국",
+      region: "US",
+      regionLabel: "미국",
       balanceKrw: usKrwRow >= 0 ? getVal(usKrwRow, 0) : 0,
       inflowsKrw: usKrwRow >= 0 ? getVal(usKrwRow, 1) : 0,
       outflowsKrw: usKrwRow >= 0 ? getVal(usKrwRow, 2) : 0,
@@ -266,7 +460,8 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
       localCurrency: "USD",
     };
     const regionVN: import("./types").CashRegionData = {
-      region: "VN", regionLabel: "베트남",
+      region: "VN",
+      regionLabel: "베트남",
       balanceKrw: vnKrwRow >= 0 ? getVal(vnKrwRow, 0) : 0,
       inflowsKrw: vnKrwRow >= 0 ? getVal(vnKrwRow, 1) : 0,
       outflowsKrw: vnKrwRow >= 0 ? getVal(vnKrwRow, 2) : 0,
@@ -275,7 +470,8 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
       localCurrency: "VND",
     };
 
-    const totalBalance = totalRow >= 0 ? getVal(totalRow, 0) : regionKR.balanceKrw + regionUS.balanceKrw + regionVN.balanceKrw;
+    const totalBalance =
+      totalRow >= 0 ? getVal(totalRow, 0) : regionKR.balanceKrw + regionUS.balanceKrw + regionVN.balanceKrw;
     const totalInflows = totalRow >= 0 ? getVal(totalRow, 1) : 0;
     const totalOutflows = totalRow >= 0 ? getVal(totalRow, 2) : 0;
     const totalNetChange = totalRow >= 0 ? getVal(totalRow, 3) : 0;
@@ -290,37 +486,66 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
     });
   }
 
-  // Burn Rate = 평균 월간 지출 (최근 데이터 있는 월 기준)
   const monthsWithOutflows = monthlyData.filter((m) => m.totalOutflowsKrw > 0);
-  const burnRate = monthsWithOutflows.length > 0
-    ? monthsWithOutflows.reduce((s, m) => s + m.totalOutflowsKrw, 0) / monthsWithOutflows.length
-    : 0;
-
-  // Runway = 최신 잔고 / 월평균 지출
+  const burnRate =
+    monthsWithOutflows.length > 0
+      ? monthsWithOutflows.reduce((s, m) => s + m.totalOutflowsKrw, 0) / monthsWithOutflows.length
+      : 0;
   const latestBalance = monthlyData.length > 0 ? monthlyData[monthlyData.length - 1].totalBalanceKrw : 0;
   const runway = burnRate > 0 ? latestBalance / burnRate : 0;
 
   return { months, monthlyData, exchangeRates: { usdKrw, usdVnd }, burnRate, runway };
 }
 
-// --- Income Statement ---
-// 시트 구조 ("2026년"):
-// Row 3: ["","","","","","","","","26. 01.","26. 02.", ... "26. 12."]  ← 월 헤더 (col I~T = index 8~19)
-// Row 35: ["Income Statement"]
-// Row 36: ["","","","Revenue","","","","","0","0",...]    ← Revenue 합계
-// Row 43: ["","","","Expenses","","","","","0","0",...]   ← Expenses 합계
-// Row 44: ["","","","직원 급여 및 복지","","","","","0",...]  ← 비용 카테고리
-// Row 48: ["","","","사무실 유지관리","","","","","0",...]
-// Row 59: ["","","","4대보험","","","","","0",...]
+// ─── Income Statement ─────────────────────────
+
 export async function fetchIncome(): Promise<{
   monthly: IncomeMonthly[];
   expenses: ExpenseCategory[];
   totalRevenue: number;
   totalExpense: number;
 }> {
+  const sync = await readSyncTab("Income");
+  if (sync) return incomeFromSync(sync);
+  return incomeFromOriginal();
+}
+
+function incomeFromSync(sync: SyncTab) {
+  // headers: [type, category, 1월, 2월, ...]
+  const months = sync.headers.slice(2);
+
+  const revenueRow = sync.data.find((r) => String(r[0]) === "Revenue");
+  const expensesRow = sync.data.find((r) => String(r[0]) === "Expenses");
+  const expenseRows = sync.data.filter((r) => String(r[0]) === "Expense");
+
+  const monthly: IncomeMonthly[] = [];
+  let totalRevenue = 0;
+  let totalExpense = 0;
+
+  for (let m = 0; m < months.length; m++) {
+    const revenue = revenueRow ? toNum(revenueRow[m + 2]) : 0;
+    const expense = expensesRow ? Math.abs(toNum(expensesRow[m + 2])) : 0;
+    monthly.push({ month: months[m], revenue, expense, netIncome: revenue - expense });
+    totalRevenue += revenue;
+    totalExpense += expense;
+  }
+
+  const expenses: ExpenseCategory[] = expenseRows
+    .map((r) => ({
+      category: String(r[1] || ""),
+      amount: Math.abs(
+        Array.from({ length: months.length }, (_, m) => toNum(r[m + 2])).reduce((s, v) => s + v, 0),
+      ),
+    }))
+    .filter((e) => e.amount > 0)
+    .sort((a, b) => b.amount - a.amount);
+
+  return { monthly, expenses, totalRevenue, totalExpense };
+}
+
+async function incomeFromOriginal() {
   const rows = await readSheet("2026년", "A1:V70");
 
-  // 월 헤더 (Row 3, col I~ = index 8~)
   const monthStartCol = 8;
   const monthLabels: string[] = [];
   const headerRow = rows[3] || [];
@@ -329,7 +554,6 @@ export async function fetchIncome(): Promise<{
     if (label) monthLabels.push(label);
   }
 
-  // Revenue와 Expenses 행 찾기
   let revenueRow: string[] = [];
   let expensesRow: string[] = [];
   const expenseCategories: { name: string; values: number[] }[] = [];
@@ -349,9 +573,7 @@ export async function fetchIncome(): Promise<{
       continue;
     }
 
-    // 비용 카테고리 수집 (Expenses 다음의 col[3]에 이름이 있는 행들)
     if (inExpenseSection && col3) {
-      // 하위 소분류(col[4])가 아닌, 카테고리 합계(col[3])만 수집
       const values: number[] = [];
       for (let c = monthStartCol; c < monthStartCol + monthLabels.length; c++) {
         values.push(parseNumber(row[c] || "0"));
@@ -362,13 +584,11 @@ export async function fetchIncome(): Promise<{
       }
     }
 
-    // Net Income 등 나오면 비용 섹션 종료
     if (inExpenseSection && (col3 === "Net Income" || col3 === "EBITDA" || col3.startsWith("Net"))) {
       inExpenseSection = false;
     }
   }
 
-  // 월별 수익 vs 비용
   const monthly: IncomeMonthly[] = [];
   let totalRevenue = 0;
   let totalExpense = 0;
@@ -387,7 +607,6 @@ export async function fetchIncome(): Promise<{
     totalExpense += expense;
   }
 
-  // 비용 카테고리 합산
   const expenses: ExpenseCategory[] = expenseCategories
     .map((cat) => ({
       category: cat.name,
@@ -399,10 +618,8 @@ export async function fetchIncome(): Promise<{
   return { monthly, expenses, totalRevenue, totalExpense };
 }
 
-// --- AR (미수금) ---
-// 시트 구조 ("거래처별 미수금/회수기간 관리표"):
-// Row 3: 헤더 — 홈택스, 작성일자, 상호, 공급가액, 품목명, 작성일자, 실제 정산일자, 회수일수, 발급일자, 회수일수, 입금여부, 평균 회수일수
-// Row 4~: ["","","","","Actual","1월","거래처명","","금액","품목명","작성일","정산일","회수일수","발급일","회수일수","","메모"]
+// ─── AR (미수금) ──────────────────────────────
+
 export async function fetchAR(): Promise<{
   invoices: import("./types").ArInvoice[];
   agingBuckets: import("./types").ArAgingBucket[];
@@ -412,33 +629,29 @@ export async function fetchAR(): Promise<{
   avgCollectionDays: number;
   maxAgingDays: number;
 }> {
-  const rows = await readSheet("거래처별 미수금/회수기간 관리표", "A1:R200");
+  const sync = await readSyncTab("AR");
+  if (sync) return arFromSync(sync);
+  return arFromOriginal();
+}
 
+function arFromSync(sync: SyncTab) {
+  // headers: [month, client, amount, description, invoiceDate, paymentDate, collectionDays, note]
   const today = new Date();
   const invoices: import("./types").ArInvoice[] = [];
 
-  for (let i = 4; i < rows.length; i++) {
-    const row = rows[i];
-    if (!row || row.length < 9) continue;
-    if ((row[4] || "").trim() !== "Actual") continue;
-
-    const month = (row[5] || "").trim();
-    const client = (row[6] || "").trim();
-    const amount = parseNumber(row[8] || "0");
-    const description = (row[9] || "").trim();
-    const invoiceDate = (row[10] || "").trim();
-    const paymentDateRaw = (row[11] || "").trim();
-    const collectionDays = parseNumber(row[12] || "0");
-    const note = (row[16] || "").trim();
-
+  for (const row of sync.data) {
+    const client = String(row[1] || "").trim();
+    const amount = toNum(row[2]);
     if (!client || amount === 0) continue;
 
+    const paymentDateRaw = String(row[5] || "").trim();
     const hasPaid = paymentDateRaw.length > 0;
+    const note = String(row[7] || "").trim();
     let status: "paid" | "unpaid" | "checking" | "scheduled" = hasPaid ? "paid" : "unpaid";
     if (!hasPaid && note === "확인필요") status = "checking";
     if (!hasPaid && (note.includes("예정") || note.includes("입금요청"))) status = "scheduled";
 
-    // Aging 계산: 미수금이면 발급일~오늘, 정산완료면 0
+    const invoiceDate = String(row[4] || "").trim();
     let agingDays = 0;
     if (!hasPaid && invoiceDate) {
       const d = parseDate(invoiceDate);
@@ -454,10 +667,67 @@ export async function fetchAR(): Promise<{
           : ("red" as const);
 
     invoices.push({
-      month,
+      month: String(row[0] || "").trim(),
       client,
       amount,
-      description,
+      description: String(row[3] || "").trim(),
+      invoiceDate,
+      paymentDate: hasPaid ? paymentDateRaw : null,
+      collectionDays: hasPaid ? toNum(row[6]) : 0,
+      status,
+      note,
+      agingDays,
+      risk,
+    });
+  }
+
+  return buildArResult(invoices);
+}
+
+async function arFromOriginal() {
+  const rows = await readSheet("거래처별 미수금/회수기간 관리표", "A1:R200");
+
+  const today = new Date();
+  const invoices: import("./types").ArInvoice[] = [];
+
+  for (let i = 4; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || row.length < 9) continue;
+    if ((row[4] || "").trim() !== "Actual") continue;
+
+    const client = (row[6] || "").trim();
+    const amount = parseNumber(row[8] || "0");
+    if (!client || amount === 0) continue;
+
+    const invoiceDate = (row[10] || "").trim();
+    const paymentDateRaw = (row[11] || "").trim();
+    const collectionDays = parseNumber(row[12] || "0");
+    const note = (row[16] || "").trim();
+
+    const hasPaid = paymentDateRaw.length > 0;
+    let status: "paid" | "unpaid" | "checking" | "scheduled" = hasPaid ? "paid" : "unpaid";
+    if (!hasPaid && note === "확인필요") status = "checking";
+    if (!hasPaid && (note.includes("예정") || note.includes("입금요청"))) status = "scheduled";
+
+    let agingDays = 0;
+    if (!hasPaid && invoiceDate) {
+      const d = parseDate(invoiceDate);
+      if (d) agingDays = Math.max(0, Math.floor((today.getTime() - d.getTime()) / 86400000));
+    }
+
+    const risk = hasPaid
+      ? ("green" as const)
+      : agingDays <= 30
+        ? ("yellow" as const)
+        : agingDays <= 60
+          ? ("orange" as const)
+          : ("red" as const);
+
+    invoices.push({
+      month: (row[5] || "").trim(),
+      client,
+      amount,
+      description: (row[9] || "").trim(),
       invoiceDate,
       paymentDate: hasPaid ? paymentDateRaw : null,
       collectionDays: hasPaid ? collectionDays : 0,
@@ -468,7 +738,10 @@ export async function fetchAR(): Promise<{
     });
   }
 
-  // 미수금만
+  return buildArResult(invoices);
+}
+
+function buildArResult(invoices: import("./types").ArInvoice[]) {
   const outstanding = invoices.filter((inv) => inv.status !== "paid");
   const paid = invoices.filter((inv) => inv.status === "paid");
 
@@ -476,14 +749,12 @@ export async function fetchAR(): Promise<{
   const outstandingCount = outstanding.length;
   const maxAgingDays = outstanding.length > 0 ? Math.max(...outstanding.map((inv) => inv.agingDays)) : 0;
 
-  // 평균 회수일수 (정산완료 건 기준)
   const paidWithDays = paid.filter((inv) => inv.collectionDays > 0);
   const avgCollectionDays =
     paidWithDays.length > 0
       ? Math.round(paidWithDays.reduce((s, inv) => s + inv.collectionDays, 0) / paidWithDays.length)
       : 0;
 
-  // Aging buckets
   const bucketDefs = [
     { label: "0-30일", min: 0, max: 30, color: "#E8FF47" },
     { label: "31-60일", min: 31, max: 60, color: "#F59E0B" },
@@ -500,7 +771,6 @@ export async function fetchAR(): Promise<{
     };
   });
 
-  // Client summary (미수금만)
   const clientMap = new Map<string, { total: number; count: number; maxDays: number }>();
   for (const inv of outstanding) {
     const cur = clientMap.get(inv.client) || { total: 0, count: 0, maxDays: 0 };
@@ -519,11 +789,38 @@ export async function fetchAR(): Promise<{
     }))
     .sort((a, b) => b.totalOutstanding - a.totalOutstanding);
 
-  return { invoices, agingBuckets, clientSummaries, totalOutstanding, outstandingCount, avgCollectionDays, maxAgingDays };
+  return {
+    invoices,
+    agingBuckets,
+    clientSummaries,
+    totalOutstanding,
+    outstandingCount,
+    avgCollectionDays,
+    maxAgingDays,
+  };
 }
 
-// --- YoY 비교 ---
+// ─── YoY 비교 ─────────────────────────────────
+
 export async function fetchYoY(): Promise<import("./types").YoYRow[]> {
+  const sync = await readSyncTab("YoY");
+  if (sync) return yoyFromSync(sync);
+  return yoyFromOriginal();
+}
+
+function yoyFromSync(sync: SyncTab): import("./types").YoYRow[] {
+  // headers: [year, 1월, ..., 12월, total, headcount, perPerson, target]
+  return sync.data.map((row) => ({
+    year: String(row[0] || ""),
+    monthly: Array.from({ length: 12 }, (_, m) => toNum(row[m + 1])),
+    total: toNum(row[13]),
+    headcount: toNum(row[14]),
+    perPerson: toNum(row[15]),
+    target: row[16] ? toNum(row[16]) : undefined,
+  }));
+}
+
+async function yoyFromOriginal(): Promise<import("./types").YoYRow[]> {
   const rows = await readSheet("매출비교", "A1:R15");
   const result: import("./types").YoYRow[] = [];
   for (const row of rows) {
@@ -541,7 +838,8 @@ export async function fetchYoY(): Promise<import("./types").YoYRow[]> {
   return result;
 }
 
-// --- 클라이언트별 매출 (A/R 데이터 활용) ---
+// ─── 클라이언트별 매출 (A/R 데이터 활용) ──────
+
 export async function fetchClientRevenue(): Promise<{
   invoices: import("./types").ArInvoice[];
   months: string[];
@@ -556,25 +854,44 @@ export async function fetchClientRevenue(): Promise<{
 }
 
 function parseDate(str: string): Date | null {
-  // "2025-01-05" or "2025. 1. 17" formats
   const cleaned = str.replace(/\.\s*/g, "-").replace(/-$/, "").trim();
   const d = new Date(cleaned);
   return isNaN(d.getTime()) ? null : d;
 }
 
-// --- FX ---
-export async function fetchFx(): Promise<FxRate[]> {
-  // FX data might come from the cash position sheet or a dedicated sheet
-  // For now, we'll return current rates from the cash position data
-  const rows = await readSheet("2026 Cash Position Summary", "A1:Z5");
+// ─── FX ───────────────────────────────────────
 
-  // Look for FX rates in the header area
+export async function fetchFx(): Promise<FxRate[]> {
+  // FX: Cash sync 탭에서 환율 읽기 시도, 없으면 원본
+  const sync = await readSyncTab("Cash");
   const rates: FxRate[] = [
     { pair: "USD/KRW", rate: 0, change: 0, date: new Date().toISOString().slice(0, 10) },
     { pair: "USD/VND", rate: 0, change: 0, date: new Date().toISOString().slice(0, 10) },
   ];
 
-  // Try to find rate values in the sheet
+  if (sync) {
+    const fxUsdRow = sync.data.find(
+      (r) => String(r[0]) === "FX" && String(r[1]) === "USD/KRW",
+    );
+    const fxVndRow = sync.data.find(
+      (r) => String(r[0]) === "FX" && String(r[1]) === "USD/VND",
+    );
+    // 최신 월의 값 사용
+    const months = sync.headers.slice(3);
+    const lastIdx = months.length - 1 + 3;
+    if (fxUsdRow) {
+      const val = toNum(fxUsdRow[lastIdx]) || toNum(fxUsdRow[3]);
+      if (val > 1000) rates[0].rate = val;
+    }
+    if (fxVndRow) {
+      const val = toNum(fxVndRow[lastIdx]) || toNum(fxVndRow[3]);
+      if (val > 20000) rates[1].rate = val;
+    }
+    if (rates[0].rate > 0 || rates[1].rate > 0) return rates;
+  }
+
+  // 원본 폴백
+  const rows = await readSheet("2026 Cash Position Summary", "A1:Z5");
   for (const row of rows) {
     for (let j = 0; j < row.length; j++) {
       const cell = row[j]?.toString() || "";
