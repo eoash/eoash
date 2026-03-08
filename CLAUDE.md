@@ -109,6 +109,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **환경별 설정 하드코딩 금지**: prometheus.yml scrape target 등은 `__PLACEHOLDER__` + `sed` 치환으로 분리
 - **Anthropic Admin API 파라미터**: `start_date` → `starting_at`, `end_date` → `ending_at`, `group_by` → `group_by[]`
 - **managed-settings.json env**: Claude Code 프로세스에만 적용됨, Bash 자식 프로세스에는 전달 안 됨
+- **OTel delta→cumulative 외삽**: Prometheus `increase([1d])`는 카운터 첫째 날 데이터 포인트가 적으면 24시간으로 외삽하여 과대 계산 → per-user cutoff에 1일 grace period 추가 필수 (`addDays(cutoff, 1)`)
 
 ### Vercel + Google Service Account 함정 (2026-03-07)
 - **Private Key newline 손상**: Vercel env var에 줄바꿈 있는 키 직접 넣으면 `invalid_grant` 에러 → **SA JSON 전체를 Base64 인코딩**해서 `GOOGLE_SA_KEY_BASE64`로 저장, 코드에서 `Buffer.from(env, "base64")` 디코딩
