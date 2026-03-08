@@ -63,18 +63,12 @@ export default function RevenueDashboard({ data, year }: { data: RevenueData; ye
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6">
         <KpiCard
           title={t("rev.totalRevenue")}
           value={formatKRW(totalActual)}
           subtitle={`${year} YTD`}
           tooltip={t("rev.totalRevenue.tip")}
-        />
-        <KpiCard
-          title={t("rev.dataMonths")}
-          value={`${monthsWithData.length}${t("common.months")}`}
-          subtitle={`${monthly.length}${t("common.months")} ${t("common.basis")}`}
-          tooltip={t("rev.dataMonths.tip")}
         />
         <KpiCard
           title={t("rev.achievement")}

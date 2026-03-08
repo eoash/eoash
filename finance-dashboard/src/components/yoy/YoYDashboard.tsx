@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo, useEffect } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import YoYChart from "@/components/charts/YoYChart";
 import { formatKRW } from "@/lib/utils";
@@ -8,19 +9,55 @@ import type { YoYRow } from "@/lib/types";
 
 export default function YoYDashboard({ data }: { data: YoYRow[] }) {
   const { t } = useT();
+  const allYears = data.map((d) => d.year);
 
-  const latest = data[data.length - 1];
-  const prev = data.length >= 2 ? data[data.length - 2] : null;
+  const [startYear, setStartYear] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("yoy-start-year");
+      if (saved && allYears.includes(saved)) return saved;
+    }
+    return allYears[0] ?? "2020";
+  });
+  const [endYear, setEndYear] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("yoy-end-year");
+      if (saved && allYears.includes(saved)) return saved;
+    }
+    return allYears[allYears.length - 1] ?? "2025";
+  });
+
+  useEffect(() => { localStorage.setItem("yoy-start-year", startYear); }, [startYear]);
+  useEffect(() => { localStorage.setItem("yoy-end-year", endYear); }, [endYear]);
+
+  const filtered = useMemo(() => {
+    const si = allYears.indexOf(startYear);
+    const ei = allYears.indexOf(endYear);
+    if (si < 0 || ei < 0) return data;
+    return data.slice(Math.min(si, ei), Math.max(si, ei) + 1);
+  }, [data, allYears, startYear, endYear]);
+
+  const latest = filtered[filtered.length - 1];
+  const prev = filtered.length >= 2 ? filtered[filtered.length - 2] : null;
   const yoyGrowth = prev && prev.total > 0 ? ((latest.total - prev.total) / prev.total) * 100 : 0;
-  const cagr = data.length >= 2
-    ? (Math.pow(latest.total / data[0].total, 1 / (data.length - 1)) - 1) * 100
+  const cagr = filtered.length >= 2
+    ? (Math.pow(latest.total / filtered[0].total, 1 / (filtered.length - 1)) - 1) * 100
     : 0;
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
         <h1 className="text-2xl font-bold">{t("yoy.title")}</h1>
-        <span className="text-xs text-gray-500">2020 — {latest.year}</span>
+        <div className="flex items-center gap-2 text-sm">
+          <select value={startYear} onChange={(e) => setStartYear(e.target.value)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {allYears.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+          <span className="text-gray-500">~</span>
+          <select value={endYear} onChange={(e) => setEndYear(e.target.value)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {allYears.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
@@ -55,7 +92,7 @@ export default function YoYDashboard({ data }: { data: YoYRow[] }) {
         />
       </div>
 
-      <YoYChart data={data} />
+      <YoYChart data={filtered} />
 
       {/* 연도별 테이블 */}
       <div className="mt-6 rounded-xl bg-[#111111] border border-[#222] p-5 overflow-x-auto">
@@ -72,7 +109,7 @@ export default function YoYDashboard({ data }: { data: YoYRow[] }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, i) => {
+            {filtered.map((row, i) => {
               const prevRow = i > 0 ? data[i - 1] : null;
               const growth = prevRow && prevRow.total > 0 ? ((row.total - prevRow.total) / prevRow.total) * 100 : 0;
               return (

@@ -4,12 +4,9 @@ import ClientsDashboard from "@/components/clients/ClientsDashboard";
 export const revalidate = 300;
 
 export default async function ClientsPage() {
-  let clients;
-  let months: string[] = [];
   try {
-    const data = await fetchClientRevenue();
-    clients = data.clients;
-    months = data.months;
+    const { invoices, months } = await fetchClientRevenue();
+    return <ClientsDashboard invoices={invoices} months={months} />;
   } catch (error) {
     console.error("[ClientsPage] failed:", error);
     return (
@@ -21,6 +18,4 @@ export default async function ClientsPage() {
       </div>
     );
   }
-
-  return <ClientsDashboard clients={clients} months={months} />;
 }

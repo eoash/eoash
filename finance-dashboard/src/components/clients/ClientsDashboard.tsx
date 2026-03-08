@@ -1,12 +1,65 @@
 "use client";
 
+import { useState, useMemo, useEffect } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import { formatKRW } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
-import type { ClientRevenue } from "@/lib/types";
+import type { ArInvoice, ClientRevenue } from "@/lib/types";
 
-export default function ClientsDashboard({ clients, months }: { clients: ClientRevenue[]; months: string[] }) {
+function aggregateClients(invoices: ArInvoice[]): ClientRevenue[] {
+  const map = new Map<string, ClientRevenue>();
+  for (const inv of invoices) {
+    const cur = map.get(inv.client) || {
+      client: inv.client, totalAmount: 0, invoiceCount: 0,
+      paidAmount: 0, unpaidAmount: 0, paidCount: 0, unpaidCount: 0, avgCollectionDays: 0,
+    };
+    cur.totalAmount += inv.amount;
+    cur.invoiceCount += 1;
+    if (inv.status === "paid") {
+      cur.paidAmount += inv.amount;
+      cur.paidCount += 1;
+      cur.avgCollectionDays += inv.collectionDays;
+    } else {
+      cur.unpaidAmount += inv.amount;
+      cur.unpaidCount += 1;
+    }
+    map.set(inv.client, cur);
+  }
+  return Array.from(map.values())
+    .map((c) => ({ ...c, avgCollectionDays: c.paidCount > 0 ? Math.round(c.avgCollectionDays / c.paidCount) : 0 }))
+    .sort((a, b) => b.totalAmount - a.totalAmount);
+}
+
+export default function ClientsDashboard({ invoices, months }: { invoices: ArInvoice[]; months: string[] }) {
   const { t } = useT();
+
+  const [startMonth, setStartMonth] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("clients-start-month");
+      if (saved && months.includes(saved)) return saved;
+    }
+    return months[0] ?? "";
+  });
+  const [endMonth, setEndMonth] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("clients-end-month");
+      if (saved && months.includes(saved)) return saved;
+    }
+    return months[months.length - 1] ?? "";
+  });
+
+  useEffect(() => { localStorage.setItem("clients-start-month", startMonth); }, [startMonth]);
+  useEffect(() => { localStorage.setItem("clients-end-month", endMonth); }, [endMonth]);
+
+  const filtered = useMemo(() => {
+    const si = months.indexOf(startMonth);
+    const ei = months.indexOf(endMonth);
+    if (si < 0 || ei < 0) return invoices;
+    const validMonths = new Set(months.slice(Math.min(si, ei), Math.max(si, ei) + 1));
+    return invoices.filter((inv) => validMonths.has(inv.month));
+  }, [invoices, months, startMonth, endMonth]);
+
+  const clients = useMemo(() => aggregateClients(filtered), [filtered]);
 
   const totalRevenue = clients.reduce((s, c) => s + c.totalAmount, 0);
   const totalPaid = clients.reduce((s, c) => s + c.paidAmount, 0);
@@ -14,22 +67,27 @@ export default function ClientsDashboard({ clients, months }: { clients: ClientR
   const avgDays = clients.filter((c) => c.avgCollectionDays > 0);
   const overallAvgDays = avgDays.length > 0 ? Math.round(avgDays.reduce((s, c) => s + c.avgCollectionDays, 0) / avgDays.length) : 0;
 
-  const periodLabel = months.length > 0
-    ? `${months[0]} ~ ${months[months.length - 1]}`
-    : "";
-
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
         <h1 className="text-2xl font-bold">{t("clients.title")}</h1>
-        <span className="text-xs text-gray-500">
-          {t("clients.subtitle.source")}{periodLabel && ` · ${periodLabel}`}
-        </span>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-gray-500">{t("clients.subtitle.source")}</span>
+          <select value={startMonth} onChange={(e) => setStartMonth(e.target.value)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {months.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
+          <span className="text-gray-500">~</span>
+          <select value={endMonth} onChange={(e) => setEndMonth(e.target.value)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {months.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
         <KpiCard title={t("clients.totalRevenue")} value={formatKRW(totalRevenue)} subtitle={`${clients.length} ${t("common.places")}`} tooltip={t("clients.totalRevenue.tip")} />
-        <KpiCard title={t("clients.settled")} value={formatKRW(totalPaid)} subtitle={`${Math.round((totalPaid / totalRevenue) * 100)}%`} tooltip={t("clients.settled.tip")} />
+        <KpiCard title={t("clients.settled")} value={formatKRW(totalPaid)} subtitle={totalRevenue > 0 ? `${Math.round((totalPaid / totalRevenue) * 100)}%` : "0%"} tooltip={t("clients.settled.tip")} />
         <KpiCard title={t("clients.outstanding")} value={formatKRW(totalUnpaid)} subtitle={`${clients.filter((c) => c.unpaidCount > 0).length} ${t("common.places")}`} tooltip={t("clients.outstanding.tip")} trend={totalUnpaid > 0 ? { value: Math.round((totalUnpaid / totalRevenue) * 100), isPositive: false } : undefined} />
         <KpiCard title={t("clients.avgDays")} value={`${overallAvgDays}${t("common.days")}`} subtitle={t("clients.avgDays.sub")} tooltip={t("clients.avgDays.tip")} />
       </div>
@@ -73,7 +131,7 @@ export default function ClientsDashboard({ clients, months }: { clients: ClientR
                       <span className="text-gray-600">&mdash;</span>
                     )}
                   </td>
-                  <td className="hidden md:table-cell py-2 px-3 text-right text-gray-400">{c.avgCollectionDays > 0 ? `${c.avgCollectionDays}${t("common.days")}` : "&mdash;"}</td>
+                  <td className="hidden md:table-cell py-2 px-3 text-right text-gray-400">{c.avgCollectionDays > 0 ? `${c.avgCollectionDays}${t("common.days")}` : "—"}</td>
                   <td className="hidden md:table-cell py-2 px-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <div className="w-16 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">

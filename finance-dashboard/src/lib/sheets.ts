@@ -543,27 +543,16 @@ export async function fetchYoY(): Promise<import("./types").YoYRow[]> {
 
 // --- 클라이언트별 매출 (A/R 데이터 활용) ---
 export async function fetchClientRevenue(): Promise<{
-  clients: import("./types").ClientRevenue[];
+  invoices: import("./types").ArInvoice[];
   months: string[];
 }> {
   const { invoices } = await fetchAR();
-  const map = new Map<string, import("./types").ClientRevenue>();
   const monthSet = new Set<string>();
   for (const inv of invoices) {
     if (inv.month) monthSet.add(inv.month);
-    const cur = map.get(inv.client) || { client: inv.client, totalAmount: 0, invoiceCount: 0, paidAmount: 0, unpaidAmount: 0, paidCount: 0, unpaidCount: 0, avgCollectionDays: 0 };
-    cur.totalAmount += inv.amount;
-    cur.invoiceCount += 1;
-    if (inv.status === "paid") { cur.paidAmount += inv.amount; cur.paidCount += 1; cur.avgCollectionDays += inv.collectionDays; }
-    else { cur.unpaidAmount += inv.amount; cur.unpaidCount += 1; }
-    map.set(inv.client, cur);
   }
-  // Sort months numerically (e.g., "1월", "2월", "12월")
   const months = Array.from(monthSet).sort((a, b) => parseInt(a) - parseInt(b));
-  const clients = Array.from(map.values())
-    .map((c) => ({ ...c, avgCollectionDays: c.paidCount > 0 ? Math.round(c.avgCollectionDays / c.paidCount) : 0 }))
-    .sort((a, b) => b.totalAmount - a.totalAmount);
-  return { clients, months };
+  return { invoices, months };
 }
 
 function parseDate(str: string): Date | null {

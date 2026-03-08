@@ -5,28 +5,38 @@ import MonthlyPnLChart from "@/components/charts/MonthlyPnLChart";
 import RevenueCompositionChart from "@/components/charts/RevenueCompositionChart";
 import ExpenseTop10Chart from "@/components/charts/ExpenseTop10Chart";
 import AnnualTrendChart from "@/components/charts/AnnualTrendChart";
+import { useState } from "react";
 import { WITHTAX_YEARLY } from "@/lib/withtax-data";
 import { formatKRW, formatPercent } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 
-const y2025 = WITHTAX_YEARLY.find((y) => y.year === "2025")!;
-const y2024 = WITHTAX_YEARLY.find((y) => y.year === "2024")!;
-
-const totalRevenue = y2025.매출합계;
-const totalExpense = y2025.판관비합계;
-const netIncome = y2025.당기순이익;
-const netMargin = totalRevenue > 0 ? netIncome / totalRevenue : 0;
-
-// YoY 매출 성장률
-const revenueGrowth = ((totalRevenue - y2024.매출합계) / y2024.매출합계) * 100;
+const availableYears = WITHTAX_YEARLY.map((y) => y.year);
 
 export default function IncomePage() {
   const { t } = useT();
+  const [selectedYear, setSelectedYear] = useState("2025");
+
+  const yearData = WITHTAX_YEARLY.find((y) => y.year === selectedYear)!;
+  const prevYearData = WITHTAX_YEARLY.find((y) => y.year === String(Number(selectedYear) - 1));
+
+  const totalRevenue = yearData.매출합계;
+  const totalExpense = yearData.판관비합계;
+  const netIncome = yearData.당기순이익;
+  const netMargin = totalRevenue > 0 ? netIncome / totalRevenue : 0;
+  const revenueGrowth = prevYearData && prevYearData.매출합계 > 0
+    ? ((totalRevenue - prevYearData.매출합계) / prevYearData.매출합계) * 100
+    : 0;
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">{t("income.title")}</h1>
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">{t("income.title")}</h1>
+          <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {availableYears.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </div>
         <span className="text-xs text-gray-500">{t("income.subtitle")}</span>
       </div>
 
@@ -69,19 +79,21 @@ export default function IncomePage() {
         />
       </div>
 
-      {/* Row 1: Monthly P&L + Revenue Composition */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="lg:col-span-2">
-          <MonthlyPnLChart />
+      {/* Row 1: Monthly P&L + Revenue Composition (2025 only) */}
+      {selectedYear === "2025" && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="lg:col-span-2">
+            <MonthlyPnLChart />
+          </div>
+          <div>
+            <RevenueCompositionChart />
+          </div>
         </div>
-        <div>
-          <RevenueCompositionChart />
-        </div>
-      </div>
+      )}
 
-      {/* Row 2: Expense TOP 10 + Annual Trend */}
+      {/* Row 2: Expense TOP 10 (2025 only) + Annual Trend (always) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ExpenseTop10Chart />
+        {selectedYear === "2025" && <ExpenseTop10Chart />}
         <AnnualTrendChart />
       </div>
     </div>
