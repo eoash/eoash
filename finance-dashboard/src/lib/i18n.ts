@@ -12,6 +12,10 @@ const translations = {
   "sidebar.title": { ko: "Finance", en: "Finance" },
   "sidebar.subtitle": { ko: "EO Studio Dashboard", en: "EO Studio Dashboard" },
   "sidebar.brand": { ko: "EO STUDIO", en: "EO STUDIO" },
+  "sidebar.sync": { ko: "데이터 동기화", en: "Sync Data" },
+  "sidebar.syncing": { ko: "동기화 중...", en: "Syncing..." },
+  "sidebar.syncDone": { ko: "동기화 완료", en: "Sync Done" },
+  "sidebar.syncFail": { ko: "동기화 실패", en: "Sync Failed" },
 
   // ── Common ──
   "common.loading": { ko: "불러오는 중...", en: "Loading..." },

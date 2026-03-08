@@ -16,10 +16,13 @@ const menuItems: { labelKey: TranslationKey; href: string }[] = [
   { labelKey: "nav.fx", href: "/fx" },
 ];
 
+type SyncState = "idle" | "syncing" | "done" | "fail";
+
 export default function Sidebar() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useT();
   const [open, setOpen] = useState(false);
+  const [syncState, setSyncState] = useState<SyncState>("idle");
 
   // 페이지 이동 시 드로어 닫기
   useEffect(() => {
@@ -68,6 +71,44 @@ export default function Sidebar() {
       </div>
 
       <div className="flex flex-col gap-2 px-4 pb-4">
+        {/* Sync button */}
+        {process.env.NEXT_PUBLIC_SYNC_URL && (
+          <button
+            onClick={async () => {
+              if (syncState === "syncing") return;
+              setSyncState("syncing");
+              try {
+                const res = await fetch(process.env.NEXT_PUBLIC_SYNC_URL!);
+                const data = await res.json();
+                setSyncState(data.ok ? "done" : "fail");
+              } catch {
+                setSyncState("fail");
+              }
+              setTimeout(() => setSyncState("idle"), 3000);
+            }}
+            disabled={syncState === "syncing"}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+              syncState === "syncing"
+                ? "bg-[#E8FF47]/10 text-[#E8FF47] animate-pulse"
+                : syncState === "done"
+                  ? "bg-green-900/30 text-green-400"
+                  : syncState === "fail"
+                    ? "bg-red-900/30 text-red-400"
+                    : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
+            }`}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+              className={syncState === "syncing" ? "animate-spin" : ""}>
+              <path d="M1 7a6 6 0 0 1 10.2-4.2M13 7a6 6 0 0 1-10.2 4.2" />
+              <path d="M11.2 1v2.8H8.4M2.8 13v-2.8h2.8" />
+            </svg>
+            {syncState === "syncing" ? t("sidebar.syncing")
+              : syncState === "done" ? t("sidebar.syncDone")
+              : syncState === "fail" ? t("sidebar.syncFail")
+              : t("sidebar.sync")}
+          </button>
+        )}
+
         {/* Language toggle */}
         <div className="flex items-center gap-1 px-0 py-1">
           <button
