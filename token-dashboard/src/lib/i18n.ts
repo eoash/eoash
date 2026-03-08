@@ -2,7 +2,7 @@ export type Locale = "ko" | "en";
 
 const translations = {
   // ── Sidebar ──
-  "sidebar.title": { ko: "Token", en: "Token" },
+  "sidebar.title": { ko: "AI Native", en: "AI Native" },
   "sidebar.subtitle": { ko: "EO Studio Dashboard", en: "EO Studio Dashboard" },
   "nav.overview": { ko: "Overview", en: "Overview" },
   "nav.leaderboard": { ko: "Leaderboard", en: "Leaderboard" },
@@ -86,6 +86,7 @@ const translations = {
   "lb.members": { ko: "명", en: " members" },
   "lb.autoRefresh": { ko: "자동 새로고침: 30초", en: "Auto-refresh: 30s" },
   "lb.noDataCodex": { ko: "Codex 사용 데이터가 없습니다", en: "No Codex usage data available" },
+  "lb.codexNote": { ko: "Codex는 캐시에서 재사용한 토큰도 input에 포함하여 집계합니다. Claude는 이를 별도(Cache Read)로 분리하기 때문에, 같은 작업이라도 Codex의 input이 더 높게 표시됩니다.", en: "Codex counts cached (reused) tokens as part of input, while Claude separates them into Cache Read. This makes Codex input appear higher for the same workload." },
   "lb.noDataGemini": { ko: "Gemini CLI 사용 데이터가 없습니다", en: "No Gemini CLI usage data available" },
   "lb.mockMode": {
     ko: "샘플 데이터로 표시 중 — PROMETHEUS_URL 설정 후 실제 데이터를 확인하세요",
@@ -180,6 +181,22 @@ const translations = {
     ko: "cache_read / cache_creation. 캐시를 얼마나 재활용하는지",
     en: "cache_read / cache_creation. How much cache is reused",
   },
+  "eff.reasoningRatio": { ko: "추론 비율", en: "Reasoning Ratio" },
+  "eff.reasoningRatio.sub": { ko: "추론 / 출력", en: "reasoning / output" },
+  "eff.reasoningRatio.tip": {
+    ko: "출력 토큰 중 추론(thinking) 비중. Codex는 응답 전 내부 추론을 수행하며, 이 비율이 높으면 더 깊이 사고한 후 답변한 것입니다.",
+    en: "Proportion of reasoning (thinking) tokens in output. Higher means more deliberation before responding.",
+  },
+  "eff.codexNote": {
+    ko: "Codex는 캐시 구조가 Claude와 다릅니다. Cache Efficiency(생성 대비 재사용) 대신 Reasoning Ratio(추론 토큰 비율)를 표시합니다.",
+    en: "Codex has a different caching model than Claude. Reasoning Ratio is shown instead of Cache Efficiency.",
+  },
+  "eff.noDaily": {
+    ko: "일별 추이 데이터가 부족합니다",
+    en: "Not enough daily trend data",
+  },
+  "eff.activeUsers": { ko: "사용자 수", en: "Active Users" },
+  "eff.activeUsers.sub": { ko: "도구 사용 팀원", en: "tool users" },
 
   // ── Setup page ──
   "setup.title": { ko: "설치 가이드", en: "Setup Guide" },

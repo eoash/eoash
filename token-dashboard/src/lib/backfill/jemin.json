@@ -24,17 +24,17 @@
         "id": "jemin@eoeoeo.net",
         "email_address": "jemin@eoeoeo.net"
       },
-      "model": "<synthetic>",
-      "date": "2026-02-12",
-      "session_count": 0,
+      "model": "claude-opus-4-6",
+      "date": "2026-02-07",
+      "session_count": 1,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 0
+      "input_tokens": 3,
+      "output_tokens": 2,
+      "cache_read_tokens": 10459,
+      "cache_creation_tokens": 7801
     },
     {
       "actor": {
@@ -114,24 +114,6 @@
         "id": "jemin@eoeoeo.net",
         "email_address": "jemin@eoeoeo.net"
       },
-      "model": "<synthetic>",
-      "date": "2026-02-16",
-      "session_count": 0,
-      "lines_of_code": 0,
-      "commits": 0,
-      "pull_requests": 0,
-      "tool_acceptance_rate": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 0
-    },
-    {
-      "actor": {
-        "type": "user",
-        "id": "jemin@eoeoeo.net",
-        "email_address": "jemin@eoeoeo.net"
-      },
       "model": "claude-sonnet-4-5-20250929",
       "date": "2026-02-16",
       "session_count": 0,
@@ -150,6 +132,42 @@
         "id": "jemin@eoeoeo.net",
         "email_address": "jemin@eoeoeo.net"
       },
+      "model": "claude-opus-4-6",
+      "date": "2026-02-19",
+      "session_count": 4,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 135,
+      "output_tokens": 302,
+      "cache_read_tokens": 310357,
+      "cache_creation_tokens": 44057
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-5-20250929",
+      "date": "2026-02-19",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 49,
+      "output_tokens": 473,
+      "cache_read_tokens": 287872,
+      "cache_creation_tokens": 55820
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      },
       "model": "claude-sonnet-4-6",
       "date": "2026-02-19",
       "session_count": 0,
@@ -157,28 +175,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 3411,
-      "output_tokens": 30955,
-      "cache_read_tokens": 14177947,
-      "cache_creation_tokens": 877825
-    },
-    {
-      "actor": {
-        "type": "user",
-        "id": "jemin@eoeoeo.net",
-        "email_address": "jemin@eoeoeo.net"
-      },
-      "model": "<synthetic>",
-      "date": "2026-02-20",
-      "session_count": 0,
-      "lines_of_code": 0,
-      "commits": 0,
-      "pull_requests": 0,
-      "tool_acceptance_rate": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 0
+      "input_tokens": 1226,
+      "output_tokens": 120936,
+      "cache_read_tokens": 81958161,
+      "cache_creation_tokens": 1835376
     },
     {
       "actor": {
@@ -188,15 +188,15 @@
       },
       "model": "claude-sonnet-4-6",
       "date": "2026-02-20",
-      "session_count": 0,
+      "session_count": 1,
       "lines_of_code": 0,
-      "commits": 0,
+      "commits": 1,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 156187,
-      "output_tokens": 330128,
-      "cache_read_tokens": 180802435,
-      "cache_creation_tokens": 6376339
+      "input_tokens": 285,
+      "output_tokens": 22208,
+      "cache_read_tokens": 20221058,
+      "cache_creation_tokens": 846541
     },
     {
       "actor": {
@@ -206,15 +206,33 @@
       },
       "model": "claude-sonnet-4-6",
       "date": "2026-02-21",
+      "session_count": 7,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 721,
+      "output_tokens": 12086,
+      "cache_read_tokens": 6532093,
+      "cache_creation_tokens": 276648
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-02-22",
       "session_count": 0,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 125,
-      "output_tokens": 11456,
-      "cache_read_tokens": 6456081,
-      "cache_creation_tokens": 1393748
+      "input_tokens": 49,
+      "output_tokens": 1402,
+      "cache_read_tokens": 1679548,
+      "cache_creation_tokens": 91418
     },
     {
       "actor": {
@@ -314,33 +332,15 @@
       },
       "model": "claude-sonnet-4-6",
       "date": "2026-03-02",
-      "session_count": 0,
+      "session_count": 10,
       "lines_of_code": 0,
-      "commits": 0,
+      "commits": 7,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 12672,
-      "output_tokens": 1627356,
-      "cache_read_tokens": 373331051,
-      "cache_creation_tokens": 10693619
-    },
-    {
-      "actor": {
-        "type": "user",
-        "id": "jemin@eoeoeo.net",
-        "email_address": "jemin@eoeoeo.net"
-      },
-      "model": "<synthetic>",
-      "date": "2026-03-03",
-      "session_count": 0,
-      "lines_of_code": 0,
-      "commits": 0,
-      "pull_requests": 0,
-      "tool_acceptance_rate": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 0
+      "input_tokens": 2022,
+      "output_tokens": 264866,
+      "cache_read_tokens": 95904051,
+      "cache_creation_tokens": 1469368
     },
     {
       "actor": {
@@ -355,28 +355,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 5075,
-      "output_tokens": 326681,
-      "cache_read_tokens": 87577826,
-      "cache_creation_tokens": 1589339
-    },
-    {
-      "actor": {
-        "type": "user",
-        "id": "jemin@eoeoeo.net",
-        "email_address": "jemin@eoeoeo.net"
-      },
-      "model": "<synthetic>",
-      "date": "2026-03-04",
-      "session_count": 0,
-      "lines_of_code": 0,
-      "commits": 0,
-      "pull_requests": 0,
-      "tool_acceptance_rate": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 0
+      "input_tokens": 2869,
+      "output_tokens": 91712,
+      "cache_read_tokens": 25721190,
+      "cache_creation_tokens": 762276
     },
     {
       "actor": {
@@ -395,6 +377,24 @@
       "output_tokens": 155604,
       "cache_read_tokens": 31791707,
       "cache_creation_tokens": 1030102
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-05",
+      "session_count": 5,
+      "lines_of_code": 0,
+      "commits": 2,
+      "pull_requests": 1,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 558,
+      "output_tokens": 84671,
+      "cache_read_tokens": 20031400,
+      "cache_creation_tokens": 337654
     },
     {
       "actor": {
@@ -427,10 +427,28 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 13,
-      "output_tokens": 416,
-      "cache_read_tokens": 579478,
-      "cache_creation_tokens": 85118
+      "input_tokens": 1211,
+      "output_tokens": 185650,
+      "cache_read_tokens": 35033673,
+      "cache_creation_tokens": 1482607
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-08",
+      "session_count": 4,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 2119,
+      "output_tokens": 67192,
+      "cache_read_tokens": 5178949,
+      "cache_creation_tokens": 822549
     }
   ]
 }
