@@ -119,4 +119,27 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-08*
+## 4. 현재 진행 상태
+
+### 당면 과제
+
+#### Token Dashboard
+- [x] 5명 설치 완료 (ash, jemin, jy.lim, izzy, chiri)
+- [x] 커밋 카운트 전원 커버 (`git log --after` 기반)
+- [ ] Gemini v0.33 metrics_url_path 복원
+
+#### Finance Dashboard
+- [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
+- [x] 세션16: Cash Position 월별 필터링 + 환율 API 자동화
+- [ ] Sheets 통화 형식 #VALUE! 에러 검증
+
+#### Leave Dashboard
+- [ ] 입사일 필드 연동
+- [ ] 재직자 필터링 (퇴사자 제외)
+- [ ] 반차(0.5일) 처리
+- [ ] Vercel 배포
+- [ ] Slack `/연차` 슬래시 커맨드 연동
+
+---
+
+*마지막 업데이트: 2026-03-09*
