@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import DailyUsageChart from "@/components/charts/DailyUsageChart";
 import ModelPieChart from "@/components/charts/ModelPieChart";
@@ -13,8 +13,18 @@ import { useT } from "@/lib/contexts/LanguageContext";
 
 export default function TeamPage() {
   const { t } = useT();
-  const [selectedName, setSelectedName] = useState(UNIQUE_MEMBERS[0]?.name ?? "");
+  const [selectedName, setSelectedName] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("members-selected");
+      if (saved && UNIQUE_MEMBERS.some((m) => m.name === saved)) return saved;
+    }
+    return UNIQUE_MEMBERS[0]?.name ?? "";
+  });
   const { data: rawData, loading, error } = useAnalytics();
+
+  useEffect(() => {
+    localStorage.setItem("members-selected", selectedName);
+  }, [selectedName]);
   const memberData = aggregateMember(rawData, selectedName);
 
   return (
