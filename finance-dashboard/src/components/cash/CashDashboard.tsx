@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import InfoTip from "@/components/common/InfoTip";
 import CashTrendChart from "@/components/charts/CashTrendChart";
 import type { CashMonthly, CurrencyUnit } from "@/lib/types";
 import { formatKRW, formatUSD, formatVND, formatNumber } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 interface CashData {
   months: string[];
@@ -38,13 +39,24 @@ function formatCurrency(amount: number, unit: CurrencyUnit): string {
 }
 
 export default function CashDashboard({ data }: { data: CashData }) {
-  const [currency, setCurrency] = useState<CurrencyUnit>("KRW");
+  const { t } = useT();
+  const [currency, setCurrency] = useState<CurrencyUnit>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("cash-currency");
+      if (saved && (["KRW", "USD", "VND"] as string[]).includes(saved)) return saved as CurrencyUnit;
+    }
+    return "KRW";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cash-currency", currency);
+  }, [currency]);
   const { monthlyData, exchangeRates, burnRate, runway } = data;
 
   const latest = monthlyData[monthlyData.length - 1];
   const prev = monthlyData.length > 1 ? monthlyData[monthlyData.length - 2] : null;
 
-  if (!latest) return <p className="text-gray-500">데이터가 없습니다</p>;
+  if (!latest) return <p className="text-gray-500">{t("common.noData")}</p>;
 
   const fmt = (krw: number) => formatCurrency(convertKrw(krw, currency, exchangeRates), currency);
 
@@ -56,7 +68,7 @@ export default function CashDashboard({ data }: { data: CashData }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Cash Position</h1>
+        <h1 className="text-2xl font-bold">{t("cash.title")}</h1>
         <div className="flex items-center gap-3">
           <div className="flex bg-[#111] border border-[#222] rounded-lg p-0.5">
             {CURRENCY_BUTTONS.map((btn) => (
@@ -74,7 +86,7 @@ export default function CashDashboard({ data }: { data: CashData }) {
             ))}
           </div>
           <span className="text-xs text-gray-500">
-            {latest.month} 기준
+            {latest.month} {t("common.basis")}
           </span>
         </div>
       </div>
@@ -82,30 +94,30 @@ export default function CashDashboard({ data }: { data: CashData }) {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
         <KpiCard
-          title="Total Cash"
+          title={t("cash.totalCash")}
           value={fmt(latest.totalBalanceKrw)}
-          subtitle="전 지역 합산"
-          tooltip="한국·미국·베트남 3개 법인 현금 잔고 합계"
+          subtitle={t("cash.totalCash.sub")}
+          tooltip={t("cash.totalCash.tip")}
           trend={balanceChange !== 0 ? { value: Math.abs(Math.round(balanceChange)), isPositive: balanceChange > 0 } : undefined}
         />
         <KpiCard
-          title="Monthly Burn Rate"
+          title={t("cash.burnRate")}
           value={fmt(burnRate)}
-          subtitle="월평균 지출"
-          tooltip="데이터가 있는 월의 Total Cash Outflows 평균"
+          subtitle={t("cash.burnRate.sub")}
+          tooltip={t("cash.burnRate.tip")}
         />
         <KpiCard
-          title="Runway"
-          value={`${runway.toFixed(1)}개월`}
-          subtitle="현재 잔고 / 월평균 지출"
-          tooltip="현재 잔고를 월평균 지출로 나눈 값. 추가 수입 없이 운영 가능한 개월수"
+          title={t("cash.runway")}
+          value={`${runway.toFixed(1)}${t("common.months")}`}
+          subtitle={t("cash.runway.sub")}
+          tooltip={t("cash.runway.tip")}
           trend={runway < 6 ? { value: Math.round(runway), isPositive: false } : undefined}
         />
         <KpiCard
-          title="Net Change"
+          title={t("cash.netChange")}
           value={fmt(latest.totalNetChangeKrw)}
-          subtitle={`${latest.month} 순현금변동`}
-          tooltip="Cash Inflows - Cash Outflows. 음수면 현금 순유출"
+          subtitle={`${latest.month}`}
+          tooltip={t("cash.netChange.tip")}
           trend={latest.totalNetChangeKrw !== 0
             ? { value: Math.abs(Math.round(latest.totalNetChangeKrw / 1e6)), isPositive: latest.totalNetChangeKrw > 0 }
             : undefined}
@@ -126,7 +138,7 @@ export default function CashDashboard({ data }: { data: CashData }) {
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
                   <span className="text-base">{REGION_FLAG[region.region] ?? ""}</span>
                   {region.regionLabel}
-                  <InfoTip text={`${region.regionLabel} 법인 현금 현황`} />
+                  <InfoTip text={`${region.regionLabel} cash status`} />
                 </p>
                 {region.localCurrency !== "KRW" && currency === "KRW" && (
                   <span className="text-xs text-gray-600">
@@ -144,15 +156,15 @@ export default function CashDashboard({ data }: { data: CashData }) {
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
                 <div>
-                  <p className="text-gray-600">Inflows</p>
+                  <p className="text-gray-600">{t("cash.inflows")}</p>
                   <p className="text-green-400">{fmt(region.inflowsKrw)}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Outflows</p>
+                  <p className="text-gray-600">{t("cash.outflows")}</p>
                   <p className="text-red-400">{fmt(region.outflowsKrw)}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Net</p>
+                  <p className="text-gray-600">{t("cash.net")}</p>
                   <p className={region.netChangeKrw >= 0 ? "text-green-400" : "text-red-400"}>
                     {fmt(region.netChangeKrw)}
                   </p>
@@ -166,7 +178,7 @@ export default function CashDashboard({ data }: { data: CashData }) {
                 />
               </div>
               <p className="text-xs text-gray-600 mt-1">
-                비중 {latest.totalBalanceKrw > 0 ? ((region.balanceKrw / latest.totalBalanceKrw) * 100).toFixed(1) : 0}%
+                {t("cash.share")} {latest.totalBalanceKrw > 0 ? ((region.balanceKrw / latest.totalBalanceKrw) * 100).toFixed(1) : 0}%
               </p>
             </div>
           );

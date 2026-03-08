@@ -13,8 +13,8 @@ export default async function CashPage() {
       <div>
         <h1 className="text-2xl font-bold mb-6">Cash Position</h1>
         <div className="rounded-xl bg-[#111111] border border-[#222] p-8 text-center">
-          <p className="text-gray-400 mb-2">데이터를 불러올 수 없습니다</p>
-          <p className="text-sm text-gray-600">Google Sheets API 연결을 확인해주세요</p>
+          <p className="text-gray-400 mb-2">Failed to load data</p>
+          <p className="text-sm text-gray-600">Please check Google Sheets API connection</p>
         </div>
       </div>
     );

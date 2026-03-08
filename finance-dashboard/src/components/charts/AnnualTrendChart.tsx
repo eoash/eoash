@@ -13,6 +13,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import { WITHTAX_YEARLY } from "@/lib/withtax-data";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const data = WITHTAX_YEARLY.map((y) => ({
   year: y.year,
@@ -42,10 +43,11 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export default function AnnualTrendChart() {
+  const { t } = useT();
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">4개년 연간 추이</h3>
-      <p className="mb-3 text-xs text-gray-500">2022~2025 매출·판관비·당기순이익</p>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.annualTrend")}</h3>
+      <p className="mb-3 text-xs text-gray-500">{t("income.chart.annualTrend.sub")}</p>
       <div className="h-[380px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
@@ -59,15 +61,15 @@ export default function AnnualTrendChart() {
             <Tooltip content={CustomTooltip} />
             <Legend wrapperStyle={{ color: "#999", fontSize: 12 }} />
             <ReferenceLine y={0} stroke="#444" strokeDasharray="3 3" />
-            <Bar dataKey="매출" fill="#34D399" name="매출" radius={[4, 4, 0, 0]} barSize={40} />
-            <Bar dataKey="판관비" fill="#FF6B6B" name="판관비" radius={[4, 4, 0, 0]} barSize={40} />
+            <Bar dataKey="매출" fill="#34D399" name={t("income.chart.revenue")} radius={[4, 4, 0, 0]} barSize={40} />
+            <Bar dataKey="판관비" fill="#FF6B6B" name={t("income.chart.expense")} radius={[4, 4, 0, 0]} barSize={40} />
             <Line
               type="monotone"
               dataKey="당기순이익"
               stroke="#E8FF47"
               strokeWidth={3}
               dot={{ fill: "#E8FF47", r: 5 }}
-              name="당기순이익"
+              name={t("income.chart.netIncome")}
             />
           </ComposedChart>
         </ResponsiveContainer>

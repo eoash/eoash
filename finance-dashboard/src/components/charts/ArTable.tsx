@@ -3,24 +3,19 @@
 import React, { useState } from "react";
 import type { ArInvoice } from "@/lib/types";
 import { formatKRW } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
-const RISK_BADGE: Record<string, { label: string; className: string }> = {
-  green: { label: "정산완료", className: "bg-green-500/15 text-green-400" },
-  yellow: { label: "0-30일", className: "bg-yellow-500/15 text-yellow-400" },
-  orange: { label: "31-60일", className: "bg-orange-500/15 text-orange-400" },
-  red: { label: "60일+", className: "bg-red-500/15 text-red-400" },
-};
-
-const STATUS_LABEL: Record<string, string> = {
-  paid: "✅ 정산",
-  unpaid: "⏳ 미수금",
-  checking: "❓ 확인필요",
-  scheduled: "📅 입금예정",
+const RISK_BADGE_CLASS: Record<string, string> = {
+  green: "bg-green-500/15 text-green-400",
+  yellow: "bg-yellow-500/15 text-yellow-400",
+  orange: "bg-orange-500/15 text-orange-400",
+  red: "bg-red-500/15 text-red-400",
 };
 
 type Filter = "all" | "unpaid" | "checking" | "scheduled";
 
 export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
+  const { t } = useT();
   const [filter, setFilter] = useState<Filter>("unpaid");
   const [expandedMonth, setExpandedMonth] = useState<string | null>(null);
 
@@ -34,17 +29,31 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
   // Group by month
   const months = [...new Set(filtered.map((inv) => inv.month))];
 
+  const riskBadgeLabel: Record<string, string> = {
+    green: t("ar.risk.green"),
+    yellow: t("ar.risk.yellow"),
+    orange: t("ar.risk.orange"),
+    red: t("ar.risk.red"),
+  };
+
+  const statusLabel: Record<string, string> = {
+    paid: t("ar.status.paid"),
+    unpaid: t("ar.status.unpaid"),
+    checking: t("ar.status.checking"),
+    scheduled: t("ar.status.scheduled"),
+  };
+
   const filters: { key: Filter; label: string; count: number }[] = [
-    { key: "unpaid", label: "미수금 전체", count: invoices.filter((i) => i.status !== "paid").length },
-    { key: "checking", label: "확인필요", count: invoices.filter((i) => i.status === "checking").length },
-    { key: "scheduled", label: "입금예정", count: invoices.filter((i) => i.status === "scheduled").length },
-    { key: "all", label: "전체 (정산포함)", count: invoices.length },
+    { key: "unpaid", label: t("ar.table.filterUnpaid"), count: invoices.filter((i) => i.status !== "paid").length },
+    { key: "checking", label: t("ar.table.filterChecking"), count: invoices.filter((i) => i.status === "checking").length },
+    { key: "scheduled", label: t("ar.table.filterScheduled"), count: invoices.filter((i) => i.status === "scheduled").length },
+    { key: "all", label: t("ar.table.filterAll"), count: invoices.length },
   ];
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-gray-400">거래처별 미수금 상세</h3>
+        <h3 className="text-sm font-semibold text-gray-400">{t("ar.table.title")}</h3>
         <div className="flex gap-1">
           {filters.map((f) => (
             <button
@@ -66,13 +75,13 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#222]">
-              <th className="text-left py-2 px-3 text-gray-500 font-medium">거래처</th>
-              <th className="text-right py-2 px-3 text-gray-500 font-medium">공급가액</th>
-              <th className="text-left py-2 px-3 text-gray-500 font-medium">품목</th>
-              <th className="text-center py-2 px-3 text-gray-500 font-medium">발급일</th>
-              <th className="text-center py-2 px-3 text-gray-500 font-medium">상태</th>
-              <th className="text-center py-2 px-3 text-gray-500 font-medium">리스크</th>
-              <th className="text-left py-2 px-3 text-gray-500 font-medium">비고</th>
+              <th className="text-left py-2 px-3 text-gray-500 font-medium">{t("ar.table.client")}</th>
+              <th className="text-right py-2 px-3 text-gray-500 font-medium">{t("ar.table.amount")}</th>
+              <th className="hidden md:table-cell text-left py-2 px-3 text-gray-500 font-medium">{t("ar.table.item")}</th>
+              <th className="hidden md:table-cell text-center py-2 px-3 text-gray-500 font-medium">{t("ar.table.date")}</th>
+              <th className="text-center py-2 px-3 text-gray-500 font-medium">{t("ar.table.status")}</th>
+              <th className="text-center py-2 px-3 text-gray-500 font-medium">{t("ar.table.risk")}</th>
+              <th className="hidden md:table-cell text-left py-2 px-3 text-gray-500 font-medium">{t("ar.table.note")}</th>
             </tr>
           </thead>
           <tbody>
@@ -89,7 +98,7 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
                   >
                     <td colSpan={2} className="py-2 px-3">
                       <span className="text-[#E8FF47] font-semibold">{month}</span>
-                      <span className="text-gray-500 ml-2">({monthInvoices.length}건)</span>
+                      <span className="text-gray-500 ml-2">({monthInvoices.length}{t("common.count")})</span>
                       <span className="text-gray-400 ml-2">{formatKRW(monthTotal)}</span>
                     </td>
                     <td colSpan={5} className="py-2 px-3 text-right text-gray-500 text-xs">
@@ -98,30 +107,30 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
                   </tr>
                   {isExpanded &&
                     monthInvoices.map((inv, j) => {
-                      const badge = RISK_BADGE[inv.risk];
+                      const badgeClass = RISK_BADGE_CLASS[inv.risk];
                       return (
                         <tr key={j} className="border-b border-[#111] hover:bg-white/3">
                           <td className="py-2 px-3 text-white">{inv.client}</td>
                           <td className="py-2 px-3 text-right text-white font-mono">
                             {formatKRW(inv.amount)}
                           </td>
-                          <td className="py-2 px-3 text-gray-400 max-w-[200px] truncate">
+                          <td className="hidden md:table-cell py-2 px-3 text-gray-400 max-w-[200px] truncate">
                             {inv.description}
                           </td>
-                          <td className="py-2 px-3 text-center text-gray-400 text-xs">
+                          <td className="hidden md:table-cell py-2 px-3 text-center text-gray-400 text-xs">
                             {inv.invoiceDate}
                           </td>
                           <td className="py-2 px-3 text-center text-xs">
-                            {STATUS_LABEL[inv.status]}
+                            {statusLabel[inv.status]}
                           </td>
                           <td className="py-2 px-3 text-center">
                             <span
-                              className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${badge.className}`}
+                              className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${badgeClass}`}
                             >
-                              {inv.status === "paid" ? badge.label : `${inv.agingDays}일`}
+                              {inv.status === "paid" ? riskBadgeLabel[inv.risk] : `${inv.agingDays}${t("common.days")}`}
                             </span>
                           </td>
-                          <td className="py-2 px-3 text-gray-500 text-xs">{inv.note}</td>
+                          <td className="hidden md:table-cell py-2 px-3 text-gray-500 text-xs">{inv.note}</td>
                         </tr>
                       );
                     })}
@@ -133,7 +142,7 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
       </div>
 
       {filtered.length === 0 && (
-        <p className="text-center text-gray-500 py-8">해당 조건의 데이터가 없습니다</p>
+        <p className="text-center text-gray-500 py-8">{t("ar.table.noData")}</p>
       )}
     </div>
   );

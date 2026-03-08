@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import type { CashMonthly, CurrencyUnit } from "@/lib/types";
 import { formatKRW, formatUSD, formatVND } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 interface Props {
   monthlyData: CashMonthly[];
@@ -55,6 +56,7 @@ function CustomTooltip({ active, payload, label, currency }: any) {
 }
 
 export default function CashTrendChart({ monthlyData, currency, exchangeRates }: Props) {
+  const { t } = useT();
   const chartData = monthlyData.map((m) => ({
     month: m.month.replace("2026.", ""),
     inflows: convert(m.totalInflowsKrw, currency, exchangeRates),
@@ -64,7 +66,7 @@ export default function CashTrendChart({ monthlyData, currency, exchangeRates }:
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
-      <h3 className="text-sm font-semibold text-gray-400 mb-4">Cash Flow 추이</h3>
+      <h3 className="text-sm font-semibold text-gray-400 mb-4">{t("cash.trendChart")}</h3>
       <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
@@ -80,8 +82,8 @@ export default function CashTrendChart({ monthlyData, currency, exchangeRates }:
               formatter={(value: string) => <span className="text-gray-400">{value}</span>}
             />
             <ReferenceLine y={0} stroke="#333" />
-            <Bar dataKey="inflows" name="Inflows" fill="#4ADE80" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="outflows" name="Outflows" fill="#F87171" radius={[0, 0, 4, 4]} />
+            <Bar dataKey="inflows" name={t("cash.inflows")} fill="#4ADE80" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="outflows" name={t("cash.outflows")} fill="#F87171" radius={[0, 0, 4, 4]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

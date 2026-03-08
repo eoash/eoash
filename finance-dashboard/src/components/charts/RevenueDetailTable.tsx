@@ -2,6 +2,7 @@
 
 import { useState, Fragment } from "react";
 import type { RevenueSegmentDetail } from "@/lib/types";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const SEGMENT_COLORS: Record<string, string> = {
   "KR 한국": "#E8FF47",
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export default function RevenueDetailTable({ details, months }: Props) {
+  const { t } = useT();
   const [expanded, setExpanded] = useState<Set<string>>(new Set(details.map((d) => d.segment)));
 
   const toggle = (seg: string) => {
@@ -35,18 +37,18 @@ export default function RevenueDetailTable({ details, months }: Props) {
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">사업부별 매출 상세</h3>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("rev.table.detail")}</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#333]">
-              <th className="text-left py-2 pr-4 text-gray-500 font-medium w-40">항목</th>
+              <th className="text-left py-2 pr-4 text-gray-500 font-medium w-40">{t("rev.table.item")}</th>
               {months.map((m) => (
                 <th key={m} className="text-right py-2 px-2 text-gray-500 font-medium min-w-[72px]">
                   {m}
                 </th>
               ))}
-              <th className="text-right py-2 pl-3 text-gray-500 font-medium min-w-[80px]">합계</th>
+              <th className="text-right py-2 pl-3 text-gray-500 font-medium min-w-[80px]">{t("rev.table.total")}</th>
             </tr>
           </thead>
           <tbody>
@@ -104,7 +106,7 @@ export default function RevenueDetailTable({ details, months }: Props) {
                   {isOpen && seg.headcount.some((h) => h > 0) && (
                     <tr className="border-b border-[#222]">
                       <td className="py-2 pr-4 pl-8 text-gray-600 text-xs">
-                        인당 매출 ({seg.headcount.find((h) => h > 0)}명)
+                        {t("rev.table.perCapita")} ({seg.headcount.find((h) => h > 0)}{t("common.people")})
                       </td>
                       {seg.perPerson.map((v, i) => (
                         <td key={i} className="text-right py-2 px-2 text-gray-600 text-xs">

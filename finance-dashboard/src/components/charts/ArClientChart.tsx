@@ -2,6 +2,7 @@
 
 import type { ArClientSummary } from "@/lib/types";
 import { formatKRW } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const RISK_COLOR: Record<string, string> = {
   yellow: "#E8FF47",
@@ -16,12 +17,13 @@ const RISK_EMOJI: Record<string, string> = {
 };
 
 export default function ArClientChart({ data }: { data: ArClientSummary[] }) {
+  const { t } = useT();
   const maxAmount = Math.max(...data.map((d) => d.totalOutstanding), 1);
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
       <h3 className="text-sm font-semibold text-gray-400 mb-4">
-        거래처별 미수금 (Top {Math.min(data.length, 10)})
+        {t("ar.chart.client")} (Top {Math.min(data.length, 10)})
       </h3>
       <div className="space-y-3">
         {data.slice(0, 10).map((c) => (
@@ -42,13 +44,13 @@ export default function ArClientChart({ data }: { data: ArClientSummary[] }) {
               />
             </div>
             <div className="flex justify-between mt-0.5">
-              <span className="text-xs text-gray-600">{c.invoiceCount}건</span>
-              <span className="text-xs text-gray-600">최장 {c.oldestDays}일</span>
+              <span className="text-xs text-gray-600">{c.invoiceCount}{t("common.count")}</span>
+              <span className="text-xs text-gray-600">{c.oldestDays}{t("common.days")}</span>
             </div>
           </div>
         ))}
       </div>
-      {data.length === 0 && <p className="text-center text-gray-500 py-4">미수금 없음</p>}
+      {data.length === 0 && <p className="text-center text-gray-500 py-4">{t("ar.chart.noAr")}</p>}
     </div>
   );
 }

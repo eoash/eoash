@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { RevenueSegment } from "@/lib/types";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 interface RevenueSegmentChartProps {
   data: RevenueSegment[];
@@ -30,9 +31,10 @@ function CustomTooltip({ active, payload }: any) {
 }
 
 export default function RevenueSegmentChart({ data }: RevenueSegmentChartProps) {
+  const { t } = useT();
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">사업별 매출 비중</h3>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("rev.chart.segment")}</h3>
       <div className="h-[350px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

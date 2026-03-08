@@ -3,19 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useT } from "@/lib/contexts/LanguageContext";
+import type { TranslationKey } from "@/lib/i18n";
 
-const menuItems = [
-  { label: "매출 현황", href: "/" },
-  { label: "클라이언트별 매출", href: "/clients" },
-  { label: "A/R 현황", href: "/ar" },
-  { label: "YoY 비교", href: "/yoy" },
-  { label: "Cash Position", href: "/cash" },
-  { label: "Income Statement", href: "/income" },
-  { label: "환율 (FX)", href: "/fx" },
+const menuItems: { labelKey: TranslationKey; href: string }[] = [
+  { labelKey: "nav.revenue", href: "/" },
+  { labelKey: "nav.clients", href: "/clients" },
+  { labelKey: "nav.ar", href: "/ar" },
+  { labelKey: "nav.yoy", href: "/yoy" },
+  { labelKey: "nav.cash", href: "/cash" },
+  { labelKey: "nav.income", href: "/income" },
+  { labelKey: "nav.fx", href: "/fx" },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { locale, setLocale, t } = useT();
   const [open, setOpen] = useState(false);
 
   // 페이지 이동 시 드로어 닫기
@@ -37,8 +40,8 @@ export default function Sidebar() {
     <>
       <div>
         <div className="mb-8 px-4">
-          <h1 className="text-lg font-bold text-white">Finance</h1>
-          <p className="text-xs text-gray-500 mt-1">EO Studio Dashboard</p>
+          <h1 className="text-lg font-bold text-white">{t("sidebar.title")}</h1>
+          <p className="text-xs text-gray-500 mt-1">{t("sidebar.subtitle")}</p>
         </div>
         <nav className="flex flex-col gap-1">
           {menuItems.map((item) => {
@@ -57,16 +60,41 @@ export default function Sidebar() {
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="px-4 pb-4">
+      <div className="flex flex-col gap-2 px-4 pb-4">
+        {/* Language toggle */}
+        <div className="flex items-center gap-1 px-0 py-1">
+          <button
+            onClick={() => setLocale("ko")}
+            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+              locale === "ko"
+                ? "bg-[#E8FF47]/10 text-[#E8FF47]"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            한국어
+          </button>
+          <span className="text-gray-600">/</span>
+          <button
+            onClick={() => setLocale("en")}
+            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+              locale === "en"
+                ? "bg-[#E8FF47]/10 text-[#E8FF47]"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            EN
+          </button>
+        </div>
+
         <span className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
-          EO Studio
+          {t("sidebar.brand")}
         </span>
       </div>
     </>

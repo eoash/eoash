@@ -12,12 +12,14 @@ import {
 } from "recharts";
 import type { ArAgingBucket } from "@/lib/types";
 import { formatKRW } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 export default function ArAgingChart({ data }: { data: ArAgingBucket[] }) {
+  const { t } = useT();
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
       <h3 className="text-sm font-semibold text-gray-400 mb-4">
-        Aging 분포 (미수금)
+        {t("ar.chart.aging")}
       </h3>
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
@@ -32,7 +34,7 @@ export default function ArAgingChart({ data }: { data: ArAgingBucket[] }) {
           <Tooltip
             contentStyle={{ background: "#1a1a1a", border: "1px solid #333", borderRadius: 8 }}
             labelStyle={{ color: "#aaa" }}
-            formatter={(value: any) => [formatKRW(value as number), "미수금"]}
+            formatter={(value: any) => [formatKRW(value as number), t("ar.unpaid")]}
           />
           <Bar dataKey="amount" radius={[6, 6, 0, 0]}>
             {data.map((entry, i) => (
@@ -45,7 +47,7 @@ export default function ArAgingChart({ data }: { data: ArAgingBucket[] }) {
         {data.map((b) => (
           <div key={b.label} className="text-center">
             <span className="text-xs text-gray-500">{b.label}</span>
-            <p className="text-sm font-medium text-white">{b.count}건</p>
+            <p className="text-sm font-medium text-white">{b.count}{t("common.count")}</p>
           </div>
         ))}
       </div>

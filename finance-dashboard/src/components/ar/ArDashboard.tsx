@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import ArAgingChart from "@/components/charts/ArAgingChart";
 import ArClientChart from "@/components/charts/ArClientChart";
 import ArTable from "@/components/charts/ArTable";
 import { formatKRW } from "@/lib/utils";
 import type { ArInvoice, ArAgingBucket, ArClientSummary } from "@/lib/types";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 /** "1월" → 1, "12월" → 12 */
 function monthToNum(m: string): number {
@@ -18,13 +19,34 @@ interface Props {
 }
 
 export default function ArDashboard({ invoices }: Props) {
+  const { t } = useT();
   const allMonths = useMemo(() => {
     const set = new Set(invoices.map((inv) => inv.month));
     return [...set].sort((a, b) => monthToNum(a) - monthToNum(b));
   }, [invoices]);
 
-  const [startMonth, setStartMonth] = useState(allMonths[0] ?? "1월");
-  const [endMonth, setEndMonth] = useState(allMonths[allMonths.length - 1] ?? "12월");
+  const [startMonth, setStartMonth] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ar-start-month");
+      if (saved && allMonths.includes(saved)) return saved;
+    }
+    return allMonths[0] ?? "1월";
+  });
+  const [endMonth, setEndMonth] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ar-end-month");
+      if (saved && allMonths.includes(saved)) return saved;
+    }
+    return allMonths[allMonths.length - 1] ?? "12월";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ar-start-month", startMonth);
+  }, [startMonth]);
+
+  useEffect(() => {
+    localStorage.setItem("ar-end-month", endMonth);
+  }, [endMonth]);
 
   const filtered = useMemo(() => {
     const s = monthToNum(startMonth);
@@ -53,10 +75,10 @@ export default function ArDashboard({ invoices }: Props) {
 
     // Aging buckets
     const bucketDefs = [
-      { label: "0-30일", min: 0, max: 30, color: "#E8FF47" },
-      { label: "31-60일", min: 31, max: 60, color: "#F59E0B" },
-      { label: "61-90일", min: 61, max: 90, color: "#F97316" },
-      { label: "90일+", min: 91, max: Infinity, color: "#EF4444" },
+      { label: t("ar.aging.0_30"), min: 0, max: 30, color: "#E8FF47" },
+      { label: t("ar.aging.31_60"), min: 31, max: 60, color: "#F59E0B" },
+      { label: t("ar.aging.61_90"), min: 61, max: 90, color: "#F97316" },
+      { label: t("ar.aging.90plus"), min: 91, max: Infinity, color: "#EF4444" },
     ];
     const agingBuckets: ArAgingBucket[] = bucketDefs.map((b) => {
       const items = outstanding.filter((inv) => inv.agingDays >= b.min && inv.agingDays <= b.max);
@@ -86,12 +108,12 @@ export default function ArDashboard({ invoices }: Props) {
     const orangeCount = clientSummaries.filter((c) => c.risk === "orange").length;
 
     return { totalOutstanding, outstandingCount, avgCollectionDays, maxAgingDays, agingBuckets, clientSummaries, redCount, orangeCount };
-  }, [filtered]);
+  }, [filtered, t]);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
-        <h1 className="text-2xl font-bold">A/R 현황</h1>
+        <h1 className="text-2xl font-bold">{t("ar.title")}</h1>
         <div className="flex items-center gap-2 text-sm">
           <select
             value={startMonth}
@@ -112,36 +134,36 @@ export default function ArDashboard({ invoices }: Props) {
               <option key={m} value={m}>{m}</option>
             ))}
           </select>
-          <span className="text-xs text-gray-500 ml-1">거래처별 미수금 / 회수기간 관리</span>
+          <span className="text-xs text-gray-500 ml-1">{t("ar.subtitle")}</span>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
         <KpiCard
-          title="미수금 합계"
+          title={t("ar.outstanding")}
           value={formatKRW(stats.totalOutstanding)}
-          subtitle={`${stats.outstandingCount}건 미정산`}
-          tooltip="정산일이 비어있는 건의 공급가액 합계. 확인필요·입금예정 포함"
+          subtitle={`${stats.outstandingCount}${t("common.count")}`}
+          tooltip={t("ar.outstanding.tip")}
         />
         <KpiCard
-          title="평균 회수일수"
-          value={`${stats.avgCollectionDays}일`}
-          subtitle="정산완료 건 기준"
-          tooltip="실제 정산된 건들의 발급일→정산일 평균 소요일수"
+          title={t("ar.avgDays")}
+          value={`${stats.avgCollectionDays}${t("common.days")}`}
+          subtitle={t("ar.avgDays.sub")}
+          tooltip={t("ar.avgDays.tip")}
         />
         <KpiCard
-          title="최장 미수금"
-          value={`${stats.maxAgingDays}일`}
-          subtitle="발급일 기준 경과일"
-          tooltip="현재 미수금 중 가장 오래된 건의 발급일 기준 경과일수"
+          title={t("ar.oldest")}
+          value={`${stats.maxAgingDays}${t("common.days")}`}
+          subtitle={t("ar.oldest.sub")}
+          tooltip={t("ar.oldest.tip")}
           trend={stats.maxAgingDays > 60 ? { value: stats.maxAgingDays, isPositive: false } : undefined}
         />
         <KpiCard
-          title="리스크 거래처"
-          value={`${stats.redCount + stats.orangeCount}곳`}
-          subtitle={`🔴 ${stats.redCount}곳 · 🟠 ${stats.orangeCount}곳`}
-          tooltip="미수금 경과 31일 이상인 거래처 수. 🔴 60일+, 🟠 31-60일"
+          title={t("ar.riskClients")}
+          value={`${stats.redCount + stats.orangeCount}${t("common.places")}`}
+          subtitle={`🔴 ${stats.redCount}${t("common.places")} · 🟠 ${stats.orangeCount}${t("common.places")}`}
+          tooltip={t("ar.riskClients.tip")}
           trend={stats.redCount > 0 ? { value: stats.redCount, isPositive: false } : undefined}
         />
       </div>

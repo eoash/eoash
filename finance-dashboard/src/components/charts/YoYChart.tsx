@@ -3,12 +3,14 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import type { YoYRow } from "@/lib/types";
 import { formatKRW } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const COLORS = ["#333", "#444", "#555", "#666", "#E8FF47", "#4ADE80"];
 
 export default function YoYChart({ data }: { data: YoYRow[] }) {
+  const { t } = useT();
   // 월별 비교 차트 데이터
-  const months = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
+  const months = Array.from({ length: 12 }, (_, i) => t(`month.${i + 1}` as any));
   const chartData = months.map((m, i) => {
     const row: Record<string, any> = { month: m };
     for (const d of data) row[d.year] = d.monthly[i];
@@ -20,7 +22,7 @@ export default function YoYChart({ data }: { data: YoYRow[] }) {
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
-      <h3 className="text-sm font-semibold text-gray-400 mb-4">월별 매출 비교 (최근 3년)</h3>
+      <h3 className="text-sm font-semibold text-gray-400 mb-4">{t("yoy.chart.monthly")}</h3>
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>

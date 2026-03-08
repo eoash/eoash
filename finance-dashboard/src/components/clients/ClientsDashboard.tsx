@@ -1,0 +1,87 @@
+"use client";
+
+import KpiCard from "@/components/cards/KpiCard";
+import { formatKRW } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
+import type { ClientRevenue } from "@/lib/types";
+
+export default function ClientsDashboard({ clients }: { clients: ClientRevenue[] }) {
+  const { t } = useT();
+
+  const totalRevenue = clients.reduce((s, c) => s + c.totalAmount, 0);
+  const totalPaid = clients.reduce((s, c) => s + c.paidAmount, 0);
+  const totalUnpaid = clients.reduce((s, c) => s + c.unpaidAmount, 0);
+  const avgDays = clients.filter((c) => c.avgCollectionDays > 0);
+  const overallAvgDays = avgDays.length > 0 ? Math.round(avgDays.reduce((s, c) => s + c.avgCollectionDays, 0) / avgDays.length) : 0;
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">{t("clients.title")}</h1>
+        <span className="text-xs text-gray-500">{t("clients.subtitle")}</span>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+        <KpiCard title={t("clients.totalRevenue")} value={formatKRW(totalRevenue)} subtitle={`${clients.length} ${t("common.places")}`} tooltip={t("clients.totalRevenue.tip")} />
+        <KpiCard title={t("clients.settled")} value={formatKRW(totalPaid)} subtitle={`${Math.round((totalPaid / totalRevenue) * 100)}%`} tooltip={t("clients.settled.tip")} />
+        <KpiCard title={t("clients.outstanding")} value={formatKRW(totalUnpaid)} subtitle={`${clients.filter((c) => c.unpaidCount > 0).length} ${t("common.places")}`} tooltip={t("clients.outstanding.tip")} trend={totalUnpaid > 0 ? { value: Math.round((totalUnpaid / totalRevenue) * 100), isPositive: false } : undefined} />
+        <KpiCard title={t("clients.avgDays")} value={`${overallAvgDays}${t("common.days")}`} subtitle={t("clients.avgDays.sub")} tooltip={t("clients.avgDays.tip")} />
+      </div>
+
+      {/* Client Table */}
+      <div className="rounded-xl bg-[#111111] border border-[#222] p-5 overflow-x-auto">
+        <h3 className="text-sm font-semibold text-gray-400 mb-4">{t("clients.table.title")} ({clients.length}{t("common.places")})</h3>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[#222]">
+              <th className="text-left py-2 px-3 text-gray-500">{t("clients.table.rank")}</th>
+              <th className="text-left py-2 px-3 text-gray-500">{t("clients.table.client")}</th>
+              <th className="text-right py-2 px-3 text-gray-500">{t("clients.table.revenue")}</th>
+              <th className="text-right py-2 px-3 text-gray-500">{t("clients.table.count")}</th>
+              <th className="text-center py-2 px-3 text-gray-500">{t("clients.table.status")}</th>
+              <th className="text-right py-2 px-3 text-gray-500">{t("clients.table.outstanding")}</th>
+              <th className="hidden md:table-cell text-right py-2 px-3 text-gray-500">{t("clients.table.days")}</th>
+              <th className="hidden md:table-cell text-right py-2 px-3 text-gray-500">{t("clients.table.share")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clients.map((c, i) => {
+              const pct = totalRevenue > 0 ? (c.totalAmount / totalRevenue) * 100 : 0;
+              return (
+                <tr key={c.client} className="border-b border-[#111] hover:bg-white/5">
+                  <td className="py-2 px-3 text-gray-600">{i + 1}</td>
+                  <td className="py-2 px-3 text-white max-w-[200px] truncate">{c.client}</td>
+                  <td className="py-2 px-3 text-right text-white font-mono">{formatKRW(c.totalAmount)}</td>
+                  <td className="py-2 px-3 text-right text-gray-400">{c.invoiceCount}{t("common.count")}</td>
+                  <td className="py-2 px-3 text-center">
+                    {c.unpaidCount === 0 ? (
+                      <span className="text-green-400 text-xs">{t("clients.table.allSettled")}</span>
+                    ) : (
+                      <span className="text-yellow-400 text-xs">{c.paidCount}/{c.invoiceCount}</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-3 text-right">
+                    {c.unpaidAmount > 0 ? (
+                      <span className="text-red-400 font-mono">{formatKRW(c.unpaidAmount)}</span>
+                    ) : (
+                      <span className="text-gray-600">&mdash;</span>
+                    )}
+                  </td>
+                  <td className="hidden md:table-cell py-2 px-3 text-right text-gray-400">{c.avgCollectionDays > 0 ? `${c.avgCollectionDays}${t("common.days")}` : "&mdash;"}</td>
+                  <td className="hidden md:table-cell py-2 px-3 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <div className="w-16 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#E8FF47] rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
+                      </div>
+                      <span className="text-xs text-gray-500 w-10 text-right">{pct.toFixed(1)}%</span>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

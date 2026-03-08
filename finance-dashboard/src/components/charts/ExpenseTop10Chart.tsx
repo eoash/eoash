@@ -1,6 +1,7 @@
 "use client";
 
 import { WITHTAX_EXPENSES_2025 } from "@/lib/withtax-data";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const data = WITHTAX_EXPENSES_2025.slice(0, 10);
 const maxAmount = data[0].amount;
@@ -16,10 +17,11 @@ function fmt(v: number) {
 }
 
 export default function ExpenseTop10Chart() {
+  const { t } = useT();
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">판관비 TOP 10</h3>
-      <p className="mb-3 text-xs text-gray-500">2025년 판관비 상위 10개 항목</p>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.expenseTop10")}</h3>
+      <p className="mb-3 text-xs text-gray-500">{t("income.chart.expenseTop10.sub")}</p>
       <div className="flex flex-col gap-2.5 mt-4">
         {data.map((item, i) => (
           <div key={item.name} className="group relative">

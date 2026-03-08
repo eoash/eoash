@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { RevenueSegmentDetail } from "@/lib/types";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const SEGMENT_COLORS: Record<string, string> = {
   "KR 한국": "#E8FF47",
@@ -50,6 +51,7 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export default function RevenueTrendChart({ details, months }: RevenueTrendChartProps) {
+  const { t } = useT();
   // Transform segmentDetails into stacked bar data
   const segmentNames = details.map((d) => d.segment);
   const chartData = months.map((month, i) => {
@@ -62,7 +64,7 @@ export default function RevenueTrendChart({ details, months }: RevenueTrendChart
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">사업부별 월간 매출</h3>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("rev.chart.monthly")}</h3>
       <div className="h-[350px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>

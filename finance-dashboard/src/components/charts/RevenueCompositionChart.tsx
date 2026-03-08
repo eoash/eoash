@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { WITHTAX_YEARLY } from "@/lib/withtax-data";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 const COLORS = ["#34D399", "#47B8FF", "#A78BFA", "#F59E0B", "#FF6B6B", "#E8FF47"];
 
@@ -40,10 +41,11 @@ function CustomTooltip({ active, payload }: any) {
 }
 
 export default function RevenueCompositionChart() {
+  const { t } = useT();
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">매출 구성</h3>
-      <p className="mb-3 text-xs text-gray-500">2025년 매출 항목별 비중</p>
+      <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.composition")}</h3>
+      <p className="mb-3 text-xs text-gray-500">{t("income.chart.composition.sub")}</p>
       <div className="h-[260px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

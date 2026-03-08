@@ -11,6 +11,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import { formatNumber } from "@/lib/utils";
+import { useT } from "@/lib/contexts/LanguageContext";
 
 interface FxPoint {
   date: string;
@@ -31,10 +32,11 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export default function FxLiveChart({ data }: { data: FxPoint[] }) {
+  const { t } = useT();
   if (data.length === 0) {
     return (
       <div className="rounded-xl bg-[#111111] border border-[#222] p-6 text-center">
-        <p className="text-gray-500">환율 추이 데이터를 불러올 수 없습니다</p>
+        <p className="text-gray-500">{t("fx.chart.error")}</p>
       </div>
     );
   }
@@ -49,7 +51,7 @@ export default function FxLiveChart({ data }: { data: FxPoint[] }) {
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
-      <h3 className="text-sm font-semibold text-gray-400 mb-4">USD/KRW 90일 추이</h3>
+      <h3 className="text-sm font-semibold text-gray-400 mb-4">{t("fx.chart.usdkrw90d")}</h3>
       <div className="h-[320px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
