@@ -111,6 +111,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **managed-settings.json env**: Claude Code 프로세스에만 적용됨, Bash 자식 프로세스에는 전달 안 됨
 - **OTel delta→cumulative 외삽**: Prometheus `increase([1d])`는 카운터 첫째 날 데이터 포인트가 적으면 24시간으로 외삽하여 과대 계산 → per-user cutoff에 1일 grace period 추가 필수 (`addDays(cutoff, 1)`)
 
+### install-hook.sh 셸→Python 함정 (2026-03-08)
+- **triple-quote 충돌**: `python3 -c "..."` 안에서 `'''$VAR'''` 사용 시, VAR이 `'`로 끝나면 `''''`가 되어 Python SyntaxError → 환경변수로 전달 후 `os.environ[]`로 읽기
+- **f-string 이스케이프**: `python3 -c "..."` 안에서 `existing[\"key\"]`처럼 `\"`를 쓰면 환경에 따라 깨짐 → 문자열 연결(`+`)이나 `.get()`으로 대체
+- **Windows UTF-8**: Python 3.x라도 Windows 기본 인코딩은 cp949 → `PYTHONUTF8=1` 환경변수 + `open(..., encoding='utf-8')` 명시 필수
+- **Prometheus staleness (5분 규칙)**: 메트릭이 5분 이상 스크랩 안 되면 stale 처리 → `last_over_time(metric[30d])`로 마지막 유효 값 조회 (Gemini 등 간헐적 push 메트릭)
+
 ### Vercel + Google Service Account 함정 (2026-03-07)
 - **Private Key newline 손상**: Vercel env var에 줄바꿈 있는 키 직접 넣으면 `invalid_grant` 에러 → **SA JSON 전체를 Base64 인코딩**해서 `GOOGLE_SA_KEY_BASE64`로 저장, 코드에서 `Buffer.from(env, "base64")` 디코딩
 - **Service Account Sheets 공유 필수**: SA 이메일을 Google Sheets에 뷰어로 공유 안 하면 `Requested entity was not found` 에러
