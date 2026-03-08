@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { label: "매출 현황", href: "/" },
+  { label: "클라이언트별 매출", href: "/clients" },
+  { label: "A/R 현황", href: "/ar" },
+  { label: "YoY 비교", href: "/yoy" },
   { label: "Cash Position", href: "/cash" },
   { label: "Income Statement", href: "/income" },
   { label: "환율 (FX)", href: "/fx" },

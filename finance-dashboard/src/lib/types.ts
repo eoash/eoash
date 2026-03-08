@@ -39,12 +39,34 @@ export interface CashPositionRow {
   balanceUsd: number;
 }
 
+export interface CashRegionData {
+  region: string;
+  regionLabel: string;
+  balanceKrw: number;
+  inflowsKrw: number;
+  outflowsKrw: number;
+  netChangeKrw: number;
+  balanceLocal: number;
+  localCurrency: string;
+}
+
 export interface CashRegionSummary {
   region: string;
   regionLabel: string;
   banks: { bank: string; currency: string; balance: number; balanceUsd: number }[];
   totalUsd: number;
 }
+
+export interface CashMonthly {
+  month: string;
+  regions: CashRegionData[];
+  totalBalanceKrw: number;
+  totalInflowsKrw: number;
+  totalOutflowsKrw: number;
+  totalNetChangeKrw: number;
+}
+
+export type CurrencyUnit = "KRW" | "USD" | "VND";
 
 export interface IncomeRow {
   month: string;
@@ -76,4 +98,53 @@ export interface FxHistoryPoint {
   date: string;
   usdKrw: number;
   usdVnd: number;
+}
+
+export interface YoYRow {
+  year: string;
+  monthly: number[];
+  total: number;
+  headcount: number;
+  perPerson: number;
+  target?: number;
+}
+
+export interface ClientRevenue {
+  client: string;
+  totalAmount: number;
+  invoiceCount: number;
+  paidAmount: number;
+  unpaidAmount: number;
+  paidCount: number;
+  unpaidCount: number;
+  avgCollectionDays: number;
+}
+
+export interface ArInvoice {
+  month: string;
+  client: string;
+  amount: number;
+  description: string;
+  invoiceDate: string;
+  paymentDate: string | null;
+  collectionDays: number;
+  status: "paid" | "unpaid" | "checking" | "scheduled";
+  note: string;
+  agingDays: number;
+  risk: "green" | "yellow" | "orange" | "red";
+}
+
+export interface ArAgingBucket {
+  label: string;
+  count: number;
+  amount: number;
+  color: string;
+}
+
+export interface ArClientSummary {
+  client: string;
+  totalOutstanding: number;
+  invoiceCount: number;
+  oldestDays: number;
+  risk: "green" | "yellow" | "orange" | "red";
 }

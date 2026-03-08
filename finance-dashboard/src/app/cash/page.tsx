@@ -1,7 +1,5 @@
-import KpiCard from "@/components/cards/KpiCard";
-import CashRegionCard from "@/components/cards/CashRegionCard";
 import { fetchCashPosition } from "@/lib/sheets";
-import { formatKRW } from "@/lib/utils";
+import CashDashboard from "@/components/cash/CashDashboard";
 
 export const revalidate = 300;
 
@@ -22,40 +20,5 @@ export default async function CashPage() {
     );
   }
 
-  const { regions, totalUsd: totalKrw } = data;
-
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Cash Position</h1>
-        <span className="text-xs text-gray-500">KRW 환산 기준</span>
-      </div>
-
-      {/* KPI */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KpiCard
-          title="Total Cash (KRW)"
-          value={formatKRW(totalKrw)}
-          subtitle="전 지역 합산"
-          tooltip="한국·미국·베트남 3개 법인 현금 잔고의 KRW 환산 합계"
-        />
-        {regions.map((r) => (
-          <KpiCard
-            key={r.region}
-            title={`${r.regionLabel}`}
-            value={formatKRW(r.totalUsd)}
-            subtitle="KRW 환산"
-            tooltip={`${r.regionLabel} 법인의 최신 월말 잔고 (KRW 환산)`}
-          />
-        ))}
-      </div>
-
-      {/* Region Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {regions.map((r) => (
-          <CashRegionCard key={r.region} data={r} />
-        ))}
-      </div>
-    </div>
-  );
+  return <CashDashboard data={data} />;
 }
