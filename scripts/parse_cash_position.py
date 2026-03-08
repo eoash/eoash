@@ -21,8 +21,9 @@ import json
 import re
 import sys
 import warnings
-from datetime import datetime
+from datetime import datetime, date
 from pathlib import Path
+from urllib.request import urlopen
 
 import pandas as pd
 
@@ -30,13 +31,15 @@ warnings.filterwarnings("ignore")
 
 # ─── 파서들 ──────────────────────────────────────
 
-def parse_clobe(filepath):
-    """Clobe.ai 엑셀 → 한국 법인 합산 (KRW)"""
-    df = pd.read_excel(filepath, sheet_name="계좌")
-    # Row 1 = 헤더, Row 2~11 = 데이터, Row 12 = 합계
-    # 컬럼: 계좌구분, 은행, 계좌번호, 계좌별칭, 통화, 기초잔액, 입금, 출금, 대체, 기말잔액
+def parse_clobe(filepath, year=None, month=None):
+    """Clobe.ai 엑셀 → 한국 법인 합산 (KRW)
+
+    year/month 지정 시 '통합 라벨링 내역'에서 해당 월만 필터.
+    잔액은 '계좌' 시트의 기말잔액(=현재 잔액) 사용.
+    """
+    df_acct = pd.read_excel(filepath, sheet_name="계좌")
     header_idx = None
-    for i, row in df.iterrows():
+    for i, row in df_acct.iterrows():
         vals = [str(v).strip() for v in row.values if pd.notna(v)]
         if "기초 잔액" in vals or "기초잔액" in vals:
             header_idx = i
@@ -46,8 +49,8 @@ def parse_clobe(filepath):
         raise ValueError("Clobe 파일에서 헤더를 찾을 수 없습니다")
 
     total_idx = None
-    for i in range(header_idx + 1, len(df)):
-        vals = [str(v).strip() for v in df.iloc[i].values if pd.notna(v)]
+    for i in range(header_idx + 1, len(df_acct)):
+        vals = [str(v).strip() for v in df_acct.iloc[i].values if pd.notna(v)]
         if "합계" in vals:
             total_idx = i
             break
@@ -55,22 +58,48 @@ def parse_clobe(filepath):
     if total_idx is None:
         raise ValueError("Clobe 파일에서 합계 행을 찾을 수 없습니다")
 
-    row = df.iloc[total_idx]
-    # 합계 행: [합계, NaN, NaN, NaN, NaN, 기초잔액, 입금, 출금, 대체, 기말잔액]
+    row = df_acct.iloc[total_idx]
     values = [v for v in row.values if pd.notna(v)]
-    # values = ['합계', 기초잔액, 입금, 출금, 대체, 기말잔액]
     nums = [v for v in values if isinstance(v, (int, float))]
 
-    if len(nums) >= 4:
-        return {
-            "region": "Korea",
-            "currency": "KRW",
-            "balance": int(nums[-1]),       # 기말잔액
-            "inflows": int(nums[1]),        # 입금
-            "outflows": int(nums[2]),       # 출금
-            "net_change": int(nums[1]) - int(nums[2]),
-        }
-    raise ValueError(f"Clobe 합계 행 파싱 실패: {values}")
+    if len(nums) < 4:
+        raise ValueError(f"Clobe 합계 행 파싱 실패: {values}")
+
+    balance = int(nums[-1])  # 기말잔액 (현재 잔액)
+
+    # 월별 필터링: 통합 라벨링 내역에서 해당 월 입출금만 집계
+    if year and month:
+        try:
+            df_txn = pd.read_excel(filepath, sheet_name="통합 라벨링 내역")
+            df_txn["입금"] = pd.to_numeric(df_txn["입금"], errors="coerce").fillna(0)
+            df_txn["출금"] = pd.to_numeric(df_txn["출금"], errors="coerce").fillna(0)
+            df_txn["거래 월"] = pd.to_numeric(df_txn["거래 월"], errors="coerce")
+            df_txn["거래 연도"] = pd.to_numeric(df_txn["거래 연도"], errors="coerce")
+            mask = (df_txn["거래 연도"] == year) & (df_txn["거래 월"] == month)
+            filtered = df_txn[mask]
+            inflows = int(filtered["입금"].sum())
+            outflows = int(filtered["출금"].sum())
+
+            # 월말 잔액 역산: 현재 잔액에서 이후 월 거래를 되돌림
+            after_mask = (df_txn["거래 연도"] == year) & (df_txn["거래 월"] > month)
+            after = df_txn[after_mask]
+            after_net = int(after["입금"].sum()) - int(after["출금"].sum())
+            balance = balance - after_net  # 현재잔액 - 이후월순변동 = 해당월말잔액
+        except Exception:
+            inflows = int(nums[1])
+            outflows = int(nums[2])
+    else:
+        inflows = int(nums[1])
+        outflows = int(nums[2])
+
+    return {
+        "region": "Korea",
+        "currency": "KRW",
+        "balance": balance,
+        "inflows": inflows,
+        "outflows": outflows,
+        "net_change": inflows - outflows,
+    }
 
 
 def parse_chase(filepath):
@@ -151,6 +180,7 @@ def parse_vietnam(filepath, year=None, month=None):
     total_out = 0
     total_in = 0
     last_balance = 0
+    overall_first_balance = 0  # 파일 내 가장 최근 잔액 (최신순 정렬 기준)
 
     for i in range(data_start, len(df)):
         row = df.iloc[i]
@@ -167,6 +197,10 @@ def parse_vietnam(filepath, year=None, month=None):
         in_amt = parse_vnd(row.iloc[3])    # 맡기신금액 (입금)
         bal = parse_vnd(row.iloc[4])       # 거래후잔액
 
+        # 파일 첫 번째 잔액 = 가장 최근 잔액 (최신순 정렬)
+        if overall_first_balance == 0:
+            overall_first_balance = bal
+
         # year, month가 전달되면 필터링
         if year and month:
             if txn_date.year != year or txn_date.month != month:
@@ -175,7 +209,11 @@ def parse_vietnam(filepath, year=None, month=None):
         total_out += out_amt
         total_in += in_amt
         if last_balance == 0:
-            last_balance = bal  # 가장 최근 잔액
+            last_balance = bal  # 해당 월 가장 최근 잔액
+
+    # 해당 월 거래가 없으면 파일 내 가장 최근 잔액으로 폴백
+    if last_balance == 0:
+        last_balance = overall_first_balance
 
     return {
         "region": "Vietnam",
@@ -306,24 +344,10 @@ def col_letter(idx):
 def update_sheet(service, sid, sheet_name, col_idx, data):
     """Cash Position Summary 시트에 데이터 쓰기
 
+    Inflows/Outflows만 숫자로 입력. Balance/Net Change/합산은 시트 수식에 맡김.
     data keys: korea, chase, hanmi, vietnam
     """
     c = col_letter(col_idx)
-
-    def fmt_krw(val):
-        if val < 0:
-            return f"(₩{abs(int(val)):,})"
-        return f"₩{int(val):,} "
-
-    def fmt_usd(val):
-        if val < 0:
-            return f"-${abs(val):,.2f}"
-        return f"${val:,.2f}"
-
-    def fmt_vnd(val):
-        if val < 0:
-            return f"({abs(int(val)):,} ₫)"
-        return f"{int(val):,} ₫"
 
     updates = []
     kr = data.get("korea")
@@ -331,47 +355,65 @@ def update_sheet(service, sid, sheet_name, col_idx, data):
     hm = data.get("hanmi")
     vn = data.get("vietnam")
 
-    # Korea (KRW) — Row 2~5
+    # Korea (KRW) — Row 3 Inflows, Row 4 Outflows (Row 2 Balance, Row 5 Net = 수식)
     if kr:
-        updates.append({"range": f"'{sheet_name}'!{c}2", "values": [[fmt_krw(kr["balance"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}3", "values": [[fmt_krw(kr["inflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}4", "values": [[fmt_krw(kr["outflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}5", "values": [[fmt_krw(kr["net_change"])]]})
+        updates.append({"range": f"'{sheet_name}'!{c}3", "values": [[kr["inflows"]]]})
+        updates.append({"range": f"'{sheet_name}'!{c}4", "values": [[kr["outflows"]]]})
 
-    # U.S. (USD) — Row 18~21 (합산)
-    if ch and hm:
-        us_balance = ch["balance"] + hm["balance"]
-        us_inflows = ch["inflows"] + hm["inflows"]
-        us_outflows = ch["outflows"] + hm["outflows"]
-        us_net = us_inflows - us_outflows
+    # U.S. 합산 (Row 18~21) — 수식 (=Chase+Hanmi), 건드리지 않음
 
-        updates.append({"range": f"'{sheet_name}'!{c}18", "values": [[fmt_usd(us_balance)]]})
-        updates.append({"range": f"'{sheet_name}'!{c}19", "values": [[fmt_usd(us_inflows)]]})
-        updates.append({"range": f"'{sheet_name}'!{c}20", "values": [[fmt_usd(us_outflows)]]})
-        updates.append({"range": f"'{sheet_name}'!{c}21", "values": [[fmt_usd(us_net)]]})
-
-    # Chase Bank — Row 24~27
+    # Chase Bank — Row 25 Inflows, Row 26 Outflows (Row 24 Balance, Row 27 Net = 수식)
     if ch:
-        updates.append({"range": f"'{sheet_name}'!{c}24", "values": [[fmt_usd(ch["balance"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}25", "values": [[fmt_usd(ch["inflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}26", "values": [[fmt_usd(ch["outflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}27", "values": [[fmt_usd(ch["net_change"])]]})
+        updates.append({"range": f"'{sheet_name}'!{c}25", "values": [[ch["inflows"]]]})
+        updates.append({"range": f"'{sheet_name}'!{c}26", "values": [[ch["outflows"]]]})
 
-    # Hanmi Bank — Row 29~32
+    # Hanmi Bank — Row 30 Inflows, Row 31 Outflows (Row 29 Balance, Row 31 Net = 수식)
     if hm:
-        updates.append({"range": f"'{sheet_name}'!{c}29", "values": [[fmt_usd(hm["balance"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}30", "values": [[fmt_usd(hm["inflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}31", "values": [[fmt_usd(hm["outflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}32", "values": [[fmt_usd(hm["net_change"])]]})
+        updates.append({"range": f"'{sheet_name}'!{c}30", "values": [[hm["inflows"]]]})
+        updates.append({"range": f"'{sheet_name}'!{c}31", "values": [[hm["outflows"]]]})
 
-    # Vietnam (VND) — Row 33~36
+    # Vietnam — Row 33~36은 합산 수식 (=Operating+Saving)
+    # Operating Account — Row 40 Inflows, Row 41 Outflows (Row 39 Balance, Row 42 Net = 수식)
     if vn:
-        updates.append({"range": f"'{sheet_name}'!{c}33", "values": [[fmt_vnd(vn["balance"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}34", "values": [[fmt_vnd(vn["inflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}35", "values": [[fmt_vnd(vn["outflows"])]]})
-        updates.append({"range": f"'{sheet_name}'!{c}36", "values": [[fmt_vnd(vn["net_change"])]]})
+        updates.append({"range": f"'{sheet_name}'!{c}40", "values": [[vn["inflows"]]]})
+        updates.append({"range": f"'{sheet_name}'!{c}41", "values": [[vn["outflows"]]]})
 
     return updates
+
+
+# ─── 환율 ──────────────────────────────────────
+
+def fetch_exchange_rate(year, month):
+    """fawazahmed0/currency-api에서 월말 환율 조회.
+
+    현재 월이면 최신(latest), 과거 월이면 말일 기준.
+    Returns: (usd_krw, vnd_to_krw)
+    """
+    today = date.today()
+    target = date(year, month, 1)
+
+    if target.year == today.year and target.month == today.month:
+        date_str = "latest"
+    else:
+        # 월말 날짜 계산
+        if month == 12:
+            last_day = date(year, 12, 31)
+        else:
+            last_day = date(year, month + 1, 1) - __import__("datetime").timedelta(days=1)
+        date_str = last_day.strftime("%Y-%m-%d")
+
+    url = f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@{date_str}/v1/currencies/usd.json"
+    try:
+        with urlopen(url) as resp:
+            data = json.loads(resp.read().decode())
+        usd = data.get("usd", {})
+        usd_krw = round(usd.get("krw", 0), 2)
+        usd_vnd = usd.get("vnd", 1)
+        vnd_to_krw = round(usd_krw / usd_vnd, 6) if usd_vnd else 0
+        return usd_krw, vnd_to_krw
+    except Exception as e:
+        print(f"   ⚠️  환율 API 조회 실패: {e}")
+        return None, None
 
 
 # ─── 메인 ──────────────────────────────────────
@@ -396,7 +438,7 @@ def main():
     if args.clobe:
         filepath = glob.glob(args.clobe)[0] if "*" in args.clobe else args.clobe
         print(f"📂 Clobe: {Path(filepath).name}")
-        results["korea"] = parse_clobe(filepath)
+        results["korea"] = parse_clobe(filepath, year, month)
         print(f"   Korea 합산: Balance ₩{results['korea']['balance']:,} | In ₩{results['korea']['inflows']:,} | Out ₩{results['korea']['outflows']:,}")
 
     # 2. Chase
@@ -434,6 +476,13 @@ def main():
 
     print(f"\n{'='*50}")
 
+    # 환율 조회 (dry-run에서도 표시)
+    usd_krw, vnd_to_krw = fetch_exchange_rate(year, month)
+    if usd_krw:
+        print(f"   💱 USD/KRW: {usd_krw:,.2f}")
+    if vnd_to_krw:
+        print(f"   💱 VND→KRW: {vnd_to_krw}")
+
     if args.dry_run:
         print("🔍 DRY RUN — 시트 업데이트 건너뜀")
         print(json.dumps(results, indent=2, ensure_ascii=False, default=str))
@@ -450,6 +499,13 @@ def main():
         return
 
     updates = update_sheet(service, sid, sheet_name, col_idx, results)
+
+    # 환율 자동 입력 (위에서 이미 조회한 값 재사용)
+    c = col_letter(col_idx)
+    if usd_krw:
+        updates.append({"range": f"'{sheet_name}'!{c}22", "values": [[usd_krw]]})
+    if vnd_to_krw:
+        updates.append({"range": f"'{sheet_name}'!{c}37", "values": [[vnd_to_krw]]})
 
     if updates:
         service.spreadsheets().values().batchUpdate(
