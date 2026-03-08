@@ -10,6 +10,12 @@
 
 set -e
 
+# Windows 환경 감지 → Python UTF-8 모드 강제
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OS" == "Windows_NT" ]]; then
+  export PYTHONUTF8=1
+  export PYTHONIOENCODING=utf-8
+fi
+
 HOOKS_DIR="$HOME/.claude/hooks"
 SETTINGS="$HOME/.claude/settings.json"
 HOOK_FILE="$HOOKS_DIR/otel_push.py"
@@ -69,11 +75,11 @@ echo "      -> $HOOK_FILE"
 # 3. settings.json에 Stop hook 등록 (자동 업데이트 명령)
 echo "[2/7] Claude Code Stop hook 등록 중..."
 
-python3 -c "
+HOOK_CMD_ENV="$HOOK_CMD" python3 -c "
 import json, os
 
 path = os.path.expanduser('~/.claude/settings.json')
-hook_cmd = '''$HOOK_CMD'''
+hook_cmd = os.environ['HOOK_CMD_ENV']
 
 # settings.json 읽기 (없으면 빈 객체)
 data = {}
@@ -233,10 +239,11 @@ else:
     data['telemetry'] = {**existing, **new_telemetry}
     with open(path, 'w') as f:
         json.dump(data, f, indent=2)
-    if existing.get('otlpEndpoint'):
-        print(f'      -> endpoint 업데이트: {existing[\"otlpEndpoint\"]} → {otel_endpoint}')
+    old_ep = existing.get('otlpEndpoint', '')
+    if old_ep:
+        print('      -> endpoint 업데이트: ' + old_ep + ' → ' + otel_endpoint)
     else:
-        print(f'      -> 텔레메트리 설정 완료: {otel_endpoint}')
+        print('      -> 텔레메트리 설정 완료: ' + otel_endpoint)
 "
 else
   echo "      Gemini CLI 미설치. 설치 후 install-hook.sh를 다시 실행하면 자동 설정됩니다."

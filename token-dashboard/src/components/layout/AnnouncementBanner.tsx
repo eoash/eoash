@@ -20,7 +20,7 @@ interface BannerItem {
 // id를 바꾸면 이전에 닫은 사용자에게도 다시 표시됩니다.
 const BANNERS: BannerItem[] = [
   {
-    id: "setup-v1",
+    id: "setup-v2",
     type: "setup",
     messageKey: "announce.setup",
     linkTextKey: "announce.setupLink",

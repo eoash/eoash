@@ -11,7 +11,7 @@ export interface Announcement {
 // id를 바꾸면 이전에 닫은 사용자에게도 다시 표시됩니다.
 export const ANNOUNCEMENTS: Announcement[] = [
   {
-    id: "setup-v1",
+    id: "setup-v2",
     type: "setup",
     message: "아직 설치 전이라면 터미널에서 한 줄이면 완료!",
     linkText: "Setup Guide →",

@@ -2,6 +2,8 @@ export type Locale = "ko" | "en";
 
 const translations = {
   // ── Sidebar ──
+  "sidebar.title": { ko: "Token", en: "Token" },
+  "sidebar.subtitle": { ko: "EO Studio Dashboard", en: "EO Studio Dashboard" },
   "nav.overview": { ko: "Overview", en: "Overview" },
   "nav.leaderboard": { ko: "Leaderboard", en: "Leaderboard" },
   "nav.members": { ko: "Members", en: "Members" },

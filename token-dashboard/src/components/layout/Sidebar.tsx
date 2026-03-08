@@ -37,7 +37,12 @@ export default function Sidebar() {
 
   const navContent = (
     <>
-      <nav className="flex flex-col gap-1 mt-8">
+      <div>
+        <div className="mb-8 px-4">
+          <h1 className="text-lg font-bold text-white">{t("sidebar.title")}</h1>
+          <p className="text-xs text-gray-500 mt-1">{t("sidebar.subtitle")}</p>
+        </div>
+      <nav className="flex flex-col gap-1">
         {menuItems.map((item) => {
           const isActive =
             item.href === "/"
@@ -59,6 +64,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
+      </div>
 
       <div className="flex flex-col gap-2 px-2 mt-auto">
         <Link
