@@ -13,13 +13,13 @@ interface KpiCardProps {
 
 export default function KpiCard({ title, value, subtitle, tooltip, trend }: KpiCardProps) {
   return (
-    <div className="rounded-xl bg-[#111111] border border-[#222] p-5">
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+    <div className="rounded-xl bg-[#111111] border border-[#222] p-3 md:p-5">
+      <p className="text-[10px] md:text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1">
         {title}
         {tooltip && <InfoTip text={tooltip} />}
       </p>
-      <div className="mt-2 flex items-end gap-2">
-        <span className="text-2xl font-bold text-white">{value}</span>
+      <div className="mt-1 md:mt-2 flex items-end gap-1 md:gap-2">
+        <span className="text-lg md:text-2xl font-bold text-white">{value}</span>
         {trend && (
           <span
             className={`flex items-center text-sm font-medium ${
