@@ -217,6 +217,8 @@ const translations = {
   "fx.alert.krwWeekly": { ko: "USD/KRW 주간 변동: ±100원", en: "USD/KRW weekly: ±100 KRW" },
   "fx.alert.vndDaily": { ko: "USD/VND 일일 변동: ±200", en: "USD/VND daily: ±200" },
   "fx.alert.vndWeekly": { ko: "USD/VND 주간 변동: ±500", en: "USD/VND weekly: ±500" },
+  "fx.today": { ko: "오늘", en: "Today" },
+  "fx.historicalPrefix": { ko: "과거 환율 · currency-api 기준 · ", en: "Historical · currency-api · " },
   "fx.chart.usdkrw90d": { ko: "USD/KRW 90일 추이", en: "USD/KRW 90-Day Trend" },
   "fx.chart.error": { ko: "환율 추이 데이터를 불러올 수 없습니다", en: "Failed to load FX trend data" },
 

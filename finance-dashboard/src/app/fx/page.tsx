@@ -3,18 +3,22 @@ import FxDashboard from "@/components/fx/FxDashboard";
 export const revalidate = 3600;
 
 async function fetchFxData() {
-  const res = await fetch("https://open.er-api.com/v6/latest/USD", {
-    next: { revalidate: 3600 },
-  });
+  // fawazahmed0/currency-api: KRW + VND 모두 지원
+  const res = await fetch(
+    "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
+    { next: { revalidate: 3600 } }
+  );
 
   let latestKrw = 0;
   let latestVnd = 0;
   let lastUpdated = "";
+
   if (res.ok) {
     const data = await res.json();
-    latestKrw = data.rates?.KRW || 0;
-    latestVnd = data.rates?.VND || 0;
-    lastUpdated = data.time_last_update_utc || "";
+    const rates = data.usd || {};
+    latestKrw = rates.krw || 0;
+    latestVnd = rates.vnd || 0;
+    lastUpdated = data.date || "";
   }
 
   return { latestKrw, latestVnd, lastUpdated };
