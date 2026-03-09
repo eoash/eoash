@@ -135,7 +135,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] 세계관 리뉴얼: AI Explorer's Log (Scout → AI Native)
 - [x] 브랜드 컬러 #00E87A 통일 (18파일)
 - [x] UI 사이즈 조정 + Web Interface Guidelines 준수
-- [ ] Gemini v0.33 metrics_url_path 복원
+- [x] Gemini v0.33 metrics_url_path 복원
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
