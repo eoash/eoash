@@ -129,6 +129,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] Windows 설치 명령어 수정 (`powershell -Command` 래핑)
 - [x] Setup 페이지 Mac/Windows 탭 토글 추가
 - [x] 김찬희/김찬호 이메일·Slack ID·아바타 분리 수정
+- [x] sync-dashboards.yml skipped 해결 (git diff 기반 변경 감지)
+- [x] Sidebar 전체 메뉴 SVG 아이콘 추가
+- [x] songsh/june backfill 추가, jemin 업데이트
+- [x] 세계관 리뉴얼: AI Explorer's Log (Scout → AI Native)
+- [x] 브랜드 컬러 #00E87A 통일 (18파일)
+- [x] UI 사이즈 조정 + Web Interface Guidelines 준수
 - [ ] Gemini v0.33 metrics_url_path 복원
 
 #### Finance Dashboard
