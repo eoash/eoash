@@ -217,7 +217,7 @@
       "computedHash": "0f107512ab2adafbc1c3cdc0dc1eff080eb58d64f5c23042e7560e608734563b"
     },
     "remotion-best-practices": {
-      "source": "eoash/ash-skills",
+      "source": "remotion-dev/skills",
       "sourceType": "github",
       "computedHash": "9851afb52e1b892c43b2af973bda1776ce01fedfdfe704e0cfd70069a3a9c300"
     },
