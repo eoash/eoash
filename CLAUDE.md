@@ -142,7 +142,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
 - [x] 세션16: Cash Position 월별 필터링 + 환율 API 자동화
 - [x] 브랜드 컬러 #00E87A 통일 (21파일) + Sidebar SVG 아이콘 추가
-- [ ] Sheets 통화 형식 #VALUE! 에러 검증
+- [x] Sheets 에러 검증 완료 (#VALUE! 0개, #DIV/0! 54개는 미래 월 비율 계산으로 정상)
 
 #### Leave Dashboard
 - [ ] 입사일 필드 연동
