@@ -124,8 +124,11 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 ### 당면 과제
 
 #### Token Dashboard
-- [x] 5명 설치 완료 (ash, jemin, jy.lim, izzy, chiri)
+- [x] 8명 설치 완료 (ash, chiri, cw.lim, izzy, jemin, june, jy.lim, songsh)
 - [x] 커밋 카운트 전원 커버 (`git log --after` 기반)
+- [x] Windows 설치 명령어 수정 (`powershell -Command` 래핑)
+- [x] Setup 페이지 Mac/Windows 탭 토글 추가
+- [x] 김찬희/김찬호 이메일·Slack ID·아바타 분리 수정
 - [ ] Gemini v0.33 metrics_url_path 복원
 
 #### Finance Dashboard

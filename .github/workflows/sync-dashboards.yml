@@ -10,7 +10,6 @@ on:
 
 jobs:
   sync-finance:
-    if: github.event_name == 'workflow_dispatch' || contains(join(github.event.commits.*.modified, ','), 'finance-dashboard/') || contains(join(github.event.commits.*.added, ','), 'finance-dashboard/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout monorepo
@@ -18,7 +17,23 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Check finance-dashboard changes
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -q '^finance-dashboard/'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Sync to eo-finance-dashboard
+        if: steps.changes.outputs.changed == 'true'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.DASHBOARD_SYNC_TOKEN }}
@@ -30,7 +45,6 @@ jobs:
           commit-message: 'sync: monorepo changes'
 
   sync-token:
-    if: github.event_name == 'workflow_dispatch' || contains(join(github.event.commits.*.modified, ','), 'token-dashboard/') || contains(join(github.event.commits.*.added, ','), 'token-dashboard/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout monorepo
@@ -38,7 +52,23 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Check token-dashboard changes
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -q '^token-dashboard/'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Sync to token-dashboard
+        if: steps.changes.outputs.changed == 'true'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.DASHBOARD_SYNC_TOKEN }}
