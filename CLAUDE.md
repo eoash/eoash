@@ -136,10 +136,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] 브랜드 컬러 #00E87A 통일 (18파일)
 - [x] UI 사이즈 조정 + Web Interface Guidelines 준수
 - [x] Gemini v0.33 metrics_url_path 복원
+- [x] KpiCard 반응형 사이즈 + 모바일 2열 그리드 + InfoTip group/tip 패턴
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
 - [x] 세션16: Cash Position 월별 필터링 + 환율 API 자동화
+- [x] 브랜드 컬러 #00E87A 통일 (21파일) + Sidebar SVG 아이콘 추가
 - [ ] Sheets 통화 형식 #VALUE! 에러 검증
 
 #### Leave Dashboard
@@ -151,4 +153,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-09*
+*마지막 업데이트: 2026-03-10*
