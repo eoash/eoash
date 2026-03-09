@@ -160,8 +160,14 @@ function revenueFromSync(sync: SyncTab) {
     .filter((s) => s.amount > 0)
     .sort((a, b) => b.amount - a.amount);
 
-  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: 0 };
+  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: REVENUE_TARGETS[CURRENT_YEAR] ?? 0 };
 }
+
+// 연간 매출 목표 (KRW 기준, 환율 1 USD = 1,450 KRW)
+// 2026: $10M USD = ₩14,500,000,000
+const REVENUE_TARGETS: Record<number, number> = {
+  2026: 14_500_000_000,
+};
 
 async function revenueFromOriginal(year: number) {
   const rows = await readSheet(`${year} 매출`, "A1:T45");
@@ -268,7 +274,7 @@ async function revenueFromOriginal(year: number) {
     .filter((s) => s.amount > 0)
     .sort((a, b) => b.amount - a.amount);
 
-  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: 0 };
+  return { monthly, months, segments, segmentDetails, totalActual, totalTarget: REVENUE_TARGETS[year] ?? 0 };
 }
 
 // ─── Cash Position ────────────────────────────

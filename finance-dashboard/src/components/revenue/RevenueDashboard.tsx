@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import KpiCard from "@/components/cards/KpiCard";
 import RevenueTrendChart from "@/components/charts/RevenueTrendChart";
 import RevenueSegmentChart from "@/components/charts/RevenueSegmentChart";
 import RevenueDetailTable from "@/components/charts/RevenueDetailTable";
-import { formatKRW, formatPercent } from "@/lib/utils";
+import { formatKRW, formatUSD, formatPercent, BUDGET_FX_RATE } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 import type { RevenueMonthly, RevenueSegment, RevenueSegmentDetail } from "@/lib/types";
+
+export type CurrencyMode = "KRW" | "USD";
 
 interface RevenueData {
   monthly: RevenueMonthly[];
@@ -21,8 +24,13 @@ interface RevenueData {
 export default function RevenueDashboard({ data, year }: { data: RevenueData; year: number }) {
   const { t, locale } = useT();
   const router = useRouter();
+  const [currency, setCurrency] = useState<CurrencyMode>("KRW");
 
   const { monthly, months, segments, segmentDetails, totalActual, totalTarget } = data;
+
+  const toDisplay = (krw: number) => currency === "USD" ? krw / BUDGET_FX_RATE : krw;
+  const fmt = (krw: number) => currency === "USD" ? formatUSD(krw / BUDGET_FX_RATE) : formatKRW(krw);
+
   const achievementRate = totalTarget > 0 ? totalActual / totalTarget : 0;
 
   // MoM growth (last 2 months with data)
@@ -58,17 +66,39 @@ export default function RevenueDashboard({ data, year }: { data: RevenueData; ye
               <option key={y} value={y}>{y}</option>
             ))}
           </select>
+          {/* Currency toggle */}
+          <div className="flex rounded-lg border border-[#333] overflow-hidden">
+            {(["KRW", "USD"] as const).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCurrency(c)}
+                className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+                  currency === c
+                    ? "bg-[#E8FF47] text-black"
+                    : "bg-[#111111] text-gray-400 hover:text-white"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
         <span className="text-xs text-gray-500">{periodLabel}</span>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-6">
         <KpiCard
           title={t("rev.totalRevenue")}
-          value={formatKRW(totalActual)}
+          value={fmt(totalActual)}
           subtitle={`${year} YTD`}
           tooltip={t("rev.totalRevenue.tip")}
+        />
+        <KpiCard
+          title={t("rev.target")}
+          value={currency === "USD" ? "$10M" : "₩145억"}
+          subtitle={t("rev.target.sub")}
+          tooltip={t("rev.target.tip")}
         />
         <KpiCard
           title={t("rev.achievement")}
@@ -97,16 +127,16 @@ export default function RevenueDashboard({ data, year }: { data: RevenueData; ye
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2">
-          <RevenueTrendChart details={segmentDetails} months={months} />
+          <RevenueTrendChart details={segmentDetails} months={months} currency={currency} />
         </div>
         <div>
-          <RevenueSegmentChart data={segments} />
+          <RevenueSegmentChart data={segments} currency={currency} />
         </div>
       </div>
 
       {/* Revenue Detail Table */}
       {segmentDetails.length > 0 && (
-        <RevenueDetailTable details={segmentDetails} months={months} />
+        <RevenueDetailTable details={segmentDetails} months={months} currency={currency} />
       )}
     </div>
   );

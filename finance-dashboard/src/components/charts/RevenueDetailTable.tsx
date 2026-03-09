@@ -2,7 +2,9 @@
 
 import { useState, Fragment } from "react";
 import type { RevenueSegmentDetail } from "@/lib/types";
+import type { CurrencyMode } from "@/components/revenue/RevenueDashboard";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { BUDGET_FX_RATE } from "@/lib/utils";
 
 const SEGMENT_COLORS: Record<string, string> = {
   "KR 한국": "#E8FF47",
@@ -10,21 +12,32 @@ const SEGMENT_COLORS: Record<string, string> = {
   "GL 글로벌": "#34D399",
 };
 
-function formatAmount(n: number): string {
+function formatAmountKRW(n: number): string {
   if (n === 0) return "-";
   if (n >= 100_000_000) return `${(n / 100_000_000).toFixed(1)}억`;
   if (n >= 10_000) return `${Math.round(n / 10_000).toLocaleString()}만`;
   return n.toLocaleString();
 }
 
+function formatAmountUSD(n: number): string {
+  if (n === 0) return "-";
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
+  return `$${n.toLocaleString()}`;
+}
+
 interface Props {
   details: RevenueSegmentDetail[];
   months: string[];
+  currency: CurrencyMode;
 }
 
-export default function RevenueDetailTable({ details, months }: Props) {
+export default function RevenueDetailTable({ details, months, currency }: Props) {
   const { t } = useT();
   const [expanded, setExpanded] = useState<Set<string>>(new Set(details.map((d) => d.segment)));
+  const rate = currency === "USD" ? BUDGET_FX_RATE : 1;
+  const fmt = currency === "USD" ? formatAmountUSD : formatAmountKRW;
+  const convert = (v: number) => Math.round(v / rate);
 
   const toggle = (seg: string) => {
     setExpanded((prev) => {
@@ -75,11 +88,11 @@ export default function RevenueDetailTable({ details, months }: Props) {
                     </td>
                     {seg.subtotal.map((v, i) => (
                       <td key={i} className="text-right py-2.5 px-2 font-semibold text-white">
-                        {formatAmount(v)}
+                        {fmt(convert(v))}
                       </td>
                     ))}
                     <td className="text-right py-2.5 pl-3 font-bold" style={{ color }}>
-                      {formatAmount(seg.total)}
+                      {fmt(convert(seg.total))}
                     </td>
                   </tr>
 
@@ -93,11 +106,11 @@ export default function RevenueDetailTable({ details, months }: Props) {
                         <td className="py-2 pr-4 pl-8 text-gray-400">{item.name}</td>
                         {item.monthly.map((v, i) => (
                           <td key={i} className="text-right py-2 px-2 text-gray-400">
-                            {formatAmount(v)}
+                            {fmt(convert(v))}
                           </td>
                         ))}
                         <td className="text-right py-2 pl-3 text-gray-300">
-                          {formatAmount(item.total)}
+                          {fmt(convert(item.total))}
                         </td>
                       </tr>
                     ))}
@@ -110,7 +123,7 @@ export default function RevenueDetailTable({ details, months }: Props) {
                       </td>
                       {seg.perPerson.map((v, i) => (
                         <td key={i} className="text-right py-2 px-2 text-gray-600 text-xs">
-                          {formatAmount(v)}
+                          {fmt(convert(v))}
                         </td>
                       ))}
                       <td className="text-right py-2 pl-3 text-gray-600 text-xs">-</td>
