@@ -61,7 +61,7 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
               onClick={() => setFilter(f.key)}
               className={`px-3 py-1 text-xs rounded-lg transition-colors ${
                 filter === f.key
-                  ? "bg-[#E8FF47]/15 text-[#E8FF47]"
+                  ? "bg-[#00E87A]/15 text-[#00E87A]"
                   : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
               }`}
             >
@@ -97,7 +97,7 @@ export default function ArTable({ invoices }: { invoices: ArInvoice[] }) {
                     onClick={() => setExpandedMonth(expandedMonth === month ? null : month)}
                   >
                     <td colSpan={2} className="py-2 px-3">
-                      <span className="text-[#E8FF47] font-semibold">{month}</span>
+                      <span className="text-[#00E87A] font-semibold">{month}</span>
                       <span className="text-gray-500 ml-2">({monthInvoices.length}{t("common.count")})</span>
                       <span className="text-gray-400 ml-2">{formatKRW(monthTotal)}</span>
                     </td>

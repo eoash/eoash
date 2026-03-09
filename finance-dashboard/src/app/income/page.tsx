@@ -33,7 +33,7 @@ export default function IncomePage() {
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold">{t("income.title")}</h1>
           <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {availableYears.map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
         </div>

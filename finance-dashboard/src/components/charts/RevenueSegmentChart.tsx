@@ -17,7 +17,7 @@ interface RevenueSegmentChartProps {
   currency: CurrencyMode;
 }
 
-const COLORS = ["#E8FF47", "#47B8FF", "#FF6B6B", "#A78BFA", "#34D399", "#F59E0B"];
+const COLORS = ["#00E87A", "#47B8FF", "#FF6B6B", "#A78BFA", "#34D399", "#F59E0B"];
 
 export default function RevenueSegmentChart({ data, currency }: RevenueSegmentChartProps) {
   const { t } = useT();

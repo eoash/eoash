@@ -69,12 +69,12 @@ export default function FxDashboard({ data: initialData }: { data: FxData }) {
             value={selectedDate}
             max={today}
             onChange={(e) => handleDateChange(e.target.value)}
-            className="rounded-lg bg-[#111] border border-[#333] px-3 py-1.5 text-sm text-gray-300 focus:border-[#E8FF47] focus:outline-none"
+            className="rounded-lg bg-[#111] border border-[#333] px-3 py-1.5 text-sm text-gray-300 focus:border-[#00E87A] focus:outline-none"
           />
           {selectedDate && (
             <button
               onClick={handleReset}
-              className="rounded-lg bg-[#222] border border-[#333] px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:border-[#E8FF47] transition-colors"
+              className="rounded-lg bg-[#222] border border-[#333] px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:border-[#00E87A] transition-colors"
             >
               {t("fx.today")}
             </button>
@@ -145,7 +145,7 @@ export default function FxDashboard({ data: initialData }: { data: FxData }) {
             <p className="text-xs text-gray-500 mb-2">
               USD/KRW {isHistorical ? updateDate : t("fx.current")}
             </p>
-            <p className="text-2xl font-bold text-[#E8FF47]">
+            <p className="text-2xl font-bold text-[#00E87A]">
               {latestKrw > 0
                 ? `₩${formatNumber(Math.round(latestKrw))}`
                 : "N/A"}
@@ -164,7 +164,7 @@ export default function FxDashboard({ data: initialData }: { data: FxData }) {
             <p className="text-xs text-gray-500 mb-2">
               USD/VND {isHistorical ? updateDate : t("fx.current")}
             </p>
-            <p className="text-2xl font-bold text-[#E8FF47]">
+            <p className="text-2xl font-bold text-[#00E87A]">
               {latestVnd > 0
                 ? `₫${formatNumber(Math.round(latestVnd))}`
                 : "N/A"}

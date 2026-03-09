@@ -66,9 +66,9 @@ export default function AnnualTrendChart() {
             <Line
               type="monotone"
               dataKey="당기순이익"
-              stroke="#E8FF47"
+              stroke="#00E87A"
               strokeWidth={3}
-              dot={{ fill: "#E8FF47", r: 5 }}
+              dot={{ fill: "#00E87A", r: 5 }}
               name={t("income.chart.netIncome")}
             />
           </ComposedChart>

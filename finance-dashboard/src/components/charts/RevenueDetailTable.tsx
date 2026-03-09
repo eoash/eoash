@@ -7,7 +7,7 @@ import { useT } from "@/lib/contexts/LanguageContext";
 import { BUDGET_FX_RATE } from "@/lib/utils";
 
 const SEGMENT_COLORS: Record<string, string> = {
-  "KR 한국": "#E8FF47",
+  "KR 한국": "#00E87A",
   "플래닛 한국": "#47B8FF",
   "GL 글로벌": "#34D399",
 };

@@ -49,12 +49,12 @@ export default function YoYDashboard({ data }: { data: YoYRow[] }) {
         <h1 className="text-2xl font-bold">{t("yoy.title")}</h1>
         <div className="flex items-center gap-2 text-sm">
           <select value={startYear} onChange={(e) => setStartYear(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {allYears.map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
           <span className="text-gray-500">~</span>
           <select value={endYear} onChange={(e) => setEndYear(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {allYears.map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
         </div>
@@ -114,7 +114,7 @@ export default function YoYDashboard({ data }: { data: YoYRow[] }) {
               const growth = prevRow && prevRow.total > 0 ? ((row.total - prevRow.total) / prevRow.total) * 100 : 0;
               return (
                 <tr key={row.year} className="border-b border-[#111] hover:bg-white/5">
-                  <td className="py-2 px-3 text-[#E8FF47] font-semibold">{row.year}</td>
+                  <td className="py-2 px-3 text-[#00E87A] font-semibold">{row.year}</td>
                   <td className="py-2 px-3 text-right text-white font-mono">{formatKRW(row.total)}</td>
                   <td className={`hidden md:table-cell py-2 px-3 text-right font-medium ${growth > 0 ? "text-green-400" : growth < 0 ? "text-red-400" : "text-gray-500"}`}>
                     {i > 0 ? `${growth >= 0 ? "+" : ""}${growth.toFixed(1)}%` : "—"}

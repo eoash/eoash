@@ -10,7 +10,7 @@ import {
 import { WITHTAX_YEARLY } from "@/lib/withtax-data";
 import { useT } from "@/lib/contexts/LanguageContext";
 
-const COLORS = ["#34D399", "#47B8FF", "#A78BFA", "#F59E0B", "#FF6B6B", "#E8FF47"];
+const COLORS = ["#34D399", "#47B8FF", "#A78BFA", "#F59E0B", "#FF6B6B", "#00E87A"];
 
 const yearly2025 = WITHTAX_YEARLY.find((y) => y.year === "2025");
 const items = yearly2025?.매출항목 ?? {};

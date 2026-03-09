@@ -85,7 +85,7 @@ export default function CashDashboard({ data, year }: { data: CashData; year: nu
           <select
             value={year}
             onChange={(e) => router.push(`/cash?year=${e.target.value}`)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-[#E8FF47] transition-colors cursor-pointer appearance-none"
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-[#00E87A] transition-colors cursor-pointer appearance-none"
             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 8px center", paddingRight: "28px" }}
           >
             {YEAR_OPTIONS.map((y) => (
@@ -102,7 +102,7 @@ export default function CashDashboard({ data, year }: { data: CashData; year: nu
                 onClick={() => setCurrency(btn.key)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                   currency === btn.key
-                    ? "bg-[#E8FF47]/15 text-[#E8FF47]"
+                    ? "bg-[#00E87A]/15 text-[#00E87A]"
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
@@ -198,7 +198,7 @@ export default function CashDashboard({ data, year }: { data: CashData; year: nu
               {/* 비중 바 */}
               <div className="mt-3 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#E8FF47] rounded-full"
+                  className="h-full bg-[#00E87A] rounded-full"
                   style={{ width: `${latest.totalBalanceKrw > 0 ? (region.balanceKrw / latest.totalBalanceKrw) * 100 : 0}%` }}
                 />
               </div>

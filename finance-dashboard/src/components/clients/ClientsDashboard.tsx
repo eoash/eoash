@@ -109,17 +109,17 @@ export default function ClientsDashboard({ invoices }: { invoices: ArInvoice[] }
         <h1 className="text-2xl font-bold">{t("clients.title")}</h1>
         <div className="flex items-center gap-2 text-sm">
           <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {years.map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
           <span className="text-gray-500">{t("clients.subtitle.source")}</span>
           <select value={startMonth} onChange={(e) => setStartMonth(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {yearMonths.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
           <span className="text-gray-500">~</span>
           <select value={endMonth} onChange={(e) => setEndMonth(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
             {yearMonths.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
         </div>
@@ -175,7 +175,7 @@ export default function ClientsDashboard({ invoices }: { invoices: ArInvoice[] }
                   <td className="hidden md:table-cell py-2 px-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <div className="w-16 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#E8FF47] rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
+                        <div className="h-full bg-[#00E87A] rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
                       </div>
                       <span className="text-xs text-gray-500 w-10 text-right">{pct.toFixed(1)}%</span>
                     </div>

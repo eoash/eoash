@@ -75,7 +75,7 @@ export default function ArDashboard({ invoices }: Props) {
 
     // Aging buckets
     const bucketDefs = [
-      { label: t("ar.aging.0_30"), min: 0, max: 30, color: "#E8FF47" },
+      { label: t("ar.aging.0_30"), min: 0, max: 30, color: "#00E87A" },
       { label: t("ar.aging.31_60"), min: 31, max: 60, color: "#F59E0B" },
       { label: t("ar.aging.61_90"), min: 61, max: 90, color: "#F97316" },
       { label: t("ar.aging.90plus"), min: 91, max: Infinity, color: "#EF4444" },
@@ -118,7 +118,7 @@ export default function ArDashboard({ invoices }: Props) {
           <select
             value={startMonth}
             onChange={(e) => setStartMonth(e.target.value)}
-            className="bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-1.5 text-white text-sm outline-none focus:border-[#E8FF47]/50"
+            className="bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-1.5 text-white text-sm outline-none focus:border-[#00E87A]/50"
           >
             {allMonths.map((m) => (
               <option key={m} value={m}>{m}</option>
@@ -128,7 +128,7 @@ export default function ArDashboard({ invoices }: Props) {
           <select
             value={endMonth}
             onChange={(e) => setEndMonth(e.target.value)}
-            className="bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-1.5 text-white text-sm outline-none focus:border-[#E8FF47]/50"
+            className="bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-1.5 text-white text-sm outline-none focus:border-[#00E87A]/50"
           >
             {allMonths.map((m) => (
               <option key={m} value={m}>{m}</option>

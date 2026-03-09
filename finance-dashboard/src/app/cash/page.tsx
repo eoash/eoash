@@ -25,7 +25,7 @@ export default async function CashPage({ searchParams }: { searchParams: Promise
           <p className="text-sm text-gray-600 mb-4">해당 연도의 시트가 존재하지 않거나 API 연결에 실패했습니다</p>
           <a
             href="/cash?year=2026"
-            className="inline-block px-4 py-2 text-sm rounded-lg bg-[#E8FF47]/15 text-[#E8FF47] hover:bg-[#E8FF47]/25 transition-colors"
+            className="inline-block px-4 py-2 text-sm rounded-lg bg-[#00E87A]/15 text-[#00E87A] hover:bg-[#00E87A]/25 transition-colors"
           >
             2026년으로 돌아가기
           </a>

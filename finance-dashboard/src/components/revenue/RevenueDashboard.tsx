@@ -60,7 +60,7 @@ export default function RevenueDashboard({ data, year }: { data: RevenueData; ye
           <select
             value={year}
             onChange={(e) => router.push(`/?year=${e.target.value}`)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer"
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#00E87A] cursor-pointer"
           >
             {[2026, 2025, 2024, 2023, 2022, 2021, 2020].map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -74,7 +74,7 @@ export default function RevenueDashboard({ data, year }: { data: RevenueData; ye
                 onClick={() => setCurrency(c)}
                 className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                   currency === c
-                    ? "bg-[#E8FF47] text-black"
+                    ? "bg-[#00E87A] text-black"
                     : "bg-[#111111] text-gray-400 hover:text-white"
                 }`}
               >

@@ -5,7 +5,7 @@ import { formatKRW } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 const RISK_COLOR: Record<string, string> = {
-  yellow: "#E8FF47",
+  yellow: "#00E87A",
   orange: "#F59E0B",
   red: "#EF4444",
 };

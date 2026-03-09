@@ -5,7 +5,7 @@ import type { YoYRow } from "@/lib/types";
 import { formatKRW } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 
-const COLORS = ["#333", "#444", "#555", "#666", "#E8FF47", "#4ADE80"];
+const COLORS = ["#333", "#444", "#555", "#666", "#00E87A", "#4ADE80"];
 
 export default function YoYChart({ data }: { data: YoYRow[] }) {
   const { t } = useT();

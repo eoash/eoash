@@ -762,7 +762,7 @@ function buildArResult(invoices: import("./types").ArInvoice[]) {
       : 0;
 
   const bucketDefs = [
-    { label: "0-30일", min: 0, max: 30, color: "#E8FF47" },
+    { label: "0-30일", min: 0, max: 30, color: "#00E87A" },
     { label: "31-60일", min: 31, max: 60, color: "#F59E0B" },
     { label: "61-90일", min: 61, max: 90, color: "#F97316" },
     { label: "90일+", min: 91, max: Infinity, color: "#EF4444" },

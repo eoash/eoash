@@ -5,15 +5,32 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useT } from "@/lib/contexts/LanguageContext";
 import type { TranslationKey } from "@/lib/i18n";
+import type { ReactNode } from "react";
 
-const menuItems: { labelKey: TranslationKey; href: string }[] = [
-  { labelKey: "nav.revenue", href: "/" },
-  { labelKey: "nav.clients", href: "/clients" },
-  { labelKey: "nav.ar", href: "/ar" },
-  { labelKey: "nav.yoy", href: "/yoy" },
-  { labelKey: "nav.cash", href: "/cash" },
-  { labelKey: "nav.income", href: "/income" },
-  { labelKey: "nav.fx", href: "/fx" },
+const iconProps = { width: 16, height: 16, viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+
+const menuItems: { labelKey: TranslationKey; href: string; icon: ReactNode }[] = [
+  { labelKey: "nav.revenue", href: "/", icon: (
+    <svg {...iconProps}><path d="M2 12l3-4 3 2 4-5 2 2" /><path d="M2 14h12" /></svg>
+  )},
+  { labelKey: "nav.clients", href: "/clients", icon: (
+    <svg {...iconProps}><rect x="3" y="6" width="10" height="8" rx="1" /><path d="M5 6V4a3 3 0 0 1 6 0v2" /></svg>
+  )},
+  { labelKey: "nav.ar", href: "/ar", icon: (
+    <svg {...iconProps}><circle cx="8" cy="8" r="6" /><path d="M8 4v4l2.5 1.5" /></svg>
+  )},
+  { labelKey: "nav.yoy", href: "/yoy", icon: (
+    <svg {...iconProps}><path d="M2 14V8M6 14V4M10 14V6M14 14V2" /></svg>
+  )},
+  { labelKey: "nav.cash", href: "/cash", icon: (
+    <svg {...iconProps}><rect x="1.5" y="4" width="13" height="9" rx="1.5" /><path d="M1.5 7h13" /><circle cx="8" cy="10" r="1.5" /></svg>
+  )},
+  { labelKey: "nav.income", href: "/income", icon: (
+    <svg {...iconProps}><rect x="2" y="1.5" width="12" height="13" rx="1" /><path d="M5 5h6M5 8h6M5 11h3" /></svg>
+  )},
+  { labelKey: "nav.fx", href: "/fx", icon: (
+    <svg {...iconProps}><circle cx="5.5" cy="6" r="3.5" /><circle cx="10.5" cy="10" r="3.5" /><path d="M4 7.5l3-3M9 12.5l3-3" /></svg>
+  )},
 ];
 
 type SyncState = "idle" | "syncing" | "done" | "fail";
@@ -57,12 +74,13 @@ export default function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-[#E8FF47]/10 text-[#E8FF47]"
+                    ? "bg-[#00E87A]/10 text-[#00E87A]"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
+                {item.icon}
                 {t(item.labelKey)}
               </Link>
             );
@@ -89,7 +107,7 @@ export default function Sidebar() {
             disabled={syncState === "syncing"}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
               syncState === "syncing"
-                ? "bg-[#E8FF47]/10 text-[#E8FF47] animate-pulse"
+                ? "bg-[#00E87A]/10 text-[#00E87A] animate-pulse"
                 : syncState === "done"
                   ? "bg-green-900/30 text-green-400"
                   : syncState === "fail"
@@ -115,7 +133,7 @@ export default function Sidebar() {
             onClick={() => setLocale("ko")}
             className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
               locale === "ko"
-                ? "bg-[#E8FF47]/10 text-[#E8FF47]"
+                ? "bg-[#00E87A]/10 text-[#00E87A]"
                 : "text-gray-500 hover:text-gray-300"
             }`}
           >
@@ -126,7 +144,7 @@ export default function Sidebar() {
             onClick={() => setLocale("en")}
             className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
               locale === "en"
-                ? "bg-[#E8FF47]/10 text-[#E8FF47]"
+                ? "bg-[#00E87A]/10 text-[#00E87A]"
                 : "text-gray-500 hover:text-gray-300"
             }`}
           >

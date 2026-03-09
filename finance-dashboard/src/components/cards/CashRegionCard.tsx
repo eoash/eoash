@@ -6,7 +6,7 @@ interface CashRegionCardProps {
 }
 
 const regionColors: Record<string, string> = {
-  KR: "#E8FF47",
+  KR: "#00E87A",
   US: "#47B8FF",
   VN: "#34D399",
 };
