@@ -6,6 +6,7 @@ on:
     paths:
       - 'finance-dashboard/**'
       - 'token-dashboard/**'
+  workflow_dispatch: # 수동 테스트용
 
 jobs:
   sync-finance:
