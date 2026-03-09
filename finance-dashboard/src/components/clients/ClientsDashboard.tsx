@@ -30,8 +30,38 @@ function aggregateClients(invoices: ArInvoice[]): ClientRevenue[] {
     .sort((a, b) => b.totalAmount - a.totalAmount);
 }
 
+function extractYear(dateStr: string): number {
+  const m = dateStr.match(/^(\d{4})/);
+  return m ? parseInt(m[1]) : 0;
+}
+
 export default function ClientsDashboard({ invoices, months }: { invoices: ArInvoice[]; months: string[] }) {
   const { t } = useT();
+
+  // 연도 목록 추출
+  const years = useMemo(() => {
+    const s = new Set<number>();
+    for (const inv of invoices) {
+      const y = extractYear(inv.invoiceDate);
+      if (y > 2000) s.add(y);
+    }
+    return Array.from(s).sort((a, b) => b - a);
+  }, [invoices]);
+
+  const [selectedYear, setSelectedYear] = useState(() => years[0] || new Date().getFullYear());
+
+  // 연도 필터 적용된 인보이스
+  const yearFiltered = useMemo(() =>
+    invoices.filter((inv) => extractYear(inv.invoiceDate) === selectedYear),
+    [invoices, selectedYear]
+  );
+
+  // 연도 필터 적용 후 월 목록
+  const yearMonths = useMemo(() => {
+    const s = new Set<string>();
+    for (const inv of yearFiltered) if (inv.month) s.add(inv.month);
+    return Array.from(s).sort((a, b) => parseInt(a) - parseInt(b));
+  }, [yearFiltered]);
 
   const [startMonth, setStartMonth] = useState(() => {
     if (typeof window !== "undefined") {
