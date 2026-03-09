@@ -10,7 +10,7 @@ on:
 
 jobs:
   sync-finance:
-    if: contains(join(github.event.commits.*.modified, ','), 'finance-dashboard/') || contains(join(github.event.commits.*.added, ','), 'finance-dashboard/')
+    if: github.event_name == 'workflow_dispatch' || contains(join(github.event.commits.*.modified, ','), 'finance-dashboard/') || contains(join(github.event.commits.*.added, ','), 'finance-dashboard/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout monorepo
@@ -30,7 +30,7 @@ jobs:
           commit-message: 'sync: monorepo changes'
 
   sync-token:
-    if: contains(join(github.event.commits.*.modified, ','), 'token-dashboard/') || contains(join(github.event.commits.*.added, ','), 'token-dashboard/')
+    if: github.event_name == 'workflow_dispatch' || contains(join(github.event.commits.*.modified, ','), 'token-dashboard/') || contains(join(github.event.commits.*.added, ','), 'token-dashboard/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout monorepo
