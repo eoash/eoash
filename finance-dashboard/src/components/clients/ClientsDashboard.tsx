@@ -35,7 +35,7 @@ function extractYear(dateStr: string): number {
   return m ? parseInt(m[1]) : 0;
 }
 
-export default function ClientsDashboard({ invoices, months }: { invoices: ArInvoice[]; months: string[] }) {
+export default function ClientsDashboard({ invoices }: { invoices: ArInvoice[] }) {
   const { t } = useT();
 
   // 연도 목록 추출
@@ -66,28 +66,34 @@ export default function ClientsDashboard({ invoices, months }: { invoices: ArInv
   const [startMonth, setStartMonth] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("clients-start-month");
-      if (saved && months.includes(saved)) return saved;
+      if (saved && yearMonths.includes(saved)) return saved;
     }
-    return months[0] ?? "";
+    return yearMonths[0] ?? "";
   });
   const [endMonth, setEndMonth] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("clients-end-month");
-      if (saved && months.includes(saved)) return saved;
+      if (saved && yearMonths.includes(saved)) return saved;
     }
-    return months[months.length - 1] ?? "";
+    return yearMonths[yearMonths.length - 1] ?? "";
   });
+
+  // 연도 변경 시 월 필터 리셋
+  useEffect(() => {
+    setStartMonth(yearMonths[0] ?? "");
+    setEndMonth(yearMonths[yearMonths.length - 1] ?? "");
+  }, [selectedYear, yearMonths]);
 
   useEffect(() => { localStorage.setItem("clients-start-month", startMonth); }, [startMonth]);
   useEffect(() => { localStorage.setItem("clients-end-month", endMonth); }, [endMonth]);
 
   const filtered = useMemo(() => {
-    const si = months.indexOf(startMonth);
-    const ei = months.indexOf(endMonth);
-    if (si < 0 || ei < 0) return invoices;
-    const validMonths = new Set(months.slice(Math.min(si, ei), Math.max(si, ei) + 1));
-    return invoices.filter((inv) => validMonths.has(inv.month));
-  }, [invoices, months, startMonth, endMonth]);
+    const si = yearMonths.indexOf(startMonth);
+    const ei = yearMonths.indexOf(endMonth);
+    if (si < 0 || ei < 0) return yearFiltered;
+    const validMonths = new Set(yearMonths.slice(Math.min(si, ei), Math.max(si, ei) + 1));
+    return yearFiltered.filter((inv) => validMonths.has(inv.month));
+  }, [yearFiltered, yearMonths, startMonth, endMonth]);
 
   const clients = useMemo(() => aggregateClients(filtered), [filtered]);
 
@@ -102,15 +108,19 @@ export default function ClientsDashboard({ invoices, months }: { invoices: ArInv
       <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
         <h1 className="text-2xl font-bold">{t("clients.title")}</h1>
         <div className="flex items-center gap-2 text-sm">
+          <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}
+            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
           <span className="text-gray-500">{t("clients.subtitle.source")}</span>
           <select value={startMonth} onChange={(e) => setStartMonth(e.target.value)}
             className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
-            {months.map((m) => <option key={m} value={m}>{m}</option>)}
+            {yearMonths.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
           <span className="text-gray-500">~</span>
           <select value={endMonth} onChange={(e) => setEndMonth(e.target.value)}
             className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-[#E8FF47] cursor-pointer">
-            {months.map((m) => <option key={m} value={m}>{m}</option>)}
+            {yearMonths.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
         </div>
       </div>

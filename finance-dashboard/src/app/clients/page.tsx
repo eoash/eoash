@@ -5,8 +5,8 @@ export const revalidate = 300;
 
 export default async function ClientsPage() {
   try {
-    const { invoices, months } = await fetchClientRevenue();
-    return <ClientsDashboard invoices={invoices} months={months} />;
+    const { invoices } = await fetchClientRevenue();
+    return <ClientsDashboard invoices={invoices} />;
   } catch (error) {
     console.error("[ClientsPage] failed:", error);
     return (
