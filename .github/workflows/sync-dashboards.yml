@@ -1,0 +1,49 @@
+name: Sync Dashboard Repos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'finance-dashboard/**'
+      - 'token-dashboard/**'
+
+jobs:
+  sync-finance:
+    if: contains(join(github.event.commits.*.modified, ','), 'finance-dashboard/') || contains(join(github.event.commits.*.added, ','), 'finance-dashboard/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync to eo-finance-dashboard
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.DASHBOARD_SYNC_TOKEN }}
+        with:
+          source-directory: 'finance-dashboard'
+          destination-github-username: 'eoash'
+          destination-repository-name: 'eo-finance-dashboard'
+          target-branch: 'main'
+          commit-message: 'sync: monorepo changes'
+
+  sync-token:
+    if: contains(join(github.event.commits.*.modified, ','), 'token-dashboard/') || contains(join(github.event.commits.*.added, ','), 'token-dashboard/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync to token-dashboard
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.DASHBOARD_SYNC_TOKEN }}
+        with:
+          source-directory: 'token-dashboard'
+          destination-github-username: 'eoash'
+          destination-repository-name: 'token-dashboard'
+          target-branch: 'main'
+          commit-message: 'sync: monorepo changes'

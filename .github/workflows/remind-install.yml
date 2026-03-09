@@ -1,0 +1,27 @@
+name: Token Dashboard - Install Reminder
+
+on:
+  schedule:
+    # 매일 오후 1시 KST (= 04:00 UTC)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # 수동 실행도 가능
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Send install reminders
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          PROMETHEUS_URL: ${{ secrets.PROMETHEUS_URL }}
+        run: |
+          cd token-dashboard && python3 scripts/remind_install.py --send
