@@ -1,0 +1,74 @@
+name: Data Integrity Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'token-dashboard/src/lib/prometheus.ts'
+      - 'token-dashboard/src/lib/data-source.ts'
+      - 'token-dashboard/src/lib/aggregators/**'
+      - 'token-dashboard/src/app/api/analytics/**'
+  pull_request:
+    paths:
+      - 'token-dashboard/src/lib/prometheus.ts'
+      - 'token-dashboard/src/lib/data-source.ts'
+      - 'token-dashboard/src/lib/aggregators/**'
+      - 'token-dashboard/src/app/api/analytics/**'
+  workflow_dispatch: # 수동 실행
+
+jobs:
+  check-integrity:
+    runs-on: ubuntu-latest
+    env:
+      DASHBOARD_URL: https://token-dashboard-iota.vercel.app
+    steps:
+      - name: Check data integrity on production
+        run: |
+          echo "=== Data Integrity Check ==="
+
+          # 1. pipeline-health (인프라)
+          echo ""
+          echo "--- Pipeline Health ---"
+          HEALTH=$(curl -sf "$DASHBOARD_URL/api/pipeline-health" || echo '{"status":"unreachable"}')
+          HEALTH_STATUS=$(echo "$HEALTH" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "error")
+          echo "Infrastructure: $HEALTH_STATUS"
+
+          # 2. data-integrity (데이터 검증)
+          echo ""
+          echo "--- Data Integrity ---"
+          INTEGRITY=$(curl -sf "$DASHBOARD_URL/api/data-integrity" || echo '{"status":"unreachable","summary":"API unreachable"}')
+          echo "$INTEGRITY" | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          print(f\"Status: {d.get('status','unknown')}\")
+          print(f\"Summary: {d.get('summary','')}\")
+          print(f\"Users checked: {d.get('checkedUsers',0)}\")
+          print(f\"Days checked: {d.get('checkedDays',0)}\")
+
+          spikes = d.get('spikes', [])
+          if spikes:
+              print(f\"\n  {len(spikes)} SPIKE(s) detected:\")
+              for s in spikes:
+                  print(f\"  - {s['user']} on {s['date']}: {s['tokens']:,} tokens ({s['ratio']}x vs prev day)\")
+
+          drops = d.get('drops', [])
+          if drops:
+              print(f\"\n  {len(drops)} DROP(s) detected:\")
+              for dr in drops:
+                  print(f\"  - {dr['user']}: last seen {dr['lastSeenDate']}, missing {dr['missingDays']} day(s)\")
+          " 2>/dev/null
+
+          # 3. 결과 판정
+          STATUS=$(echo "$INTEGRITY" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "error")
+
+          if [ "$STATUS" = "fail" ]; then
+            echo ""
+            echo "Data integrity check FAILED - spikes detected. Review before deploying."
+            exit 1
+          elif [ "$STATUS" = "warn" ]; then
+            echo ""
+            echo "Data integrity check WARNING - some users may have data gaps."
+          else
+            echo ""
+            echo "Data integrity check PASSED"
+          fi
