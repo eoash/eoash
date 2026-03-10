@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import { buildProfiles } from "@/lib/gamification";
+import type { ClaudeCodeDataPoint } from "@/lib/types";
 import JourneyMap from "@/components/rank/JourneyMap";
 import CharacterCard from "@/components/rank/CharacterCard";
 import RadarComparison from "@/components/rank/RadarComparison";
@@ -17,7 +17,17 @@ const LS_KEY = "rank-selected-user";
 export default function RankPage() {
   const { locale } = useT();
   const isKo = locale === "ko";
-  const { data, loading, error } = useAnalytics();
+  // Rank는 항상 전체 기간 데이터 사용 (DateRangePicker 무관)
+  const [data, setData] = useState<ClaudeCodeDataPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/analytics?days=365")
+      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
+      .then((j) => setData(j.data ?? []))
+      .catch(() => setError("데이터를 불러오지 못했습니다."))
+      .finally(() => setLoading(false));
+  }, []);
   const profiles = useMemo(() => buildProfiles(data), [data]);
 
   const [selectedName, setSelectedName] = useState<string>("");
