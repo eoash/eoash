@@ -23,7 +23,12 @@ const translations = {
   "announce.new": { ko: "New", en: "New" },
   "announce.update": { ko: "업데이트", en: "Update" },
   "announce.info": { ko: "안내", en: "Info" },
+  "announce.warning": { ko: "⚠️ 공사중", en: "⚠️ Maintenance" },
   "announce.close": { ko: "닫기", en: "Close" },
+  "announce.maintenance": {
+    ko: "토큰 사용량 집계에 특정일 스파이크가 감지되어 데이터 보정 작업 중입니다. 일부 수치가 부정확할 수 있습니다.",
+    en: "Spike detected in token usage data. Data correction in progress — some numbers may be inaccurate.",
+  },
   "announce.setup": {
     ko: "아직 설치 전이라면 터미널에서 한 줄이면 완료!",
     en: "Not installed yet? Just one command in your terminal!",

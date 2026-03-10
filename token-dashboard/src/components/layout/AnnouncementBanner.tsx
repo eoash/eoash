@@ -9,7 +9,7 @@ const STORAGE_KEY = "dismissed-announcements";
 
 interface BannerItem {
   id: string;
-  type: "setup" | "update" | "info";
+  type: "setup" | "update" | "info" | "warning";
   messageKey: TranslationKey;
   linkTextKey?: TranslationKey;
   linkHref?: string;
@@ -19,6 +19,12 @@ interface BannerItem {
 // 배너 추가/수정 시 이 배열만 변경하면 됩니다.
 // id를 바꾸면 이전에 닫은 사용자에게도 다시 표시됩니다.
 const BANNERS: BannerItem[] = [
+  {
+    id: "maintenance-2026-03-10",
+    type: "warning",
+    messageKey: "announce.maintenance",
+    active: true,
+  },
   {
     id: "setup-v2",
     type: "setup",
@@ -30,15 +36,17 @@ const BANNERS: BannerItem[] = [
 ];
 
 const typeStyles: Record<BannerItem["type"], { border: string; bg: string; hoverBg: string; badgeKey: TranslationKey }> = {
-  setup:  { border: "border-[#00E87A]/20", bg: "bg-[#00E87A]/5",  hoverBg: "hover:bg-[#00E87A]/10", badgeKey: "announce.new" },
-  update: { border: "border-[#3B82F6]/20", bg: "bg-[#3B82F6]/5",  hoverBg: "hover:bg-[#3B82F6]/10", badgeKey: "announce.update" },
-  info:   { border: "border-gray-500/20",  bg: "bg-gray-500/5",   hoverBg: "hover:bg-gray-500/10",  badgeKey: "announce.info" },
+  setup:   { border: "border-[#00E87A]/20", bg: "bg-[#00E87A]/5",  hoverBg: "hover:bg-[#00E87A]/10", badgeKey: "announce.new" },
+  update:  { border: "border-[#3B82F6]/20", bg: "bg-[#3B82F6]/5",  hoverBg: "hover:bg-[#3B82F6]/10", badgeKey: "announce.update" },
+  info:    { border: "border-gray-500/20",  bg: "bg-gray-500/5",   hoverBg: "hover:bg-gray-500/10",  badgeKey: "announce.info" },
+  warning: { border: "border-[#F59E0B]/30", bg: "bg-[#F59E0B]/10", hoverBg: "hover:bg-[#F59E0B]/15", badgeKey: "announce.warning" },
 };
 
 const badgeColors: Record<BannerItem["type"], string> = {
   setup: "text-[#00E87A]",
   update: "text-[#3B82F6]",
   info: "text-gray-400",
+  warning: "text-[#F59E0B]",
 };
 
 export default function AnnouncementBanner() {
