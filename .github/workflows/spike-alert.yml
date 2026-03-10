@@ -1,0 +1,80 @@
+name: Token Dashboard - Spike Alert
+
+on:
+  schedule:
+    # 매일 오전 11시, 오후 5시 KST (= 02:00, 08:00 UTC)
+    - cron: '0 2,8 * * *'
+  workflow_dispatch: # 수동 실행
+
+jobs:
+  check-spikes:
+    runs-on: ubuntu-latest
+    env:
+      DASHBOARD_URL: https://token-dashboard-iota.vercel.app
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: U013YP1TURZ
+
+    steps:
+      - name: Check data integrity and alert
+        run: |
+          python3 << 'PYEOF'
+          import urllib.request, json, os, sys
+
+          dashboard = os.environ["DASHBOARD_URL"]
+          token = os.environ.get("SLACK_BOT_TOKEN", "")
+          channel = os.environ["SLACK_CHANNEL"]
+
+          # 1. data-integrity API 호출
+          try:
+              req = urllib.request.Request(f"{dashboard}/api/data-integrity")
+              resp = urllib.request.urlopen(req, timeout=30)
+              data = json.loads(resp.read())
+          except Exception as e:
+              print(f"API error: {e}")
+              sys.exit(1)
+
+          status = data.get("status", "unknown")
+          spikes = data.get("spikes", [])
+          ts = data.get("timestamp", "")[:16]
+
+          print(f"Status: {status}, Spikes: {len(spikes)}")
+
+          if status != "fail":
+              print("No spikes. Done.")
+              sys.exit(0)
+
+          # 2. Slack 메시지 구성
+          lines = [":rotating_light: *Token Dashboard Spike Alert*"]
+          lines.append(f"_{ts} | {len(spikes)} spike(s) detected_")
+          lines.append("")
+
+          for s in spikes:
+              user = s["user"].split("@")[0]
+              tokens = f"{s['tokens']:,}"
+              lines.append(f"• *{user}* — {s['date']} — {tokens} tokens ({s['ratio']}x)")
+
+          lines.append("")
+          lines.append(f"<{dashboard}|대시보드 확인> · <{dashboard}/api/data-integrity|API 원본>")
+
+          msg = "\n".join(lines)
+          print(msg)
+
+          # 3. Slack 발송
+          if not token:
+              print("SLACK_BOT_TOKEN not set. Skipping alert.")
+              sys.exit(0)
+
+          payload = json.dumps({"channel": channel, "text": msg, "unfurl_links": False}).encode()
+          req = urllib.request.Request(
+              "https://slack.com/api/chat.postMessage",
+              data=payload,
+              headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+          )
+          resp = urllib.request.urlopen(req)
+          result = json.loads(resp.read())
+          if result.get("ok"):
+              print("Alert sent successfully")
+          else:
+              print(f"Slack error: {result.get('error')}")
+              sys.exit(1)
+          PYEOF
