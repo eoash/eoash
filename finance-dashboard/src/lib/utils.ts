@@ -1,3 +1,4 @@
+/** Format number as KRW currency */
 export function formatKRW(n: number): string {
   return new Intl.NumberFormat("ko-KR", {
     style: "currency",
