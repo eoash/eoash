@@ -12,8 +12,8 @@ export async function GET(req: NextRequest) {
   const clientSecret = process.env.SLACK_CLIENT_SECRET ?? "";
   const redirectUri = `${req.nextUrl.origin}/api/auth/slack/callback`;
 
-  // Exchange code for token
-  const tokenRes = await fetch("https://slack.com/api/oauth.v2.access", {
+  // Exchange code for token (OpenID Connect)
+  const tokenRes = await fetch("https://slack.com/api/openid.connect.token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
@@ -21,31 +21,30 @@ export async function GET(req: NextRequest) {
       client_secret: clientSecret,
       code,
       redirect_uri: redirectUri,
+      grant_type: "authorization_code",
     }),
   });
 
   const tokenData = await tokenRes.json();
-  if (!tokenData.ok || !tokenData.authed_user?.access_token) {
-    console.error("Slack OAuth failed:", tokenData.error);
+  if (!tokenData.ok || !tokenData.access_token) {
+    console.error("Slack OIDC token failed:", tokenData.error);
     return NextResponse.redirect(new URL("/board?auth=error", req.url));
   }
 
-  const userToken = tokenData.authed_user.access_token;
-
-  // Get user identity
-  const identityRes = await fetch("https://slack.com/api/users.identity", {
-    headers: { Authorization: `Bearer ${userToken}` },
+  // Get user info (OpenID Connect)
+  const userInfoRes = await fetch("https://slack.com/api/openid.connect.userInfo", {
+    headers: { Authorization: `Bearer ${tokenData.access_token}` },
   });
 
-  const identityData = await identityRes.json();
-  if (!identityData.ok) {
-    console.error("Slack identity failed:", identityData.error);
+  const userInfo = await userInfoRes.json();
+  if (!userInfo.ok) {
+    console.error("Slack OIDC userInfo failed:", userInfo.error);
     return NextResponse.redirect(new URL("/board?auth=error", req.url));
   }
 
-  const email = (identityData.user?.email ?? "").toLowerCase();
-  const name = EMAIL_TO_NAME[email] ?? identityData.user?.name ?? email;
-  const avatar = NAME_TO_AVATAR[name] ?? identityData.user?.image_72;
+  const email = (userInfo.email ?? "").toLowerCase();
+  const name = EMAIL_TO_NAME[email] ?? userInfo.name ?? email;
+  const avatar = NAME_TO_AVATAR[name] ?? userInfo.picture;
 
   const cookie = createSessionCookie({ name, email, avatar });
   const response = NextResponse.redirect(new URL("/board", req.url));

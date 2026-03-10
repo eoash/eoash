@@ -11,11 +11,12 @@ export async function GET(req: NextRequest) {
 
   const params = new URLSearchParams({
     client_id: clientId,
-    user_scope: "identity.basic,identity.email,identity.avatar",
+    scope: "openid,profile,email",
     redirect_uri: redirectUri,
+    response_type: "code",
   });
 
   return NextResponse.redirect(
-    `https://slack.com/oauth/v2/authorize?${params.toString()}`,
+    `https://slack.com/openid/connect/authorize?${params.toString()}`,
   );
 }
