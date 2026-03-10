@@ -34,13 +34,11 @@ function topModelShare(m: MemberData): number {
 
 // ── Insight Generators ──
 
-function frequencyInsight(profile: UserProfile, memberData: MemberData): UsageInsight | null {
+function frequencyInsight(profile: UserProfile, memberData: MemberData, rangeDays: number): UsageInsight | null {
   if (profile.activeDays === 0 || memberData.daily.length === 0) return null;
 
-  // Calculate active ratio from date range (not streak, which is range-dependent)
-  const firstDate = new Date(memberData.daily[0].date);
-  const lastDate = new Date(memberData.daily[memberData.daily.length - 1].date);
-  const rangeSpan = Math.max(1, Math.round((lastDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+  // Use the user-selected date range (not data-derived span) for accurate ratio
+  const rangeSpan = Math.max(1, rangeDays);
   const activeDays = memberData.daily.length;
   const activeRatio = activeDays / rangeSpan;
   const pct = Math.round(activeRatio * 100);
@@ -343,12 +341,13 @@ function volumeInsight(m: MemberData, profile: UserProfile): UsageInsight | null
 export function generateUsageInsights(
   memberData: MemberData,
   profile: UserProfile | null,
+  rangeDays: number = 30,
 ): UsageInsight[] {
   // No insights for users with no data or no profile
   if (!profile || profile.totalTokens === 0 || profile.activeDays === 0) return [];
 
   const insights: (UsageInsight | null)[] = [
-    frequencyInsight(profile, memberData),
+    frequencyInsight(profile, memberData, rangeDays),
     codingLeverageInsight(memberData, profile),
     modelStrategyInsight(memberData),
     cacheInsight(memberData),

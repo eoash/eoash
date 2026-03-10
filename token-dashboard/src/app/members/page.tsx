@@ -13,9 +13,11 @@ import { aggregateMember } from "@/lib/aggregators/team";
 import { buildProfiles } from "@/lib/gamification";
 import { generateUsageInsights } from "@/lib/usage-insights";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { useDateRange } from "@/lib/contexts/DateRangeContext";
 
 export default function TeamPage() {
   const { t } = useT();
+  const { days } = useDateRange();
   const [selectedName, setSelectedName] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("members-selected");
@@ -39,8 +41,8 @@ export default function TeamPage() {
   );
 
   const insights = useMemo(
-    () => generateUsageInsights(memberData, selectedProfile),
-    [memberData, selectedProfile],
+    () => generateUsageInsights(memberData, selectedProfile, days),
+    [memberData, selectedProfile, days],
   );
 
   return (
