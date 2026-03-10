@@ -21,11 +21,17 @@ function avg(nums: number[]): number {
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }
 
+function formatCompact(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return String(Math.round(n));
+}
+
 export default function RadarComparison({ profile, allProfiles }: Props) {
   const { locale } = useT();
   const isKo = locale === "ko";
 
-  const { chartData, aboveAvgCount } = useMemo(() => {
+  const { chartData, stats } = useMemo(() => {
     const teamAvg = {
       tokens: avg(allProfiles.map((p) => p.totalTokens)),
       activeDays: avg(allProfiles.map((p) => p.activeDays)),
@@ -48,44 +54,31 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
       labelKo: string;
       labelEn: string;
       userVal: number;
+      unit?: string;
     }[] = [
-      {
-        key: "tokens",
-        labelKo: "토큰",
-        labelEn: "Tokens",
-        userVal: profile.totalTokens,
-      },
-      {
-        key: "activeDays",
-        labelKo: "활동일",
-        labelEn: "Active Days",
-        userVal: profile.activeDays,
-      },
-      {
-        key: "commits",
-        labelKo: "커밋",
-        labelEn: "Commits",
-        userVal: profile.totalCommits,
-      },
-      {
-        key: "streak",
-        labelKo: "스트릭",
-        labelEn: "Streak",
-        userVal: profile.currentStreak,
-      },
-      {
-        key: "achievements",
-        labelKo: "업적",
-        labelEn: "Achievements",
-        userVal: profile.earnedAchievements.length,
-      },
+      { key: "tokens", labelKo: "토큰", labelEn: "Tokens", userVal: profile.totalTokens },
+      { key: "activeDays", labelKo: "활동일", labelEn: "Active", userVal: profile.activeDays, unit: isKo ? "일" : "d" },
+      { key: "commits", labelKo: "커밋", labelEn: "Commits", userVal: profile.totalCommits },
+      { key: "streak", labelKo: "스트릭", labelEn: "Streak", userVal: profile.currentStreak, unit: isKo ? "일" : "d" },
+      { key: "achievements", labelKo: "업적", labelEn: "Achieve", userVal: profile.earnedAchievements.length },
     ];
 
-    let aboveCount = 0;
+    const statsArr: { label: string; userVal: number; avgVal: number; above: boolean; unit?: string }[] = [];
+
     const data = axes.map((axis) => {
-      const userNorm = (axis.userVal / maxVals[axis.key]) * 100;
-      const avgNorm = (teamAvg[axis.key] / maxVals[axis.key]) * 100;
-      if (axis.userVal > teamAvg[axis.key]) aboveCount++;
+      const userRatio = axis.userVal / maxVals[axis.key];
+      const avgRatio = teamAvg[axis.key] / maxVals[axis.key];
+      // sqrt 스케일: 상위권 압축, 중하위권 확대 → 비교가 수월해짐
+      const userNorm = Math.sqrt(userRatio) * 100;
+      const avgNorm = Math.sqrt(avgRatio) * 100;
+      const above = axis.userVal > teamAvg[axis.key];
+      statsArr.push({
+        label: isKo ? axis.labelKo : axis.labelEn,
+        userVal: axis.userVal,
+        avgVal: teamAvg[axis.key],
+        above,
+        unit: axis.unit,
+      });
       return {
         axis: isKo ? axis.labelKo : axis.labelEn,
         user: Math.round(userNorm),
@@ -93,88 +86,98 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
       };
     });
 
-    return { chartData: data, aboveAvgCount: aboveCount };
+    return { chartData: data, stats: statsArr };
   }, [profile, allProfiles, isKo]);
 
   const userColor = profile.level.color[0];
+  const aboveCount = stats.filter((s) => s.above).length;
 
   return (
     <div className="rounded-xl border border-[#222] bg-[#111111] p-5">
-      <h2 className="text-base font-semibold text-white mb-3">
-        {isKo ? "🛰️ 탐사 프로필" : "🛰️ Exploration Profile"}
-      </h2>
-
-      {/* Legend */}
-      <div className="flex items-center gap-4 mb-2 px-1">
-        <div className="flex items-center gap-1.5">
-          <span
-            className="inline-block w-3 h-3 rounded-sm"
-            style={{ backgroundColor: userColor, opacity: 0.6 }}
-          />
-          <span className="text-xs text-gray-400">
-            {isKo ? "나" : "You"}
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span
-            className="inline-block w-3 h-3 rounded-sm border border-dashed"
-            style={{ borderColor: "#666", backgroundColor: "transparent" }}
-          />
-          <span className="text-xs text-gray-400">
-            {isKo ? "팀 평균" : "Team Avg"}
-          </span>
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-base font-semibold text-white">
+          {isKo ? "🛰️ 탐사 프로필" : "🛰️ Exploration Profile"}
+        </h2>
+        {/* Legend */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span
+              className="inline-block w-2.5 h-2.5 rounded-full"
+              style={{ backgroundColor: userColor, opacity: 0.7 }}
+            />
+            <span className="text-[10px] text-gray-500">
+              {isKo ? "나" : "You"}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span
+              className="inline-block w-2.5 h-2.5 rounded-full border border-dashed"
+              style={{ borderColor: "#555", backgroundColor: "transparent" }}
+            />
+            <span className="text-[10px] text-gray-500">
+              {isKo ? "팀 평균" : "Avg"}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div style={{ width: "100%", height: 250 }}>
+      <div style={{ width: "100%", height: 270 }}>
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="75%">
-            <PolarGrid stroke="#222" />
+            <PolarGrid stroke="#1a1a1a" strokeWidth={1} />
             <PolarAngleAxis
               dataKey="axis"
-              tick={{ fill: "#666", fontSize: 11 }}
+              tick={{ fill: "#555", fontSize: 11, fontWeight: 500 }}
             />
             <Radar
               name="Team Avg"
               dataKey="avg"
-              stroke="#666"
-              fill="#666"
-              fillOpacity={0.1}
-              strokeDasharray="4 4"
+              stroke="#444"
+              fill="#444"
+              fillOpacity={0.08}
+              strokeDasharray="4 3"
+              strokeWidth={1.5}
             />
             <Radar
               name={profile.name}
               dataKey="user"
               stroke={userColor}
               fill={userColor}
-              fillOpacity={0.3}
+              fillOpacity={0.2}
+              strokeWidth={2}
             />
           </RadarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Axis descriptions */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mt-2 px-1">
-        {[
-          { labelKo: "토큰", labelEn: "Tokens", descKo: "총 사용 토큰", descEn: "Total tokens used" },
-          { labelKo: "활동일", labelEn: "Active Days", descKo: "AI 사용한 날 수", descEn: "Days with AI usage" },
-          { labelKo: "커밋", labelEn: "Commits", descKo: "Git 커밋 수", descEn: "Git commits made" },
-          { labelKo: "스트릭", labelEn: "Streak", descKo: "연속 활동일", descEn: "Consecutive active days" },
-          { labelKo: "업적", labelEn: "Achievements", descKo: "획득한 업적 수", descEn: "Achievements earned" },
-        ].map((item) => (
-          <p key={item.labelEn} className="text-[10px] text-gray-600">
-            <span className="text-gray-500">{isKo ? item.labelKo : item.labelEn}</span>
-            {" — "}
-            {isKo ? item.descKo : item.descEn}
-          </p>
+      {/* Stat comparison row */}
+      <div className="grid grid-cols-5 gap-1 mt-1">
+        {stats.map((s) => (
+          <div key={s.label} className="text-center">
+            <p className="text-[10px] text-gray-600 mb-0.5">{s.label}</p>
+            <p className="text-xs font-medium" style={{ color: s.above ? userColor : "#666" }}>
+              {formatCompact(s.userVal)}{s.unit ?? ""}
+            </p>
+            <p className="text-[10px] text-gray-600">
+              {isKo ? "평균 " : "avg "}{formatCompact(s.avgVal)}{s.unit ?? ""}
+            </p>
+          </div>
         ))}
       </div>
 
       <p
-        className="text-xs text-gray-500 mt-3 font-mono"
+        className="text-[10px] text-gray-600 mt-3 font-mono"
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
-        [LOG] Above average in {aboveAvgCount}/5 dimensions.
+        [LOG] {aboveCount === 5
+          ? (isKo ? "전 영역 팀 평균 초과. 최전선 탐사 중." : "All dimensions above average. Leading exploration.")
+          : aboveCount === 0
+            ? (isKo ? "전 영역 팀 평균 이하. 탐사 가속 필요." : "All dimensions below average. Acceleration needed.")
+            : (isKo
+              ? `${stats.filter(s => s.above).map(s => s.label).join("·")} 팀 평균 초과 (${aboveCount}/5).`
+              : `Above avg in ${stats.filter(s => s.above).map(s => s.label).join(", ")} (${aboveCount}/5).`
+            )
+        }
       </p>
     </div>
   );

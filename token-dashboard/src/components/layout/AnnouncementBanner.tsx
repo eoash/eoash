@@ -20,10 +20,12 @@ interface BannerItem {
 // id를 바꾸면 이전에 닫은 사용자에게도 다시 표시됩니다.
 const BANNERS: BannerItem[] = [
   {
-    id: "maintenance-2026-03-10",
-    type: "warning",
-    messageKey: "announce.maintenance",
-    active: false,
+    id: "spike-resolved-2026-03-11",
+    type: "update",
+    messageKey: "announce.spikeResolved",
+    linkTextKey: "announce.spikeResolvedLink",
+    linkHref: "/board?post=31f74768-ec37-81d0-b80a-dfb67a9e241e",
+    active: true,
   },
   {
     id: "setup-v2",

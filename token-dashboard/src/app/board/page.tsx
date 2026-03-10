@@ -11,12 +11,15 @@ import { TEAM_MEMBERS } from "@/lib/constants";
 const AUTHOR_OPTIONS = TEAM_MEMBERS.filter((m) => m.avatar).map((m) => m.name).sort();
 
 export default function BoardPage() {
-  const { t } = useT();
+  const { t, locale } = useT();
+  const isKo = locale === "ko";
   const [posts, setPosts] = useState<BoardPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [showWrite, setShowWrite] = useState(false);
   const [user, setUser] = useState<BoardUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+
+  const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   // Login flow state
   const [showLogin, setShowLogin] = useState(false);
@@ -34,13 +37,18 @@ export default function BoardPage() {
       .finally(() => setAuthLoading(false));
   }, []);
 
-  // Check URL params for auth errors
+  // Check URL params for auth errors + deep link
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const auth = params.get("auth");
     if (auth === "expired") {
       setLoginStatus("error");
       setShowLogin(true);
+    }
+    const postId = params.get("post");
+    if (postId) setOpenPostId(postId);
+    // Clean URL without reload
+    if (auth || postId) {
       window.history.replaceState({}, "", "/board");
     }
   }, []);
@@ -122,27 +130,30 @@ export default function BoardPage() {
             </div>
           )}
 
-          {/* Write button */}
+          {/* Login / Write buttons */}
           {!showWrite && !showLogin && (
-            <button
-              onClick={handleWriteClick}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#00E87A]/15 text-[#00E87A] border border-[#00E87A]/30 hover:bg-[#00E87A]/25 transition-colors cursor-pointer"
-            >
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
+            <>
+              {!authLoading && !user && (
+                <button
+                  onClick={() => setShowLogin(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-800/50 text-gray-300 border border-gray-700 hover:text-white hover:border-gray-600 transition-colors cursor-pointer"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" />
+                  </svg>
+                  {isKo ? "로그인" : "Login"}
+                </button>
+              )}
+              <button
+                onClick={handleWriteClick}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#00E87A]/15 text-[#00E87A] border border-[#00E87A]/30 hover:bg-[#00E87A]/25 transition-colors cursor-pointer"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              {t("board.write")}
-            </button>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                {t("board.write")}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -232,7 +243,7 @@ export default function BoardPage() {
           {t("common.loading")}
         </div>
       ) : (
-        <BoardFeed posts={posts} user={user} onDeleted={() => { setLoading(true); loadPosts(); }} />
+        <BoardFeed posts={posts} user={user} onDeleted={() => { setLoading(true); loadPosts(); }} openPostId={openPostId} onLoginClick={() => setShowLogin(true)} />
       )}
     </div>
   );

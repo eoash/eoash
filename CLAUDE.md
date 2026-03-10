@@ -147,10 +147,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] Backfill v4 마커 + 스크립트 URL 모노레포 전환 (서브레포 의존 제거)
 - [x] Prometheus 과다집계 우회: 세션별 backfill + 하루 1회 전체 re-backfill (backfill 우선으로 Prometheus 미사용)
 - [x] cache_creation 필드명 통일 (otel_push.py + backfill API: cache_creation_input_tokens → cache_creation_tokens)
-- [ ] Board 게시판 (Notion DB 연동 대기)
+- [x] Board 게시판 (Notion DB 연동 완료)
   - [x] 코드 구현 완료 (notion-board.ts, /api/board, 컴포넌트 4개, /board 페이지)
-  - [ ] Notion DB 생성 + 환경변수 설정 (NOTION_BOARD_DB_ID, NOTION_API_KEY)
-  - [ ] Vercel 배포 + 테스트
+  - [x] Notion DB 생성 + 환경변수 설정 (NOTION_BOARD_DB_ID, NOTION_API_KEY)
+  - [x] Vercel 배포 + 테스트
+  - [x] 딥링크(?post=id) + 로그인 UX 개선 + 고정글/업데이트글 생성
+  - [x] RadarComparison sqrt 스케일 + InfoTip align/z-index 개선
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
@@ -167,4 +169,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-10*
+*마지막 업데이트: 2026-03-11*

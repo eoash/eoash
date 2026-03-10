@@ -17,9 +17,10 @@ function timeAgo(iso: string): string {
 interface Props {
   postId: string;
   userName?: string; // 로그인된 사용자 이름
+  onLoginClick?: () => void;
 }
 
-export default function CommentSection({ postId, userName }: Props) {
+export default function CommentSection({ postId, userName, onLoginClick }: Props) {
   const [comments, setComments] = useState<BoardComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [content, setContent] = useState("");
@@ -117,9 +118,12 @@ export default function CommentSection({ postId, userName }: Props) {
           </button>
         </div>
       ) : (
-        <div className="text-xs text-gray-600 py-1">
-          댓글을 작성하려면 로그인하세요
-        </div>
+        <button
+          onClick={onLoginClick}
+          className="text-xs text-gray-500 hover:text-[#00E87A] transition-colors cursor-pointer py-1"
+        >
+          댓글을 작성하려면 <span className="underline underline-offset-2">로그인</span>하세요
+        </button>
       )}
     </div>
   );

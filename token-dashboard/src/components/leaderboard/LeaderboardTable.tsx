@@ -88,7 +88,7 @@ function ClaudeTable({ period }: { period: Period }) {
               <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end">{t("chart.output").toUpperCase()}<InfoTip below text={t("lb.output.tip")} /></span></th>
               <th className="hidden lg:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end">{t("chart.cacheRead").toUpperCase()}<InfoTip below text={t("lb.cacheRead.tip")} /></span></th>
               <th className="px-3 py-3 text-right text-xs text-neutral-600 font-medium min-w-[120px] md:min-w-[180px] md:px-4"><span className="inline-flex items-center justify-end">{t("lb.total")}<InfoTip below text={t("lb.total.tip")} /></span></th>
-              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end">{t("lb.cacheHit")}<InfoTip below text={t("lb.cacheHit.tip")} /></span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end">{t("lb.cacheHit")}<InfoTip below align="right" text={t("lb.cacheHit.tip")} /></span></th>
             </tr>
           </thead>
           <tbody>

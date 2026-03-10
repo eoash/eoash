@@ -12,9 +12,11 @@ interface Props {
   posts: BoardPost[];
   user?: BoardUser | null;
   onDeleted?: () => void;
+  openPostId?: string | null;
+  onLoginClick?: () => void;
 }
 
-export default function BoardFeed({ posts, user, onDeleted }: Props) {
+export default function BoardFeed({ posts, user, onDeleted, openPostId, onLoginClick }: Props) {
   const { t } = useT();
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -56,11 +58,11 @@ export default function BoardFeed({ posts, user, onDeleted }: Props) {
         <div className="rounded-xl border border-gray-800 bg-gray-900/60 overflow-hidden divide-y divide-gray-800/60">
           {/* 고정글 먼저 */}
           {pinned.map((post) => (
-            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} />
+            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} defaultOpen={post.id === openPostId} onLoginClick={onLoginClick} />
           ))}
           {/* 나머지 글 */}
           {rest.map((post) => (
-            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} />
+            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} defaultOpen={post.id === openPostId} onLoginClick={onLoginClick} />
           ))}
         </div>
       )}

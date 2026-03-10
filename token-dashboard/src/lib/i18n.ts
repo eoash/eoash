@@ -29,6 +29,11 @@ const translations = {
     ko: "토큰 사용량 집계에 특정일 스파이크가 감지되어 데이터 보정 작업 중입니다. 일부 수치가 부정확할 수 있습니다.",
     en: "Spike detected in token usage data. Data correction in progress — some numbers may be inaccurate.",
   },
+  "announce.spikeResolved": {
+    ko: "토큰 사용량 스파이크 이슈가 해결되었습니다. 현재 전 팀원 데이터가 정상 집계됩니다.",
+    en: "Token usage spike issue has been resolved. All team members' data is now accurate.",
+  },
+  "announce.spikeResolvedLink": { ko: "자세히 보기 →", en: "Details →" },
   "announce.setup": {
     ko: "아직 설치 전이라면 터미널에서 한 줄이면 완료!",
     en: "Not installed yet? Just one command in your terminal!",

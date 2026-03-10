@@ -11,10 +11,12 @@ interface Props {
   compact?: boolean;
   user?: BoardUser | null;
   onDeleted?: () => void;
+  defaultOpen?: boolean;
+  onLoginClick?: () => void;
 }
 
-export default function PostCard({ post, compact, user, onDeleted }: Props) {
-  const [expanded, setExpanded] = useState(false);
+export default function PostCard({ post, compact, user, onDeleted, defaultOpen, onLoginClick }: Props) {
+  const [expanded, setExpanded] = useState(defaultOpen ?? false);
   const [deleting, setDeleting] = useState(false);
   const canDelete = user && user.name === post.author && !post.pinned;
 
@@ -166,7 +168,7 @@ export default function PostCard({ post, compact, user, onDeleted }: Props) {
           </div>
 
           {/* 댓글 */}
-          <CommentSection postId={post.id} userName={user?.name} />
+          <CommentSection postId={post.id} userName={user?.name} onLoginClick={onLoginClick} />
         </div>
       )}
     </div>
