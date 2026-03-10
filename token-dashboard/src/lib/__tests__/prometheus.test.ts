@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeDailyIncrease, tsToDate } from "../prometheus";
+import { computeDailyIncrease, tsToDate, MAX_HOURLY_DELTA } from "../prometheus";
 
 // --- Helper: KST 날짜 → Unix timestamp (정오 KST = 03:00 UTC) ---
 function kstNoon(dateStr: string): number {
@@ -248,5 +248,72 @@ describe("computeDailyIncrease — 엣지 케이스", () => {
     const result = computeDailyIncrease(series, "2026-03-09");
     const dayMap = new Map(result[0].values.map(([ts, v]) => [tsToDate(ts), Number(v)]));
     expect(dayMap.get("2026-03-09")).toBe(100);
+  });
+});
+
+// ============================================================
+// computeDailyIncrease — 시간당 delta 상한 (otel_push 이중 전송 방어)
+// ============================================================
+describe("computeDailyIncrease — MAX_HOURLY_DELTA cap", () => {
+  it("정상 delta는 cap에 걸리지 않음", () => {
+    const series = [
+      makeSeries("a@test.com", "haiku", [
+        ["2026-03-08", 0],
+        ["2026-03-09", 500_000],  // +500K (정상)
+        ["2026-03-09", 1_200_000], // +700K (정상)
+      ]),
+    ];
+
+    const result = computeDailyIncrease(series, "2026-03-09");
+    const dayMap = new Map(result[0].values.map(([ts, v]) => [tsToDate(ts), Number(v)]));
+    expect(dayMap.get("2026-03-09")).toBe(1_200_000); // 500K + 700K
+  });
+
+  it("팽창 delta는 MAX_HOURLY_DELTA로 cap", () => {
+    const inflated = MAX_HOURLY_DELTA * 5; // 10M — otel_push 이중 전송
+    const series = [
+      makeSeries("chiri@test.com", "haiku", [
+        ["2026-03-08", 0],
+        ["2026-03-09", inflated],         // +10M → capped to 2M
+        ["2026-03-09", inflated * 2],     // +10M → capped to 2M
+        ["2026-03-10", inflated * 2 + 500_000], // +500K (정상)
+      ]),
+    ];
+
+    const result = computeDailyIncrease(series, "2026-03-09");
+    const dayMap = new Map(result[0].values.map(([ts, v]) => [tsToDate(ts), Number(v)]));
+
+    // 3/9: 2M + 2M = 4M (원래 20M이 cap 됨)
+    expect(dayMap.get("2026-03-09")).toBe(MAX_HOURLY_DELTA * 2);
+    // 3/10: 500K (정상 범위, cap 안 걸림)
+    expect(dayMap.get("2026-03-10")).toBe(500_000);
+  });
+
+  it("cap 경계값 (정확히 MAX_HOURLY_DELTA)은 통과", () => {
+    const series = [
+      makeSeries("a@test.com", "haiku", [
+        ["2026-03-08", 0],
+        ["2026-03-09", MAX_HOURLY_DELTA], // 정확히 cap = 통과
+      ]),
+    ];
+
+    const result = computeDailyIncrease(series, "2026-03-09");
+    const dayMap = new Map(result[0].values.map(([ts, v]) => [tsToDate(ts), Number(v)]));
+    expect(dayMap.get("2026-03-09")).toBe(MAX_HOURLY_DELTA);
+  });
+
+  it("리셋 후 팽창 delta도 cap 적용", () => {
+    const series = [
+      makeSeries("a@test.com", "haiku", [
+        ["2026-03-08", 5_000_000],
+        ["2026-03-09", 100],             // 리셋 → skip
+        ["2026-03-09", 8_000_000],       // +7,999,900 → capped to 2M
+        ["2026-03-09", 8_500_000],       // +500K (정상)
+      ]),
+    ];
+
+    const result = computeDailyIncrease(series, "2026-03-09");
+    const dayMap = new Map(result[0].values.map(([ts, v]) => [tsToDate(ts), Number(v)]));
+    expect(dayMap.get("2026-03-09")).toBe(MAX_HOURLY_DELTA + 500_000);
   });
 });
