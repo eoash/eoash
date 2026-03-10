@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import KpiCard from "@/components/cards/KpiCard";
 import DailyUsageChart from "@/components/charts/DailyUsageChart";
 import ModelPieChart from "@/components/charts/ModelPieChart";
+import UsageInsightCard from "@/components/members/UsageInsightCard";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { UNIQUE_MEMBERS } from "@/lib/constants";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import { aggregateMember } from "@/lib/aggregators/team";
+import { buildProfiles } from "@/lib/gamification";
+import { generateUsageInsights } from "@/lib/usage-insights";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 export default function TeamPage() {
@@ -25,7 +28,20 @@ export default function TeamPage() {
   useEffect(() => {
     localStorage.setItem("members-selected", selectedName);
   }, [selectedName]);
+
   const memberData = aggregateMember(rawData, selectedName);
+
+  // Build profiles once, find selected member's profile
+  const profiles = useMemo(() => buildProfiles(rawData), [rawData]);
+  const selectedProfile = useMemo(
+    () => profiles.find((p) => p.name === selectedName) ?? null,
+    [profiles, selectedName],
+  );
+
+  const insights = useMemo(
+    () => generateUsageInsights(memberData, selectedProfile),
+    [memberData, selectedProfile],
+  );
 
   return (
     <div>
@@ -62,6 +78,9 @@ export default function TeamPage() {
             <KpiCard title={t("kpi.totalCommits")} value={String(memberData.commits)} subtitle={`by ${selectedName}`} tooltip={t("team.commits.tip")} />
             <KpiCard title={t("kpi.pullRequests")} value={String(memberData.pullRequests)} subtitle={`by ${selectedName}`} tooltip={t("team.prs.tip")} />
           </div>
+
+          <UsageInsightCard insights={insights} name={selectedName} />
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <DailyUsageChart data={memberData.daily} />
