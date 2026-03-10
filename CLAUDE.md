@@ -142,6 +142,10 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] Gemini v0.33 metrics_url_path 복원
 - [x] KpiCard 반응형 사이즈 + 모바일 2열 그리드 + InfoTip group/tip 패턴
 - [x] data-integrity API + CI 워크플로우 (스파이크/유실 자동 감지 안전망)
+- [x] Model 파이차트 컬러 수정 (Haiku 4.5 amber, Haiku 3.5 orange) + 값 기준 내림차순 정렬
+- [x] Backfill API 커밋 대상을 모노레포(eoash/eoash)로 변경 + GITHUB_BACKFILL_TOKEN 갱신
+- [x] Backfill v4 마커 + 스크립트 URL 모노레포 전환 (서브레포 의존 제거)
+- [x] Prometheus 과다집계 우회: 세션별 backfill + 하루 1회 전체 re-backfill (backfill 우선으로 Prometheus 미사용)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
