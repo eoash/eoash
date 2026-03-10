@@ -67,6 +67,23 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Merge sub-repo backfill before sync
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          SYNC_TOKEN: ${{ secrets.DASHBOARD_SYNC_TOKEN }}
+        run: |
+          # sub-repo의 backfill 파일 중 monorepo에 없는 것을 병합
+          # (backfill API가 sub-repo에 직접 커밋한 파일 보존)
+          git clone --depth 1 "https://x-access-token:${SYNC_TOKEN}@github.com/eoash/token-dashboard.git" /tmp/sub-repo
+          for f in /tmp/sub-repo/src/lib/backfill/*.json; do
+            fname=$(basename "$f")
+            if [ ! -f "token-dashboard/src/lib/backfill/$fname" ]; then
+              cp "$f" "token-dashboard/src/lib/backfill/$fname"
+              echo "Merged from sub-repo: $fname"
+            fi
+          done
+          rm -rf /tmp/sub-repo
+
       - name: Sync to token-dashboard
         if: steps.changes.outputs.changed == 'true'
         uses: cpina/github-action-push-to-another-repository@main
