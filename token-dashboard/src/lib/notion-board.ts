@@ -166,6 +166,18 @@ export async function updateReaction(
   }
 }
 
+export async function archivePost(pageId: string): Promise<void> {
+  const res = await fetch(`${NOTION_API}/pages/${pageId}`, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify({ archived: true }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Archive failed: ${res.status}`);
+  }
+}
+
 // ── Comments ──
 
 export interface BoardComment {

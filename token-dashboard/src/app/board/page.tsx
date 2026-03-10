@@ -232,7 +232,7 @@ export default function BoardPage() {
           {t("common.loading")}
         </div>
       ) : (
-        <BoardFeed posts={posts} />
+        <BoardFeed posts={posts} user={user} onDeleted={() => { setLoading(true); loadPosts(); }} />
       )}
     </div>
   );

@@ -2,16 +2,35 @@
 
 import { useState } from "react";
 import type { BoardPost } from "@/lib/notion-board";
+import type { BoardUser } from "@/lib/board-types";
 import ReactionBar from "./ReactionBar";
 import CommentSection from "./CommentSection";
 
 interface Props {
   post: BoardPost;
   compact?: boolean;
+  user?: BoardUser | null;
+  onDeleted?: () => void;
 }
 
-export default function PostCard({ post, compact }: Props) {
+export default function PostCard({ post, compact, user, onDeleted }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const canDelete = user && user.name === post.author && !post.pinned;
+
+  const handleDelete = async () => {
+    if (!confirm("이 글을 삭제하시겠습니까?")) return;
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/board", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId: post.id, author: post.author }),
+      });
+      if (res.ok) onDeleted?.();
+    } catch { /* silent */ }
+    finally { setDeleting(false); }
+  };
   const isProduct = post.category === "프로덕트";
 
   // compact 모드 (Overview 위젯) — 한 줄 요약
@@ -132,11 +151,22 @@ export default function PostCard({ post, compact }: Props) {
             {post.author} · {post.date}
           </div>
 
-          {/* 리액션 */}
-          <ReactionBar postId={post.id} reactions={post.reactions} />
+          {/* 리액션 + 삭제 */}
+          <div className="flex items-center justify-between">
+            <ReactionBar postId={post.id} reactions={post.reactions} />
+            {canDelete && (
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="text-xs text-gray-600 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-30"
+              >
+                {deleting ? "삭제 중..." : "삭제"}
+              </button>
+            )}
+          </div>
 
           {/* 댓글 */}
-          <CommentSection postId={post.id} />
+          <CommentSection postId={post.id} userName={user?.name} />
         </div>
       )}
     </div>

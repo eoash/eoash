@@ -2,12 +2,19 @@
 
 import { useState } from "react";
 import type { BoardPost } from "@/lib/notion-board";
+import type { BoardUser } from "@/lib/board-types";
 import PostCard from "./PostCard";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 type Filter = "all" | "공지" | "프로덕트";
 
-export default function BoardFeed({ posts }: { posts: BoardPost[] }) {
+interface Props {
+  posts: BoardPost[];
+  user?: BoardUser | null;
+  onDeleted?: () => void;
+}
+
+export default function BoardFeed({ posts, user, onDeleted }: Props) {
   const { t } = useT();
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -49,11 +56,11 @@ export default function BoardFeed({ posts }: { posts: BoardPost[] }) {
         <div className="rounded-xl border border-gray-800 bg-gray-900/60 overflow-hidden divide-y divide-gray-800/60">
           {/* 고정글 먼저 */}
           {pinned.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} />
           ))}
           {/* 나머지 글 */}
           {rest.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} user={user} onDeleted={onDeleted} />
           ))}
         </div>
       )}
