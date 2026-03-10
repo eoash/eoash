@@ -17,8 +17,11 @@ $BASE_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/
 $DASHBOARD_API = "https://token-dashboard-iota.vercel.app/api/backfill"
 $OTEL_COLLECTOR = "https://otel-collector-production-2dac.up.railway.app"
 $GEMINI_SETTINGS = "$env:USERPROFILE\.gemini\settings.json"
+# python3 또는 python 실제 경로 감지 (HOOK_CMD에 하드코딩 필요)
+$PYTHON_EXE = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
 # 자동 업데이트 hook 명령: bash가 없으므로 powershell로 실행
-$HOOK_CMD = "powershell -NoProfile -Command `"`$d=`$input|Out-String;Invoke-WebRequest -Uri '$BASE_URL/otel_push.py' -OutFile '$HOOK_FILE' -ErrorAction SilentlyContinue;`$d|python3 '$HOOK_FILE'`""
+# UTF-8 강제 + python 경로 동적 감지
+$HOOK_CMD = "powershell -NoProfile -Command `"`$env:PYTHONUTF8='1';`$env:PYTHONIOENCODING='utf-8';`$d=[Console]::In.ReadToEnd();Invoke-WebRequest -Uri '$BASE_URL/otel_push.py' -OutFile '$HOOK_FILE' -ErrorAction SilentlyContinue;`$d|$PYTHON_EXE '$HOOK_FILE'`""
 
 Write-Host ""
 Write-Host "  ╔═══════════════════════════════════════════════════════════╗"

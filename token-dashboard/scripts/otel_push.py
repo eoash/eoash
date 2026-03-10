@@ -452,10 +452,10 @@ def maybe_daily_rebackfill(user_email: str):
         script_path = os.path.join(tempfile.gettempdir(), "generate_backfill_daily.py")
         urllib.request.urlretrieve(BACKFILL_SCRIPT_URL, script_path)
 
-        # 실행하여 backfill JSON 생성
+        # 실행하여 backfill JSON 생성 (Windows: python3 없을 수 있으므로 sys.executable 사용)
         out_path = os.path.join(tempfile.gettempdir(), "backfill_daily.json")
         subprocess.run(
-            ["python3", script_path, "--out", out_path],
+            [sys.executable, script_path, "--out", out_path],
             capture_output=True, text=True, timeout=60,
         )
 
