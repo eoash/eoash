@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { BoardPost } from "@/lib/notion-board";
 import ReactionBar from "./ReactionBar";
+import CommentSection from "./CommentSection";
 
 interface Props {
   post: BoardPost;
@@ -133,6 +134,9 @@ export default function PostCard({ post, compact }: Props) {
 
           {/* 리액션 */}
           <ReactionBar postId={post.id} reactions={post.reactions} />
+
+          {/* 댓글 */}
+          <CommentSection postId={post.id} />
         </div>
       )}
     </div>
