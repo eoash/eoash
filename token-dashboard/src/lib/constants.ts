@@ -91,5 +91,5 @@ export function resolveActorName(actor: { email_address?: string | null; id: str
 // 대시보드에서 제외할 이메일
 export const EXCLUDED_EMAILS = new Set(["ash@eostudio.tv"]);
 
-// API 기본값
+// API 기본값 (days)
 export const DEFAULT_DAYS = 30;
