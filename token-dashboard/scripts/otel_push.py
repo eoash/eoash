@@ -380,26 +380,80 @@ def compute_delta(totals: dict, prev_state: dict) -> dict:
     return delta
 
 
-BACKFILL_MARKER = os.path.expanduser("~/.claude/hooks/.backfill_v4_done")
+DAILY_BACKFILL_MARKER = os.path.expanduser("~/.claude/hooks/.backfill_daily")
 BACKFILL_SCRIPT_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/generate_backfill.py"
 BACKFILL_API_URL = "https://token-dashboard-iota.vercel.app/api/backfill"
 
 
-def maybe_rebackfill(user_email: str):
-    """1회성 re-backfill: marker 파일이 없으면 최신 generate_backfill.py로 재생성 후 API에 전송"""
-    if os.path.exists(BACKFILL_MARKER):
+def send_session_backfill(delta: dict, user_email: str):
+    """매 세션 종료 시 현재 세션의 delta를 backfill API에 전송.
+    backfill cutoff를 항상 오늘로 유지하여 Prometheus 과다집계 영향 차단."""
+    import datetime
+
+    if not delta or not user_email:
         return
+
+    today = datetime.date.today().isoformat()
+
+    # delta: {(model, token_type): count} → 날짜+모델별 집계
+    by_model = defaultdict(lambda: {"input_tokens": 0, "output_tokens": 0,
+                                     "cache_read_tokens": 0, "cache_creation_input_tokens": 0})
+    for (model, token_type), count in delta.items():
+        if token_type == "input":
+            by_model[model]["input_tokens"] += count
+        elif token_type == "output":
+            by_model[model]["output_tokens"] += count
+        elif token_type == "cache_read":
+            by_model[model]["cache_read_tokens"] += count
+        elif token_type == "cache_creation":
+            by_model[model]["cache_creation_input_tokens"] += count
+
+    records = []
+    for model, tokens in by_model.items():
+        records.append({"date": today, "model": model, **tokens})
+
+    if not records:
+        return
+
+    try:
+        payload = json.dumps({"email": user_email, "data": records, "mode": "add"}).encode("utf-8")
+        req = urllib.request.Request(
+            BACKFILL_API_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        urllib.request.urlopen(req, timeout=15)
+    except Exception:
+        pass  # 실패해도 메인 로직에 영향 없음
+
+
+def maybe_daily_rebackfill(user_email: str):
+    """하루 1회 전체 transcript re-backfill. 누락 보정용 안전망.
+    날짜 마커로 오늘 이미 실행했으면 스킵."""
+    import datetime
+
+    today = datetime.date.today().isoformat()
+
+    # 오늘 이미 실행했는지 확인
+    try:
+        if os.path.exists(DAILY_BACKFILL_MARKER):
+            with open(DAILY_BACKFILL_MARKER, "r", encoding="utf-8") as f:
+                if f.read().strip() == today:
+                    return
+    except Exception:
+        pass
 
     import subprocess
     import tempfile
 
     try:
         # 최신 generate_backfill.py 다운로드
-        script_path = os.path.join(tempfile.gettempdir(), "generate_backfill_v2.py")
+        script_path = os.path.join(tempfile.gettempdir(), "generate_backfill_daily.py")
         urllib.request.urlretrieve(BACKFILL_SCRIPT_URL, script_path)
 
         # 실행하여 backfill JSON 생성
-        out_path = os.path.join(tempfile.gettempdir(), "backfill_v2.json")
+        out_path = os.path.join(tempfile.gettempdir(), "backfill_daily.json")
         subprocess.run(
             ["python3", script_path, "--out", out_path],
             capture_output=True, text=True, timeout=60,
@@ -425,10 +479,10 @@ def maybe_rebackfill(user_email: str):
         )
         with urllib.request.urlopen(req, timeout=30) as resp:
             if resp.status == 200:
-                # marker 파일 생성 — 다음부터 실행 안 함
-                os.makedirs(os.path.dirname(BACKFILL_MARKER), exist_ok=True)
-                with open(BACKFILL_MARKER, "w", encoding="utf-8") as m:
-                    m.write("v4")
+                # 날짜 마커 갱신 — 오늘은 다시 실행 안 함
+                os.makedirs(os.path.dirname(DAILY_BACKFILL_MARKER), exist_ok=True)
+                with open(DAILY_BACKFILL_MARKER, "w", encoding="utf-8") as m:
+                    m.write(today)
     except Exception:
         pass  # 실패해도 메인 로직에 영향 없음
     finally:
@@ -501,8 +555,11 @@ def main():
     if success:
         save_sent_state(transcript_path, totals, total_commits, total_prs)
 
-    # 7. 1회성 re-backfill
-    maybe_rebackfill(user_email)
+    # 9. 세션 backfill — 매 세션 delta를 backfill API에도 전송 (Prometheus 과다집계 차단)
+    send_session_backfill(delta, user_email)
+
+    # 10. 하루 1회 전체 re-backfill — 누락 보정용 안전망
+    maybe_daily_rebackfill(user_email)
 
 
 if __name__ == "__main__":

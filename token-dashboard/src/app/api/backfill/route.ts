@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { email: string; data: unknown[] };
+  let body: { email: string; data: unknown[]; mode?: "merge" | "add" };
   try {
     body = await req.json();
   } catch {
@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const additive = body.mode === "add";
 
   // 이메일에서 username 추출 (파일명용)
   const raw = body.email.split("@")[0].replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -56,17 +58,27 @@ export async function POST(req: NextRequest) {
     // 파일 없음 — 새로 생성
   }
 
-  // date+model 키로 merge (새 데이터가 기존 데이터를 덮어씀)
-  const merged = new Map<string, unknown>();
+  // date+model 키로 merge
+  const merged = new Map<string, Record<string, unknown>>();
   for (const d of existingData) {
     const rec = d as Record<string, unknown>;
     const key = `${rec.date}|${rec.model}`;
     merged.set(key, rec);
   }
+  const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_read_tokens", "cache_creation_input_tokens"];
   for (const d of body.data) {
     const rec = d as Record<string, unknown>;
     const key = `${rec.date}|${rec.model}`;
-    merged.set(key, rec);
+    if (additive && merged.has(key)) {
+      // add 모드: 기존 값에 합산 (세션 delta 누적)
+      const existing = merged.get(key)!;
+      for (const f of TOKEN_FIELDS) {
+        existing[f] = ((existing[f] as number) || 0) + ((rec[f] as number) || 0);
+      }
+    } else {
+      // merge 모드(기본): 덮어쓰기 (전체 re-backfill용)
+      merged.set(key, rec);
+    }
   }
   const mergedArray = Array.from(merged.values())
     .filter((d) => (d as Record<string, unknown>).model !== "<synthetic>")
