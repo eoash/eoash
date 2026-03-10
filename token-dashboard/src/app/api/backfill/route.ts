@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const GITHUB_TOKEN = process.env.GITHUB_BACKFILL_TOKEN;
-const REPO = "eoash/token-dashboard";
+const REPO = "eoash/eoash";
 const BRANCH = "main";
+const REPO_PREFIX = "token-dashboard/";
 
 export async function POST(req: NextRequest) {
   if (!GITHUB_TOKEN) {
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
   if (!username || username.length > 64) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
-  const filePath = `src/lib/backfill/${username}.json`;
+  const filePath = `${REPO_PREFIX}src/lib/backfill/${username}.json`;
 
   // 기존 파일 읽기 (SHA + 기존 데이터)
   let sha: string | undefined;
