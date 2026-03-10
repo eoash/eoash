@@ -89,6 +89,17 @@ function filterSynthetic(data: ClaudeCodeDataPoint[]): ClaudeCodeDataPoint[] {
   });
 }
 
+/** (email, model, date) 키 생성 */
+function pointKey(d: ClaudeCodeDataPoint): string {
+  const email = d.actor?.email_address ?? d.actor?.id ?? "";
+  return `${email}|${d.model}|${d.date}`;
+}
+
+/** 토큰 합산 (input + output) */
+function pointTotal(d: ClaudeCodeDataPoint): number {
+  return d.input_tokens + d.output_tokens;
+}
+
 export async function fetchAnalytics(params: {
   start_date: string;
   end_date: string;
@@ -100,20 +111,17 @@ export async function fetchAnalytics(params: {
     return getMockAnalytics();
   }
 
-  // Prometheus + backfill JSON 병합 (유저별 cutoff)
+  // Prometheus 전체 데이터 (cutoff 제한 없이)
   const promData = await fetchFromPrometheus(params);
 
-  // Prometheus 데이터: 해당 유저의 cutoff 이후만 사용
-  // (backfill ≤ cutoff, Prometheus > cutoff — gap 없음)
-  const promPoints = promData.data.filter((d) => {
-    const email = d.actor?.email_address ?? d.actor?.id ?? "";
-    const cutoff = perUserCutoff.get(email) ?? "";
-    if (!cutoff) return true;
-    return d.date > cutoff;
-  });
+  // Prometheus 데이터를 (email, model, date) 맵으로 인덱싱
+  const promMap = new Map<string, ClaudeCodeDataPoint>();
+  for (const d of promData.data) {
+    const key = pointKey(d);
+    promMap.set(key, d);
+  }
 
-  // Backfill 데이터: 날짜 범위 내 + 해당 유저의 cutoff 이전
-  // Codex(gpt-*) 모델은 /api/codex-usage에서 별도 서빙 → 여기서 제외
+  // Backfill: cutoff 이전 날짜만 (Codex 제외)
   const backfillPoints = backfillData.filter((d) => {
     if (isCodexModel(d.model)) return false;
     const email = d.actor?.email_address ?? d.actor?.id ?? "";
@@ -125,7 +133,24 @@ export async function fetchAnalytics(params: {
     );
   });
 
-  const merged = filterSynthetic([...backfillPoints, ...promPoints]);
+  // 병합: backfill 기본, Prometheus가 더 크면 Prometheus로 교체
+  const merged = new Map<string, ClaudeCodeDataPoint>();
 
-  return { data: merged };
+  for (const d of backfillPoints) {
+    merged.set(pointKey(d), d);
+  }
+
+  for (const [key, promPoint] of promMap) {
+    const existing = merged.get(key);
+    if (!existing) {
+      // Prometheus에만 있는 날짜 (cutoff 이후) → 그대로 사용
+      merged.set(key, promPoint);
+    } else if (pointTotal(promPoint) > pointTotal(existing)) {
+      // 둘 다 있는데 Prometheus가 더 큼 → backfill 과소 → Prometheus 채택
+      merged.set(key, promPoint);
+    }
+    // else: backfill이 같거나 더 큼 → backfill 유지
+  }
+
+  return { data: filterSynthetic([...merged.values()]) };
 }
