@@ -14,7 +14,7 @@ export async function GET() {
       { posts },
       {
         headers: {
-          "Cache-Control": "s-maxage=300, stale-while-revalidate=600",
+          "Cache-Control": "no-store",
         },
       },
     );
