@@ -35,7 +35,8 @@ function CustomTooltip({ active, payload }: TooltipContentProps<number, string>)
 
 export default function ModelPieChart({ data }: ModelPieChartProps) {
   const { t } = useT();
-  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const sorted = [...data].sort((a, b) => b.value - a.value);
+  const total = sorted.reduce((sum, d) => sum + d.value, 0);
 
   function formatTotal(val: number): string {
     if (val >= 1_000_000_000) return `${(val / 1_000_000_000).toFixed(1)}B`;
@@ -50,8 +51,8 @@ export default function ModelPieChart({ data }: ModelPieChartProps) {
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie data={data} cx="50%" cy="45%" innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
-              {data.map((entry, index) => (
+            <Pie data={sorted} cx="50%" cy="45%" innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
+              {sorted.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
