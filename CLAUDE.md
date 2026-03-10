@@ -139,6 +139,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] UI 사이즈 조정 + Web Interface Guidelines 준수
 - [x] Gemini v0.33 metrics_url_path 복원
 - [x] KpiCard 반응형 사이즈 + 모바일 2열 그리드 + InfoTip group/tip 패턴
+- [x] data-integrity API + CI 워크플로우 (스파이크/유실 자동 감지 안전망)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
