@@ -150,7 +150,7 @@ def build_user_levels(data: list[dict]) -> dict[str, dict]:
         day_xp = active_days * 50
         commit_xp = u["commits"] * 1
         pr_xp = u["prs"] * 30
-        streak_bonus = int(max(0, max_streak - 2) * 50 * 0.5)
+        streak_bonus = int(max(0, max_streak - 2) * 10)
         raw_xp = token_xp + day_xp + commit_xp + pr_xp + streak_bonus
 
         # Decay 적용

@@ -356,7 +356,7 @@ function computeAchievementDates(
     const commitXp = runningCommits * 1;
     const prXp = runningPRs * 30;
     const streakBonusDays = Math.max(0, maxStreak - 2);
-    const streakBonus = Math.floor(streakBonusDays * 50 * 0.5);
+    const streakBonus = Math.floor(streakBonusDays * 10);
     const xp = tokenXp + dayXp + commitXp + prXp + streakBonus;
     const level = getLevel(xp, email);
 
@@ -462,7 +462,7 @@ export function buildProfiles(data: ClaudeCodeDataPoint[]): UserProfile[] {
     const commitXp = totalCommits * 1;
     const prXp = totalPRs * 30;
     const streakBonusDays = Math.max(0, maxStreak - 2);
-    const streakBonus = Math.floor(streakBonusDays * 50 * 0.5);
+    const streakBonus = Math.floor(streakBonusDays * 10);
     const rawXp = tokenXp + dayXp + commitXp + prXp + streakBonus;
 
     // XP Decay: 마지막 활동 후 7일 유예, 이후 일 1% 감소
