@@ -1,41 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useT } from "@/lib/contexts/LanguageContext";
-import { TEAM_MEMBERS } from "@/lib/constants";
+import type { BoardUser } from "@/lib/board-types";
 
-const AUTHOR_KEY = "board-comment-author";
 const CATEGORIES = ["프로덕트", "공지"] as const;
 type Category = (typeof CATEGORIES)[number];
 
-// constants.ts TEAM_MEMBERS에서 이름 목록 추출 (정렬)
-const AUTHOR_OPTIONS = TEAM_MEMBERS.map((m) => m.name).sort();
-
 interface Props {
+  user: BoardUser;
   onClose: () => void;
   onCreated: () => void;
 }
 
-export default function WritePostForm({ onClose, onCreated }: Props) {
+export default function WritePostForm({ user, onClose, onCreated }: Props) {
   const { t } = useT();
-  const [author, setAuthor] = useState("");
   const [category, setCategory] = useState<Category>("프로덕트");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [link, setLink] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(AUTHOR_KEY);
-    if (saved) setAuthor(saved);
-  }, []);
-
-  const canSubmit = author && title.trim() && body.trim() && !submitting;
+  const canSubmit = title.trim() && body.trim() && !submitting;
 
   const submit = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
-    localStorage.setItem(AUTHOR_KEY, author);
 
     try {
       const res = await fetch("/api/board/posts", {
@@ -45,7 +35,7 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
           title: title.trim(),
           body: body.trim(),
           category,
-          author,
+          author: user.name,
           link: link.trim() || undefined,
         }),
       });
@@ -60,9 +50,6 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
     }
   };
 
-  const selectClass =
-    "w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none appearance-none cursor-pointer";
-
   return (
     <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
       <div className="flex items-center justify-between mb-4">
@@ -76,26 +63,31 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
       </div>
 
       <div className="space-y-3">
-        {/* 작성자 + 카테고리 (한 줄) */}
+        {/* 작성자 (잠금) + 카테고리 */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">
-              작성자 <span className="text-red-400">*</span>
-            </label>
-            <select
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className={selectClass}
-            >
-              <option value="" disabled>
-                선택하세요
-              </option>
-              {AUTHOR_OPTIONS.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
+            <label className="text-xs text-gray-500 mb-1 block">작성자</label>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/40 border border-gray-700/50 text-sm text-gray-300">
+              {user.avatar && (
+                <img
+                  src={user.avatar}
+                  alt=""
+                  className="w-5 h-5 rounded-full"
+                />
+              )}
+              <span>{user.name}</span>
+              <svg
+                className="w-3 h-3 text-gray-600 ml-auto"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
           </div>
           <div>
             <label className="text-xs text-gray-500 mb-1 block">
@@ -104,7 +96,7 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
-              className={selectClass}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none appearance-none cursor-pointer"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -117,9 +109,7 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
 
         {/* 제목 */}
         <div>
-          <label className="text-xs text-gray-500 mb-1 block">
-            제목
-          </label>
+          <label className="text-xs text-gray-500 mb-1 block">제목</label>
           <input
             type="text"
             value={title}
@@ -132,9 +122,7 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
 
         {/* 본문 */}
         <div>
-          <label className="text-xs text-gray-500 mb-1 block">
-            본문
-          </label>
+          <label className="text-xs text-gray-500 mb-1 block">본문</label>
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
