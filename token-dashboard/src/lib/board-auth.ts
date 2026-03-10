@@ -3,7 +3,7 @@ import crypto from "crypto";
 export type { BoardUser } from "./board-types";
 import type { BoardUser } from "./board-types";
 
-const SECRET = process.env.SLACK_CLIENT_SECRET ?? "dev-secret";
+const SECRET = process.env.SLACK_BOT_TOKEN ?? "dev-secret";
 const COOKIE_NAME = "board-session";
 const MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 
@@ -53,4 +53,16 @@ export function getUserFromCookies(cookieHeader: string | null): BoardUser | nul
   const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
   if (!match) return null;
   return verify(match[1]);
+}
+
+// ── Magic link token (5 min expiry) ──
+
+const MAGIC_LINK_TTL = 5 * 60 * 1000; // 5 minutes
+
+export function createVerifyToken(name: string, email: string, avatar?: string): string {
+  return sign({ name, email, avatar, exp: Date.now() + MAGIC_LINK_TTL });
+}
+
+export function verifyMagicToken(token: string): BoardUser | null {
+  return verify(token);
 }
