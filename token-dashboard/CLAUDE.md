@@ -68,7 +68,7 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 
 | 파일 | 역할 |
 |------|------|
-| `src/lib/data-source.ts` | 데이터 소스 병합 (backfill vs Prometheus 큰 값 자동 선택), `<synthetic>` 필터, 이메일 sanitize |
+| `src/lib/data-source.ts` | 데이터 소스 병합 (backfill 우선, Prometheus 보조), `<synthetic>` 필터, 이메일 sanitize |
 | `src/lib/prometheus.ts` | PromQL 클라이언트 |
 | `src/lib/constants.ts` | 팀원 27명, 아바타(NAME_TO_AVATAR), 모델, 색상, resolveActorName |
 | `src/lib/i18n.ts` | 한/영 번역 (140+ 키) |
@@ -101,8 +101,8 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 - **Railway 재시작 원인**: Railway free tier 자동 재시작, 또는 인프라 업데이트. Collector 재시작 시 delta→cumulative 변환 상태가 초기화됨
 
 ### Backfill 보정
-- **Prometheus raw delta를 backfill에 직접 넣지 말 것**: raw delta는 이중전송/Collector 이상으로 실제의 10~50배일 수 있음. `computeDailyIncrease()`의 hourly/daily cap을 거친 값만 신뢰 (실사례: chiri 3/9 raw delta 86M → cap 후 3.8M, raw 값을 backfill에 넣어 스파이크 발생)
-- **data-source 자동 보정**: 같은 (email, model, date)에 backfill과 Prometheus 둘 다 있으면 큰 값 자동 선택. backfill 과소 시 capped Prometheus가 채택됨
+- **Prometheus raw delta를 backfill에 직접 넣지 말 것**: raw delta는 이중전송/Collector 이상으로 실제의 10~50배일 수 있음 (실사례: chiri 3/9 haiku backfill 0 → Prometheus 84.9M, 이중전송)
+- **data-source 병합: backfill 우선 (max 선택 절대 금지)**: 같은 (email, model, date)에 backfill과 Prometheus 둘 다 있으면 항상 backfill 채택. Admin API가 ground truth. max(backfill, prometheus)로 하면 이중전송으로 부풀려진 Prometheus가 채택됨 (실사례: chiri haiku 50x 과다 → 모델분포 차트 왜곡)
 - **이중전송 여부 확인**: Anthropic 콘솔(console.anthropic.com → Usage)에서 실제 API 호출량 대조
 
 ### Backfill cutoff

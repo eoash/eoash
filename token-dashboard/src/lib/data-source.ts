@@ -133,7 +133,8 @@ export async function fetchAnalytics(params: {
     );
   });
 
-  // 병합: backfill 기본, Prometheus가 더 크면 Prometheus로 교체
+  // 병합: backfill 우선 (Admin API = ground truth), Prometheus는 보조
+  // Prometheus 이중전송으로 부풀려진 데이터가 backfill을 덮어쓰지 않도록 함
   const merged = new Map<string, ClaudeCodeDataPoint>();
 
   for (const d of backfillPoints) {
@@ -141,15 +142,11 @@ export async function fetchAnalytics(params: {
   }
 
   for (const [key, promPoint] of promMap) {
-    const existing = merged.get(key);
-    if (!existing) {
+    if (!merged.has(key)) {
       // Prometheus에만 있는 날짜 (cutoff 이후) → 그대로 사용
       merged.set(key, promPoint);
-    } else if (pointTotal(promPoint) > pointTotal(existing)) {
-      // 둘 다 있는데 Prometheus가 더 큼 → backfill 과소 → Prometheus 채택
-      merged.set(key, promPoint);
     }
-    // else: backfill이 같거나 더 큼 → backfill 유지
+    // backfill이 이미 있으면 항상 backfill 유지 (Admin API가 정확)
   }
 
   return { data: filterSynthetic([...merged.values()]) };
