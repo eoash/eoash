@@ -331,7 +331,17 @@ function GeminiTable() {
 export default function LeaderboardTable() {
   const { t } = useT();
   const [tool, setTool] = useState<AiTool>("claude");
-  const [period, setPeriod] = useState<Period>("30d");
+  const [period, setPeriodState] = useState<Period>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("lb-period") as Period | null;
+      if (saved && saved in PERIOD_DAYS) return saved;
+    }
+    return "30d";
+  });
+  const setPeriod = (p: Period) => {
+    setPeriodState(p);
+    localStorage.setItem("lb-period", p);
+  };
 
   const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
     { key: "claude", label: "Claude Code", color: "#00E87A" },
