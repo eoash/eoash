@@ -116,6 +116,8 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **managed-settings.json env**: Claude Code 프로세스에만 적용, Bash 자식 프로세스에는 전달 안 됨
 - **Anthropic Admin API 파라미터**: `start_date` → `starting_at`, `end_date` → `ending_at`, `group_by` → `group_by[]`
 - **Windows UTF-8**: Python 3.x라도 Windows 기본 인코딩은 cp949 → `PYTHONUTF8=1` + `encoding='utf-8'` 필수
+- **Vercel 연속 push 취소**: 이중 레포 sync 시 연달아 push하면 Vercel이 이전 빌드를 auto-cancel → 결과적으로 모든 빌드 Canceled 가능. `vercel ls --prod`로 확인 후 `npx vercel --prod` 수동 배포
+- **이중 레포 git reset 주의**: sub-repo에서 `git reset --hard origin/main` 시 모노레포 git에만 있는 신규 파일이 디스크에서 삭제됨. `git show HEAD:path > file`로 복원
 
 ---
 
