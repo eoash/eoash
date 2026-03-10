@@ -380,8 +380,8 @@ def compute_delta(totals: dict, prev_state: dict) -> dict:
     return delta
 
 
-BACKFILL_MARKER = os.path.expanduser("~/.claude/hooks/.backfill_v3_done")
-BACKFILL_SCRIPT_URL = "https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/generate_backfill.py"
+BACKFILL_MARKER = os.path.expanduser("~/.claude/hooks/.backfill_v4_done")
+BACKFILL_SCRIPT_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/generate_backfill.py"
 BACKFILL_API_URL = "https://token-dashboard-iota.vercel.app/api/backfill"
 
 
@@ -428,7 +428,7 @@ def maybe_rebackfill(user_email: str):
                 # marker 파일 생성 — 다음부터 실행 안 함
                 os.makedirs(os.path.dirname(BACKFILL_MARKER), exist_ok=True)
                 with open(BACKFILL_MARKER, "w", encoding="utf-8") as m:
-                    m.write("v3")
+                    m.write("v4")
     except Exception:
         pass  # 실패해도 메인 로직에 영향 없음
     finally:

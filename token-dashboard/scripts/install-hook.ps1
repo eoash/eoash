@@ -2,7 +2,7 @@
 # Claude Code / Codex / Gemini CLI 토큰 사용량을 자동으로 대시보드에 수집합니다.
 #
 # 사용법:
-#   powershell -Command "irm https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.ps1 | iex"
+#   powershell -Command "irm https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/install-hook.ps1 | iex"
 
 $ErrorActionPreference = "Stop"
 
@@ -13,7 +13,7 @@ $env:PYTHONIOENCODING = "utf-8"
 $HOOKS_DIR = "$env:USERPROFILE\.claude\hooks"
 $SETTINGS = "$env:USERPROFILE\.claude\settings.json"
 $HOOK_FILE = "$HOOKS_DIR\otel_push.py"
-$BASE_URL = "https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts"
+$BASE_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts"
 $DASHBOARD_API = "https://token-dashboard-iota.vercel.app/api/backfill"
 $OTEL_COLLECTOR = "https://otel-collector-production-2dac.up.railway.app"
 $GEMINI_SETTINGS = "$env:USERPROFILE\.gemini\settings.json"

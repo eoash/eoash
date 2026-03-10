@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 const INSTALL_CMD_MAC =
-  "curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.sh | bash";
+  "curl -sL https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/install-hook.sh | bash";
 const INSTALL_CMD_WIN =
-  'powershell -Command "irm https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.ps1 | iex"';
+  'powershell -Command "irm https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/install-hook.ps1 | iex"';
 
 export default function SetupPage() {
   const { t } = useT();

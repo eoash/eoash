@@ -6,7 +6,7 @@
 # 필요: python3, curl, git (GitHub 계정 불필요)
 #
 # 사용법:
-#   curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.sh | bash
+#   curl -sL https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/install-hook.sh | bash
 
 set -e
 
@@ -19,7 +19,7 @@ fi
 HOOKS_DIR="$HOME/.claude/hooks"
 SETTINGS="$HOME/.claude/settings.json"
 HOOK_FILE="$HOOKS_DIR/otel_push.py"
-BASE_URL="https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts"
+BASE_URL="https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts"
 DASHBOARD_API="https://token-dashboard-iota.vercel.app/api/backfill"
 OTEL_COLLECTOR="https://otel-collector-production-2dac.up.railway.app"
 GEMINI_SETTINGS="$HOME/.gemini/settings.json"
