@@ -63,7 +63,7 @@ export default function CommentSection({ postId, userName }: Props) {
       ) : comments.length > 0 ? (
         <div className="space-y-2 mb-3">
           {comments.map((c) => (
-            <div key={c.id} className="flex gap-2 text-sm">
+            <div key={c.id} className="group/comment flex gap-2 text-sm">
               <span className="text-[#00E87A] font-medium shrink-0 text-xs mt-0.5">
                 {c.author}
               </span>
@@ -73,6 +73,21 @@ export default function CommentSection({ postId, userName }: Props) {
               <span className="text-gray-600 text-[10px] shrink-0 mt-0.5">
                 {timeAgo(c.createdAt)}
               </span>
+              {userName === c.author && (
+                <button
+                  onClick={async () => {
+                    const res = await fetch("/api/board/comments", {
+                      method: "DELETE",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ commentId: c.id, author: c.author }),
+                    });
+                    if (res.ok) setComments((prev) => prev.filter((x) => x.id !== c.id));
+                  }}
+                  className="text-[10px] text-gray-700 hover:text-red-400 transition-colors cursor-pointer opacity-0 group-hover/comment:opacity-100 shrink-0 mt-0.5"
+                >
+                  ✕
+                </button>
+              )}
             </div>
           ))}
         </div>
