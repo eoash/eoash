@@ -203,8 +203,8 @@ const translations = {
   },
   "eff.member": { ko: "팀원", en: "Member" },
   "eff.totalTokens.tip": {
-    ko: "input + output + cache_read + cache_creation 합계",
-    en: "Sum of input + output + cache_read + cache_creation",
+    ko: "input + output 합계 (cache 제외)",
+    en: "Sum of input + output (excluding cache)",
   },
   "eff.cacheHit.tip": {
     ko: "cache_read / (cache_read + cache_creation + input). 높을수록 좋음",
