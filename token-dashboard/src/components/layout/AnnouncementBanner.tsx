@@ -23,7 +23,7 @@ const BANNERS: BannerItem[] = [
     id: "maintenance-2026-03-10",
     type: "warning",
     messageKey: "announce.maintenance",
-    active: true,
+    active: false,
   },
   {
     id: "setup-v2",
