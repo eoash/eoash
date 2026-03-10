@@ -68,7 +68,7 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 
 | 파일 | 역할 |
 |------|------|
-| `src/lib/data-source.ts` | 데이터 소스 분기 (backfill vs Prometheus), `<synthetic>` 필터, 이메일 sanitize |
+| `src/lib/data-source.ts` | 데이터 소스 병합 (backfill vs Prometheus 큰 값 자동 선택), `<synthetic>` 필터, 이메일 sanitize |
 | `src/lib/prometheus.ts` | PromQL 클라이언트 |
 | `src/lib/constants.ts` | 팀원 27명, 아바타(NAME_TO_AVATAR), 모델, 색상, resolveActorName |
 | `src/lib/i18n.ts` | 한/영 번역 (140+ 키) |
@@ -99,6 +99,11 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 - **카운터 리셋 보정**: `prometheus.ts`에서 원본 카운터를 시간별(step=3600) 조회 후, 양의 delta만 합산. 음의 delta(리셋)는 skip → curVal이 새 baseline, 다음 양의 delta부터 집계 재개. 1일 패딩으로 기존 유저 baseline 확보, 신규 유저는 첫 데이터포인트를 initial increase로 처리
 - **recovery 모드 절대 다시 추가하지 말 것**: "리셋 후 old peak까지 따라잡기=이중 집계"는 잘못된 가정. old peak은 수일간 누적된 역사적 합계이고, 리셋 후 성장은 실제 신규 사용량 (실사례: haiku input 실제 1.18M → recovery가 46K만 집계, 26배 과소)
 - **Railway 재시작 원인**: Railway free tier 자동 재시작, 또는 인프라 업데이트. Collector 재시작 시 delta→cumulative 변환 상태가 초기화됨
+
+### Backfill 보정
+- **Prometheus raw delta를 backfill에 직접 넣지 말 것**: raw delta는 이중전송/Collector 이상으로 실제의 10~50배일 수 있음. `computeDailyIncrease()`의 hourly/daily cap을 거친 값만 신뢰 (실사례: chiri 3/9 raw delta 86M → cap 후 3.8M, raw 값을 backfill에 넣어 스파이크 발생)
+- **data-source 자동 보정**: 같은 (email, model, date)에 backfill과 Prometheus 둘 다 있으면 큰 값 자동 선택. backfill 과소 시 capped Prometheus가 채택됨
+- **이중전송 여부 확인**: Anthropic 콘솔(console.anthropic.com → Usage)에서 실제 API 호출량 대조
 
 ### Backfill cutoff
 - **cutoff 계산에 Codex(gpt-*) 모델 포함 금지**: Codex backfill이 Claude cutoff를 오염시켜 Prometheus 데이터가 필터링됨 (실사례: ash Codex 3/8 데이터가 cutoff=3/8로 설정 → Claude 3/8 Prometheus 데이터 소실). `isCodexModel()` 가드 필수

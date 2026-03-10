@@ -18,19 +18,13 @@ interface PromSeries {
 }
 
 /**
- * 시간당 delta 상한 (토큰 수 기준).
- * otel_push.py 구버전이 resume 시 전체 transcript를 DELTA로 재전송하면
- * 시간당 5~10M+ 팽창이 발생함. 정상 집중 사용 최대 ~200K/hour.
- * 500K으로 cap → 정상 사용 2.5배, 스파이크 대부분 차단.
+ * 시간당/일별 delta 상한 — 현재 비활성화 (Infinity).
+ * otel_push.py 이중전송 근본 원인이 수정됨 (.otel_sent/ 상태 파일).
+ * cap이 정상 대량 사용(ash 2M+/day)을 잘라내므로 제거.
+ * 스파이크 재발 시 값을 낮춰서 재활성화 가능.
  */
-export const MAX_HOURLY_DELTA = 500_000;
-
-/**
- * 일별 delta 상한 (시리즈당, 토큰 수 기준).
- * 시간당 cap만으로는 스파이크 시간이 다수(10+)일 때 누적 과다.
- * 정상 최대 일일 사용: ~1M (ash 3/7: 926K). 2M이면 충분한 여유.
- */
-export const MAX_DAILY_DELTA = 2_000_000;
+export const MAX_HOURLY_DELTA = Infinity;
+export const MAX_DAILY_DELTA = Infinity;
 
 // --- PromQL queries ---
 // Raw counter queries (no increase()) — delta computed in JS to handle collector restarts
