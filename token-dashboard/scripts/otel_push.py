@@ -397,7 +397,7 @@ def send_session_backfill(delta: dict, user_email: str):
 
     # delta: {(model, token_type): count} → 날짜+모델별 집계
     by_model = defaultdict(lambda: {"input_tokens": 0, "output_tokens": 0,
-                                     "cache_read_tokens": 0, "cache_creation_input_tokens": 0})
+                                     "cache_read_tokens": 0, "cache_creation_tokens": 0})
     for (model, token_type), count in delta.items():
         if token_type == "input":
             by_model[model]["input_tokens"] += count
@@ -406,7 +406,7 @@ def send_session_backfill(delta: dict, user_email: str):
         elif token_type == "cache_read":
             by_model[model]["cache_read_tokens"] += count
         elif token_type == "cache_creation":
-            by_model[model]["cache_creation_input_tokens"] += count
+            by_model[model]["cache_creation_tokens"] += count
 
     records = []
     for model, tokens in by_model.items():

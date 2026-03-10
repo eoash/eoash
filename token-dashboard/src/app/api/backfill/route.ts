@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     const key = `${rec.date}|${rec.model}`;
     merged.set(key, rec);
   }
-  const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_read_tokens", "cache_creation_input_tokens"];
+  const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_read_tokens", "cache_creation_tokens"];
   for (const d of body.data) {
     const rec = d as Record<string, unknown>;
     const key = `${rec.date}|${rec.model}`;
