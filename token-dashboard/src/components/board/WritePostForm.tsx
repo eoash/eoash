@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { TEAM_MEMBERS } from "@/lib/constants";
 
 const AUTHOR_KEY = "board-comment-author";
+const CATEGORIES = ["프로덕트", "공지"] as const;
+type Category = (typeof CATEGORIES)[number];
+
+// constants.ts TEAM_MEMBERS에서 이름 목록 추출 (정렬)
+const AUTHOR_OPTIONS = TEAM_MEMBERS.map((m) => m.name).sort();
 
 interface Props {
   onClose: () => void;
@@ -13,6 +19,7 @@ interface Props {
 export default function WritePostForm({ onClose, onCreated }: Props) {
   const { t } = useT();
   const [author, setAuthor] = useState("");
+  const [category, setCategory] = useState<Category>("프로덕트");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [link, setLink] = useState("");
@@ -23,12 +30,12 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
     if (saved) setAuthor(saved);
   }, []);
 
-  const canSubmit = author.trim() && title.trim() && body.trim() && !submitting;
+  const canSubmit = author && title.trim() && body.trim() && !submitting;
 
   const submit = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
-    localStorage.setItem(AUTHOR_KEY, author.trim());
+    localStorage.setItem(AUTHOR_KEY, author);
 
     try {
       const res = await fetch("/api/board/posts", {
@@ -37,8 +44,8 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
         body: JSON.stringify({
           title: title.trim(),
           body: body.trim(),
-          category: "프로덕트",
-          author: author.trim(),
+          category,
+          author,
           link: link.trim() || undefined,
         }),
       });
@@ -53,6 +60,9 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
     }
   };
 
+  const selectClass =
+    "w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none appearance-none cursor-pointer";
+
   return (
     <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
       <div className="flex items-center justify-between mb-4">
@@ -66,19 +76,43 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
       </div>
 
       <div className="space-y-3">
-        {/* 작성자 */}
-        <div>
-          <label className="text-xs text-gray-500 mb-1 block">
-            작성자
-          </label>
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="이름을 입력하세요"
-            maxLength={20}
-            className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 placeholder-gray-600 focus:border-[#00E87A]/50 focus:outline-none"
-          />
+        {/* 작성자 + 카테고리 (한 줄) */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs text-gray-500 mb-1 block">
+              작성자 <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className={selectClass}
+            >
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {AUTHOR_OPTIONS.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-xs text-gray-500 mb-1 block">
+              카테고리
+            </label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value as Category)}
+              className={selectClass}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* 제목 */}
@@ -126,11 +160,6 @@ export default function WritePostForm({ onClose, onCreated }: Props) {
             placeholder="https://..."
             className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 placeholder-gray-600 focus:border-[#00E87A]/50 focus:outline-none"
           />
-        </div>
-
-        {/* 카테고리 안내 */}
-        <div className="text-[10px] text-gray-600">
-          카테고리는 자동으로 &apos;프로덕트&apos;로 설정됩니다. 공지는 운영팀만 작성할 수 있습니다.
         </div>
 
         {/* 버튼 */}
