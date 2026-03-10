@@ -7,6 +7,7 @@ import LeaderboardTable from "@/components/leaderboard/LeaderboardTable";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import AnnouncementBanner from "@/components/layout/AnnouncementBanner";
 import WeeklyChampions from "@/components/cards/WeeklyChampions";
+import LatestPosts from "@/components/board/LatestPosts";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { aggregateOverview } from "@/lib/aggregators/overview";
 import { useAnalytics } from "@/lib/hooks/useAnalytics";
@@ -68,6 +69,8 @@ export default function OverviewPage() {
               <WeeklyChampions data={rawData} />
             </div>
           </div>
+
+          <LatestPosts />
         </>
       )}
     </div>

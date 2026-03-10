@@ -318,6 +318,17 @@ const translations = {
   "period.7days": { ko: "7일", en: "7 Days" },
   "period.30days": { ko: "30일", en: "30 Days" },
   "period.allTime": { ko: "전체", en: "All Time" },
+
+  // ── Board ──
+  "nav.board": { ko: "Board", en: "Board" },
+  "board.title": { ko: "게시판", en: "Board" },
+  "board.latest": { ko: "최신 글", en: "Latest Posts" },
+  "board.more": { ko: "더보기 →", en: "See more →" },
+  "board.all": { ko: "전체", en: "All" },
+  "board.notice": { ko: "공지", en: "Notice" },
+  "board.product": { ko: "프로덕트", en: "Product" },
+  "board.pinned": { ko: "고정", en: "Pinned" },
+  "board.empty": { ko: "아직 게시글이 없습니다", en: "No posts yet" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;

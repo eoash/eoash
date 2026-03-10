@@ -14,10 +14,12 @@ const menuIcons: Record<string, React.ReactNode> = {
   "/utilization": (/* bar chart */ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 14V8M6 14V4M10 14V6M14 14V2"/></svg>),
   "/efficiency": (/* zap */ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 1.5L3 9h5l-1 5.5L13 7H8l.5-5.5z"/></svg>),
   "/rank": (/* rocket */ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 1.5c0 0-4 3-4 8l1.5 2.5h5L12 9.5c0-5-4-8-4-8z"/><circle cx="8" cy="6.5" r="1.2"/><path d="M6 12l-1.5 2.5M10 12l1.5 2.5"/></svg>),
+  "/board": (/* clipboard-list */ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="1.5" width="10" height="13" rx="1.5"/><path d="M6 1.5V3h4V1.5"/><path d="M6 6.5h4M6 9h4M6 11.5h2"/></svg>),
 };
 
 const menuItems: { labelKey: TranslationKey; href: string }[] = [
   { labelKey: "nav.overview", href: "/" },
+  { labelKey: "nav.board", href: "/board" },
   { labelKey: "nav.leaderboard", href: "/leaderboard" },
   { labelKey: "nav.members", href: "/members" },
   { labelKey: "nav.models", href: "/models" },
