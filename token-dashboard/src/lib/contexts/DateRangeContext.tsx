@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { format, subDays } from "date-fns";
+
+const STORAGE_KEY = "date-range-preset";
 
 interface DateRange {
   start: string; // yyyy-MM-dd
@@ -16,11 +18,23 @@ interface DateRangeContextValue {
 }
 
 const today = format(new Date(), "yyyy-MM-dd");
-const defaultRange: DateRange = {
-  start: format(subDays(new Date(), 30), "yyyy-MM-dd"),
-  end: today,
-  label: "Last 30 days",
-};
+
+function buildRange(label: string): DateRange {
+  const end = today;
+  if (label === "Last 7 days") return { start: format(subDays(new Date(), 7), "yyyy-MM-dd"), end, label };
+  if (label === "Last 90 days") return { start: format(subDays(new Date(), 90), "yyyy-MM-dd"), end, label };
+  // default: 30 days
+  return { start: format(subDays(new Date(), 30), "yyyy-MM-dd"), end, label: "Last 30 days" };
+}
+
+function loadSavedRange(): DateRange {
+  if (typeof window === "undefined") return buildRange("Last 30 days");
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) return buildRange(saved);
+  return buildRange("Last 30 days");
+}
+
+const defaultRange = buildRange("Last 30 days");
 
 const DateRangeContext = createContext<DateRangeContextValue>({
   range: defaultRange,
@@ -29,7 +43,20 @@ const DateRangeContext = createContext<DateRangeContextValue>({
 });
 
 export function DateRangeProvider({ children }: { children: ReactNode }) {
-  const [range, setRange] = useState<DateRange>(defaultRange);
+  const [range, setRangeState] = useState<DateRange>(defaultRange);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setRangeState(loadSavedRange());
+    setHydrated(true);
+  }, []);
+
+  const setRange = (r: DateRange) => {
+    setRangeState(r);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, r.label);
+    }
+  };
 
   const days = Math.max(
     1,
@@ -39,8 +66,11 @@ export function DateRangeProvider({ children }: { children: ReactNode }) {
     )
   );
 
+  // hydration 전에는 기본값으로 렌더 (SSR 불일치 방지)
+  const value = hydrated ? range : defaultRange;
+
   return (
-    <DateRangeContext.Provider value={{ range, setRange, days }}>
+    <DateRangeContext.Provider value={{ range: value, setRange, days }}>
       {children}
     </DateRangeContext.Provider>
   );
