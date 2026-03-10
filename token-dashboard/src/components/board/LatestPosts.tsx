@@ -13,7 +13,7 @@ export default function LatestPosts() {
   useEffect(() => {
     fetch("/api/board")
       .then((r) => r.json())
-      .then((d) => setPosts((d.posts ?? []).slice(0, 3)))
+      .then((d) => setPosts((d.posts ?? []).slice(0, 5)))
       .catch(() => {});
   }, []);
 
@@ -30,7 +30,7 @@ export default function LatestPosts() {
           {t("board.more")}
         </Link>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="rounded-xl border border-gray-800 bg-gray-900/60 overflow-hidden divide-y divide-gray-800/40">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} compact />
         ))}

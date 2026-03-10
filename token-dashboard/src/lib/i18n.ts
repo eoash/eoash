@@ -329,6 +329,7 @@ const translations = {
   "board.product": { ko: "프로덕트", en: "Product" },
   "board.pinned": { ko: "고정", en: "Pinned" },
   "board.empty": { ko: "아직 게시글이 없습니다", en: "No posts yet" },
+  "board.write": { ko: "글쓰기", en: "Write" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;

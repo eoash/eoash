@@ -25,7 +25,7 @@ export default function BoardFeed({ posts }: { posts: BoardPost[] }) {
   return (
     <div>
       {/* 탭 필터 */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4">
         {tabs.map(({ key, label }) => (
           <button
             key={key}
@@ -46,23 +46,16 @@ export default function BoardFeed({ posts }: { posts: BoardPost[] }) {
           {t("board.empty")}
         </div>
       ) : (
-        <>
-          {/* 고정 공지 */}
-          {pinned.length > 0 && (
-            <div className="flex flex-col gap-3 mb-6">
-              {pinned.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          )}
-
-          {/* 나머지 글 — 카드 그리드 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {rest.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        </>
+        <div className="rounded-xl border border-gray-800 bg-gray-900/60 overflow-hidden divide-y divide-gray-800/60">
+          {/* 고정글 먼저 */}
+          {pinned.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+          {/* 나머지 글 */}
+          {rest.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
       )}
     </div>
   );
