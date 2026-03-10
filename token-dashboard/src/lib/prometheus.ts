@@ -17,6 +17,14 @@ interface PromSeries {
   values: [number, string][]; // [unix_timestamp, value_string]
 }
 
+/**
+ * 시간당 delta 상한 (토큰 수 기준).
+ * otel_push.py 구버전이 resume 시 전체 transcript를 DELTA로 재전송하면
+ * 시간당 5~10M+ 팽창이 발생함. 정상 집중 사용 최대 ~200K/hour.
+ * 500K으로 cap → 정상 사용 2.5배, 스파이크 대부분 차단.
+ */
+export const MAX_HOURLY_DELTA = 500_000;
+
 // --- PromQL queries ---
 // Raw counter queries (no increase()) — delta computed in JS to handle collector restarts
 // OTel Collector 재시작 시 누적 카운터가 리셋되며, increase([1d])는 리셋 전 값을
@@ -104,8 +112,9 @@ export function computeDailyIncrease(
         // 카운터 리셋 감지 → skip, curVal이 새 baseline이 됨
         // 다음 양의 delta부터 정상 집계 재개
       } else if (delta > 0) {
-        // 정상 증가
-        dailyIncrease.set(curDate, (dailyIncrease.get(curDate) ?? 0) + delta);
+        // 정상 증가 (otel_push 이중 전송 방어: 시간당 상한 적용)
+        const capped = Math.min(delta, MAX_HOURLY_DELTA);
+        dailyIncrease.set(curDate, (dailyIncrease.get(curDate) ?? 0) + capped);
       }
     }
 
