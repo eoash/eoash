@@ -266,7 +266,6 @@ else:
 "
 else
   echo "      Gemini CLI 미설치. 설치 후 install-hook.sh를 다시 실행하면 자동 설정됩니다."
-  echo "      설치: npm install -g @anthropic-ai/gemini-cli 또는 https://geminicli.com"
 fi
 
 # 8. Gemini CLI GEMINI.md에 사용자 이메일 기록 (메트릭 식별용)
