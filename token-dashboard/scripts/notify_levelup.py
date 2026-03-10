@@ -148,7 +148,7 @@ def build_user_levels(data: list[dict]) -> dict[str, dict]:
         # XP 계산 (gamification.ts와 동일)
         token_xp = u["tokens"] // 10_000
         day_xp = active_days * 50
-        commit_xp = u["commits"] * 10
+        commit_xp = u["commits"] * 1
         pr_xp = u["prs"] * 30
         streak_bonus = int(max(0, max_streak - 2) * 50 * 0.5)
         raw_xp = token_xp + day_xp + commit_xp + pr_xp + streak_bonus

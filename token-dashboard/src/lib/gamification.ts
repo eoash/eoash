@@ -353,7 +353,7 @@ function computeAchievementDates(
     const tokenXp = Math.floor(runningTokens / 10_000);
     const activeDays = new Set(sortedDates.slice(0, sortedDates.indexOf(date) + 1)).size;
     const dayXp = activeDays * 50;
-    const commitXp = runningCommits * 10;
+    const commitXp = runningCommits * 1;
     const prXp = runningPRs * 30;
     const streakBonusDays = Math.max(0, maxStreak - 2);
     const streakBonus = Math.floor(streakBonusDays * 50 * 0.5);
@@ -459,7 +459,7 @@ export function buildProfiles(data: ClaudeCodeDataPoint[]): UserProfile[] {
     // XP calculation
     const tokenXp = Math.floor(totalTokens / 10_000);
     const dayXp = activeDays * 50;
-    const commitXp = totalCommits * 10;
+    const commitXp = totalCommits * 1;
     const prXp = totalPRs * 30;
     const streakBonusDays = Math.max(0, maxStreak - 2);
     const streakBonus = Math.floor(streakBonusDays * 50 * 0.5);
