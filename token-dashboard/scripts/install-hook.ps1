@@ -17,7 +17,7 @@ $BASE_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/
 $DASHBOARD_API = "https://token-dashboard-iota.vercel.app/api/backfill"
 $OTEL_COLLECTOR = "https://otel-collector-production-2dac.up.railway.app"
 $GEMINI_SETTINGS = "$env:USERPROFILE\.gemini\settings.json"
-# python3 또는 python 실제 경로 감지 (HOOK_CMD에 하드코딩 필요)
+# python3 또는 python 실제 경로 감지 (Windows Store 스텁 우회)
 $PYTHON_EXE = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
 # 자동 업데이트 hook 명령: bash가 없으므로 powershell로 실행
 # UTF-8 강제 + python 경로 동적 감지
@@ -46,12 +46,12 @@ Write-Host "  ╚═════════════════════
 Write-Host ""
 
 # 0. 필수 도구 확인
-foreach ($cmd in @("python3", "curl", "git")) {
+foreach ($cmd in @($PYTHON_EXE, "curl", "git")) {
     if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
         # python3이 없으면 python 시도
-        if ($cmd -eq "python3" -and (Get-Command "python" -ErrorAction SilentlyContinue)) {
+        if ($cmd -eq $PYTHON_EXE -and (Get-Command "python" -ErrorAction SilentlyContinue)) {
             Write-Host "[i] python3 대신 python 사용"
-            Set-Alias -Name python3 -Value python -Scope Script
+            $PYTHON_EXE = "python"
         } else {
             Write-Host "[!] $cmd 이 설치되어 있지 않습니다."
             exit 1
@@ -97,7 +97,7 @@ Write-Host "      -> $HOOK_FILE"
 Write-Host "[2/7] Claude Code Stop hook 등록 중..."
 
 $env:HOOK_CMD_ENV = $HOOK_CMD
-python3 -c @"
+$PYTHON_EXE -c @"
 import json, os
 
 path = os.path.expanduser('~/.claude/settings.json')
@@ -150,15 +150,15 @@ if (Test-Path $CLAUDE_DIR) {
         $BACKFILL_SCRIPT = [System.IO.Path]::GetTempFileName() -replace '\.tmp$', '.py'
         $BACKFILL_JSON = [System.IO.Path]::GetTempFileName() -replace '\.tmp$', '.json'
         Invoke-WebRequest -Uri "$BASE_URL/generate_backfill.py" -OutFile $BACKFILL_SCRIPT
-        python3 $BACKFILL_SCRIPT --out $BACKFILL_JSON
+        $PYTHON_EXE $BACKFILL_SCRIPT --out $BACKFILL_JSON
 
-        $DATA_COUNT = python3 -c "import json; print(len(json.load(open(r'$BACKFILL_JSON', encoding='utf-8'))['data']))" 2>$null
+        $DATA_COUNT = $PYTHON_EXE -c "import json; print(len(json.load(open(r'$BACKFILL_JSON', encoding='utf-8'))['data']))" 2>$null
         if (-not $DATA_COUNT) { $DATA_COUNT = "0" }
 
         if ([int]$DATA_COUNT -gt 0) {
             Write-Host "      ${DATA_COUNT}개 레코드 생성. 대시보드로 전송 중..."
 
-            $PAYLOAD = python3 -c @"
+            $PAYLOAD = $PYTHON_EXE -c @"
 import json
 with open(r'$BACKFILL_JSON', encoding='utf-8') as f:
     data = json.load(f)
@@ -196,7 +196,7 @@ $CODEX_SESSIONS = "$env:USERPROFILE\.codex\sessions"
 if (Test-Path $CODEX_SESSIONS) {
     $CODEX_SCRIPT = [System.IO.Path]::GetTempFileName() -replace '\.tmp$', '.py'
     Invoke-WebRequest -Uri "$BASE_URL/codex_push.py" -OutFile $CODEX_SCRIPT
-    python3 $CODEX_SCRIPT --email $GIT_EMAIL 2>&1 | ForEach-Object { "      $_" }
+    $PYTHON_EXE $CODEX_SCRIPT --email $GIT_EMAIL 2>&1 | ForEach-Object { "      $_" }
     Remove-Item -Path $CODEX_SCRIPT -Force -ErrorAction SilentlyContinue
 } else {
     Write-Host "      ~/.codex/sessions/ 없음. Codex를 사용하면 자동 수집됩니다."
@@ -211,8 +211,8 @@ Invoke-WebRequest -Uri "$BASE_URL/codex_push.py" -OutFile $CODEX_PUSH_LOCAL
 $taskName = "EO-Codex-Push"
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 
-# python3 또는 python 경로
-$pythonPath = (Get-Command python3 -ErrorAction SilentlyContinue).Source
+# $PYTHON_EXE 또는 python 경로
+$pythonPath = (Get-Command $PYTHON_EXE -ErrorAction SilentlyContinue).Source
 if (-not $pythonPath) { $pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source }
 
 if ($pythonPath) {
@@ -240,7 +240,7 @@ if (Get-Command gemini -ErrorAction SilentlyContinue) {
         New-Item -ItemType Directory -Path $geminiDir -Force | Out-Null
     }
 
-    python3 -c @"
+    $PYTHON_EXE -c @"
 import json, os
 
 path = os.path.expanduser('~/.gemini/settings.json')
@@ -282,7 +282,7 @@ else:
 Write-Host "[7/7] Gemini CLI 사용자 설정 중..."
 
 if (Get-Command gemini -ErrorAction SilentlyContinue) {
-    python3 -c @"
+    $PYTHON_EXE -c @"
 import json, os
 
 path = os.path.expanduser('~/.gemini/settings.json')
