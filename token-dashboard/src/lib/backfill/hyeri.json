@@ -8,15 +8,15 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-02-09",
-      "session_count": 4,
+      "session_count": 2,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 6320,
-      "output_tokens": 17530,
-      "cache_read_tokens": 17409242,
-      "cache_creation_tokens": 652820
+      "input_tokens": 31,
+      "output_tokens": 254,
+      "cache_read_tokens": 160172,
+      "cache_creation_tokens": 52121
     },
     {
       "actor": {
@@ -499,10 +499,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 890,
-      "output_tokens": 125027,
-      "cache_read_tokens": 25000191,
-      "cache_creation_tokens": 1092404
+      "input_tokens": 196,
+      "output_tokens": 16738,
+      "cache_read_tokens": 3542477,
+      "cache_creation_tokens": 512783
     },
     {
       "actor": {
@@ -517,10 +517,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 731,
-      "output_tokens": 109385,
-      "cache_read_tokens": 16840295,
-      "cache_creation_tokens": 910144
+      "input_tokens": 2075,
+      "output_tokens": 184251,
+      "cache_read_tokens": 62401782,
+      "cache_creation_tokens": 1940858
     }
   ]
 }
