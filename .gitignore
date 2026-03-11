@@ -88,6 +88,31 @@ sync/
 # Separate git repositories (managed independently)
 dashboard/
 
+# Private internal files (public repo protection)
+agent/
+ash_bot/
+config/
+scripts/daily/
+scripts/archive/
+scripts/setup/
+scripts/tools/
+scripts/flip_send*.py
+scripts/generate_*.py
+scripts/parse_*.py
+scripts/read_*.py
+scripts/test_*.py
+scripts/gmail_*.py
+scripts/quickbooks_*.py
+scripts/organize_*.py
+scripts/start_slack_bot.sh
+scripts/otel-e2e-test.sh
+scripts/hooks/
+docs/
+onboarding/
+.claude/hooks/
+.claude/skills/
+.claude/settings.json
+
 # Duplicate skill folders (canonical: .claude/skills/)
 .agent/
 .agents/

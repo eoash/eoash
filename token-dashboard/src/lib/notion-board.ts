@@ -18,6 +18,7 @@ export interface BoardPost {
   thumbnail: string | null;
   link: string | null;
   pinned: boolean;
+  edited: boolean;
   date: string; // YYYY-MM-DD
   reactions: {
     "👍": number;
@@ -48,6 +49,7 @@ function parsePage(p: any): BoardPost {
     | undefined;
   const linkUrl = props["링크"]?.url as string | null;
   const pinned = (props["고정"]?.checkbox as boolean) ?? false;
+  const edited = (props["수정됨"]?.checkbox as boolean) ?? false;
   const dateObj = props["날짜"]?.date as { start: string } | null;
 
   return {
@@ -62,6 +64,7 @@ function parsePage(p: any): BoardPost {
       files?.[0]?.file?.url ?? files?.[0]?.external?.url ?? null,
     link: linkUrl,
     pinned,
+    edited,
     date: dateObj?.start ?? "",
     reactions: {
       "👍": (props["👍"]?.number as number) ?? 0,
@@ -164,6 +167,39 @@ export async function updateReaction(
   if (!updateRes.ok) {
     throw new Error(`Reaction update failed: ${updateRes.status}`);
   }
+}
+
+export async function updatePost(
+  pageId: string,
+  title: string,
+  body: string,
+  link?: string,
+): Promise<BoardPost> {
+  if (!API_KEY) throw new Error("Board DB not configured");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const properties: Record<string, any> = {
+    "제목": { title: [{ text: { content: title } }] },
+    "본문": { rich_text: [{ text: { content: body } }] },
+    "수정됨": { checkbox: true },
+  };
+
+  if (link !== undefined) {
+    properties["링크"] = link ? { url: link } : { url: null };
+  }
+
+  const res = await fetch(`${NOTION_API}/pages/${pageId}`, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify({ properties }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Post update failed: ${res.status}`);
+  }
+
+  const page = await res.json();
+  return parsePage(page);
 }
 
 export async function archivePost(pageId: string): Promise<void> {

@@ -243,7 +243,7 @@ export default function BoardPage() {
           {t("common.loading")}
         </div>
       ) : (
-        <BoardFeed posts={posts} user={user} onDeleted={() => { setLoading(true); loadPosts(); }} openPostId={openPostId} onLoginClick={() => setShowLogin(true)} />
+        <BoardFeed posts={posts} user={user} onDeleted={() => { setLoading(true); loadPosts(); }} onUpdated={() => { setLoading(true); loadPosts(); }} openPostId={openPostId} onLoginClick={() => setShowLogin(true)} />
       )}
     </div>
   );

@@ -11,14 +11,22 @@ interface Props {
   compact?: boolean;
   user?: BoardUser | null;
   onDeleted?: () => void;
+  onUpdated?: (updated: BoardPost) => void;
   defaultOpen?: boolean;
   onLoginClick?: () => void;
 }
 
-export default function PostCard({ post, compact, user, onDeleted, defaultOpen, onLoginClick }: Props) {
+export default function PostCard({ post, compact, user, onDeleted, onUpdated, defaultOpen, onLoginClick }: Props) {
   const [expanded, setExpanded] = useState(defaultOpen ?? false);
   const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(post.title);
+  const [editBody, setEditBody] = useState(post.body);
+  const [editLink, setEditLink] = useState(post.link ?? "");
+  const [saving, setSaving] = useState(false);
+
   const canDelete = user && user.name === post.author && !post.pinned;
+  const canEdit = user && user.name === post.author && !post.pinned;
 
   const handleDelete = async () => {
     if (!confirm("이 글을 삭제하시겠습니까?")) return;
@@ -33,6 +41,42 @@ export default function PostCard({ post, compact, user, onDeleted, defaultOpen, 
     } catch { /* silent */ }
     finally { setDeleting(false); }
   };
+
+  const startEdit = () => {
+    setEditTitle(post.title);
+    setEditBody(post.body);
+    setEditLink(post.link ?? "");
+    setEditing(true);
+  };
+
+  const cancelEdit = () => {
+    setEditing(false);
+  };
+
+  const saveEdit = async () => {
+    if (!editTitle.trim() || !editBody.trim()) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/board/posts", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pageId: post.id,
+          title: editTitle.trim(),
+          body: editBody.trim(),
+          author: post.author,
+          link: editLink.trim() || undefined,
+        }),
+      });
+      if (res.ok) {
+        const { post: updated } = await res.json();
+        setEditing(false);
+        onUpdated?.(updated);
+      }
+    } catch { /* silent */ }
+    finally { setSaving(false); }
+  };
+
   const isProduct = post.category === "프로덕트";
 
   // compact 모드 (Overview 위젯) — 한 줄 요약
@@ -99,6 +143,9 @@ export default function PostCard({ post, compact, user, onDeleted, defaultOpen, 
         {/* 제목 */}
         <span className="text-sm font-medium text-gray-100 truncate flex-1">
           {post.title}
+          {post.edited && (
+            <span className="text-[10px] text-gray-500 font-normal ml-1.5">(편집됨)</span>
+          )}
         </span>
 
         {/* 메타 — 작성자 + 날짜 */}
@@ -126,49 +173,118 @@ export default function PostCard({ post, compact, user, onDeleted, defaultOpen, 
       {/* 펼침 영역 */}
       {expanded && (
         <div className="px-4 pb-4 pt-0">
-          {/* 본문 */}
-          {post.body && (
-            <p className="text-sm text-gray-400 leading-relaxed mb-2">
-              {post.body}
-            </p>
+          {editing ? (
+            /* 편집 모드 */
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">제목</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  maxLength={100}
+                  className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">본문</label>
+                <textarea
+                  value={editBody}
+                  onChange={(e) => setEditBody(e.target.value)}
+                  maxLength={2000}
+                  rows={5}
+                  className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none resize-none"
+                />
+                <div className="text-right text-[10px] text-gray-600 mt-0.5">
+                  {editBody.length}/2000
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">
+                  링크 <span className="text-gray-600">(선택)</span>
+                </label>
+                <input
+                  type="url"
+                  value={editLink}
+                  onChange={(e) => setEditLink(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 placeholder-gray-600 focus:border-[#00E87A]/50 focus:outline-none"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={cancelEdit}
+                  className="px-3 py-1.5 rounded-lg text-xs text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={saveEdit}
+                  disabled={!editTitle.trim() || !editBody.trim() || saving}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#00E87A]/15 text-[#00E87A] border border-[#00E87A]/30 hover:bg-[#00E87A]/25 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {saving ? "저장 중..." : "저장"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* 읽기 모드 */
+            <>
+              {/* 본문 */}
+              {post.body && (
+                <p className="text-sm text-gray-400 leading-relaxed mb-2">
+                  {post.body}
+                </p>
+              )}
+
+              {/* 링크 */}
+              {post.link && (
+                <a
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-[#00E87A] hover:underline mb-2"
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  {post.link.replace(/^https?:\/\//, "").slice(0, 50)}
+                </a>
+              )}
+
+              {/* 모바일 작성자 표시 */}
+              <div className="text-xs text-gray-500 sm:hidden mb-2">
+                {post.author} · {post.date}
+              </div>
+
+              {/* 리액션 + 편집/삭제 */}
+              <div className="flex items-center justify-between">
+                <ReactionBar postId={post.id} reactions={post.reactions} />
+                <div className="flex items-center gap-3">
+                  {canEdit && (
+                    <button
+                      onClick={startEdit}
+                      className="text-xs text-gray-600 hover:text-gray-300 transition-colors cursor-pointer"
+                    >
+                      편집
+                    </button>
+                  )}
+                  {canDelete && (
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      className="text-xs text-gray-600 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-30"
+                    >
+                      {deleting ? "삭제 중..." : "삭제"}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* 댓글 */}
+              <CommentSection postId={post.id} userName={user?.name} onLoginClick={onLoginClick} />
+            </>
           )}
-
-          {/* 링크 */}
-          {post.link && (
-            <a
-              href={post.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-[#00E87A] hover:underline mb-2"
-            >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-              {post.link.replace(/^https?:\/\//, "").slice(0, 50)}
-            </a>
-          )}
-
-          {/* 모바일 작성자 표시 */}
-          <div className="text-xs text-gray-500 sm:hidden mb-2">
-            {post.author} · {post.date}
-          </div>
-
-          {/* 리액션 + 삭제 */}
-          <div className="flex items-center justify-between">
-            <ReactionBar postId={post.id} reactions={post.reactions} />
-            {canDelete && (
-              <button
-                onClick={handleDelete}
-                disabled={deleting}
-                className="text-xs text-gray-600 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-30"
-              >
-                {deleting ? "삭제 중..." : "삭제"}
-              </button>
-            )}
-          </div>
-
-          {/* 댓글 */}
-          <CommentSection postId={post.id} userName={user?.name} onLoginClick={onLoginClick} />
         </div>
       )}
     </div>
