@@ -149,5 +149,12 @@ export async function fetchAnalytics(params: {
     // backfill이 이미 있으면 항상 backfill 유지 (Admin API가 정확)
   }
 
-  return { data: filterSynthetic([...merged.values()]) };
+  // 최종 날짜 범위 필터: Prometheus rolling window가 params.start_date보다
+  // 일찍 시작할 수 있어서, backfill 보호가 빠진 과거 날짜의 부풀려진 데이터가
+  // 그대로 통과하는 버그 방지 (days=1 "오늘" 조회에서 특히 영향 큼)
+  const bounded = [...merged.values()].filter(
+    (d) => d.date >= params.start_date && d.date <= params.end_date
+  );
+
+  return { data: filterSynthetic(bounded) };
 }
