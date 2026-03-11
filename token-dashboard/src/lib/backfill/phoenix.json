@@ -19,12 +19,22 @@
       "cache_creation_tokens": 530374
     },
     {
-      "date": "2026-03-11",
+      "actor": {
+        "type": "user",
+        "id": "phoenix@eoeoeo.net",
+        "email_address": "phoenix@eoeoeo.net"
+      },
       "model": "claude-sonnet-4-6",
-      "input_tokens": 7,
-      "output_tokens": 990,
-      "cache_read_tokens": 34663,
-      "cache_creation_tokens": 8470
+      "date": "2026-03-11",
+      "session_count": 1,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 17,
+      "output_tokens": 1004,
+      "cache_read_tokens": 75799,
+      "cache_creation_tokens": 24168
     }
   ]
 }
