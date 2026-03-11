@@ -80,6 +80,10 @@ if [ -z "$GIT_EMAIL" ] || ! echo "$GIT_EMAIL" | grep -q "@eoeoeo.net"; then
 fi
 
 echo "사용자: $GIT_EMAIL"
+
+# 이메일을 파일로 저장 (git 없는 환경에서도 otel_push가 사용자를 식별하도록)
+mkdir -p "$HOOKS_DIR"
+echo "$GIT_EMAIL" > "$HOOKS_DIR/.otel_email"
 echo ""
 
 # 1. hooks 디렉토리 생성

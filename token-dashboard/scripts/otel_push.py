@@ -326,7 +326,8 @@ def sanitize_email(email: str) -> str:
 
 
 def detect_user_email() -> str:
-    """git config에서 이메일 추출"""
+    """이메일 감지: git config → .otel_email 파일 → unknown"""
+    # 1. git config
     try:
         import subprocess
         result = subprocess.run(
@@ -335,6 +336,16 @@ def detect_user_email() -> str:
         )
         if result.returncode == 0 and result.stdout.strip():
             return sanitize_email(result.stdout.strip())
+    except Exception:
+        pass
+    # 2. install-hook이 저장한 .otel_email 파일
+    otel_email_path = os.path.join(os.path.expanduser("~/.claude/hooks"), ".otel_email")
+    try:
+        if os.path.exists(otel_email_path):
+            with open(otel_email_path, "r", encoding="utf-8") as f:
+                email = f.read().strip()
+            if email:
+                return sanitize_email(email)
     except Exception:
         pass
     return "unknown"

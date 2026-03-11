@@ -81,6 +81,10 @@ if (-not $GIT_EMAIL -or $GIT_EMAIL -notmatch "@eoeoeo\.net") {
 }
 
 Write-Host "사용자: $GIT_EMAIL"
+
+# 이메일을 파일로 저장 (git 없는 환경에서도 otel_push가 사용자를 식별하도록)
+New-Item -ItemType Directory -Path $HOOKS_DIR -Force | Out-Null
+[System.IO.File]::WriteAllText("$HOOKS_DIR\.otel_email", $GIT_EMAIL, [System.Text.Encoding]::UTF8)
 Write-Host ""
 
 # 1. hooks 디렉토리 생성
