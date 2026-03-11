@@ -37,10 +37,10 @@ export const TEAM_MEMBERS: TeamMember[] = [
   { email: "dev@eoeoeo.net", name: "Dev" },
   // — Vietnam —
   { email: "truonghpq.vd@eoeoeo.net", name: "Truong", avatar: "https://avatars.slack-edge.com/2025-11-19/9933025106743_9eaf10b6b50fe9cce67a_72.jpg" },
-  { email: "hungtran@eoeoeo.net", name: "Hung" },
+  { email: "hungtran@eoeoeo.net", name: "Hung", avatar: "https://ca.slack-edge.com/T087GTVPGVD-U09KYRZ1WCB-44e70a28f4ba-72" },
   { email: "diepngan@eoeoeo.net", name: "Kashy", avatar: "https://avatars.slack-edge.com/2025-08-12/9332631765683_d81296fe914170c27ee1_72.png" },
-  { email: "ivee@eoeoeo.net", name: "Ivee", avatar: "https://avatars.slack-edge.com/2025-10-03/9625077423955_1ce09c7f8b78bcb9a638_72.png" },
-  { email: "kairenz@eoeoeo.net", name: "Thiệu" },
+  { email: "ivee@eoeoeo.net", name: "Ivee", avatar: "https://avatars.slack-edge.com/2026-03-11/10673365108438_d09a34aafe9f5a7373aa_72.png" },
+  { email: "kairenz@eoeoeo.net", name: "Thiệu", avatar: "https://ca.slack-edge.com/T087GTVPGVD-U0AJPUT6UAW-4b50e646bc1f-72" },
   // — Ash's Agent Squad (Mock/Gemini/GPT 전용) —
   { email: "jay@eostudio.tv", name: "Jay" },
   { email: "alex@eostudio.tv", name: "Alex" },
