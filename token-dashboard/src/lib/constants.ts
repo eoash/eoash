@@ -38,6 +38,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   // — Vietnam —
   { email: "truonghpq.vd@eoeoeo.net", name: "Truong", avatar: "https://avatars.slack-edge.com/2025-11-19/9933025106743_9eaf10b6b50fe9cce67a_72.jpg" },
   { email: "hungtran@eoeoeo.net", name: "Hung" },
+  { email: "diepngan@eoeoeo.net", name: "Kashy", avatar: "https://avatars.slack-edge.com/2025-08-12/9332631765683_d81296fe914170c27ee1_72.png" },
+  { email: "ivee@eoeoeo.net", name: "Ivee", avatar: "https://avatars.slack-edge.com/2025-10-03/9625077423955_1ce09c7f8b78bcb9a638_72.png" },
+  { email: "kairenz@eoeoeo.net", name: "Thiệu" },
   // — Ash's Agent Squad (Mock/Gemini/GPT 전용) —
   { email: "jay@eostudio.tv", name: "Jay" },
   { email: "alex@eostudio.tv", name: "Alex" },
