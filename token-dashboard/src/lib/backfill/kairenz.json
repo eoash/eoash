@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "actor": {
+        "type": "user",
+        "id": "kairenz@eoeoeo.net",
+        "email_address": "kairenz@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-10",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 12,
+      "output_tokens": 719,
+      "cache_read_tokens": 50290,
+      "cache_creation_tokens": 25416
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "kairenz@eoeoeo.net",
+        "email_address": "kairenz@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-11",
+      "session_count": 8,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 292,
+      "output_tokens": 19466,
+      "cache_read_tokens": 2743422,
+      "cache_creation_tokens": 140852
+    }
+  ]
+}
