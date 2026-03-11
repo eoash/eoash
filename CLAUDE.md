@@ -125,56 +125,19 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ## 4. 현재 진행 상태
 
-### 당면 과제
+### Token Dashboard — 안정 운영 중
+- **설치 현황**: 24/35명 backfill 완료 (ash, chaenn, chankim, chiri, cw.lim, grace, gyeol, heejoo, hungtran, hyeri, ivee, izzy, jemin, jhghood25, june, jy.lim, kairenz, leejumi, ljw, phoenix, saul, songsh, truonghpq.vd, ty)
+- **완료된 주요 기능**: Board 게시판(Notion DB), 게이미피케이션(/rank), DateRangePicker, Members 인사이트 v2, Hook 자가복구, data-integrity CI, 브랜드 컬러 #00E87A 통일, 모노레포 Vercel 직접 연결
+- **데이터 파이프라인**: OTel → backfill 우선 (Prometheus 과다집계 우회), 세션별 backfill + 하루 1회 re-backfill
+- [ ] Chanhee backfill 재실행 (Windows PC install-hook.ps1 재실행 필요)
+- [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
+- [ ] auto-deploy 안정화 모니터링
 
-#### Token Dashboard
-- [x] 8명 설치 완료 (ash, chiri, cw.lim, izzy, jemin, june, jy.lim, songsh)
-- [x] 커밋 카운트 전원 커버 (`git log --after` 기반)
-- [x] Windows 설치 명령어 수정 (`powershell -Command` 래핑)
-- [x] Setup 페이지 Mac/Windows 탭 토글 추가
-- [x] 김찬희/김찬호 이메일·Slack ID·아바타 분리 수정
-- [x] sync-dashboards.yml skipped 해결 (git diff 기반 변경 감지)
-- [x] Sidebar 전체 메뉴 SVG 아이콘 추가
-- [x] songsh/june backfill 추가, jemin 업데이트
-- [x] 세계관 리뉴얼: AI Explorer's Log (Scout → AI Native)
-- [x] 브랜드 컬러 #00E87A 통일 (18파일)
-- [x] UI 사이즈 조정 + Web Interface Guidelines 준수
-- [x] Gemini v0.33 metrics_url_path 복원
-- [x] KpiCard 반응형 사이즈 + 모바일 2열 그리드 + InfoTip group/tip 패턴
-- [x] data-integrity API + CI 워크플로우 (스파이크/유실 자동 감지 안전망)
-- [x] Model 파이차트 컬러 수정 (Haiku 4.5 amber, Haiku 3.5 orange) + 값 기준 내림차순 정렬
-- [x] Backfill API 커밋 대상을 모노레포(eoash/eoash)로 변경 + GITHUB_BACKFILL_TOKEN 갱신
-- [x] Backfill v4 마커 + 스크립트 URL 모노레포 전환 (서브레포 의존 제거)
-- [x] Prometheus 과다집계 우회: 세션별 backfill + 하루 1회 전체 re-backfill (backfill 우선으로 Prometheus 미사용)
-- [x] cache_creation 필드명 통일 (otel_push.py + backfill API: cache_creation_input_tokens → cache_creation_tokens)
-- [x] Board 게시판 (Notion DB 연동 완료)
-  - [x] 코드 구현 완료 (notion-board.ts, /api/board, 컴포넌트 4개, /board 페이지)
-  - [x] Notion DB 생성 + 환경변수 설정 (NOTION_BOARD_DB_ID, NOTION_API_KEY)
-  - [x] Vercel 배포 + 테스트
-  - [x] 딥링크(?post=id) + 로그인 UX 개선 + 고정글/업데이트글 생성
-  - [x] RadarComparison sqrt 스케일 + InfoTip align/z-index 개선
-  - [x] Notion DB "수정됨" checkbox 속성 추가 + 편집/이미지/삭제 Playwright 테스트 통과
-- [x] Vercel SLACK_BOT_TOKEN `\n` 줄바꿈 대응 (코드에 `.trim()` 방어 로직 추가)
-- [x] Board 한글 글씨 깨짐 진단 및 수정
-- [x] level-notify.yml GitHub Actions 워크플로우 비활성화
-- [x] LeaderboardTable 행 클릭 → Members 페이지 이동 (PR #3)
-- [x] DateRangePicker 통합: 오늘/7일/30일/전체 + 리더보드 자체 period 제거 (PR #4)
-- [x] Leaderboard 전용 페이지에 DateRangePicker 추가 (PR #5)
-- [x] 스파이크 알림 5건 분석 → 전부 정상 cold start 패턴 확인
-- [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
-- [x] 전체 `text-[10px]` → `text-xs` 일괄 수정 (11파일 30곳 완료)
-- [x] Hook 자가복구 시스템 (otel_push.py ensure_hook_registered + hook_health.py + cron)
-- [x] Board 영어 용어 작성 안내 추가 (게시판 공지 + 글쓰기 폼)
-- [x] Ivee 아바타 갱신 + Hung/Thiệu(kairenz) 베트남 워크스페이스 아바타 추가
-- [x] 스파이크 알림 7건 분석 → 전부 정상 사용 패턴 확인
+### Finance Dashboard — 안정 운영 중
+- 모든 주요 기능 완료 (세션15~19): Cash Position 자동화, 환율 API, USD/KRW 토글, 7개 페이지
+- Sheets 에러 검증 완료, 모바일 UI 확인
 
-#### Finance Dashboard
-- [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
-- [x] 세션16: Cash Position 월별 필터링 + 환율 API 자동화
-- [x] 브랜드 컬러 #00E87A 통일 (21파일) + Sidebar SVG 아이콘 추가
-- [x] Sheets 에러 검증 완료 (#VALUE! 0개, #DIV/0! 54개는 미래 월 비율 계산으로 정상)
-
-#### Leave Dashboard
+### Leave Dashboard — 미완료
 - [ ] 입사일 필드 연동
 - [ ] 재직자 필터링 (퇴사자 제외)
 - [ ] 반차(0.5일) 처리
