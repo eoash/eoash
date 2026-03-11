@@ -43,7 +43,7 @@ export default function PartyRanking({ profiles, selectedName, onSelect }: Props
           </span>
         )}
       </h2>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-gray-600 mb-3">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-3">
         <span>{isKo ? "다음 레벨 = 다음 레벨까지 XP 진행률" : "Next Lv = XP progress to next level"}</span>
         <span>🔥 = {isKo ? "연속 사용일" : "streak"}</span>
         <span>✓ = {isKo ? "오늘/어제 활동" : "active today"}</span>
@@ -158,7 +158,7 @@ function GroupRows({
                   <span className={`font-medium ${isSelected ? "text-white" : "text-gray-300"}`}>
                     {p.name}
                   </span>
-                  <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-gray-600">
+                  <div className="flex items-center gap-1.5 mt-0.5 text-xs text-gray-500">
                     <span>{formatTokens(p.totalTokens)}</span>
                     <span>·</span>
                     <span>{p.activeDays}d</span>
