@@ -154,7 +154,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
   - [x] 딥링크(?post=id) + 로그인 UX 개선 + 고정글/업데이트글 생성
   - [x] RadarComparison sqrt 스케일 + InfoTip align/z-index 개선
   - [x] Notion DB "수정됨" checkbox 속성 추가 + 편집/이미지/삭제 Playwright 테스트 통과
-- [ ] Vercel SLACK_BOT_TOKEN 환경변수 `\n` 줄바꿈 제거 (magic token 서명 불일치 원인)
+- [x] Vercel SLACK_BOT_TOKEN `\n` 줄바꿈 대응 (코드에 `.trim()` 방어 로직 추가)
 - [x] Board 한글 글씨 깨짐 진단 및 수정
 - [x] level-notify.yml GitHub Actions 워크플로우 비활성화
 - [x] LeaderboardTable 행 클릭 → Members 페이지 이동 (PR #3)
@@ -164,6 +164,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
 - [x] 전체 `text-[10px]` → `text-xs` 일괄 수정 (11파일 30곳 완료)
 - [x] Hook 자가복구 시스템 (otel_push.py ensure_hook_registered + hook_health.py + cron)
+- [x] Board 영어 용어 작성 안내 추가 (게시판 공지 + 글쓰기 폼)
+- [x] Ivee 아바타 갱신 + Hung/Thiệu(kairenz) 베트남 워크스페이스 아바타 추가
+- [x] 스파이크 알림 7건 분석 → 전부 정상 사용 패턴 확인
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
