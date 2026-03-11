@@ -3,9 +3,10 @@
 import { format, subDays } from "date-fns";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { nowKST, todayKST } from "@/lib/utils";
 import type { TranslationKey } from "@/lib/i18n";
 
-const today = format(new Date(), "yyyy-MM-dd");
+const today = todayKST();
 
 const PRESETS: { labelKey: TranslationKey; days: number }[] = [
   { labelKey: "date.7d", days: 6 },
@@ -19,14 +20,14 @@ export default function DateRangePicker() {
 
   const applyPreset = (days: number, label: string) => {
     setRange({
-      start: format(subDays(new Date(), days), "yyyy-MM-dd"),
+      start: format(subDays(nowKST(), days), "yyyy-MM-dd"),
       end: today,
       label,
     });
   };
 
   const isPresetActive = (days: number) => {
-    const expected = format(subDays(new Date(), days), "yyyy-MM-dd");
+    const expected = format(subDays(nowKST(), days), "yyyy-MM-dd");
     return range.start === expected && range.end === today;
   };
 

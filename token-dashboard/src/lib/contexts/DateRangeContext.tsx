@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { format, subDays } from "date-fns";
+import { nowKST } from "@/lib/utils";
 
 const STORAGE_KEY = "date-range-preset";
 
@@ -17,14 +18,15 @@ interface DateRangeContextValue {
   days: number;
 }
 
-const today = format(new Date(), "yyyy-MM-dd");
+const today = format(nowKST(), "yyyy-MM-dd");
 
 function buildRange(label: string): DateRange {
   const end = today;
-  if (label === "Last 7 days") return { start: format(subDays(new Date(), 6), "yyyy-MM-dd"), end, label };
-  if (label === "Last 90 days") return { start: format(subDays(new Date(), 89), "yyyy-MM-dd"), end, label };
+  const kst = nowKST();
+  if (label === "Last 7 days") return { start: format(subDays(kst, 6), "yyyy-MM-dd"), end, label };
+  if (label === "Last 90 days") return { start: format(subDays(kst, 89), "yyyy-MM-dd"), end, label };
   // default: 30 days
-  return { start: format(subDays(new Date(), 29), "yyyy-MM-dd"), end, label: "Last 30 days" };
+  return { start: format(subDays(kst, 29), "yyyy-MM-dd"), end, label: "Last 30 days" };
 }
 
 function loadSavedRange(): DateRange {
