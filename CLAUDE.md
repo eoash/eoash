@@ -126,10 +126,11 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 ## 4. 현재 진행 상태
 
 ### Token Dashboard — 안정 운영 중
-- **설치 현황**: 24/35명 backfill 완료 (ash, chaenn, chankim, chiri, cw.lim, grace, gyeol, heejoo, hungtran, hyeri, ivee, izzy, jemin, jhghood25, june, jy.lim, kairenz, leejumi, ljw, phoenix, saul, songsh, truonghpq.vd, ty)
+- **설치 현황**: 26/34명 (backfill 24명 + OTel only 2명: hyunahk, chanhee)
+- **미가입 8명**: Kashy, Dowon, Gunwook, Jeebin, Sumin, SoYoung, Jade, Zen
 - **완료된 주요 기능**: Board 게시판(Notion DB), 게이미피케이션(/rank), DateRangePicker, Members 인사이트 v2, Hook 자가복구, data-integrity CI, 브랜드 컬러 #00E87A 통일, 모노레포 Vercel 직접 연결
+- **폐기(3/11)**: 레벨업 카드 + Slack 알림 — satori OG Image API 텍스트 겹침 해결 불가로 삭제
 - **데이터 파이프라인**: OTel → backfill 우선 (Prometheus 과다집계 우회), 세션별 backfill + 하루 1회 re-backfill
-- [ ] Chanhee backfill 재실행 (Windows PC install-hook.ps1 재실행 필요)
 - [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
 - [ ] auto-deploy 안정화 모니터링
 
