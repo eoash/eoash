@@ -7,6 +7,7 @@ import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leader
 import { NAME_TO_AVATAR } from "@/lib/constants";
 import InfoTip from "@/components/InfoTip";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import type { TranslationKey } from "@/lib/i18n";
 import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
@@ -17,15 +18,6 @@ function navigateToMember(name: string, router: ReturnType<typeof useRouter>) {
 }
 
 type AiTool = "claude" | "gemini" | "codex";
-type Period = "today" | "7d" | "30d" | "all";
-
-const PERIOD_DAYS: Record<Period, number> = { today: 0, "7d": 6, "30d": 29, all: 365 };
-const PERIOD_LABEL_KEYS: Record<Period, TranslationKey> = {
-  today: "period.today",
-  "7d": "period.7days",
-  "30d": "period.30days",
-  all: "period.allTime",
-};
 const AVATAR_COLORS = ["#7C3AED", "#DB2777", "#059669", "#D97706", "#2563EB"];
 const MEDAL = ["🥇", "🥈", "🥉"];
 
@@ -42,9 +34,10 @@ function Avatar({ name, initial, color }: { name: string; initial: string; color
 }
 
 // ── Claude Code 테이블 ──────────────────────────────
-function ClaudeTable({ period }: { period: Period }) {
+function ClaudeTable() {
   const router = useRouter();
   const { t, locale } = useT();
+  const { range } = useDateRange();
   const [rows, setRows] = useState<ClaudeMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +47,7 @@ function ClaudeTable({ period }: { period: Period }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/analytics?days=${PERIOD_DAYS[period]}`);
+      const res = await fetch(`/api/analytics?start=${range.start}&end=${range.end}`);
       if (!res.ok) throw new Error(`Server error (${res.status})`);
       const json = await res.json();
       setRows(aggregateMembers(json.data ?? []));
@@ -64,7 +57,7 @@ function ClaudeTable({ period }: { period: Period }) {
       setError(t("common.error"));
       setRows([]);
     } finally { setLoading(false); }
-  }, [period, t, locale]);
+  }, [range.start, range.end, t, locale]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => {
@@ -150,7 +143,7 @@ function ClaudeTable({ period }: { period: Period }) {
         </table>
       </div>
       <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
-        <span>{rows.length}{t("lb.members")} · {t(PERIOD_LABEL_KEYS[period])}</span>
+        <span>{rows.length}{t("lb.members")} · {range.label}</span>
         <span>{t("lb.autoRefresh")}</span>
       </div>
     </>
@@ -338,19 +331,7 @@ function GeminiTable() {
 
 // ── 메인 컴포넌트 ────────────────────────────────────
 export default function LeaderboardTable() {
-  const { t } = useT();
   const [tool, setTool] = useState<AiTool>("claude");
-  const [period, setPeriodState] = useState<Period>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("lb-period") as Period | null;
-      if (saved && saved in PERIOD_DAYS) return saved;
-    }
-    return "30d";
-  });
-  const setPeriod = (p: Period) => {
-    setPeriodState(p);
-    localStorage.setItem("lb-period", p);
-  };
 
   const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
     { key: "claude", label: "Claude Code", color: "#00E87A" },
@@ -360,7 +341,7 @@ export default function LeaderboardTable() {
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] overflow-hidden">
-      <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222]">
+      <div className="px-6 py-5 flex items-center gap-4 border-b border-[#222]">
         <div className="flex gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-1">
           {AI_TOOLS.map((ai) => (
             <button key={ai.key} onClick={() => setTool(ai.key)}
@@ -370,20 +351,9 @@ export default function LeaderboardTable() {
             </button>
           ))}
         </div>
-
-        {tool === "claude" && (
-          <div className="flex rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] p-1 gap-1">
-            {(Object.keys(PERIOD_LABEL_KEYS) as Period[]).map((p) => (
-              <button key={p} onClick={() => setPeriod(p)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${period === p ? "bg-white text-black" : "text-neutral-400 hover:text-white"}`}>
-                {t(PERIOD_LABEL_KEYS[p])}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
-      {tool === "claude" && <ClaudeTable period={period} />}
+      {tool === "claude" && <ClaudeTable />}
       {tool === "gemini" && <GeminiTable />}
       {tool === "codex"  && <CodexTable />}
     </div>

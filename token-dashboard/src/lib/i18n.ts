@@ -314,9 +314,10 @@ const translations = {
   },
 
   // ── DateRangePicker ──
+  "date.today": { ko: "오늘", en: "Today" },
   "date.7d": { ko: "7일", en: "7D" },
   "date.30d": { ko: "30일", en: "30D" },
-  "date.90d": { ko: "90일", en: "90D" },
+  "date.all": { ko: "전체", en: "All" },
 
   // ── Leaderboard periods ──
   "period.today": { ko: "오늘", en: "Today" },
