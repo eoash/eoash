@@ -17,6 +17,14 @@
       "output_tokens": 94491,
       "cache_read_tokens": 10864542,
       "cache_creation_tokens": 530374
+    },
+    {
+      "date": "2026-03-11",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 7,
+      "output_tokens": 990,
+      "cache_read_tokens": 34663,
+      "cache_creation_tokens": 8470
     }
   ]
 }
