@@ -142,11 +142,16 @@ export async function fetchAnalytics(params: {
   }
 
   for (const [key, promPoint] of promMap) {
-    if (!merged.has(key)) {
-      // Prometheus에만 있는 날짜 (cutoff 이후) → 그대로 사용
-      merged.set(key, promPoint);
-    }
-    // backfill이 이미 있으면 항상 backfill 유지 (Admin API가 정확)
+    if (merged.has(key)) continue; // backfill 우선 (Admin API가 정확)
+
+    // cutoff 이전 날짜는 모델 관계없이 Prometheus 차단
+    // backfill에 해당 모델 레코드가 없으면 실제로 안 쓴 것 — Prometheus는 이중전송 잔류
+    const email = promPoint.actor?.email_address ?? promPoint.actor?.id ?? "";
+    const cutoff = perUserCutoff.get(email) ?? "";
+    if (cutoff && promPoint.date <= cutoff) continue;
+
+    // cutoff 이후 → Prometheus 데이터 사용
+    merged.set(key, promPoint);
   }
 
   // 최종 날짜 범위 필터: Prometheus rolling window가 params.start_date보다
