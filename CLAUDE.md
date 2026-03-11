@@ -155,14 +155,14 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
   - [x] RadarComparison sqrt 스케일 + InfoTip align/z-index 개선
   - [x] Notion DB "수정됨" checkbox 속성 추가 + 편집/이미지/삭제 Playwright 테스트 통과
 - [ ] Vercel SLACK_BOT_TOKEN 환경변수 `\n` 줄바꿈 제거 (magic token 서명 불일치 원인)
-- [ ] Board 한글 글씨 깨짐 진단 및 수정
+- [x] Board 한글 글씨 깨짐 진단 및 수정
 - [x] level-notify.yml GitHub Actions 워크플로우 비활성화
 - [x] LeaderboardTable 행 클릭 → Members 페이지 이동 (PR #3)
 - [x] DateRangePicker 통합: 오늘/7일/30일/전체 + 리더보드 자체 period 제거 (PR #4)
 - [x] Leaderboard 전용 페이지에 DateRangePicker 추가 (PR #5)
 - [x] 스파이크 알림 5건 분석 → 전부 정상 cold start 패턴 확인
 - [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
-- [ ] 전체 `text-[10px]` → `text-xs` 일괄 수정 (Leaderboard, KpiCard, Board 등 잔여분)
+- [x] 전체 `text-[10px]` → `text-xs` 일괄 수정 (11파일 30곳 완료)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화

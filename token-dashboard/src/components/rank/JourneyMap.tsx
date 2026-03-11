@@ -42,7 +42,7 @@ export default function JourneyMap({ profile }: Props) {
                 )}
                 {isCurrent && !profile.avatar && (
                   <div
-                    className="w-6 h-6 rounded-full absolute -top-8 flex items-center justify-center text-[10px] font-bold text-white"
+                    className="w-6 h-6 rounded-full absolute -top-8 flex items-center justify-center text-xs font-bold text-white"
                     style={{ backgroundColor: from }}
                   >
                     {profile.name[0]}
@@ -60,14 +60,14 @@ export default function JourneyMap({ profile }: Props) {
                   }}
                 >
                   {isLocked && !reached && (
-                    <span className="absolute -top-1 -right-1 text-[10px]">🔒</span>
+                    <span className="absolute -top-1 -right-1 text-xs">🔒</span>
                   )}
                   <span className={reached ? "" : "grayscale"}>{lv.icon}</span>
                 </div>
 
                 {/* Label */}
                 <span
-                  className={`text-[10px] mt-1 font-medium whitespace-nowrap ${
+                  className={`text-xs mt-1 font-medium whitespace-nowrap ${
                     reached ? "text-gray-300" : "text-gray-600"
                   }`}
                   style={isCurrent ? { color: from } : undefined}

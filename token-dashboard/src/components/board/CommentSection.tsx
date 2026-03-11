@@ -71,7 +71,7 @@ export default function CommentSection({ postId, userName, onLoginClick }: Props
               <span className="text-gray-300 text-xs leading-relaxed flex-1">
                 {c.content}
               </span>
-              <span className="text-gray-600 text-[10px] shrink-0 mt-0.5">
+              <span className="text-gray-600 text-xs shrink-0 mt-0.5">
                 {timeAgo(c.createdAt)}
               </span>
               {userName === c.author && (
@@ -84,7 +84,7 @@ export default function CommentSection({ postId, userName, onLoginClick }: Props
                     });
                     if (res.ok) setComments((prev) => prev.filter((x) => x.id !== c.id));
                   }}
-                  className="text-[10px] text-gray-700 hover:text-red-400 transition-colors cursor-pointer opacity-0 group-hover/comment:opacity-100 shrink-0 mt-0.5"
+                  className="text-xs text-gray-700 hover:text-red-400 transition-colors cursor-pointer opacity-0 group-hover/comment:opacity-100 shrink-0 mt-0.5"
                 >
                   ✕
                 </button>

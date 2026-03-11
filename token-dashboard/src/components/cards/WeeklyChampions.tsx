@@ -89,13 +89,13 @@ export default function WeeklyChampions({ data }: { data: ClaudeCodeDataPoint[] 
             {c.avatar ? (
               <img src={c.avatar} alt={c.name} className="w-6 h-6 rounded-full flex-shrink-0" />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-[10px] text-gray-400 flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
                 {c.name[0]}
               </div>
             )}
             <span className={`text-sm font-medium flex-1 ${i === 0 ? "text-white" : "text-gray-300"}`}>
               {levelMap.get(c.name) && (
-                <span className="text-[10px] text-gray-500 mr-1">
+                <span className="text-xs text-gray-500 mr-1">
                   {levelMap.get(c.name)!.icon}Lv.{levelMap.get(c.name)!.level}
                 </span>
               )}

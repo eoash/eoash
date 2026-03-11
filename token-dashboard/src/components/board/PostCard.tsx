@@ -135,9 +135,9 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
   if (compact) {
     return (
       <div className="flex items-center gap-2 py-1.5 text-sm">
-        {post.pinned && <span className="text-[10px]">📌</span>}
+        {post.pinned && <span className="text-xs">📌</span>}
         <span
-          className={`text-[10px] font-medium px-1.5 py-0.5 rounded shrink-0 ${
+          className={`text-xs font-medium px-1.5 py-0.5 rounded shrink-0 ${
             isProduct
               ? "text-[#00E87A] bg-[#00E87A]/10"
               : "text-[#3B82F6] bg-[#3B82F6]/10"
@@ -178,7 +178,7 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
       >
         {/* 카테고리 배지 */}
         <span
-          className={`text-[10px] font-medium px-1.5 py-0.5 rounded shrink-0 ${
+          className={`text-xs font-medium px-1.5 py-0.5 rounded shrink-0 ${
             isProduct
               ? "text-[#00E87A] bg-[#00E87A]/10"
               : "text-[#3B82F6] bg-[#3B82F6]/10"
@@ -189,14 +189,14 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
 
         {/* 고정 아이콘 */}
         {post.pinned && (
-          <span className="text-[10px] text-[#F59E0B] shrink-0">📌</span>
+          <span className="text-xs text-[#F59E0B] shrink-0">📌</span>
         )}
 
         {/* 제목 */}
         <span className="text-sm font-medium text-gray-100 truncate flex-1">
           {post.title}
           {post.edited && (
-            <span className="text-[10px] text-gray-500 font-normal ml-1.5">(편집됨)</span>
+            <span className="text-xs text-gray-500 font-normal ml-1.5">(편집됨)</span>
           )}
         </span>
 
@@ -247,7 +247,7 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
                   rows={5}
                   className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 focus:border-[#00E87A]/50 focus:outline-none resize-none"
                 />
-                <div className="text-right text-[10px] text-gray-600 mt-0.5">
+                <div className="text-right text-xs text-gray-600 mt-0.5">
                   {editBody.length}/2000
                 </div>
               </div>

@@ -80,19 +80,19 @@ export default function TeamRankingCard({ data }: TeamRankingCardProps) {
                       ? `${(member.acceptanceRate * 100).toFixed(0)}%`
                       : "—"}
                   </p>
-                  <p className="text-[10px] text-neutral-600">accept</p>
+                  <p className="text-xs text-neutral-600">accept</p>
                 </div>
                 <div>
                   <p className="text-xs font-mono text-neutral-300">
                     {member.commits ?? "—"}
                   </p>
-                  <p className="text-[10px] text-neutral-600">commits</p>
+                  <p className="text-xs text-neutral-600">commits</p>
                 </div>
                 <div>
                   <p className="text-xs font-mono text-neutral-300">
                     {member.prs ?? "—"}
                   </p>
-                  <p className="text-[10px] text-neutral-600">PRs</p>
+                  <p className="text-xs text-neutral-600">PRs</p>
                 </div>
               </div>
             </div>

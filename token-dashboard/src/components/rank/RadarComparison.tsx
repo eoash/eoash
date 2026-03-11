@@ -105,7 +105,7 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
               className="inline-block w-2.5 h-2.5 rounded-full"
               style={{ backgroundColor: userColor, opacity: 0.7 }}
             />
-            <span className="text-[10px] text-gray-500">
+            <span className="text-xs text-gray-500">
               {isKo ? "나" : "You"}
             </span>
           </div>
@@ -114,7 +114,7 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
               className="inline-block w-2.5 h-2.5 rounded-full border border-dashed"
               style={{ borderColor: "#555", backgroundColor: "transparent" }}
             />
-            <span className="text-[10px] text-gray-500">
+            <span className="text-xs text-gray-500">
               {isKo ? "팀 평균" : "Avg"}
             </span>
           </div>
@@ -154,11 +154,11 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
       <div className="grid grid-cols-5 gap-1 mt-1">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <p className="text-[10px] text-gray-600 mb-0.5">{s.label}</p>
+            <p className="text-xs text-gray-600 mb-0.5">{s.label}</p>
             <p className="text-xs font-medium" style={{ color: s.above ? userColor : "#666" }}>
               {formatCompact(s.userVal)}{s.unit ?? ""}
             </p>
-            <p className="text-[10px] text-gray-600">
+            <p className="text-xs text-gray-600">
               {isKo ? "평균 " : "avg "}{formatCompact(s.avgVal)}{s.unit ?? ""}
             </p>
           </div>
@@ -166,7 +166,7 @@ export default function RadarComparison({ profile, allProfiles }: Props) {
       </div>
 
       <p
-        className="text-[10px] text-gray-600 mt-3 font-mono"
+        className="text-xs text-gray-600 mt-3 font-mono"
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
         [LOG] {aboveCount === 5

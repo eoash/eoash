@@ -55,7 +55,7 @@ export default function SetupPage() {
             <div className="flex rounded-md overflow-hidden border border-[#00E87A]/20 ml-2">
               <button
                 onClick={() => { setOs("mac"); setCopied(false); }}
-                className={`text-[10px] px-2.5 py-1 font-medium transition-colors cursor-pointer ${
+                className={`text-xs px-2.5 py-1 font-medium transition-colors cursor-pointer ${
                   os === "mac"
                     ? "bg-[#00E87A]/20 text-[#00E87A]"
                     : "text-gray-500 hover:text-gray-300"
@@ -65,7 +65,7 @@ export default function SetupPage() {
               </button>
               <button
                 onClick={() => { setOs("win"); setCopied(false); }}
-                className={`text-[10px] px-2.5 py-1 font-medium transition-colors cursor-pointer ${
+                className={`text-xs px-2.5 py-1 font-medium transition-colors cursor-pointer ${
                   os === "win"
                     ? "bg-[#00E87A]/20 text-[#00E87A]"
                     : "text-gray-500 hover:text-gray-300"
@@ -112,7 +112,7 @@ export default function SetupPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="text-sm font-semibold text-white">{t(s.titleKey)}</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-mono">{s.tool}</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-mono">{s.tool}</span>
               </div>
               <p className="text-xs text-gray-400">{t(s.descKey)}</p>
             </div>

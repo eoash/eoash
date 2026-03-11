@@ -198,7 +198,7 @@ export default function AchievementGrid({ earnedAchievements, profile, allProfil
                                   style={{ width: `${progress.percent}%` }}
                                 />
                               </div>
-                              <span className="text-[10px] font-mono text-gray-500">
+                              <span className="text-xs font-mono text-gray-500">
                                 {progress.current}/{progress.target}
                               </span>
                             </div>
@@ -207,7 +207,7 @@ export default function AchievementGrid({ earnedAchievements, profile, allProfil
                           {/* Earned: check + date + rarity badge */}
                           {earned && (
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] text-[#00E87A]">
+                              <span className="text-xs text-[#00E87A]">
                                 {"✓ "}
                                 {profile.achievedAt[a.id]
                                   ? profile.achievedAt[a.id].slice(5).replace("-", "/")

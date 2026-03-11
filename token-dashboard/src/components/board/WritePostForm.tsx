@@ -131,7 +131,7 @@ export default function WritePostForm({ user, onClose, onCreated }: Props) {
             rows={5}
             className="w-full px-3 py-2 rounded-lg bg-gray-800/70 border border-gray-700 text-sm text-gray-200 placeholder-gray-600 focus:border-[#00E87A]/50 focus:outline-none resize-none"
           />
-          <div className="text-right text-[10px] text-gray-600 mt-0.5">
+          <div className="text-right text-xs text-gray-600 mt-0.5">
             {body.length}/2000
           </div>
         </div>

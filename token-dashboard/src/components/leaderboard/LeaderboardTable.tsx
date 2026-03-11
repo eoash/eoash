@@ -107,7 +107,7 @@ function ClaudeTable() {
                       <td colSpan={7} className="px-4 py-0">
                         <div className="flex items-center gap-2 py-1">
                           <div className="flex-1 border-t border-dashed border-yellow-500/40" />
-                          <span className="text-[10px] text-yellow-500/60 font-medium whitespace-nowrap">{t("lb.teamAvg")} — {formatTokens(avgTotal)}</span>
+                          <span className="text-xs text-yellow-500/60 font-medium whitespace-nowrap">{t("lb.teamAvg")} — {formatTokens(avgTotal)}</span>
                           <div className="flex-1 border-t border-dashed border-yellow-500/40" />
                         </div>
                       </td>

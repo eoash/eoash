@@ -16,7 +16,7 @@ export default function KpiCard({ title, value, subtitle, unavailable, tooltip, 
   return (
     <div className={`relative rounded-xl bg-[#111111] border border-[#222] p-3 md:p-5${unavailable ? " opacity-40" : ""}`}>
       <div className="flex items-center gap-1">
-        <p className="text-[10px] md:text-xs font-medium text-gray-500 uppercase tracking-wide">
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
           {title}
         </p>
         {tooltip && <InfoTip text={tooltip} />}
