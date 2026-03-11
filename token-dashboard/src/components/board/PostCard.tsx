@@ -1,10 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { BoardPost } from "@/lib/notion-board";
 import type { BoardUser } from "@/lib/board-types";
 import ReactionBar from "./ReactionBar";
 import CommentSection from "./CommentSection";
+
+const IMG_EXT_RE = /https?:\/\/\S+\.(?:png|jpe?g|gif|webp|svg)(?:\?\S*)?/gi;
+const ANY_URL_RE = /https?:\/\/\S+/g;
+
+function renderBody(text: string): ReactNode[] {
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  const combined = new RegExp(
+    `(${IMG_EXT_RE.source})|(${ANY_URL_RE.source})`,
+    "gi",
+  );
+  let m;
+
+  while ((m = combined.exec(text)) !== null) {
+    if (m.index > lastIndex) {
+      parts.push(text.slice(lastIndex, m.index));
+    }
+    const url = m[0];
+    if (m[1]) {
+      parts.push(
+        <img
+          key={m.index}
+          src={url}
+          alt=""
+          className="rounded-lg max-w-full max-h-96 my-2 block"
+          loading="lazy"
+        />,
+      );
+    } else {
+      parts.push(
+        <a
+          key={m.index}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#00E87A] hover:underline break-all"
+        >
+          {url.length > 70
+            ? url.replace(/^https?:\/\//, "").slice(0, 60) + "…"
+            : url.replace(/^https?:\/\//, "")}
+        </a>,
+      );
+    }
+    lastIndex = m.index + url.length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+}
 
 interface Props {
   post: BoardPost;
@@ -232,9 +284,9 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
             <>
               {/* 본문 */}
               {post.body && (
-                <p className="text-sm text-gray-400 leading-relaxed mb-2">
-                  {post.body}
-                </p>
+                <div className="text-sm text-gray-400 leading-relaxed mb-2 whitespace-pre-wrap">
+                  {renderBody(post.body)}
+                </div>
               )}
 
               {/* 링크 */}
