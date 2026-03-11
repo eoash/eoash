@@ -42,6 +42,11 @@ export const TEAM_MEMBERS: TeamMember[] = [
   { email: "chris@eostudio.tv", name: "Chris" },
 ];
 
+/** 외부 이메일 → 사내 이메일 매핑 (git email이 다른 팀원용) */
+export const EMAIL_ALIAS: Record<string, string> = {
+  "jobskim@icloud.com": "ty@eoeoeo.net",
+};
+
 export const EMAIL_TO_NAME: Record<string, string> = Object.fromEntries(
   TEAM_MEMBERS.flatMap((m) => {
     const lower = m.email.toLowerCase();
@@ -49,6 +54,12 @@ export const EMAIL_TO_NAME: Record<string, string> = Object.fromEntries(
     return [[lower, m.name], [username, m.name]];
   })
 );
+
+// alias 이메일도 EMAIL_TO_NAME에 등록
+for (const [alias, canonical] of Object.entries(EMAIL_ALIAS)) {
+  const name = EMAIL_TO_NAME[canonical];
+  if (name) EMAIL_TO_NAME[alias.toLowerCase()] = name;
+}
 
 export const NAME_TO_AVATAR: Record<string, string> = Object.fromEntries(
   TEAM_MEMBERS.filter((m) => m.avatar).map((m) => [m.name, m.avatar!])

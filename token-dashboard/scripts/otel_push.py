@@ -310,13 +310,19 @@ def push_metrics(payload: dict) -> bool:
         return False
 
 
+EMAIL_ALIAS = {
+    "jobskim@icloud.com": "ty@eoeoeo.net",
+}
+
+
 def sanitize_email(email: str) -> str:
-    """중복 도메인 제거 (예: user@eoeoeo.net@eoeoeo.net → user@eoeoeo.net)"""
+    """중복 도메인 제거 + alias 변환 (git email이 다른 팀원용)"""
     at_count = email.count("@")
     if at_count > 1:
         parts = email.split("@")
-        return f"{parts[0]}@{parts[-1]}"
-    return email
+        email = f"{parts[0]}@{parts[-1]}"
+    normalized = email.lower()
+    return EMAIL_ALIAS.get(normalized, normalized)
 
 
 def detect_user_email() -> str:

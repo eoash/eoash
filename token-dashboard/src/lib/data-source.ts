@@ -1,6 +1,7 @@
 import type { ClaudeCodeAnalyticsResponse, ClaudeCodeDataPoint } from "./types";
 import { fetchFromPrometheus } from "./prometheus";
 import { getMockAnalytics } from "./mock-data";
+import { EMAIL_ALIAS } from "./constants";
 import fs from "fs";
 import path from "path";
 
@@ -11,11 +12,11 @@ export function getDataSource(): DataSource {
   return "mock";
 }
 
-/** 이메일 정규화: 이중 도메인(a@b@c) 방지 + lowercase */
+/** 이메일 정규화: 이중 도메인(a@b@c) 방지 + lowercase + alias 변환 */
 function sanitizeEmail(email: string): string {
   const parts = email.toLowerCase().split("@");
-  if (parts.length >= 2) return `${parts[0]}@${parts[1]}`;
-  return email.toLowerCase();
+  const normalized = parts.length >= 2 ? `${parts[0]}@${parts[1]}` : email.toLowerCase();
+  return EMAIL_ALIAS[normalized] ?? normalized;
 }
 
 /** backfill/ 디렉토리의 모든 JSON을 읽어서 병합 + sanitize */
