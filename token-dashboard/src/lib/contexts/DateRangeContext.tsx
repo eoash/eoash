@@ -23,8 +23,9 @@ const today = format(nowKST(), "yyyy-MM-dd");
 function buildRange(label: string): DateRange {
   const end = today;
   const kst = nowKST();
+  if (label === "Today") return { start: today, end, label };
   if (label === "Last 7 days") return { start: format(subDays(kst, 6), "yyyy-MM-dd"), end, label };
-  if (label === "Last 90 days") return { start: format(subDays(kst, 89), "yyyy-MM-dd"), end, label };
+  if (label === "All") return { start: format(subDays(kst, 365), "yyyy-MM-dd"), end, label };
   // default: 30 days
   return { start: format(subDays(kst, 29), "yyyy-MM-dd"), end, label: "Last 30 days" };
 }
