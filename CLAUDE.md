@@ -153,6 +153,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
   - [x] Vercel 배포 + 테스트
   - [x] 딥링크(?post=id) + 로그인 UX 개선 + 고정글/업데이트글 생성
   - [x] RadarComparison sqrt 스케일 + InfoTip align/z-index 개선
+  - [x] Notion DB "수정됨" checkbox 속성 추가 + 편집/이미지/삭제 Playwright 테스트 통과
+- [ ] Vercel SLACK_BOT_TOKEN 환경변수 `\n` 줄바꿈 제거 (magic token 서명 불일치 원인)
+- [ ] Board 한글 글씨 깨짐 진단 및 수정
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화

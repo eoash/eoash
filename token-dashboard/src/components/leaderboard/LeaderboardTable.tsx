@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
 import { NAME_TO_AVATAR } from "@/lib/constants";
@@ -9,6 +10,11 @@ import { useT } from "@/lib/contexts/LanguageContext";
 import type { TranslationKey } from "@/lib/i18n";
 import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
+
+function navigateToMember(name: string, router: ReturnType<typeof useRouter>) {
+  localStorage.setItem("members-selected", name);
+  router.push("/members");
+}
 
 type AiTool = "claude" | "gemini" | "codex";
 type Period = "today" | "7d" | "30d" | "all";
@@ -37,6 +43,7 @@ function Avatar({ name, initial, color }: { name: string; initial: string; color
 
 // ── Claude Code 테이블 ──────────────────────────────
 function ClaudeTable({ period }: { period: Period }) {
+  const router = useRouter();
   const { t, locale } = useT();
   const [rows, setRows] = useState<ClaudeMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,7 +120,7 @@ function ClaudeTable({ period }: { period: Period }) {
                       </td>
                     </tr>
                   )}
-                  <tr className={`border-b border-[#1a1a1a] transition-colors ${isTop3 ? "bg-[#00E87A]/[0.03] hover:bg-[#00E87A]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
+                  <tr onClick={() => navigateToMember(row.name, router)} className={`border-b border-[#1a1a1a] transition-colors cursor-pointer ${isTop3 ? "bg-[#00E87A]/[0.03] hover:bg-[#00E87A]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
                     <td className="px-3 py-3 text-sm md:px-4 md:py-4">{isTop3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                     <td className="px-3 py-3 md:px-4 md:py-4">
                       <div className="flex items-center gap-2 md:gap-3">
@@ -152,6 +159,7 @@ function ClaudeTable({ period }: { period: Period }) {
 
 // ── Codex 테이블 (실데이터) ──────────────────────────
 function CodexTable() {
+  const router = useRouter();
   const { t, locale } = useT();
   const [rows, setRows] = useState<CodexMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -212,7 +220,7 @@ function CodexTable() {
             ) : rows.length === 0 ? (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">{t("lb.noDataCodex")}</td></tr>
             ) : rows.map((row, i) => (
-              <tr key={row.email} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
+              <tr key={row.email} onClick={() => navigateToMember(row.name, router)} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors cursor-pointer">
                 <td className="px-3 py-3 text-sm md:px-4 md:py-4">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                 <td className="px-3 py-3 md:px-4 md:py-4">
                   <div className="flex items-center gap-2 md:gap-3">
@@ -242,6 +250,7 @@ function CodexTable() {
 
 // ── Gemini CLI 테이블 (실데이터) ─────────────────────
 function GeminiTable() {
+  const router = useRouter();
   const { t, locale } = useT();
   const [rows, setRows] = useState<GeminiMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -299,7 +308,7 @@ function GeminiTable() {
             ) : rows.length === 0 ? (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-neutral-600">{t("lb.noDataGemini")}</td></tr>
             ) : rows.map((row, i) => (
-              <tr key={row.email} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors">
+              <tr key={row.email} onClick={() => navigateToMember(row.name, router)} className="border-b border-[#1a1a1a] hover:bg-[#161616] transition-colors cursor-pointer">
                 <td className="px-3 py-3 text-sm md:px-4 md:py-4">{i < 3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
                 <td className="px-3 py-3 md:px-4 md:py-4">
                   <div className="flex items-center gap-2 md:gap-3">
