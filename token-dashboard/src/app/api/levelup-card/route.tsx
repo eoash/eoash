@@ -3,9 +3,9 @@ import type { NextRequest } from "next/server";
 
 export const runtime = "edge";
 
-// 레벨별 그라데이션 컬러
+// 레벨별 글로우 컬러
 const LEVEL_COLORS: Record<string, [string, string]> = {
-  "1": ["#666", "#888"],
+  "1": ["#888", "#AAA"],
   "2": ["#4A9EFF", "#6BB5FF"],
   "3": ["#00E87A", "#4AFFA0"],
   "4": ["#00CED1", "#48D1CC"],
@@ -33,11 +33,27 @@ export async function GET(request: NextRequest) {
   const prevTitle = searchParams.get("prevTitle") || "";
   const avatar = searchParams.get("avatar") || "";
 
-  const [color1, color2] = LEVEL_COLORS[level] || ["#666", "#888"];
-  const prevColor = prevLevel ? (LEVEL_COLORS[prevLevel] || ["#666", "#888"])[0] : "#666";
+  const [c1, c2] = LEVEL_COLORS[level] || ["#888", "#AAA"];
+  const prevColor = prevLevel ? (LEVEL_COLORS[prevLevel] || ["#888"])[0] : "#888";
   const prevIcon = prevLevel ? (LEVEL_ICONS[prevLevel] || "📡") : "";
-  const formattedXp = Number(xp).toLocaleString();
+  const fmtXp = Number(xp).toLocaleString();
   const hasPrev = prevLevel && prevTitle;
+
+  // 파티클 위치 (별/점)
+  const particles = [
+    { t: "18px", l: "45%", s: 3, o: 0.6 },
+    { t: "60px", l: "72%", s: 2, o: 0.4 },
+    { t: "35px", l: "88%", s: 4, o: 0.5 },
+    { t: "120px", l: "92%", s: 2, o: 0.3 },
+    { t: "200px", l: "95%", s: 3, o: 0.5 },
+    { t: "280px", l: "85%", s: 2, o: 0.4 },
+    { t: "90px", l: "15%", s: 2, o: 0.3 },
+    { t: "320px", l: "8%", s: 3, o: 0.4 },
+    { t: "160px", l: "5%", s: 2, o: 0.5 },
+    { t: "50px", l: "35%", s: 2, o: 0.3 },
+    { t: "350px", l: "55%", s: 2, o: 0.3 },
+    { t: "300px", l: "40%", s: 3, o: 0.4 },
+  ];
 
   return new ImageResponse(
     (
@@ -49,86 +65,146 @@ export async function GET(request: NextRequest) {
           flexDirection: "column",
           position: "relative",
           overflow: "hidden",
-          background: "#0A0A0A",
+          background: "linear-gradient(135deg, #0B1426 0%, #0D1B2A 40%, #0F2030 100%)",
         }}
       >
-        {/* === Top accent bar (thick) === */}
+        {/* === Background glow effects === */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-80px",
+            left: "-40px",
+            width: "450px",
+            height: "450px",
+            borderRadius: "50%",
+            display: "flex",
+            background: `radial-gradient(circle, ${c1}15 0%, ${c1}06 40%, transparent 65%)`,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-120px",
+            right: "-60px",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            display: "flex",
+            background: `radial-gradient(circle, ${c2}10 0%, transparent 55%)`,
+          }}
+        />
+
+        {/* === Particles === */}
+        {particles.map((p, i) => (
+          <div
+            key={`p-${i}`}
+            style={{
+              position: "absolute",
+              top: p.t,
+              left: p.l,
+              width: `${p.s}px`,
+              height: `${p.s}px`,
+              borderRadius: "50%",
+              background: i % 3 === 0 ? c1 : i % 3 === 1 ? "#FFF" : c2,
+              opacity: p.o,
+              display: "flex",
+            }}
+          />
+        ))}
+
+        {/* === Top accent line === */}
         <div
           style={{
             position: "absolute",
             top: "0",
             left: "0",
             right: "0",
-            height: "6px",
+            height: "3px",
             display: "flex",
-            background: `linear-gradient(90deg, ${color1}, ${color2})`,
+            background: `linear-gradient(90deg, transparent 5%, ${c1}80 30%, ${c2} 50%, ${c1}80 70%, transparent 95%)`,
           }}
         />
 
-        {/* === Background glow === */}
+        {/* === Outer frame border (subtle) === */}
         <div
           style={{
             position: "absolute",
-            top: "-100px",
-            left: "50px",
-            width: "500px",
-            height: "500px",
-            borderRadius: "50%",
+            top: "8px",
+            left: "8px",
+            right: "8px",
+            bottom: "8px",
+            borderRadius: "16px",
+            border: `1px solid ${c1}20`,
             display: "flex",
-            background: `radial-gradient(circle, ${color1}18 0%, transparent 60%)`,
           }}
         />
 
-        {/* === Main content === */}
+        {/* ================ MAIN CONTENT ================ */}
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "center",
             flex: 1,
-            padding: "32px 48px",
-            gap: "40px",
+            padding: "28px 40px 0 40px",
+            gap: "36px",
           }}
         >
-          {/* === LEFT: Avatar === */}
+          {/* === LEFT: Avatar with glow rings === */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "12px",
+              gap: "14px",
               flexShrink: 0,
+              paddingTop: "8px",
             }}
           >
-            {/* Avatar circle with border */}
+            {/* Outer glow ring */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "160px",
-                height: "160px",
+                width: "200px",
+                height: "200px",
                 borderRadius: "50%",
-                border: `4px solid ${color1}`,
-                boxShadow: `0 0 30px ${color1}40`,
-                overflow: "hidden",
-                background: `linear-gradient(135deg, ${color1}30, ${color2}30)`,
+                background: `radial-gradient(circle, ${c1}08 60%, transparent 100%)`,
+                border: `2px solid ${c1}35`,
+                boxShadow: `0 0 40px ${c1}20, 0 0 80px ${c1}10`,
+                position: "relative",
               }}
             >
-              {avatar ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={avatar}
-                  alt=""
-                  width={152}
-                  height={152}
-                  style={{ borderRadius: "50%", objectFit: "cover" }}
-                />
-              ) : (
-                <div style={{ display: "flex", fontSize: "72px", lineHeight: "1" }}>
-                  {icon}
-                </div>
-              )}
+              {/* Inner glow ring */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "176px",
+                  height: "176px",
+                  borderRadius: "50%",
+                  border: `3px solid ${c1}70`,
+                  boxShadow: `0 0 24px ${c1}30, inset 0 0 20px ${c1}10`,
+                  overflow: "hidden",
+                  background: `linear-gradient(180deg, ${c1}15 0%, ${c1}05 100%)`,
+                }}
+              >
+                {avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={avatar}
+                    alt=""
+                    width={170}
+                    height={170}
+                    style={{ borderRadius: "50%", objectFit: "cover" }}
+                  />
+                ) : (
+                  <div style={{ display: "flex", fontSize: "80px", lineHeight: "1" }}>
+                    {icon}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Level badge */}
@@ -137,19 +213,20 @@ export async function GET(request: NextRequest) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "6px 24px",
-                borderRadius: "20px",
-                background: `linear-gradient(135deg, ${color1}, ${color2})`,
-                boxShadow: `0 0 16px ${color1}50`,
+                padding: "6px 28px",
+                borderRadius: "8px",
+                background: `linear-gradient(135deg, ${c1}25, ${c1}15)`,
+                border: `2px solid ${c1}60`,
+                boxShadow: `0 0 12px ${c1}25`,
               }}
             >
               <div
                 style={{
                   display: "flex",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   fontWeight: 900,
-                  color: "#0A0A0A",
-                  letterSpacing: "2px",
+                  color: c1,
+                  letterSpacing: "3px",
                 }}
               >
                 Lv.{level}
@@ -157,47 +234,69 @@ export async function GET(request: NextRequest) {
             </div>
           </div>
 
-          {/* === RIGHT: Text info === */}
+          {/* === RIGHT: Text content === */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               flex: 1,
               justifyContent: "center",
-              gap: "4px",
+              gap: "2px",
+              paddingBottom: "10px",
             }}
           >
-            {/* LEVEL UP label */}
+            {/* [ ] LEVEL UP header */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
-                marginBottom: "6px",
+                gap: "8px",
+                marginBottom: "4px",
               }}
             >
               <div
                 style={{
                   display: "flex",
-                  fontSize: "16px",
-                  fontWeight: 900,
-                  color: color1,
-                  letterSpacing: "6px",
+                  fontSize: "14px",
+                  color: `${c1}60`,
+                  fontWeight: 700,
                 }}
               >
-                ★ LEVEL UP
+                [
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: "36px",
+                  fontWeight: 900,
+                  color: c1,
+                  letterSpacing: "5px",
+                  textShadow: `0 0 20px ${c1}40`,
+                }}
+              >
+                LEVEL UP
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: "14px",
+                  color: `${c1}60`,
+                  fontWeight: 700,
+                }}
+              >
+                ]
               </div>
               <div
                 style={{
                   display: "flex",
                   height: "2px",
                   flex: 1,
-                  background: `linear-gradient(90deg, ${color1}80, transparent)`,
+                  background: `linear-gradient(90deg, ${c1}50, transparent)`,
                 }}
               />
             </div>
 
-            {/* Name — big and bold */}
+            {/* Name */}
             <div
               style={{
                 display: "flex",
@@ -205,98 +304,141 @@ export async function GET(request: NextRequest) {
                 fontWeight: 900,
                 color: "#FFFFFF",
                 lineHeight: "1.1",
+                textShadow: "0 2px 10px rgba(0,0,0,0.5)",
               }}
             >
               {name}
             </div>
 
-            {/* Title with icon */}
+            {/* Icon + Title */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                marginTop: "4px",
+                gap: "10px",
+                marginTop: "6px",
               }}
             >
-              <div style={{ display: "flex", fontSize: "28px" }}>{icon}</div>
+              <div style={{ display: "flex", fontSize: "32px" }}>{icon}</div>
               <div
                 style={{
                   display: "flex",
-                  fontSize: "28px",
-                  fontWeight: 700,
-                  background: `linear-gradient(90deg, ${color1}, ${color2})`,
-                  backgroundClip: "text",
-                  color: "transparent",
+                  fontSize: "32px",
+                  fontWeight: 800,
+                  color: c1,
+                  textShadow: `0 0 16px ${c1}30`,
                 }}
               >
                 {title}
               </div>
             </div>
 
-            {/* Level transition */}
+            {/* Level transition box */}
             {hasPrev && (
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "12px",
-                  marginTop: "12px",
-                  padding: "10px 16px",
+                  justifyContent: "center",
+                  gap: "20px",
+                  marginTop: "16px",
+                  padding: "12px 20px",
                   borderRadius: "12px",
-                  background: "rgba(255,255,255,0.06)",
-                  border: "2px solid rgba(255,255,255,0.10)",
+                  background: `linear-gradient(135deg, ${c1}08, ${c1}04)`,
+                  border: `2px solid ${c1}30`,
+                  boxShadow: `inset 0 0 20px ${c1}05`,
                 }}
               >
+                {/* Previous level */}
                 <div
                   style={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    gap: "6px",
-                    fontSize: "18px",
-                    color: prevColor,
-                    opacity: "0.6",
+                    gap: "2px",
                   }}
                 >
-                  <span>{prevIcon}</span>
-                  <span>Lv.{prevLevel} {prevTitle}</span>
+                  <div style={{ display: "flex", fontSize: "28px" }}>{prevIcon}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: "14px",
+                      color: prevColor,
+                      opacity: "0.7",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Lv.{prevLevel}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: "16px",
+                      color: "#AAA",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {prevTitle}
+                  </div>
                 </div>
+
+                {/* Arrow */}
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "22px",
-                    color: color1,
+                    fontSize: "28px",
+                    color: c1,
                     fontWeight: 900,
+                    textShadow: `0 0 10px ${c1}40`,
                   }}
                 >
                   →
                 </div>
+
+                {/* New level */}
                 <div
                   style={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    gap: "6px",
-                    fontSize: "18px",
-                    fontWeight: 700,
-                    color: color1,
+                    gap: "2px",
                   }}
                 >
-                  <span>{icon}</span>
-                  <span>Lv.{level} {title}</span>
+                  <div style={{ display: "flex", fontSize: "28px" }}>{icon}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: "14px",
+                      color: c1,
+                      fontWeight: 900,
+                    }}
+                  >
+                    Lv.{level}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: "16px",
+                      color: c1,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {title}
+                  </div>
                 </div>
               </div>
             )}
 
             {/* System log */}
-            {log && (
+            {log && !hasPrev && (
               <div
                 style={{
                   display: "flex",
                   fontSize: "14px",
-                  color: "#777",
+                  color: `${c1}80`,
                   fontFamily: "monospace",
                   letterSpacing: "0.5px",
-                  marginTop: "8px",
+                  marginTop: "12px",
                 }}
               >
                 {log}
@@ -305,88 +447,98 @@ export async function GET(request: NextRequest) {
           </div>
         </div>
 
-        {/* === Bottom bar === */}
+        {/* ================ BOTTOM BAR ================ */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            padding: "0 48px 24px",
-            gap: "32px",
+            flexDirection: "column",
+            padding: "0 40px 20px",
           }}
         >
-          {/* Divider line */}
+          {/* Divider */}
           <div
             style={{
-              position: "absolute",
-              left: "48px",
-              right: "48px",
-              bottom: "56px",
-              height: "2px",
               display: "flex",
-              background: `linear-gradient(90deg, ${color1}40, ${color2}20, transparent)`,
+              height: "2px",
+              marginBottom: "14px",
+              background: `linear-gradient(90deg, transparent 2%, ${c1}40 20%, ${c1}60 50%, ${c1}40 80%, transparent 98%)`,
             }}
           />
 
-          {/* XP */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "40px",
             }}
           >
-            <div style={{ display: "flex", fontSize: "14px", color: "#666", fontWeight: 700, letterSpacing: "1px" }}>
-              XP
-            </div>
-            <div
-              style={{
-                display: "flex",
-                fontSize: "22px",
-                fontWeight: 900,
-                color: color1,
-              }}
-            >
-              {formattedXp}
-            </div>
-          </div>
-
-          {/* Streak */}
-          {Number(streak) > 0 && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <div style={{ display: "flex", fontSize: "14px", color: "#666", fontWeight: 700, letterSpacing: "1px" }}>
-                STREAK
+            {/* XP */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: "14px",
+                  color: `${c1}90`,
+                  fontWeight: 800,
+                  letterSpacing: "2px",
+                }}
+              >
+                XP
               </div>
               <div
                 style={{
                   display: "flex",
-                  fontSize: "22px",
+                  fontSize: "28px",
                   fontWeight: 900,
-                  color: "#F59E0B",
+                  color: "#FFF",
+                  textShadow: `0 0 12px ${c1}30`,
                 }}
               >
-                🔥{streak}d
+                {fmtXp}
               </div>
             </div>
-          )}
 
-          {/* Brand */}
-          <div
-            style={{
-              display: "flex",
-              marginLeft: "auto",
-              fontSize: "13px",
-              color: "#444",
-              fontWeight: 700,
-              letterSpacing: "2px",
-            }}
-          >
-            EO STUDIO
+            {/* Streak */}
+            {Number(streak) > 0 && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ display: "flex", fontSize: "24px" }}>🔥</div>
+                <div
+                  style={{
+                    display: "flex",
+                    fontSize: "14px",
+                    color: "#F59E0B",
+                    fontWeight: 800,
+                    letterSpacing: "2px",
+                  }}
+                >
+                  STREAK
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    fontSize: "28px",
+                    fontWeight: 900,
+                    color: "#F59E0B",
+                  }}
+                >
+                  {streak}d
+                </div>
+              </div>
+            )}
+
+            {/* Brand */}
+            <div
+              style={{
+                display: "flex",
+                marginLeft: "auto",
+                fontSize: "14px",
+                color: `${c1}50`,
+                fontWeight: 800,
+                letterSpacing: "3px",
+              }}
+            >
+              EO STUDIO
+            </div>
           </div>
         </div>
       </div>
