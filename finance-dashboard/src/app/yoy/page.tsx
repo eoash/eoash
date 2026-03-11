@@ -6,7 +6,8 @@ export const revalidate = 300;
 export default async function YoYPage() {
   let data;
   try {
-    data = await fetchYoY();
+    const result = await fetchYoY();
+    data = result.rows;
   } catch (error) {
     console.error("[YoYPage] fetchYoY failed:", error);
     return (

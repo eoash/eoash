@@ -82,6 +82,12 @@ async function readSyncTab(tabName: string): Promise<SyncTab | null> {
 
 // ─── Revenue ──────────────────────────────────
 
+/** API 응답 메타데이터 (디버그 + 모니터링용) */
+export interface FetchMeta {
+  _source: "sync" | "original";
+  _fetchedAt: string;
+}
+
 export async function fetchRevenue(year: number = 2026): Promise<{
   monthly: RevenueMonthly[];
   months: string[];
@@ -89,12 +95,13 @@ export async function fetchRevenue(year: number = 2026): Promise<{
   segmentDetails: RevenueSegmentDetail[];
   totalActual: number;
   totalTarget: number;
+  _meta: FetchMeta;
 }> {
   if (year === CURRENT_YEAR) {
     const sync = await readSyncTab("Revenue");
-    if (sync) return revenueFromSync(sync);
+    if (sync) return { ...revenueFromSync(sync), _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
   }
-  return revenueFromOriginal(year);
+  return { ...await revenueFromOriginal(year), _meta: { _source: "original", _fetchedAt: new Date().toISOString() } };
 }
 
 function revenueFromSync(sync: SyncTab) {
@@ -285,12 +292,13 @@ export async function fetchCashPosition(year: number = 2026): Promise<{
   exchangeRates: { usdKrw: number; usdVnd: number };
   burnRate: number;
   runway: number;
+  _meta: FetchMeta;
 }> {
   if (year === CURRENT_YEAR) {
     const sync = await readSyncTab("Cash");
-    if (sync) return cashFromSync(sync);
+    if (sync) return { ...cashFromSync(sync), _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
   }
-  return cashFromOriginal(year);
+  return { ...await cashFromOriginal(year), _meta: { _source: "original", _fetchedAt: new Date().toISOString() } };
 }
 
 function cashFromSync(sync: SyncTab) {
@@ -510,10 +518,11 @@ export async function fetchIncome(): Promise<{
   expenses: ExpenseCategory[];
   totalRevenue: number;
   totalExpense: number;
+  _meta: FetchMeta;
 }> {
   const sync = await readSyncTab("Income");
-  if (sync) return incomeFromSync(sync);
-  return incomeFromOriginal();
+  if (sync) return { ...incomeFromSync(sync), _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
+  return { ...await incomeFromOriginal(), _meta: { _source: "original", _fetchedAt: new Date().toISOString() } };
 }
 
 function incomeFromSync(sync: SyncTab) {
@@ -634,10 +643,11 @@ export async function fetchAR(): Promise<{
   outstandingCount: number;
   avgCollectionDays: number;
   maxAgingDays: number;
+  _meta: FetchMeta;
 }> {
   const sync = await readSyncTab("AR");
-  if (sync) return arFromSync(sync);
-  return arFromOriginal();
+  if (sync) return { ...arFromSync(sync), _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
+  return { ...await arFromOriginal(), _meta: { _source: "original", _fetchedAt: new Date().toISOString() } };
 }
 
 function arFromSync(sync: SyncTab) {
@@ -808,10 +818,10 @@ function buildArResult(invoices: import("./types").ArInvoice[]) {
 
 // ─── YoY 비교 ─────────────────────────────────
 
-export async function fetchYoY(): Promise<import("./types").YoYRow[]> {
+export async function fetchYoY(): Promise<{ rows: import("./types").YoYRow[]; _meta: FetchMeta }> {
   const sync = await readSyncTab("YoY");
-  if (sync) return yoyFromSync(sync);
-  return yoyFromOriginal();
+  if (sync) return { rows: yoyFromSync(sync), _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
+  return { rows: await yoyFromOriginal(), _meta: { _source: "original", _fetchedAt: new Date().toISOString() } };
 }
 
 function yoyFromSync(sync: SyncTab): import("./types").YoYRow[] {

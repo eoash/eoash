@@ -1,0 +1,78 @@
+name: Finance Dashboard Health Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'finance-dashboard/src/lib/sheets.ts'
+      - 'finance-dashboard/src/lib/utils.ts'
+      - 'finance-dashboard/src/app/api/**'
+  pull_request:
+    paths:
+      - 'finance-dashboard/src/lib/**'
+      - 'finance-dashboard/src/app/api/**'
+  schedule:
+    # 매주 월요일 00:00 UTC (09:00 KST) — 리더 브리핑 전 자동 체크
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install and run tests
+        working-directory: finance-dashboard
+        run: |
+          npm ci
+          npm test
+
+  health-check:
+    runs-on: ubuntu-latest
+    env:
+      DASHBOARD_URL: https://finance-dashboard-opal-xi.vercel.app
+    steps:
+      - name: Check finance dashboard health
+        run: |
+          echo "=== Finance Dashboard Health Check ==="
+          echo "Time: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          echo ""
+
+          HEALTH=$(curl -sf "$DASHBOARD_URL/api/health" || echo '{"status":"unreachable"}')
+
+          echo "$HEALTH" | python3 -c "
+          import json, sys
+
+          raw = sys.stdin.read()
+          try:
+              d = json.loads(raw)
+          except:
+              print('ERROR: Could not parse health API response')
+              sys.exit(1)
+
+          status = d.get('status', 'unknown')
+          checks = d.get('checks', {})
+
+          print(f'Overall: {status.upper()}')
+          print()
+
+          for name, check in checks.items():
+              icon = 'OK' if check['status'] == 'ok' else 'WARN' if check['status'] == 'warn' else 'FAIL'
+              line = f'  [{icon}] {name}: {check[\"latencyMs\"]}ms'
+              if check.get('detail'):
+                  line += f' -- {check[\"detail\"]}'
+              print(line)
+
+          print()
+
+          if status == 'fail':
+              print('Health check FAILED. Sheets API or critical data unavailable.')
+              sys.exit(1)
+          elif status == 'warn':
+              print('Health check WARNING. Some checks have issues.')
+          else:
+              print('Health check PASSED')
+          "
