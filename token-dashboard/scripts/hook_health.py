@@ -6,6 +6,7 @@ Claude Code Stop hook이 정상 등록되어 있는지 확인하고,
 
 import json
 import os
+import platform
 import sys
 import urllib.request
 
@@ -13,15 +14,29 @@ SETTINGS_PATH = os.path.expanduser("~/.claude/settings.json")
 HOOKS_DIR = os.path.expanduser("~/.claude/hooks")
 HOOK_FILE = os.path.join(HOOKS_DIR, "otel_push.py")
 BASE_URL = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts"
-HOOK_CMD = (
-    "bash -c 'D=$(cat);curl -sL "
-    f"{BASE_URL}/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;"
-    "echo \"$D\"|python3 ~/.claude/hooks/otel_push.py'"
-)
+
+IS_WINDOWS = platform.system() == "Windows"
+
+if IS_WINDOWS:
+    _hook_file_win = HOOK_FILE.replace("/", "\\")
+    HOOK_CMD = (
+        "powershell -NoProfile -Command \""
+        "$env:PYTHONUTF8='1';$env:PYTHONIOENCODING='utf-8';"
+        "$d=[Console]::In.ReadToEnd();"
+        f"Invoke-WebRequest -Uri '{BASE_URL}/otel_push.py' -OutFile '{_hook_file_win}' -ErrorAction SilentlyContinue;"
+        f"$d|python3 '{_hook_file_win}'\""
+    )
+else:
+    HOOK_CMD = (
+        "bash -c 'D=$(cat);curl -sL "
+        f"{BASE_URL}/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;"
+        "echo \"$D\"|python3 ~/.claude/hooks/otel_push.py'"
+    )
 
 
 def check_stop_hook() -> bool:
-    """settings.json에 otel_push Stop hook이 등록되어 있는지 확인"""
+    """settings.json에 otel_push Stop hook이 등록되어 있는지 확인.
+    Windows에서 bash hook이 등록되어 있으면 powershell로 자동 교체."""
     if not os.path.exists(SETTINGS_PATH):
         return False
     try:
@@ -29,7 +44,13 @@ def check_stop_hook() -> bool:
             data = json.load(f)
         for entry in data.get("hooks", {}).get("Stop", []):
             for hook in entry.get("hooks", []):
-                if "otel_push" in hook.get("command", ""):
+                cmd = hook.get("command", "")
+                if "otel_push" in cmd:
+                    # Windows인데 bash 명령어면 powershell로 교체
+                    if IS_WINDOWS and cmd.startswith("bash "):
+                        hook["command"] = HOOK_CMD
+                        with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
+                            json.dump(data, f, indent=2)
                     return True
     except (json.JSONDecodeError, IOError, OSError):
         pass

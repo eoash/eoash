@@ -497,13 +497,27 @@ def ensure_hook_registered():
     """settings.json에 Stop hook이 등록되어 있는지 확인하고, 없으면 자동 복구.
     otel_push.py는 매 세션 GitHub에서 자동 다운로드되므로,
     이 함수만으로 전 팀원 자가복구가 가능하다 (재설치 불필요)."""
+    import platform
     settings_path = os.path.expanduser("~/.claude/settings.json")
     base_url = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts"
-    hook_cmd = (
-        "bash -c 'D=$(cat);curl -sL "
-        f"{base_url}/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;"
-        "echo \"$D\"|python3 ~/.claude/hooks/otel_push.py'"
-    )
+    hooks_dir = os.path.expanduser("~/.claude/hooks")
+    hook_file = os.path.join(hooks_dir, "otel_push.py")
+
+    if platform.system() == "Windows":
+        hook_file_win = hook_file.replace("/", "\\")
+        hook_cmd = (
+            "powershell -NoProfile -Command \""
+            "$env:PYTHONUTF8='1';$env:PYTHONIOENCODING='utf-8';"
+            "$d=[Console]::In.ReadToEnd();"
+            f"Invoke-WebRequest -Uri '{base_url}/otel_push.py' -OutFile '{hook_file_win}' -ErrorAction SilentlyContinue;"
+            f"$d|python3 '{hook_file_win}'\""
+        )
+    else:
+        hook_cmd = (
+            "bash -c 'D=$(cat);curl -sL "
+            f"{base_url}/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;"
+            "echo \"$D\"|python3 ~/.claude/hooks/otel_push.py'"
+        )
 
     try:
         data = {}
@@ -511,13 +525,23 @@ def ensure_hook_registered():
             with open(settings_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-        # Stop hook에 otel_push가 있는지 확인
+        # Stop hook에 otel_push가 있는지 확인 + Windows에서 bash hook 감지 시 교체
         found = False
+        needs_replace = False
         for entry in data.get("hooks", {}).get("Stop", []):
             for hook in entry.get("hooks", []):
-                if "otel_push" in hook.get("command", ""):
+                cmd = hook.get("command", "")
+                if "otel_push" in cmd:
                     found = True
+                    # Windows인데 bash 명령어가 등록되어 있으면 powershell로 교체
+                    if platform.system() == "Windows" and cmd.startswith("bash "):
+                        hook["command"] = hook_cmd
+                        needs_replace = True
                     break
+
+        if needs_replace:
+            with open(settings_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
 
         if not found:
             if "hooks" not in data:
