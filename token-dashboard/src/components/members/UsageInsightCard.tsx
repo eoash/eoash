@@ -20,7 +20,9 @@ export default function UsageInsightCard({ insights, name }: Props) {
         <span className="text-gray-400 font-mono text-xs">
           {locale === "ko"
             ? `${name}의 AI 사용 패턴 분석`
-            : `AI Usage Pattern Analysis for ${name}`}
+            : locale === "vi"
+              ? `Phân tích mẫu sử dụng AI của ${name}`
+              : `AI Usage Pattern Analysis for ${name}`}
         </span>
       </div>
 
@@ -32,10 +34,10 @@ export default function UsageInsightCard({ insights, name }: Props) {
               <span className="text-lg leading-6 shrink-0">{insight.icon}</span>
               <div>
                 <span className="text-white text-sm font-medium">
-                  {locale === "ko" ? insight.titleKo : insight.titleEn}
+                  {locale === "ko" ? insight.titleKo : locale === "vi" ? insight.titleVi : insight.titleEn}
                 </span>
                 <p className="text-gray-400 text-sm mt-0.5">
-                  {locale === "ko" ? insight.observationKo : insight.observationEn}
+                  {locale === "ko" ? insight.observationKo : locale === "vi" ? insight.observationVi : insight.observationEn}
                 </p>
               </div>
             </div>
@@ -44,7 +46,7 @@ export default function UsageInsightCard({ insights, name }: Props) {
             <div className="ml-7 mt-1.5 rounded-lg bg-[#00E87A]/5 border border-[#00E87A]/10 px-3 py-2">
               <span className="text-[#00E87A] text-xs font-mono mr-1.5">TIP</span>
               <span className="text-gray-300 text-sm">
-                {locale === "ko" ? insight.tipKo : insight.tipEn}
+                {locale === "ko" ? insight.tipKo : locale === "vi" ? insight.tipVi : insight.tipEn}
               </span>
             </div>
           </div>

@@ -6,10 +6,13 @@ export interface UsageInsight {
   icon: string;
   titleKo: string;
   titleEn: string;
+  titleVi: string;
   observationKo: string;
   observationEn: string;
+  observationVi: string;
   tipKo: string;
   tipEn: string;
+  tipVi: string;
 }
 
 /** Team-wide stats for relative comparisons */
@@ -142,10 +145,13 @@ function frequencyInsight(profile: UserProfile, memberData: MemberData, rangeDay
       icon: "🔥",
       titleKo: "매일 사용하는 습관",
       titleEn: "Daily Usage Habit",
+      titleVi: "Thói quen dùng hàng ngày",
       observationKo: `${rangeSpan}일 중 ${activeDays}일 활동 (${pct}%).${streak.max >= 5 ? ` 최장 연속 ${streak.max}일.` : ""}`,
       observationEn: `Active ${activeDays} of ${rangeSpan} days (${pct}%).${streak.max >= 5 ? ` Best streak: ${streak.max}d.` : ""}`,
+      observationVi: `Hoạt động ${activeDays}/${rangeSpan} ngày (${pct}%).${streak.max >= 5 ? ` Chuỗi dài nhất: ${streak.max} ngày.` : ""}`,
       tipKo: "자주 반복하는 작업이 있다면 프로젝트에 .claude/commands/작업명.md 파일을 만들어보세요. /작업명 으로 바로 실행할 수 있어 매일 쓰기가 훨씬 편해집니다.",
       tipEn: "Create .claude/commands/task-name.md files for repetitive workflows. Run them instantly with /task-name — makes daily use much smoother.",
+      tipVi: "Tạo file .claude/commands/tên-tác-vụ.md cho các workflow lặp lại. Chạy ngay bằng /tên-tác-vụ — dùng hàng ngày tiện hơn rất nhiều.",
     };
   }
 
@@ -156,10 +162,13 @@ function frequencyInsight(profile: UserProfile, memberData: MemberData, rangeDay
       icon: "📅",
       titleKo: "정기적 사용 패턴",
       titleEn: "Regular Usage",
+      titleVi: "Sử dụng đều đặn",
       observationKo: `${rangeSpan}일 중 ${activeDays}일 활동 (${pct}%). 현재 연속 ${streak.current}일, 최장 ${streak.max}일.`,
       observationEn: `Active ${activeDays} of ${rangeSpan} days (${pct}%). Current streak: ${streak.current}d, best: ${streak.max}d.`,
+      observationVi: `Hoạt động ${activeDays}/${rangeSpan} ngày (${pct}%). Chuỗi hiện tại: ${streak.current} ngày, dài nhất: ${streak.max} ngày.`,
       tipKo: `퇴근 전 루틴으로 claude "오늘 내가 작성한 코드 중 개선할 부분 알려줘" 를 실행해보세요. 대화를 안 열어도 터미널에서 바로 됩니다. 이렇게 하면 빈 날이 줄어들어요.`,
       tipEn: `Try a daily routine: run claude "review my recent code changes" before leaving. Works directly from terminal without opening a chat session.`,
+      tipVi: `Thử thói quen hàng ngày: chạy claude "review my recent code changes" trước khi về. Chạy trực tiếp từ terminal mà không cần mở phiên chat.`,
     };
   }
 
@@ -170,10 +179,13 @@ function frequencyInsight(profile: UserProfile, memberData: MemberData, rangeDay
       icon: "📊",
       titleKo: "간헐적 사용 패턴",
       titleEn: "Sporadic Usage",
+      titleVi: "Sử dụng không đều",
       observationKo: `${rangeSpan}일 중 ${activeDays}일만 활동 (${pct}%).`,
       observationEn: `Active only ${activeDays} of ${rangeSpan} days (${pct}%).`,
+      observationVi: `Chỉ hoạt động ${activeDays}/${rangeSpan} ngày (${pct}%).`,
       tipKo: "매일 Claude를 열 필요 없어요. 터미널에서 claude \"이 에러 메시지 뭔지 설명해줘\" 처럼 한 줄로 질문하는 것부터 시작해보세요. 세션을 열지 않아도 바로 답변이 옵니다.",
       tipEn: "No need to open Claude daily. Start with one-liner: claude \"explain this error message\" from your terminal. You get answers without starting a session.",
+      tipVi: "Không cần mở Claude mỗi ngày. Bắt đầu bằng một dòng: claude \"explain this error message\" từ terminal. Bạn nhận câu trả lời mà không cần mở phiên.",
     };
   }
 
@@ -194,10 +206,13 @@ function trendInsight(memberData: MemberData): UsageInsight | null {
       icon: "📈",
       titleKo: "사용량 급증 중",
       titleEn: "Usage Surging",
+      titleVi: "Lượng sử dụng tăng mạnh",
       observationKo: `최근 사용량이 이전 대비 ${growthPct}% 증가. 일평균 ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.${peak ? ` 피크: ${fmtDate(peak.date)}` : ""}`,
       observationEn: `Recent usage up ${growthPct}%. Daily avg: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.${peak ? ` Peak: ${fmtDate(peak.date)}` : ""}`,
+      observationVi: `Lượng dùng gần đây tăng ${growthPct}%. TB ngày: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.${peak ? ` Đỉnh: ${fmtDate(peak.date)}` : ""}`,
       tipKo: "사용량이 늘 때가 CLAUDE.md를 세팅할 최적의 타이밍이에요. 프로젝트 루트에 CLAUDE.md를 만들고 기술 스택, 파일 구조, 코딩 규칙을 적어두면 매번 재설명 없이 바로 작업할 수 있습니다.",
       tipEn: "Now's the perfect time to set up CLAUDE.md. Create one in your project root with tech stack, file structure, and coding rules — Claude reads it automatically every session.",
+      tipVi: "Đây là thời điểm tốt nhất để tạo CLAUDE.md. Tạo file ở thư mục gốc dự án với tech stack, cấu trúc file và quy tắc code — Claude tự động đọc mỗi phiên.",
     };
   }
 
@@ -209,10 +224,13 @@ function trendInsight(memberData: MemberData): UsageInsight | null {
       icon: "📉",
       titleKo: "사용량 감소 추세",
       titleEn: "Usage Declining",
+      titleVi: "Lượng sử dụng giảm",
       observationKo: `최근 사용량이 이전 대비 ${declinePct}% 감소. 일평균 ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.`,
       observationEn: `Recent usage down ${declinePct}%. Daily avg: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.`,
+      observationVi: `Lượng dùng gần đây giảm ${declinePct}%. TB ngày: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}.`,
       tipKo: "코딩 외 업무에도 AI를 써보세요: 회의록 정리, 이메일 초안, 기술 문서 작성, 코드 리뷰. claude \"이 PR 리뷰해줘\" 한 줄이면 상세한 리뷰를 받을 수 있습니다.",
       tipEn: "Use AI beyond coding: meeting notes, email drafts, tech docs, code reviews. claude \"review this PR\" gives you detailed feedback in seconds.",
+      tipVi: "Dùng AI ngoài việc code: ghi chú họp, soạn email, viết tài liệu kỹ thuật, review code. claude \"review this PR\" cho bạn feedback chi tiết trong vài giây.",
     };
   }
 
@@ -223,10 +241,13 @@ function trendInsight(memberData: MemberData): UsageInsight | null {
       icon: "🌱",
       titleKo: "꾸준한 성장세",
       titleEn: "Steady Growth",
+      titleVi: "Tăng trưởng ổn định",
       observationKo: `사용량이 완만하게 증가 중. 일평균 ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}. 피크: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})`,
       observationEn: `Usage growing steadily. Daily avg: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}. Peak: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})`,
+      observationVi: `Lượng dùng tăng đều. TB ngày: ${fmtTokens(trend.earlierAvg)} → ${fmtTokens(trend.recentAvg)}. Đỉnh: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})`,
       tipKo: "다음 레벨업 비법: 큰 작업을 한번에 맡겨보세요. \"이 모듈 전체를 TypeScript로 전환해줘\" 같은 파일 단위 지시를 하면 AI가 훨씬 많은 일을 해줍니다.",
       tipEn: "Level-up secret: delegate bigger tasks at once. \"Convert this entire module to TypeScript\" — file-level instructions let AI do much more.",
+      tipVi: "Bí quyết lên level: giao tác vụ lớn hơn. \"Convert this entire module to TypeScript\" — chỉ thị cấp file giúp AI làm nhiều hơn rất nhiều.",
     };
   }
 
@@ -247,10 +268,13 @@ function codingLeverageInsight(m: MemberData, profile: UserProfile): UsageInsigh
         icon: "🔧",
         titleKo: "커밋은 활발, PR은 부족",
         titleEn: "Active Commits, Few PRs",
+        titleVi: "Commit nhiều, PR ít",
         observationKo: `세션당 ${cps.toFixed(1)}커밋으로 활발하지만 PR은 ${m.pullRequests}건.`,
         observationEn: `${cps.toFixed(1)} commits/session but only ${m.pullRequests} PRs.`,
+        observationVi: `${cps.toFixed(1)} commit/phiên nhưng chỉ ${m.pullRequests} PR.`,
         tipKo: "작업 끝나면 /commit 치고, 이어서 \"이 변경사항으로 PR 만들어줘\" 라고 해보세요. 제목, 본문, 테스트 계획까지 자동 생성됩니다. gh pr create 도 Claude가 대신 실행해줘요.",
         tipEn: "After work, run /commit, then say \"create a PR for these changes.\" Title, body, and test plan auto-generated. Claude can run gh pr create for you.",
+        tipVi: "Sau khi xong việc, chạy /commit, rồi nói \"create a PR for these changes.\" Tiêu đề, nội dung, kế hoạch test được tạo tự động. Claude có thể chạy gh pr create giúp bạn.",
       };
     }
     return {
@@ -258,10 +282,13 @@ function codingLeverageInsight(m: MemberData, profile: UserProfile): UsageInsigh
       icon: "⚡",
       titleKo: "높은 코딩 활용도",
       titleEn: "High Coding Leverage",
+      titleVi: "Hiệu suất code cao",
       observationKo: `세션당 ${cps.toFixed(1)}커밋, PR ${m.pullRequests}건. AI를 실제 코드 작성에 잘 활용하고 있습니다.`,
       observationEn: `${cps.toFixed(1)} commits/session, ${m.pullRequests} PRs. Using AI effectively for code production.`,
+      observationVi: `${cps.toFixed(1)} commit/phiên, ${m.pullRequests} PR. Đang sử dụng AI hiệu quả cho việc viết code.`,
       tipKo: "코드 품질을 더 올리려면: 커밋 전에 \"방금 수정한 코드에 보안 취약점이나 버그 없는지 확인해줘\" 라고 한번 물어보세요. 사소한 실수를 잡아줍니다.",
       tipEn: "Boost code quality: before committing, ask \"check my recent changes for security issues or bugs.\" Catches subtle mistakes you might miss.",
+      tipVi: "Nâng chất lượng code: trước khi commit, hỏi \"check my recent changes for security issues or bugs.\" Bắt được lỗi nhỏ bạn có thể bỏ sót.",
     };
   }
 
@@ -274,10 +301,13 @@ function codingLeverageInsight(m: MemberData, profile: UserProfile): UsageInsigh
         icon: "🔬",
         titleKo: "깊은 세션, 신중한 커밋",
         titleEn: "Deep Sessions, Careful Commits",
+        titleVi: "Phiên sâu, commit cẩn thận",
         observationKo: `${m.sessions}개 세션에서 ${m.commits}건 커밋. 커밋당 ${fmtTokens(tokensPerCommit)} 토큰으로 깊이 있는 작업 패턴.`,
         observationEn: `${m.commits} commits across ${m.sessions} sessions. ${fmtTokens(tokensPerCommit)} tokens/commit — deep work pattern.`,
+        observationVi: `${m.commits} commit trong ${m.sessions} phiên. ${fmtTokens(tokensPerCommit)} token/commit — kiểu làm việc chuyên sâu.`,
         tipKo: "작업 중간중간 \"지금까지 한 거 커밋해줘\" 라고 하면 자동으로 변경사항을 스테이징하고 커밋합니다. 롤백도 편하고 작업 히스토리도 깔끔해져요.",
         tipEn: "Say \"commit what we have so far\" mid-session. Auto-stages and commits changes. Makes rollbacks easy and keeps your work history clean.",
+        tipVi: "Nói \"commit what we have so far\" giữa phiên. Tự động stage và commit. Rollback dễ hơn và lịch sử làm việc gọn gàng hơn.",
       };
     }
     return {
@@ -285,10 +315,13 @@ function codingLeverageInsight(m: MemberData, profile: UserProfile): UsageInsigh
       icon: "🛠️",
       titleKo: "균형 잡힌 코딩 활용",
       titleEn: "Balanced Coding Usage",
+      titleVi: "Sử dụng code cân bằng",
       observationKo: `세션당 ${cps.toFixed(1)}커밋. 커밋 ${m.commits}건, PR ${m.pullRequests}건.`,
       observationEn: `${cps.toFixed(1)} commits/session. ${m.commits} commits, ${m.pullRequests} PRs.`,
+      observationVi: `${cps.toFixed(1)} commit/phiên. ${m.commits} commit, ${m.pullRequests} PR.`,
       tipKo: "테스트 코드를 AI에게 맡겨보세요. \"이 함수의 엣지 케이스 포함해서 테스트 5개 작성해줘\" — 직접 쓰면 30분, AI한테 시키면 30초입니다.",
       tipEn: "Delegate test writing: \"Write 5 tests including edge cases for this function\" — 30 seconds instead of 30 minutes.",
+      tipVi: "Giao việc viết test cho AI: \"Write 5 tests including edge cases for this function\" — 30 giây thay vì 30 phút.",
     };
   }
 
@@ -299,10 +332,13 @@ function codingLeverageInsight(m: MemberData, profile: UserProfile): UsageInsigh
       icon: "💬",
       titleKo: "상담형 사용 패턴",
       titleEn: "Consultation Pattern",
+      titleVi: "Kiểu sử dụng tư vấn",
       observationKo: `${m.sessions}개 세션에서 커밋 ${m.commits}건. 주로 질문·상담 용도로 사용 중.`,
       observationEn: `${m.commits} commits in ${m.sessions} sessions. Mostly using for Q&A and consultation.`,
+      observationVi: `${m.commits} commit trong ${m.sessions} phiên. Chủ yếu dùng để hỏi đáp và tư vấn.`,
       tipKo: "다음에 코드 수정이 필요할 때 \"이 파일 직접 수정해줘\" 라고 해보세요. Claude가 파일을 직접 열어서 고칩니다. 설명만 받는 것보다 훨씬 빠르고, 바로 커밋까지 가능합니다.",
       tipEn: "Next time you need a code change, say \"edit this file directly.\" Claude opens and modifies it for you — much faster than just getting explanations, and you can commit right away.",
+      tipVi: "Lần tới cần sửa code, nói \"edit this file directly.\" Claude mở và sửa file trực tiếp — nhanh hơn nhiều so với chỉ nhận giải thích, và có thể commit ngay.",
     };
   }
 
@@ -328,10 +364,13 @@ function modelStrategyInsight(m: MemberData): UsageInsight | null {
         icon: "🧠",
         titleKo: "Opus 집중 사용",
         titleEn: "Opus-Focused",
+        titleVi: "Tập trung dùng Opus",
         observationKo: `${top} ${sharePct}% 사용. 강력하지만 응답 속도가 느린 모델에 집중하고 있습니다.`,
         observationEn: `${top} at ${sharePct}%. Focused on the most powerful but slower model.`,
+        observationVi: `${top} chiếm ${sharePct}%. Đang tập trung vào model mạnh nhất nhưng chậm hơn.`,
         tipKo: "간단한 수정이나 질문은 터미널에서 claude --model sonnet \"OOO 해줘\" 로 해보세요. Sonnet은 Opus보다 2-3배 빠르고 간단한 작업에는 품질 차이가 거의 없습니다.",
         tipEn: "For simple fixes, try claude --model sonnet \"do X\". Sonnet is 2-3x faster than Opus with nearly identical quality for straightforward tasks.",
+        tipVi: "Với sửa đơn giản, thử claude --model sonnet \"do X\". Sonnet nhanh gấp 2-3 lần Opus và chất lượng gần như tương đương cho tác vụ đơn giản.",
       };
     }
 
@@ -341,10 +380,13 @@ function modelStrategyInsight(m: MemberData): UsageInsight | null {
         icon: "🏃",
         titleKo: "Haiku 집중 사용",
         titleEn: "Haiku-Focused",
+        titleVi: "Tập trung dùng Haiku",
         observationKo: `${top} ${sharePct}% 사용. 빠르지만 복잡한 작업에는 한계가 있는 모델입니다.`,
         observationEn: `${top} at ${sharePct}%. Fast but limited for complex tasks.`,
+        observationVi: `${top} chiếm ${sharePct}%. Nhanh nhưng hạn chế cho tác vụ phức tạp.`,
         tipKo: "복잡한 버그 디버깅이나 아키텍처 설계가 필요하면 /model sonnet 또는 /model opus 로 전환해보세요. Haiku가 못 푸는 문제를 Sonnet이 한번에 해결하는 경우가 많습니다.",
         tipEn: "For complex debugging or architecture, switch with /model sonnet or /model opus. Sonnet often solves in one shot what Haiku can't handle.",
+        tipVi: "Với debug phức tạp hoặc thiết kế kiến trúc, chuyển bằng /model sonnet hoặc /model opus. Sonnet thường giải quyết ngay những gì Haiku không xử lý được.",
       };
     }
 
@@ -354,10 +396,13 @@ function modelStrategyInsight(m: MemberData): UsageInsight | null {
         icon: "⚖️",
         titleKo: "Sonnet 균형 사용",
         titleEn: "Sonnet-Balanced",
+        titleVi: "Dùng Sonnet cân bằng",
         observationKo: `${top} ${sharePct}% 사용. 속도와 품질의 균형이 잘 잡힌 모델입니다.`,
         observationEn: `${top} at ${sharePct}%. Good balance of speed and quality.`,
+        observationVi: `${top} chiếm ${sharePct}%. Cân bằng tốt giữa tốc độ và chất lượng.`,
         tipKo: "대규모 리팩토링이나 복잡한 시스템 설계를 할 때는 /model opus 로 전환해보세요. Opus는 여러 파일에 걸친 큰 변경을 더 정확하게 계획하고 실행합니다.",
         tipEn: "For large refactoring or complex system design, try /model opus. Opus plans and executes multi-file changes more accurately.",
+        tipVi: "Với refactoring lớn hoặc thiết kế hệ thống phức tạp, thử /model opus. Opus lên kế hoạch và thực thi thay đổi nhiều file chính xác hơn.",
       };
     }
   }
@@ -370,10 +415,13 @@ function modelStrategyInsight(m: MemberData): UsageInsight | null {
       icon: "🎨",
       titleKo: "다양한 모델 활용",
       titleEn: "Diverse Model Usage",
+      titleVi: "Sử dụng đa dạng model",
       observationKo: `${m.models.length}개 모델 사용 (${modelNames}). 작업에 따라 모델을 전환하는 고급 패턴.`,
       observationEn: `${m.models.length} models (${modelNames}). Advanced pattern of switching by task.`,
+      observationVi: `${m.models.length} model (${modelNames}). Kiểu nâng cao: chuyển model theo tác vụ.`,
       tipKo: "모델 전환의 고수! 한 단계 더: .claude/settings.json에 defaultModel을 설정하고, 필요할 때만 /model로 전환하면 더 효율적입니다. 또한 Codex CLI나 Gemini CLI도 병행하면 각 도구의 강점을 비교할 수 있어요.",
       tipEn: "Model-switching pro! Set defaultModel in .claude/settings.json, switch with /model only when needed. Also try Codex CLI or Gemini CLI to compare tool strengths.",
+      tipVi: "Chuyên gia chuyển model! Đặt defaultModel trong .claude/settings.json, chỉ chuyển bằng /model khi cần. Thử thêm Codex CLI hoặc Gemini CLI để so sánh thế mạnh từng công cụ.",
     };
   }
 
@@ -391,10 +439,13 @@ function cacheInsight(m: MemberData): UsageInsight | null {
       icon: "♻️",
       titleKo: "높은 캐시 효율",
       titleEn: "High Cache Efficiency",
+      titleVi: "Hiệu suất cache cao",
       observationKo: `캐시 적중률 ${Math.round(rate * 100)}%. CLAUDE.md나 프로젝트 컨텍스트가 잘 설계되어 있다는 의미입니다.`,
       observationEn: `${Math.round(rate * 100)}% cache hit rate. Your CLAUDE.md and project context are well-designed.`,
+      observationVi: `Tỷ lệ cache hit ${Math.round(rate * 100)}%. CLAUDE.md và context dự án của bạn được thiết kế tốt.`,
       tipKo: "캐시 효율이 좋다는 건 Claude가 프로젝트를 잘 이해하고 있다는 뜻이에요. 자주 하는 워크플로우가 있다면 .claude/commands/ 폴더에 커스텀 명령어로 만들어서 더 자동화해보세요.",
       tipEn: "High cache = Claude understands your project well. If you have frequent workflows, create custom commands in .claude/commands/ for further automation.",
+      tipVi: "Cache cao = Claude hiểu dự án của bạn tốt. Nếu có workflow thường xuyên, tạo lệnh tùy chỉnh trong .claude/commands/ để tự động hóa thêm.",
     };
   }
 
@@ -404,10 +455,13 @@ function cacheInsight(m: MemberData): UsageInsight | null {
       icon: "📝",
       titleKo: "낮은 캐시 적중률",
       titleEn: "Low Cache Hit Rate",
+      titleVi: "Tỷ lệ cache hit thấp",
       observationKo: `캐시 적중률 ${Math.round(rate * 100)}%. 매번 새로운 컨텍스트를 전송하고 있어 비효율적입니다.`,
       observationEn: `${Math.round(rate * 100)}% cache hit rate. Sending fresh context each time — inefficient.`,
+      observationVi: `Tỷ lệ cache hit ${Math.round(rate * 100)}%. Đang gửi context mới mỗi lần — không hiệu quả.`,
       tipKo: "프로젝트 루트에 CLAUDE.md 파일을 만들고 기술 스택, 파일 구조, 코딩 규칙을 적어두세요. Claude가 매 세션마다 자동으로 읽어서 캐시하므로 응답이 빨라지고 토큰도 절약됩니다.",
       tipEn: "Create CLAUDE.md in your project root with tech stack, file structure, and coding rules. Claude reads it automatically each session — faster responses, fewer tokens.",
+      tipVi: "Tạo CLAUDE.md ở thư mục gốc dự án với tech stack, cấu trúc file và quy tắc code. Claude tự động đọc mỗi phiên — phản hồi nhanh hơn, tiết kiệm token hơn.",
     };
   }
 
@@ -428,10 +482,13 @@ function volumeInsight(m: MemberData, profile: UserProfile): UsageInsight | null
       icon: "🌱",
       titleKo: "가벼운 사용량",
       titleEn: "Light Usage",
+      titleVi: "Sử dụng ít",
       observationKo: `일 평균 ${fmtTokens(dailyAvg)} 토큰. 짧은 질문 위주로 사용하고 있습니다.`,
       observationEn: `${fmtTokens(dailyAvg)} tokens/day avg. Mostly short queries.`,
+      observationVi: `TB ${fmtTokens(dailyAvg)} token/ngày. Chủ yếu là câu hỏi ngắn.`,
       tipKo: "Claude에게 더 큰 일을 시켜보세요: \"이 파일 전체를 읽고 버그 있으면 고쳐줘\", \"이 폴더의 모든 TODO 코멘트를 찾아서 정리해줘\". 한 번에 큰 작업을 맡길수록 생산성이 올라갑니다.",
       tipEn: "Give Claude bigger tasks: \"Read this entire file and fix any bugs\", \"Find and organize all TODO comments in this folder.\" Bigger tasks = bigger productivity gains.",
+      tipVi: "Giao tác vụ lớn hơn cho Claude: \"Read this entire file and fix any bugs\", \"Find and organize all TODO comments in this folder.\" Tác vụ càng lớn, năng suất càng cao.",
     };
   }
 
@@ -442,10 +499,13 @@ function volumeInsight(m: MemberData, profile: UserProfile): UsageInsight | null
       icon: "🚀",
       titleKo: "높은 코드 생성률",
       titleEn: "High Code Generation",
+      titleVi: "Tạo code nhiều",
       observationKo: `출력/입력 비율 ${oir.toFixed(1)}x. 적은 프롬프트로 많은 코드를 생성하고 있습니다.${peak ? ` 피크: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       observationEn: `${oir.toFixed(1)}x output/input ratio.${peak ? ` Peak: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
+      observationVi: `Tỷ lệ output/input ${oir.toFixed(1)}x.${peak ? ` Đỉnh: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       tipKo: "코드 생성 효율이 높아요! 다음 단계: 생성된 코드를 바로 커밋하지 말고 \"방금 작성한 코드 리뷰해줘\" 라고 한번 더 물어보세요. 2차 검수로 품질이 올라갑니다.",
       tipEn: "Great generation efficiency! Next step: before committing, ask \"review the code you just wrote.\" This second pass catches subtle issues and improves quality.",
+      tipVi: "Hiệu suất tạo code tuyệt vời! Bước tiếp: trước khi commit, hỏi \"review the code you just wrote.\" Lần kiểm tra thứ hai giúp phát hiện lỗi tinh vi và nâng chất lượng.",
     };
   }
 
@@ -457,10 +517,13 @@ function volumeInsight(m: MemberData, profile: UserProfile): UsageInsight | null
       icon: "⚡",
       titleKo: "파워 유저",
       titleEn: "Power User",
+      titleVi: "Power User",
       observationKo: `일 평균 ${formattedAvg} 토큰.${peak ? ` 피크: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       observationEn: `${formattedAvg} tokens/day avg.${peak ? ` Peak: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
+      observationVi: `TB ${formattedAvg} token/ngày.${peak ? ` Đỉnh: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       tipKo: "파워 유저에게 추천: .claude/commands/ 에 자주 하는 작업을 커스텀 슬래시 명령어로 만들어보세요. 예를 들어 /deploy, /test-all, /daily-review 같은 나만의 워크플로우를 한 명령어로 실행할 수 있습니다.",
       tipEn: "Power user pro tip: create custom slash commands in .claude/commands/ for frequent workflows — /deploy, /test-all, /daily-review — run entire workflows with one command.",
+      tipVi: "Mẹo cho power user: tạo lệnh slash tùy chỉnh trong .claude/commands/ cho workflow thường xuyên — /deploy, /test-all, /daily-review — chạy cả workflow bằng một lệnh.",
     };
   }
 
@@ -472,10 +535,13 @@ function volumeInsight(m: MemberData, profile: UserProfile): UsageInsight | null
       icon: "📈",
       titleKo: "안정적인 사용 패턴",
       titleEn: "Steady Usage",
+      titleVi: "Sử dụng ổn định",
       observationKo: `일 평균 ${formattedAvg} 토큰.${peak ? ` 피크: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       observationEn: `${formattedAvg} tokens/day avg.${peak ? ` Peak: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
+      observationVi: `TB ${formattedAvg} token/ngày.${peak ? ` Đỉnh: ${fmtDate(peak.date)} (${fmtTokens(peak.tokens)})` : ""}`,
       tipKo: "사용량을 늘리는 가장 쉬운 방법: 단순 질문 대신 파일 단위로 작업을 맡겨보세요. \"이 모듈 전체 타입을 정리해줘\", \"이 API에 에러 핸들링 추가해줘\" 같은 구체적 지시가 효과적입니다.",
       tipEn: "Easiest way to boost productivity: delegate file-level tasks. \"Clean up all types in this module\" or \"add error handling to this API\" — specific instructions are most effective.",
+      tipVi: "Cách dễ nhất để tăng năng suất: giao tác vụ cấp file. \"Clean up all types in this module\" hoặc \"add error handling to this API\" — chỉ thị cụ thể là hiệu quả nhất.",
     };
   }
 
