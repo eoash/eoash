@@ -3,7 +3,7 @@ import crypto from "crypto";
 export type { BoardUser } from "./board-types";
 import type { BoardUser } from "./board-types";
 
-const SECRET = process.env.SLACK_BOT_TOKEN ?? "dev-secret";
+const SECRET = (process.env.SLACK_BOT_TOKEN ?? "dev-secret").trim();
 const COOKIE_NAME = "board-session";
 const MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 

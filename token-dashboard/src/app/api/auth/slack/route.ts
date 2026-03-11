@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createVerifyToken } from "@/lib/board-auth";
 import { TEAM_MEMBERS } from "@/lib/constants";
 
-const BOT_TOKEN = process.env.SLACK_BOT_TOKEN ?? "";
+const BOT_TOKEN = (process.env.SLACK_BOT_TOKEN ?? "").trim();
 
 export async function POST(req: NextRequest) {
   if (!BOT_TOKEN) {
