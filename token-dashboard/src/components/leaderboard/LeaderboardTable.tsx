@@ -13,7 +13,7 @@ import type { CodexMemberRow } from "@/app/api/codex-usage/route";
 type AiTool = "claude" | "gemini" | "codex";
 type Period = "today" | "7d" | "30d" | "all";
 
-const PERIOD_DAYS: Record<Period, number> = { today: 1, "7d": 7, "30d": 30, all: 365 };
+const PERIOD_DAYS: Record<Period, number> = { today: 0, "7d": 7, "30d": 30, all: 365 };
 const PERIOD_LABEL_KEYS: Record<Period, TranslationKey> = {
   today: "period.today",
   "7d": "period.7days",
