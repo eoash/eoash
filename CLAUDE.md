@@ -162,6 +162,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] Leaderboard 전용 페이지에 DateRangePicker 추가 (PR #5)
 - [x] 스파이크 알림 5건 분석 → 전부 정상 cold start 패턴 확인
 - [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
+- [ ] 전체 `text-[10px]` → `text-xs` 일괄 수정 (Leaderboard, KpiCard, Board 등 잔여분)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
