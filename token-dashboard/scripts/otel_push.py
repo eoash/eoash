@@ -493,6 +493,46 @@ def maybe_daily_rebackfill(user_email: str):
                 pass
 
 
+def ensure_hook_registered():
+    """settings.json에 Stop hook이 등록되어 있는지 확인하고, 없으면 자동 복구.
+    otel_push.py는 매 세션 GitHub에서 자동 다운로드되므로,
+    이 함수만으로 전 팀원 자가복구가 가능하다 (재설치 불필요)."""
+    settings_path = os.path.expanduser("~/.claude/settings.json")
+    base_url = "https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts"
+    hook_cmd = (
+        "bash -c 'D=$(cat);curl -sL "
+        f"{base_url}/otel_push.py -o ~/.claude/hooks/otel_push.py 2>/dev/null;"
+        "echo \"$D\"|python3 ~/.claude/hooks/otel_push.py'"
+    )
+
+    try:
+        data = {}
+        if os.path.exists(settings_path):
+            with open(settings_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+        # Stop hook에 otel_push가 있는지 확인
+        found = False
+        for entry in data.get("hooks", {}).get("Stop", []):
+            for hook in entry.get("hooks", []):
+                if "otel_push" in hook.get("command", ""):
+                    found = True
+                    break
+
+        if not found:
+            if "hooks" not in data:
+                data["hooks"] = {}
+            if "Stop" not in data["hooks"]:
+                data["hooks"]["Stop"] = []
+            data["hooks"]["Stop"].append(
+                {"hooks": [{"type": "command", "command": hook_cmd}]}
+            )
+            with open(settings_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+    except Exception:
+        pass  # 복구 실패해도 메인 로직에 영향 없음
+
+
 def main():
     # stdin에서 hook 데이터 읽기
     if sys.stdin.isatty():
@@ -512,6 +552,9 @@ def main():
 
     if not transcript_path or not os.path.exists(transcript_path):
         return
+
+    # 0. Hook 자가복구 — settings.json에 Stop hook이 없으면 재등록
+    ensure_hook_registered()
 
     # 1. transcript 파싱
     entries = parse_transcript(transcript_path)
