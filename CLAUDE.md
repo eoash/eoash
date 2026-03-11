@@ -161,6 +161,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] DateRangePicker 통합: 오늘/7일/30일/전체 + 리더보드 자체 period 제거 (PR #4)
 - [x] Leaderboard 전용 페이지에 DateRangePicker 추가 (PR #5)
 - [x] 스파이크 알림 5건 분석 → 전부 정상 cold start 패턴 확인
+- [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
