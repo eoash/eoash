@@ -499,10 +499,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 464,
-      "output_tokens": 68188,
-      "cache_read_tokens": 11549163,
-      "cache_creation_tokens": 849350
+      "input_tokens": 527,
+      "output_tokens": 73919,
+      "cache_read_tokens": 14537268,
+      "cache_creation_tokens": 860922
     },
     {
       "actor": {
