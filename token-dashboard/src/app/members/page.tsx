@@ -11,7 +11,7 @@ import { formatTokens, formatPercent } from "@/lib/utils";
 import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import { aggregateMember } from "@/lib/aggregators/team";
 import { buildProfiles } from "@/lib/gamification";
-import { generateUsageInsights } from "@/lib/usage-insights";
+import { generateUsageInsights, buildTeamStats } from "@/lib/usage-insights";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 
@@ -40,9 +40,15 @@ export default function TeamPage() {
     [profiles, selectedName],
   );
 
+  // Build team-wide stats for relative comparisons
+  const teamStats = useMemo(() => {
+    const allMembers = UNIQUE_MEMBERS.map((m) => aggregateMember(rawData, m.name));
+    return buildTeamStats(allMembers);
+  }, [rawData]);
+
   const insights = useMemo(
-    () => generateUsageInsights(memberData, selectedProfile, days),
-    [memberData, selectedProfile, days],
+    () => generateUsageInsights(memberData, selectedProfile, days, teamStats),
+    [memberData, selectedProfile, days, teamStats],
   );
 
   return (
