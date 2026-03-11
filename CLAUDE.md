@@ -163,6 +163,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] 스파이크 알림 5건 분석 → 전부 정상 cold start 패턴 확인
 - [x] Members 인사이트 v2: 실전 꿀팁 + 트렌드 분석 + 개인별 차별화 (PR #6)
 - [x] 전체 `text-[10px]` → `text-xs` 일괄 수정 (11파일 30곳 완료)
+- [x] Hook 자가복구 시스템 (otel_push.py ensure_hook_registered + hook_health.py + cron)
 
 #### Finance Dashboard
 - [x] 세션15: Apps Script Web App + Sync 버튼 + Cash Position 자동화
