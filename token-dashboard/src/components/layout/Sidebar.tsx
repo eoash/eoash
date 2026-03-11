@@ -118,6 +118,17 @@ export default function Sidebar() {
           >
             EN
           </button>
+          <span className="text-gray-600">/</span>
+          <button
+            onClick={() => setLocale("vi")}
+            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+              locale === "vi"
+                ? "bg-[#00E87A]/10 text-[#00E87A]"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            VI
+          </button>
         </div>
 
         <span className="px-4 mt-1 pb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase">

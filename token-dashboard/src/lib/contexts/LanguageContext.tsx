@@ -25,7 +25,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setMounted(true);
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Locale | null;
-      if (stored === "en" || stored === "ko") setLocaleState(stored);
+      if (stored === "en" || stored === "ko" || stored === "vi") setLocaleState(stored);
     } catch { /* ignore */ }
   }, []);
 
