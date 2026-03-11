@@ -61,13 +61,13 @@ export default function CharacterCard({ profile }: { profile: UserProfile }) {
       </div>
 
       {/* System Log Flavor Text */}
-      <p className="text-xs font-mono text-gray-500 mb-5 pl-1">
+      <p className="text-sm font-mono text-gray-500 mb-5 pl-1">
         {profile.level.logEn}
       </p>
 
       {/* XP Bar */}
       <div className="mb-5">
-        <div className="flex justify-between text-xs mb-1.5" style={{ fontVariantNumeric: "tabular-nums" }}>
+        <div className="flex justify-between text-sm mb-1.5" style={{ fontVariantNumeric: "tabular-nums" }}>
           <span className="text-gray-400 font-mono">
             XP {formatNumber(profile.xp)}
           </span>
@@ -86,7 +86,7 @@ export default function CharacterCard({ profile }: { profile: UserProfile }) {
           />
         </div>
         {profile.level.level === AUTO_LEVEL_CAP && profile.progressPercent === 100 && (
-          <p className="text-[10px] text-gray-500 mt-1.5">
+          <p className="text-xs text-gray-500 mt-1.5">
             🔒 {isKo
               ? "Lv.7 이상은 AI 프로덕트 심사 + 팀 추천이 필요합니다"
               : "Lv.7+ requires AI product review + team nomination"}
@@ -103,7 +103,7 @@ export default function CharacterCard({ profile }: { profile: UserProfile }) {
       </div>
 
       {/* Streak + Decay */}
-      <div className="flex items-center gap-4 mb-4 text-xs flex-wrap">
+      <div className="flex items-center gap-4 mb-4 text-sm flex-wrap">
         <span className="text-gray-400">
           🔥 {isKo ? "현재 스트릭" : "Current Streak"}: <span className="text-white font-mono">{profile.currentStreak}{isKo ? "일" : "d"}</span>
         </span>
