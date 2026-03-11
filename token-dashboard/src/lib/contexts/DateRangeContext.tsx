@@ -21,10 +21,10 @@ const today = format(new Date(), "yyyy-MM-dd");
 
 function buildRange(label: string): DateRange {
   const end = today;
-  if (label === "Last 7 days") return { start: format(subDays(new Date(), 7), "yyyy-MM-dd"), end, label };
-  if (label === "Last 90 days") return { start: format(subDays(new Date(), 90), "yyyy-MM-dd"), end, label };
+  if (label === "Last 7 days") return { start: format(subDays(new Date(), 6), "yyyy-MM-dd"), end, label };
+  if (label === "Last 90 days") return { start: format(subDays(new Date(), 89), "yyyy-MM-dd"), end, label };
   // default: 30 days
-  return { start: format(subDays(new Date(), 30), "yyyy-MM-dd"), end, label: "Last 30 days" };
+  return { start: format(subDays(new Date(), 29), "yyyy-MM-dd"), end, label: "Last 30 days" };
 }
 
 function loadSavedRange(): DateRange {

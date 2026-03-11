@@ -8,9 +8,9 @@ import type { TranslationKey } from "@/lib/i18n";
 const today = format(new Date(), "yyyy-MM-dd");
 
 const PRESETS: { labelKey: TranslationKey; days: number }[] = [
-  { labelKey: "date.7d", days: 7 },
-  { labelKey: "date.30d", days: 30 },
-  { labelKey: "date.90d", days: 90 },
+  { labelKey: "date.7d", days: 6 },
+  { labelKey: "date.30d", days: 29 },
+  { labelKey: "date.90d", days: 89 },
 ];
 
 export default function DateRangePicker() {
