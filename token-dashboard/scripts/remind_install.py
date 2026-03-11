@@ -59,7 +59,7 @@ TEAM = [
     ("hungtran@eoeoeo.net", "U09KYRZ1WCB"),
     ("diepngan@eoeoeo.net", "U0874FDMQET"),
     ("ivee@eoeoeo.net", "U096T308HEZ"),
-    ("kairenz@eoeoeo.net", ""),
+    ("kairenz@eoeoeo.net", "U0AJPUT6UAW"),
 ]
 
 REMINDER_MESSAGE = """안녕하세요! :wave:
