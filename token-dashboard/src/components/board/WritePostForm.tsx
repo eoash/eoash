@@ -123,6 +123,7 @@ export default function WritePostForm({ user, onClose, onCreated }: Props) {
         {/* 본문 */}
         <div>
           <label className="text-xs text-gray-500 mb-1 block">본문</label>
+          <p className="text-xs text-gray-600 mb-1.5">✏️ 기본 용어는 영어로 작성해주세요 — 번역 없이 모든 팀원이 읽을 수 있어요</p>
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}

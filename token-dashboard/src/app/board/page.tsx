@@ -158,6 +158,12 @@ export default function BoardPage() {
         </div>
       </div>
 
+      {/* Writing guideline notice */}
+      <div className="mb-4 flex items-start gap-2 rounded-lg border border-gray-800 bg-gray-900/40 px-4 py-3 text-xs text-gray-400">
+        <span className="shrink-0 mt-px">✏️</span>
+        <span>{isKo ? "기본 용어는 영어로 작성해주세요 — 번역 없이 모든 팀원이 읽을 수 있어요" : "Please write basic terms in English so every team member can read without translation"}</span>
+      </div>
+
       {/* Login flow */}
       {showLogin && !user && (
         <div className="mb-6 rounded-xl border border-gray-800 bg-gray-900/60 p-5">
