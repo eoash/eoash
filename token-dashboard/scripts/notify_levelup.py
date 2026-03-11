@@ -48,20 +48,57 @@ AUTO_LEVEL_CAP = 6
 DECAY_GRACE_DAYS = 7
 DECAY_RATE = 0.01
 
-# --- 이름 매핑 (constants.ts EMAIL_TO_NAME과 동기화) ---
+# --- 이름/아바타 매핑 (constants.ts TEAM_MEMBERS와 동기화) ---
 EMAIL_TO_NAME = {
-    "ash@eoeoeo.net": "Ash",
+    "ash@eoeoeo.net": "Seohyun",
     "chiri@eoeoeo.net": "Chiri",
-    "cw.lim@eoeoeo.net": "CW",
+    "cw.lim@eoeoeo.net": "Chanwoo",
     "izzy@eoeoeo.net": "Izzy",
     "jemin@eoeoeo.net": "Jemin",
     "june@eoeoeo.net": "June",
-    "jy.lim@eoeoeo.net": "JY",
+    "jy.lim@eoeoeo.net": "Jiyoon",
     "songsh@eoeoeo.net": "Song",
-    "chaenn@eoeoeo.net": "Chaenn",
+    "chaenn@eoeoeo.net": "Chaeeun",
     "chanhee@eoeoeo.net": "Chanhee",
     "grace@eoeoeo.net": "Grace",
     "hyunahk@eoeoeo.net": "Hyunah",
+    "ty@eoeoeo.net": "TaeYong",
+    "phoenix@eoeoeo.net": "Phoenix",
+    "hyeri@eoeoeo.net": "Hyeri",
+    "chankim@eoeoeo.net": "Chanho",
+    "heejoo@eoeoeo.net": "Heejoo",
+    "gyeol@eoeoeo.net": "Gyeol",
+    "ljw@eoeoeo.net": "Jewoo",
+    "leejumi@eoeoeo.net": "Jumi",
+    "jhghood25@eoeoeo.net": "Jihwan",
+    "saul@eoeoeo.net": "Seongheum",
+    "truonghpq.vd@eoeoeo.net": "Truong",
+}
+
+EMAIL_TO_AVATAR = {
+    "ash@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-09/10474629156276_69b69fa7c803f1e56d85_72.jpg",
+    "chiri@eoeoeo.net": "https://avatars.slack-edge.com/2021-09-05/2463691990404_8dc29cc024f02a2dda1c_72.png",
+    "cw.lim@eoeoeo.net": "https://avatars.slack-edge.com/2025-09-18/9524291207319_0c31cb66d5d1501aafcd_72.jpg",
+    "izzy@eoeoeo.net": "https://avatars.slack-edge.com/2025-09-17/9548321478705_9b12a80b514c735c69cc_72.jpg",
+    "jemin@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-01/9613131790421_9390231d8d42154c0c05_72.png",
+    "june@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-17/9719139044772_b3797a98688f8d42ceee_72.jpg",
+    "jy.lim@eoeoeo.net": "https://avatars.slack-edge.com/2025-09-18/9542670154084_9e7c78110c9a4ff94832_72.jpg",
+    "songsh@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-31/9811200976242_45705c818ece3c7792f7_72.png",
+    "chaenn@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-01/9611034420181_4809053162293d2c0555_72.png",
+    "chanhee@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-28/10615371073553_bfef484b80d2b5af7550_72.jpg",
+    "grace@eoeoeo.net": "https://avatars.slack-edge.com/2025-09-18/9539341183558_899f08971fcc43011541_72.png",
+    "hyunahk@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-10/10475811324406_1c1b4af97a1e52e20655_72.jpg",
+    "ty@eoeoeo.net": "https://avatars.slack-edge.com/2024-11-18/8038728711830_e547e81e64c89196b1c4_72.png",
+    "phoenix@eoeoeo.net": "https://avatars.slack-edge.com/2023-05-12/5247598924518_479f5ef45b136e096d13_72.png",
+    "hyeri@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-23/9749782929542_eb4e1f1d17ac2e36c39a_72.jpg",
+    "chankim@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-05/10468440643313_b6eef88812def007ebcd_72.png",
+    "heejoo@eoeoeo.net": "https://avatars.slack-edge.com/2025-11-26/9980651837799_5de589c7a820c8d3035f_72.png",
+    "gyeol@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-05/10430911278391_fa1b591ce3d0ba12e926_72.jpg",
+    "ljw@eoeoeo.net": "https://avatars.slack-edge.com/2025-06-09/9021553122116_cbc61854259dd9be665e_72.jpg",
+    "leejumi@eoeoeo.net": "https://avatars.slack-edge.com/2026-02-23/10554701768627_9564aa9740ef07472cfa_72.jpg",
+    "jhghood25@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-31/9805109735011_14de538b1dcad6f5f3fd_72.png",
+    "saul@eoeoeo.net": "https://avatars.slack-edge.com/2025-10-01/9601341495575_5fbdbff4a5002d8456fd_72.jpg",
+    "truonghpq.vd@eoeoeo.net": "https://avatars.slack-edge.com/2025-11-19/9933025106743_9eaf10b6b50fe9cce67a_72.jpg",
 }
 
 
@@ -221,13 +258,14 @@ def detect_levelups(current: dict[str, dict], prev_state: dict) -> list[dict]:
                 "icon": info["icon"],
                 "log": info["log"],
                 "xp": info["xp"],
+                "avatar": EMAIL_TO_AVATAR.get(email, ""),
             })
     return levelups
 
 
 def build_card_url(lu: dict) -> str:
     """레벨업 카드 이미지 URL 생성."""
-    params = urllib.parse.urlencode({
+    params = {
         "name": lu["name"],
         "level": str(lu["new_level"]),
         "title": lu["title"],
@@ -237,8 +275,10 @@ def build_card_url(lu: dict) -> str:
         "prevLevel": str(lu["prev_level"]) if lu["prev_level"] > 0 else "",
         "prevTitle": lu.get("prev_title", ""),
         "log": lu["log"],
-    })
-    return f"{CARD_API_URL}?{params}"
+    }
+    if lu.get("avatar"):
+        params["avatar"] = lu["avatar"]
+    return f"{CARD_API_URL}?{urllib.parse.urlencode(params)}"
 
 
 def download_card_image(url: str) -> bytes | None:
