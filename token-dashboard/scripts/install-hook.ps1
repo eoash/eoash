@@ -202,11 +202,13 @@ if (Test-Path $CODEX_SESSIONS) {
     Write-Host "      ~/.codex/sessions/ 없음. Codex를 사용하면 자동 수집됩니다."
 }
 
-# 6. Codex 자동 수집 - Windows Task Scheduler (2시간마다)
-Write-Host "[5/7] Codex 자동 수집 스케줄 등록 중..."
+# 6. Codex 자동 수집 + Hook 헬스체크 - Windows Task Scheduler (2시간마다)
+Write-Host "[5/7] Codex 자동 수집 + Hook 헬스체크 스케줄 등록 중..."
 
 $CODEX_PUSH_LOCAL = "$HOOKS_DIR\codex_push.py"
+$HOOK_HEALTH_LOCAL = "$HOOKS_DIR\hook_health.py"
 Invoke-WebRequest -Uri "$BASE_URL/codex_push.py" -OutFile $CODEX_PUSH_LOCAL
+Invoke-WebRequest -Uri "$BASE_URL/hook_health.py" -OutFile $HOOK_HEALTH_LOCAL
 
 $taskName = "EO-Codex-Push"
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
@@ -216,16 +218,17 @@ $pythonPath = (Get-Command $PYTHON_EXE -ErrorAction SilentlyContinue).Source
 if (-not $pythonPath) { $pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source }
 
 if ($pythonPath) {
-    $action = New-ScheduledTaskAction -Execute $pythonPath -Argument "`"$CODEX_PUSH_LOCAL`" --email `"$GIT_EMAIL`""
+    # 헬스체크 먼저 실행 후 Codex 수집
+    $action = New-ScheduledTaskAction -Execute $pythonPath -Argument "`"$HOOK_HEALTH_LOCAL`"; $pythonPath `"$CODEX_PUSH_LOCAL`" --email `"$GIT_EMAIL`""
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 2)
     $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd
 
     if ($existingTask) {
         Set-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings | Out-Null
-        Write-Host "      -> 기존 스케줄 업데이트 완료: 매 2시간마다 자동 수집"
+        Write-Host "      -> 기존 스케줄 업데이트 완료: 매 2시간마다 헬스체크 + 자동 수집"
     } else {
-        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Description "EO Studio Codex usage collector" | Out-Null
-        Write-Host "      -> 스케줄 등록 완료: 매 2시간마다 자동 수집"
+        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Description "EO Studio hook health check + Codex usage collector" | Out-Null
+        Write-Host "      -> 스케줄 등록 완료: 매 2시간마다 헬스체크 + 자동 수집"
     }
 } else {
     Write-Host "      [!] python 경로를 찾을 수 없어 스케줄 등록을 건너뜁니다."
