@@ -4,7 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { useTool, TOOL_COLORS, TOOL_LABELS, type ToolType } from "@/lib/contexts/ToolContext";
 import type { TranslationKey } from "@/lib/i18n";
+
+const TOOL_ORDER: ToolType[] = ["all", "claude", "codex", "gemini"];
 
 const menuIcons: Record<string, React.ReactNode> = {
   "/": (/* grid */ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1.5" y="1.5" width="5" height="5" rx="1"/><rect x="9.5" y="1.5" width="5" height="5" rx="1"/><rect x="1.5" y="9.5" width="5" height="5" rx="1"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/></svg>),
@@ -31,6 +34,7 @@ const menuItems: { labelKey: TranslationKey; href: string }[] = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useT();
+  const { tool, setTool } = useTool();
   const [open, setOpen] = useState(false);
 
   // 페이지 이동 시 드로어 닫기
@@ -51,10 +55,37 @@ export default function Sidebar() {
   const navContent = (
     <>
       <div>
-        <div className="mb-8 px-4">
+        <div className="mb-4 px-4">
           <h1 className="text-lg font-bold text-white">{t("sidebar.title")}</h1>
           <p className="text-xs text-gray-500 mt-1">{t("sidebar.subtitle")}</p>
         </div>
+
+        {/* Tool Selector */}
+        <div className="mb-6 px-2">
+          <div className="grid grid-cols-4 gap-1 p-1 rounded-lg bg-[#111] border border-[#222]">
+            {TOOL_ORDER.map((t) => {
+              const active = tool === t;
+              const color = TOOL_COLORS[t];
+              return (
+                <button
+                  key={t}
+                  onClick={() => setTool(t)}
+                  className="px-1 py-1.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer leading-tight text-center"
+                  style={active ? {
+                    backgroundColor: `${color}15`,
+                    color: color,
+                    boxShadow: `0 0 0 1px ${color}40`,
+                  } : {
+                    color: "#666",
+                  }}
+                >
+                  {TOOL_LABELS[t]}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
       <nav className="flex flex-col gap-1">
         {menuItems.map((item) => {
           const isActive =

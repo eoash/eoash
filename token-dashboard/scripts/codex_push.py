@@ -90,6 +90,40 @@ def parse_sessions(sessions_dir: str) -> list[dict]:
     return [{"date": k, **v} for k, v in sorted(daily.items())]
 
 
+def count_daily_git_activity(dates: list[str], user_email: str) -> dict[str, dict]:
+    """날짜별 git commit/PR 수를 git log에서 카운트.
+    Codex가 만든 커밋과 사용자 수동 커밋을 구분할 수 없지만,
+    해당 날짜에 Codex 세션이 있었으므로 Codex 기여로 간주."""
+    activity = {}
+    for date in dates:
+        commits = 0
+        prs = 0
+        try:
+            result = subprocess.run(
+                ["git", "log", "--oneline",
+                 f"--after={date}T00:00:00", f"--before={date}T23:59:59",
+                 f"--author={user_email}"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                commits = len(result.stdout.strip().split("\n"))
+        except Exception:
+            pass
+        try:
+            result = subprocess.run(
+                ["git", "log", "--oneline", "--grep=gh pr create",
+                 f"--after={date}T00:00:00", f"--before={date}T23:59:59",
+                 f"--author={user_email}"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                prs = len(result.stdout.strip().split("\n"))
+        except Exception:
+            pass
+        activity[date] = {"commits": commits, "pull_requests": prs}
+    return activity
+
+
 def detect_email() -> str:
     """git config에서 이메일 추출"""
     try:
@@ -159,9 +193,19 @@ def main():
         print("  파싱 가능한 세션 데이터가 없습니다.")
         sys.exit(0)
 
+    # git 활동 수집 (날짜별 커밋/PR)
+    dates = [d["date"] for d in data]
+    git_activity = count_daily_git_activity(dates, email)
+    for d in data:
+        act = git_activity.get(d["date"], {})
+        d["commits"] = act.get("commits", 0)
+        d["pull_requests"] = act.get("pull_requests", 0)
+
     total_sessions = sum(d["sessions"] for d in data)
     total_tokens = sum(d["input_tokens"] + d["output_tokens"] for d in data)
-    print(f"  {len(data)}일, {total_sessions}세션, {total_tokens:,} tokens")
+    total_commits = sum(d["commits"] for d in data)
+    total_prs = sum(d["pull_requests"] for d in data)
+    print(f"  {len(data)}일, {total_sessions}세션, {total_tokens:,} tokens, {total_commits} commits, {total_prs} PRs")
 
     if dry_run:
         print(json.dumps({"data": data}, indent=2))

@@ -6,13 +6,13 @@ import UsageTrendChart from "@/components/charts/UsageTrendChart";
 import ModelPieChart from "@/components/charts/ModelPieChart";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { formatTokens, formatPercent } from "@/lib/utils";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
+import { useToolData } from "@/lib/hooks/useToolData";
 import { aggregateUtilization } from "@/lib/aggregators/utilization";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 export default function UtilizationPage() {
   const { t } = useT();
-  const { data: rawData, loading, error } = useAnalytics();
+  const { data: rawData, loading, error } = useToolData();
 
   const util = useMemo(
     () => (loading ? null : aggregateUtilization(rawData)),

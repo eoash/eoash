@@ -17,7 +17,7 @@ import KpiCard from "@/components/cards/KpiCard";
 import InfoTip from "@/components/InfoTip";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { formatPercent, formatTokens } from "@/lib/utils";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
+import { useToolData } from "@/lib/hooks/useToolData";
 import {
   aggregateEfficiency,
   aggregateCodexEfficiency,
@@ -30,6 +30,7 @@ import {
 } from "@/lib/aggregators/efficiency";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { useTool } from "@/lib/contexts/ToolContext";
 import type { TranslationKey } from "@/lib/i18n";
 
 function formatDate(dateStr: string): string {
@@ -316,8 +317,10 @@ function MemberBarChart<T extends { name: string }>({ data, dataKey, title, tipT
 
 export default function EfficiencyPage() {
   const { t } = useT();
-  const { data: rawData, loading, error } = useAnalytics();
-  const [tool, setTool] = useState<EfficiencyTool>("claude");
+  const { data: rawData, loading, error } = useToolData();
+  const { tool: globalTool } = useTool();
+  // Efficiency 페이지는 글로벌 도구 선택을 따름 (gemini→all로 폴백)
+  const tool: EfficiencyTool = globalTool === "gemini" ? "all" : globalTool;
 
   // Codex data from dedicated API (has reasoning tokens)
   const [codexRows, setCodexRows] = useState<CodexMemberRow[]>([]);
@@ -365,19 +368,8 @@ export default function EfficiencyPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">{t("nav.efficiency")}</h1>
-          <div className="flex gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-1">
-            {TOOL_TABS.map((tab) => (
-              <button key={tab.key} onClick={() => setTool(tab.key)}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${tool === tab.key ? "text-black" : "text-neutral-400 hover:text-white"}`}
-                style={tool === tab.key ? { backgroundColor: tab.color } : {}}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">{t("nav.efficiency")}</h1>
         <DateRangePicker />
       </div>
 

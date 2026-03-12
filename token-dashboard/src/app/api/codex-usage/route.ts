@@ -11,6 +11,9 @@ export interface CodexMemberRow {
   cached: number;
   reasoning: number;
   total: number;
+  commits: number;
+  sessions: number;
+  pull_requests: number;
 }
 
 interface BackfillEntry {
@@ -20,6 +23,9 @@ interface BackfillEntry {
   cache_read_tokens?: number;
   cache_creation_tokens?: number;
   model?: string;
+  commits?: number;
+  session_count?: number;
+  pull_requests?: number;
 }
 
 export async function GET(req: NextRequest) {
@@ -28,7 +34,7 @@ export async function GET(req: NextRequest) {
     const startDate = searchParams.get("start") ?? "";
     const endDate = searchParams.get("end") ?? "";
 
-    const memberMap = new Map<string, { input: number; output: number; cached: number; reasoning: number }>();
+    const memberMap = new Map<string, { input: number; output: number; cached: number; reasoning: number; commits: number; sessions: number; pull_requests: number }>();
 
     // backfill/*.json에서 Codex 모델(gpt-*) 레코드 추출
     const backfillDir = path.join(process.cwd(), "src/lib/backfill");
@@ -46,12 +52,15 @@ export async function GET(req: NextRequest) {
       );
       if (entries.length === 0) continue;
 
-      const m = memberMap.get(email) ?? { input: 0, output: 0, cached: 0, reasoning: 0 };
+      const m = memberMap.get(email) ?? { input: 0, output: 0, cached: 0, reasoning: 0, commits: 0, sessions: 0, pull_requests: 0 };
       for (const e of entries) {
         m.input += e.input_tokens ?? 0;
         m.output += e.output_tokens ?? 0;
         m.cached += e.cache_read_tokens ?? 0;
         m.reasoning += e.cache_creation_tokens ?? 0;
+        m.commits += e.commits ?? 0;
+        m.sessions += e.session_count ?? 0;
+        m.pull_requests += e.pull_requests ?? 0;
       }
       memberMap.set(email, m);
     }

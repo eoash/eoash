@@ -8,7 +8,7 @@ import UsageInsightCard from "@/components/members/UsageInsightCard";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { UNIQUE_MEMBERS } from "@/lib/constants";
 import { formatTokens, formatPercent } from "@/lib/utils";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
+import { useToolData } from "@/lib/hooks/useToolData";
 import { aggregateMember } from "@/lib/aggregators/team";
 import { buildProfiles } from "@/lib/gamification";
 import { generateUsageInsights, buildTeamStats } from "@/lib/usage-insights";
@@ -25,7 +25,7 @@ export default function TeamPage() {
     }
     return UNIQUE_MEMBERS[0]?.name ?? "";
   });
-  const { data: rawData, loading, error } = useAnalytics();
+  const { data: rawData, loading, error } = useToolData();
 
   useEffect(() => {
     localStorage.setItem("members-selected", selectedName);

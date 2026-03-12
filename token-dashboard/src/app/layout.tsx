@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Sidebar from "@/components/layout/Sidebar";
 import { DateRangeProvider } from "@/lib/contexts/DateRangeContext";
 import { LanguageProvider } from "@/lib/contexts/LanguageContext";
+import { ToolProvider } from "@/lib/contexts/ToolContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,12 +32,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0A0A0A] text-white`}
       >
         <LanguageProvider>
-          <DateRangeProvider>
-            <div className="flex min-h-screen">
-              <Sidebar />
-              <main className="flex-1 p-4 pt-16 md:ml-60 md:p-8 md:pt-8">{children}</main>
-            </div>
-          </DateRangeProvider>
+          <ToolProvider>
+            <DateRangeProvider>
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <main className="flex-1 p-4 pt-16 md:ml-60 md:p-8 md:pt-8">{children}</main>
+              </div>
+            </DateRangeProvider>
+          </ToolProvider>
         </LanguageProvider>
       </body>
     </html>

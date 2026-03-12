@@ -13,6 +13,8 @@ interface CodexPushEntry {
   reasoning_output_tokens?: number;
   sessions?: number;
   model?: string;
+  commits?: number;
+  pull_requests?: number;
 }
 
 export async function POST(req: NextRequest) {
@@ -87,9 +89,9 @@ export async function POST(req: NextRequest) {
       cache_read_tokens: entry.cached_input_tokens ?? 0,
       cache_creation_tokens: entry.reasoning_output_tokens ?? 0,
       session_count: entry.sessions ?? 0,
-      commits: 0,
+      commits: entry.commits ?? 0,
       lines_of_code: 0,
-      pull_requests: 0,
+      pull_requests: entry.pull_requests ?? 0,
       actor: {
         email_address: body.email,
         id: body.email,

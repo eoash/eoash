@@ -4,13 +4,13 @@ import ModelPieChart from "@/components/charts/ModelPieChart";
 import TokenTrendChart from "@/components/charts/TokenTrendChart";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { formatTokens } from "@/lib/utils";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
+import { useToolData } from "@/lib/hooks/useToolData";
 import { aggregateModels } from "@/lib/aggregators/models";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 export default function ModelsPage() {
   const { t } = useT();
-  const { data: rawData, loading, error } = useAnalytics();
+  const { data: rawData, loading, error } = useToolData();
   const { pie, details } = aggregateModels(rawData);
 
   return (

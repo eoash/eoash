@@ -10,15 +10,17 @@ import WeeklyChampions from "@/components/cards/WeeklyChampions";
 import LatestPosts from "@/components/board/LatestPosts";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { aggregateOverview } from "@/lib/aggregators/overview";
-import { useAnalytics } from "@/lib/hooks/useAnalytics";
+import { useToolData } from "@/lib/hooks/useToolData";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import { useT } from "@/lib/contexts/LanguageContext";
+import { useTool } from "@/lib/contexts/ToolContext";
 import { useMemo } from "react";
 
 export default function OverviewPage() {
   const { t } = useT();
   const { range } = useDateRange();
-  const { data: rawData, loading, error } = useAnalytics();
+  const { tool } = useTool();
+  const { data: rawData, loading, error } = useToolData();
   const overview = useMemo(() => aggregateOverview(rawData), [rawData]);
 
   return (
@@ -47,10 +49,12 @@ export default function OverviewPage() {
             <KpiCard title={t("kpi.avgDailySessions")} value={String(overview.avgDailySessions)} subtitle={t("kpi.avgDailySessions.sub")} tooltip={t("kpi.avgDailySessions.tip")} />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
-            <KpiCard title={t("kpi.totalCommits")} value={overview.totalCommits.toLocaleString()} subtitle={t("kpi.totalCommits.sub")} tooltip={t("kpi.totalCommits.tip")} />
-            <KpiCard title={t("kpi.pullRequests")} value={overview.totalPRs.toLocaleString()} subtitle={t("kpi.pullRequests.sub")} tooltip={t("kpi.pullRequests.tip")} />
-          </div>
+          {(tool === "claude" || tool === "all" || tool === "codex") && overview.totalCommits > 0 && (
+            <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
+              <KpiCard title={t("kpi.totalCommits")} value={overview.totalCommits.toLocaleString()} subtitle={t("kpi.totalCommits.sub")} tooltip={t("kpi.totalCommits.tip")} />
+              <KpiCard title={t("kpi.pullRequests")} value={overview.totalPRs.toLocaleString()} subtitle={t("kpi.pullRequests.sub")} tooltip={t("kpi.pullRequests.tip")} />
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">

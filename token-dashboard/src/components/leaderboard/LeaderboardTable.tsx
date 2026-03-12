@@ -9,6 +9,7 @@ import InfoTip from "@/components/InfoTip";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
+import { useTool } from "@/lib/contexts/ToolContext";
 import type { TranslationKey } from "@/lib/i18n";
 import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
@@ -334,32 +335,23 @@ function GeminiTable() {
 
 // ── 메인 컴포넌트 ────────────────────────────────────
 export default function LeaderboardTable() {
-  const [tool, setTool] = useState<AiTool>("claude");
+  const { tool } = useTool();
 
-  const AI_TOOLS: { key: AiTool; label: string; color: string }[] = [
-    { key: "claude", label: "Claude Code", color: "#00E87A" },
-    { key: "gemini", label: "Gemini",      color: "#4285F4" },
-    { key: "codex",  label: "Codex",       color: "#10A37F" },
-  ];
+  // "all" → Claude 테이블 (전체 데이터는 Overview에서 보이므로)
+  const activeTool: AiTool = tool === "all" ? "claude" : tool;
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between gap-4 border-b border-[#222]">
-        <div className="flex gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-1">
-          {AI_TOOLS.map((ai) => (
-            <button key={ai.key} onClick={() => setTool(ai.key)}
-              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${tool === ai.key ? "text-black" : "text-neutral-400 hover:text-white"}`}
-              style={tool === ai.key ? { backgroundColor: ai.color } : {}}>
-              {ai.label}
-            </button>
-          ))}
-        </div>
+        <span className="text-sm font-medium text-neutral-400">
+          {activeTool === "claude" ? "Claude Code" : activeTool === "codex" ? "Codex" : "Gemini"} Leaderboard
+        </span>
         <DateRangePicker />
       </div>
 
-      {tool === "claude" && <ClaudeTable />}
-      {tool === "gemini" && <GeminiTable />}
-      {tool === "codex"  && <CodexTable />}
+      {activeTool === "claude" && <ClaudeTable />}
+      {activeTool === "gemini" && <GeminiTable />}
+      {activeTool === "codex"  && <CodexTable />}
     </div>
   );
 }
