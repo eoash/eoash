@@ -36,11 +36,11 @@ export function aggregateMember(data: ClaudeCodeDataPoint[], name: string): Memb
     totalInput += d.input_tokens;
     totalCacheRead += d.cache_read_tokens;
     totalCacheCreation += d.cache_creation_tokens;
-    sessions += d.session_count;
-    linesOfCode += d.lines_of_code;
-    commits += d.commits;
-    pullRequests += d.pull_requests;
-    if (d.tool_acceptance_rate > 0) {
+    sessions += d.session_count ?? 0;
+    linesOfCode += d.lines_of_code ?? 0;
+    commits += d.commits ?? 0;
+    pullRequests += d.pull_requests ?? 0;
+    if ((d.tool_acceptance_rate ?? 0) > 0) {
       toolAccSum += d.tool_acceptance_rate;
       toolAccCount++;
     }

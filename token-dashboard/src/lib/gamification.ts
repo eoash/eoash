@@ -310,8 +310,8 @@ function computeAchievementDates(
       dailyAgg.set(d.date, day);
     }
     day.tokens += d.input_tokens + d.output_tokens;
-    day.commits += d.commits;
-    day.prs += d.pull_requests;
+    day.commits += d.commits ?? 0;
+    day.prs += d.pull_requests ?? 0;
     day.output += d.output_tokens;
     day.tools.add(detectTool(d.model));
     day.models.add(d.model);
@@ -446,8 +446,8 @@ export function buildProfiles(data: ClaudeCodeDataPoint[]): UserProfile[] {
 
     for (const d of points) {
       totalTokens += d.input_tokens + d.output_tokens;
-      totalCommits += d.commits;
-      totalPRs += d.pull_requests;
+      totalCommits += d.commits ?? 0;
+      totalPRs += d.pull_requests ?? 0;
       if (d.date) activeDates.push(d.date);
       tools.add(detectTool(d.model));
       models.add(d.model);
