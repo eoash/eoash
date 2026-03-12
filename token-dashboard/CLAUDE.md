@@ -126,6 +126,8 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 - path traversal 차단 필수 (사용자 입력 파일명 검증)
 - error detail 클라이언트에 노출 금지
 - **덮어쓰기 금지**: backfill POST는 반드시 기존 데이터와 date+model 키로 merge해야 함. replace 시 다른 소스(Claude/Codex) 데이터 소실됨 (2026-03-08 jemin·chiri 데이터 소실 사고)
+- **actor 필드 필수**: backfill 엔트리에 actor 없으면 data-source.ts에서 `actor.email_address` 접근 시 TypeError → API 전체 크래시. API 수신 시 누락된 actor는 email에서 자동 주입 (route.ts). data-source는 actor 없는 엔트리 스킵 (실사례: cw.lim 3/11 actor 누락 → 대시보드 전면 장애)
+- **활동 지표 필드 누락 방어**: `session_count`, `commits`, `pull_requests`, `lines_of_code`가 undefined이면 aggregator에서 NaN 전파. 모든 aggregator에서 `?? 0` 필수
 
 ### Codex 토큰 시맨틱
 - Codex `input_tokens`는 `cached_input_tokens` 포함 (Claude와 다름). 순수 input = `input_tokens - cached_input_tokens`

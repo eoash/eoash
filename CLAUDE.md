@@ -128,11 +128,14 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 ### Token Dashboard — 안정 운영 중
 - **설치 현황**: 26/34명 (backfill 24명 + OTel only 2명: hyunahk, chanhee)
 - **미가입 8명**: Kashy, Dowon, Gunwook, Jeebin, Sumin, SoYoung, Jade, Zen
-- **완료된 주요 기능**: Board 게시판(Notion DB), 게이미피케이션(/rank), DateRangePicker, Members 인사이트 v2, Hook 자가복구, data-integrity CI, 브랜드 컬러 #00E87A 통일, 모노레포 Vercel 직접 연결
+- **완료된 주요 기능**: Board 게시판(Notion DB), 게이미피케이션(/rank), DateRangePicker, Members 인사이트 v2, Hook 자가복구, data-integrity CI, 브랜드 컬러 #00E87A 통일, 모노레포 Vercel 직접 연결, Codex Overview 통합, LeaderboardTable DateRangePicker
 - **폐기(3/11)**: 레벨업 카드 + Slack 알림 — satori OG Image API 텍스트 겹침 해결 불가로 삭제
 - **데이터 파이프라인**: OTel → backfill 우선 (Prometheus 과다집계 우회), 세션별 backfill + 하루 1회 re-backfill
+- **완료(3/12)**: Codex 토큰 Overview 포함 + `/api/codex-backfill` 신설 + Codex/GPT 모델 라벨 추가
+- **완료(3/12)**: actor 누락 방어 (data-source 스킵 + backfill API 자동 주입) + 활동 지표 NaN 방어 (`?? 0`)
+- **완료(3/12)**: 서브레포 누락 backfill 병합 (chiri 6건 + cw.lim 1건) + LeaderboardTable DateRangePicker
 - [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
-- [ ] auto-deploy 안정화 모니터링
+- [x] auto-deploy 안정화 모니터링
 
 ### Finance Dashboard — 안정 운영 중
 - 모든 주요 기능 완료 (세션15~19): Cash Position 자동화, 환율 API, USD/KRW 토글, 7개 페이지
@@ -147,4 +150,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-11*
+*마지막 업데이트: 2026-03-12*
