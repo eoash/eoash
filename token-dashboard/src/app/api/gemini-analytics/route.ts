@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { EMAIL_TO_NAME } from "@/lib/constants";
 import { queryRangeRaw, computeDailyIncrease, tsToDate } from "@/lib/prometheus";
+import { computeGeminiRange } from "@/lib/gemini-range";
 
 /**
  * Gemini analytics API — returns ClaudeCodeDataPoint[] shape
@@ -15,18 +16,7 @@ export async function GET(req: NextRequest) {
     const startDate = searchParams.get("start") ?? "";
     const endDate = searchParams.get("end") ?? "";
 
-    const now = new Date();
-    const endDay = endDate ? new Date(`${endDate}T23:59:59Z`) : now;
-    const end = (endDay > now ? now : endDay).toISOString();
-
-    const startDay = startDate
-      ? new Date(`${startDate}T00:00:00Z`)
-      : new Date(now.getTime() - 365 * 86400000);
-    const daysDiff = Math.max(1, Math.round((endDay.getTime() - startDay.getTime()) / 86400000));
-    const rollingStart = new Date(now.getTime() - daysDiff * 86400 * 1000);
-    const paddedStart = new Date(rollingStart.getTime() - 86400 * 1000);
-    const start = paddedStart.toISOString();
-    const actualStartDate = tsToDate(Math.floor(rollingStart.getTime() / 1000));
+    const { start, end, actualStartDate } = computeGeminiRange(startDate, endDate);
 
     // Raw counter + daily delta (increase() 사용 금지)
     // user_email + model + type 별로 조회

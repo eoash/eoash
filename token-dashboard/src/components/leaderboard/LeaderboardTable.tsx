@@ -9,7 +9,7 @@ import InfoTip from "@/components/InfoTip";
 import DateRangePicker from "@/components/layout/DateRangePicker";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
-import { useTool } from "@/lib/contexts/ToolContext";
+import { useTool, TOOL_COLORS } from "@/lib/contexts/ToolContext";
 import { useAutoRefreshFetch } from "@/lib/hooks/useAutoRefreshFetch";
 import type { TranslationKey } from "@/lib/i18n";
 import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
@@ -299,9 +299,9 @@ function AllTable() {
             <tr className="border-b border-[#1e1e1e]">
               <th className="px-3 py-3 text-left text-xs text-neutral-600 font-medium w-10 md:px-4">#</th>
               <th className="px-3 py-3 text-left text-xs text-neutral-600 font-medium md:px-4">{t("lb.developer")}</th>
-              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#E8FF47" }}>CLAUDE</span></th>
-              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#10A37F" }}>CODEX</span></th>
-              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#4285F4" }}>GEMINI</span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: TOOL_COLORS.claude }}>CLAUDE</span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: TOOL_COLORS.codex }}>CODEX</span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: TOOL_COLORS.gemini }}>GEMINI</span></th>
               <th className="px-3 py-3 text-right text-xs text-neutral-600 font-medium min-w-[120px] md:min-w-[180px] md:px-4">{t("lb.total")}</th>
             </tr>
           </thead>
@@ -344,9 +344,9 @@ function AllTable() {
                     <td className="px-3 py-3 text-right md:px-4 md:py-4">
                       <div className="flex items-center justify-end gap-2 md:gap-3">
                         <div className="w-16 md:w-24 h-2 rounded-full bg-[#1a1a1a] overflow-hidden flex">
-                          {claudePct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${claudePct}%`, backgroundColor: "#E8FF47" }} />}
-                          {codexPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${codexPct}%`, backgroundColor: "#10A37F" }} />}
-                          {geminiPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${geminiPct}%`, backgroundColor: "#4285F4" }} />}
+                          {claudePct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${claudePct}%`, backgroundColor: TOOL_COLORS.claude }} />}
+                          {codexPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${codexPct}%`, backgroundColor: TOOL_COLORS.codex }} />}
+                          {geminiPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${geminiPct}%`, backgroundColor: TOOL_COLORS.gemini }} />}
                         </div>
                         <span className="text-white font-mono text-xs md:text-sm font-medium min-w-[50px] md:min-w-[60px] text-right">{formatTokens(row.total)}</span>
                       </div>

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60; // 60초 ISR 캐싱 — Sheets API rate limit 보호
 
 interface CheckResult {
   status: "ok" | "warn" | "fail";
