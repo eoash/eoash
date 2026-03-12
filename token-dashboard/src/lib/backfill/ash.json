@@ -406,7 +406,7 @@
       "date": "2026-02-20",
       "session_count": 4,
       "lines_of_code": 0,
-      "commits": 6,
+      "commits": 7,
       "pull_requests": 1,
       "tool_acceptance_rate": 0,
       "input_tokens": 100755,
@@ -568,7 +568,7 @@
       "date": "2026-02-25",
       "session_count": 10,
       "lines_of_code": 0,
-      "commits": 9,
+      "commits": 22,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 13390,
@@ -820,7 +820,7 @@
       "date": "2026-03-05",
       "session_count": 8,
       "lines_of_code": 0,
-      "commits": 15,
+      "commits": 13,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 2460,
@@ -980,23 +980,51 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-10",
-      "session_count": 25,
+      "session_count": 32,
       "lines_of_code": 0,
-      "commits": 59,
+      "commits": 87,
       "pull_requests": 2,
       "tool_acceptance_rate": 0,
-      "input_tokens": 28146,
-      "output_tokens": 840862,
-      "cache_read_tokens": 253573090,
-      "cache_creation_tokens": 6991756
+      "input_tokens": 32145,
+      "output_tokens": 1079746,
+      "cache_read_tokens": 360945776,
+      "cache_creation_tokens": 10071669
     },
     {
-      "date": "2026-03-12",
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      },
       "model": "claude-opus-4-6",
-      "input_tokens": 7,
-      "output_tokens": 1724,
-      "cache_read_tokens": 208766,
-      "cache_creation_tokens": 4374
+      "date": "2026-03-11",
+      "session_count": 15,
+      "lines_of_code": 0,
+      "commits": 51,
+      "pull_requests": 4,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 36784,
+      "output_tokens": 376123,
+      "cache_read_tokens": 157267554,
+      "cache_creation_tokens": 6373726
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      },
+      "model": "claude-opus-4-6",
+      "date": "2026-03-12",
+      "session_count": 2,
+      "lines_of_code": 0,
+      "commits": 4,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 4365,
+      "output_tokens": 69393,
+      "cache_read_tokens": 20323717,
+      "cache_creation_tokens": 883892
     }
   ]
 }
