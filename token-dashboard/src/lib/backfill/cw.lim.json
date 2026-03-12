@@ -37,6 +37,14 @@
       "cache_creation_tokens": 348948
     },
     {
+      "date": "2026-03-11",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 4,
+      "output_tokens": 126,
+      "cache_read_tokens": 146702,
+      "cache_creation_tokens": 330
+    },
+    {
       "actor": {
         "type": "user",
         "id": "cw.lim@eoeoeo.net",
