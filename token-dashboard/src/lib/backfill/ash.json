@@ -1043,10 +1043,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-opus-4-6",
-      "input_tokens": 308,
-      "output_tokens": 79804,
-      "cache_read_tokens": 19597462,
-      "cache_creation_tokens": 656596,
+      "input_tokens": 311,
+      "output_tokens": 80205,
+      "cache_read_tokens": 19673994,
+      "cache_creation_tokens": 658334,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
