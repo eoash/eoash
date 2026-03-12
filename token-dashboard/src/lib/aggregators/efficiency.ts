@@ -2,7 +2,7 @@ import { resolveActorName } from "@/lib/constants";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
 
-export type EfficiencyTool = "claude" | "codex" | "all";
+export type EfficiencyTool = "claude" | "codex" | "gemini" | "all";
 
 export interface MemberEfficiency {
   name: string;
@@ -58,10 +58,15 @@ function isCodexModel(model: string): boolean {
   return model.startsWith("gpt-");
 }
 
+function isGeminiModel(model: string): boolean {
+  return model.startsWith("gemini");
+}
+
 export function filterByTool(data: ClaudeCodeDataPoint[], tool: EfficiencyTool): ClaudeCodeDataPoint[] {
   if (tool === "all") return data;
   if (tool === "codex") return data.filter((d) => isCodexModel(d.model));
-  return data.filter((d) => !isCodexModel(d.model)); // claude
+  if (tool === "gemini") return data.filter((d) => isGeminiModel(d.model));
+  return data.filter((d) => !isCodexModel(d.model) && !isGeminiModel(d.model)); // claude
 }
 
 // ── Shared calc helpers ───────────────────────────────
@@ -203,6 +208,98 @@ export function aggregateCodexEfficiency(
     avgCacheHitRate: (totals.cached + totals.input) > 0 ? totals.cached / (totals.cached + totals.input) : 0,
     avgOutputRatio: totals.input > 0 ? totals.output / totals.input : 0,
     avgReasoningRatio: totals.output > 0 ? totals.reasoning / totals.output : 0,
+    daily,
+    members,
+  };
+}
+
+// ── Gemini-specific types & aggregation ──────────────
+
+export interface GeminiMemberEfficiency {
+  name: string;
+  totalTokens: number;
+  inputTokens: number;
+  outputTokens: number;
+  cacheTokens: number;
+  thoughtTokens: number;
+  cacheHitRate: number;
+  outputRatio: number;
+  thoughtRatio: number; // thought / output
+}
+
+export interface GeminiEfficiencyAggregation {
+  avgCacheHitRate: number;
+  avgOutputRatio: number;
+  avgThoughtRatio: number;
+  daily: DailyEfficiency[];
+  members: GeminiMemberEfficiency[];
+}
+
+/**
+ * Gemini efficiency aggregation
+ * cache_read_tokens = Gemini cache, cache_creation_tokens = Gemini thought
+ */
+export function aggregateGeminiEfficiency(data: ClaudeCodeDataPoint[]): GeminiEfficiencyAggregation {
+  const memberMap = new Map<string, {
+    input: number; output: number; cache: number; thought: number;
+  }>();
+  const dailyMap = new Map<string, {
+    input: number; output: number; cache: number;
+  }>();
+
+  for (const d of data) {
+    const name = resolveActorName(d.actor);
+    const m = memberMap.get(name) ?? { input: 0, output: 0, cache: 0, thought: 0 };
+    m.input += d.input_tokens;
+    m.output += d.output_tokens;
+    m.cache += d.cache_read_tokens;
+    m.thought += d.cache_creation_tokens;
+    memberMap.set(name, m);
+
+    if (d.date) {
+      const day = dailyMap.get(d.date) ?? { input: 0, output: 0, cache: 0 };
+      day.input += d.input_tokens;
+      day.output += d.output_tokens;
+      day.cache += d.cache_read_tokens;
+      dailyMap.set(d.date, day);
+    }
+  }
+
+  const members: GeminiMemberEfficiency[] = Array.from(memberMap.entries())
+    .map(([name, v]) => ({
+      name,
+      totalTokens: v.input + v.output + v.cache,
+      inputTokens: v.input,
+      outputTokens: v.output,
+      cacheTokens: v.cache,
+      thoughtTokens: v.thought,
+      cacheHitRate: (v.cache + v.input) > 0 ? v.cache / (v.cache + v.input) : 0,
+      outputRatio: v.input > 0 ? v.output / v.input : 0,
+      thoughtRatio: v.output > 0 ? v.thought / v.output : 0,
+    }))
+    .filter((m) => m.totalTokens > 0)
+    .sort((a, b) => b.cacheHitRate - a.cacheHitRate);
+
+  const daily: DailyEfficiency[] = Array.from(dailyMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, v]) => ({
+      date,
+      cacheHitRate: (v.cache + v.input) > 0 ? v.cache / (v.cache + v.input) : 0,
+      outputRatio: v.input > 0 ? v.output / v.input : 0,
+    }));
+
+  const totals = { input: 0, output: 0, cache: 0, thought: 0 };
+  for (const v of memberMap.values()) {
+    totals.input += v.input;
+    totals.output += v.output;
+    totals.cache += v.cache;
+    totals.thought += v.thought;
+  }
+
+  return {
+    avgCacheHitRate: (totals.cache + totals.input) > 0 ? totals.cache / (totals.cache + totals.input) : 0,
+    avgOutputRatio: totals.input > 0 ? totals.output / totals.input : 0,
+    avgThoughtRatio: totals.output > 0 ? totals.thought / totals.output : 0,
     daily,
     members,
   };

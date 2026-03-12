@@ -21,11 +21,14 @@ import { useToolData } from "@/lib/hooks/useToolData";
 import {
   aggregateEfficiency,
   aggregateCodexEfficiency,
+  aggregateGeminiEfficiency,
   filterByTool,
   type EfficiencyTool,
   type EfficiencyAggregation,
   type CodexEfficiencyAggregation,
+  type GeminiEfficiencyAggregation,
   type CodexMemberEfficiency,
+  type GeminiMemberEfficiency,
   type MemberEfficiency,
 } from "@/lib/aggregators/efficiency";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
@@ -45,6 +48,7 @@ function formatPct(value: number): string {
 const TOOL_TABS: { key: EfficiencyTool; label: string; color: string }[] = [
   { key: "claude", label: "Claude Code", color: "#00E87A" },
   { key: "codex", label: "Codex", color: "#10A37F" },
+  { key: "gemini", label: "Gemini", color: "#4285F4" },
   { key: "all", label: "All", color: "#FFFFFF" },
 ];
 
@@ -267,6 +271,91 @@ function CodexEfficiencyContent({ eff, t }: { eff: CodexEfficiencyAggregation; t
   );
 }
 
+// ── Gemini Tab Content ────────────────────────────────
+
+function GeminiEfficiencyContent({ eff, t }: { eff: GeminiEfficiencyAggregation; t: (key: TranslationKey) => string }) {
+  return (
+    <>
+      <div className="mx-0 mb-4 rounded-lg border border-[#4285F4]/20 bg-[#4285F4]/5 px-4 py-2.5 text-xs text-neutral-400 leading-relaxed">
+        <span className="text-[#4285F4] font-medium">Note</span> — {t("eff.geminiNote" as TranslationKey)}
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-6">
+        <KpiCard title={t("kpi.cacheHitRate")} value={formatPercent(eff.avgCacheHitRate)} subtitle={t("lb.teamAvg").toLowerCase()} tooltip={t("kpi.cacheHitRate.tip")} />
+        <KpiCard title={t("eff.outputRatio")} value={`${eff.avgOutputRatio.toFixed(1)}x`} subtitle={t("eff.outputRatio.sub")} tooltip={t("eff.outputRatio.tip")} />
+        <KpiCard title={t("eff.thoughtRatio" as TranslationKey)} value={formatPercent(eff.avgThoughtRatio)} subtitle={t("eff.thoughtRatio.sub" as TranslationKey)} tooltip={t("eff.thoughtRatio.tip" as TranslationKey)} />
+      </div>
+
+      <DailyChart daily={eff.daily} accentColor="#4285F4" t={t} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <MemberBarChart
+          data={eff.members}
+          dataKey="cacheHitRate"
+          title={t("eff.cacheHitByMember")}
+          tipText={t("eff.cacheHitByMember.tip")}
+          color="#4285F4"
+          formatX={formatPct}
+          domain={[0, 1]}
+          tooltipContent={(m: GeminiMemberEfficiency) => (
+            <>
+              <p className="font-medium text-sm mb-1">{m.name}</p>
+              <p className="text-sm text-[#4285F4]">{t("lb.cacheHit")}: {formatPct(m.cacheHitRate)}</p>
+              <p className="text-sm text-gray-400">{t("lb.total")}: {formatTokens(m.totalTokens)}</p>
+            </>
+          )}
+          t={t}
+        />
+        <MemberBarChart
+          data={[...eff.members].sort((a, b) => b.thoughtRatio - a.thoughtRatio)}
+          dataKey="thoughtRatio"
+          title={t("eff.thoughtRatio" as TranslationKey)}
+          tipText={t("eff.thoughtRatio.tip" as TranslationKey)}
+          color="#F59E0B"
+          formatX={formatPct}
+          domain={[0, 1]}
+          tooltipContent={(m: GeminiMemberEfficiency) => (
+            <>
+              <p className="font-medium text-sm mb-1">{m.name}</p>
+              <p className="text-sm text-[#F59E0B]">{t("eff.thoughtRatio" as TranslationKey)}: {formatPct(m.thoughtRatio)}</p>
+              <p className="text-sm text-gray-400">{t("chart.output")}: {formatTokens(m.outputTokens)}</p>
+            </>
+          )}
+          t={t}
+        />
+      </div>
+
+      <div className="rounded-xl bg-[#111111] p-6">
+        <h3 className="text-lg font-semibold mb-4 flex items-center">{t("eff.breakdown")}<InfoTip text={t("eff.breakdown.tip")} /></h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-gray-500 border-b border-[#222]">
+                <th className="text-left py-2 font-medium">{t("eff.member")}</th>
+                <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">{t("kpi.totalTokens")}<InfoTip below text={t("eff.totalTokens.tip")} /></span></th>
+                <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">{t("lb.cacheHit")}<InfoTip below text={t("eff.cacheHit.tip")} /></span></th>
+                <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">{t("eff.outputRatio")}<InfoTip below text={t("eff.outputRatioCol.tip")} /></span></th>
+                <th className="text-right py-2 font-medium"><span className="inline-flex items-center justify-end">{t("eff.thoughtRatio" as TranslationKey)}<InfoTip below text={t("eff.thoughtRatio.tip" as TranslationKey)} /></span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {eff.members.map((m) => (
+                <tr key={m.name} className="border-b border-[#1a1a1a]">
+                  <td className="py-3 font-medium">{m.name}</td>
+                  <td className="text-right text-gray-400">{formatTokens(m.totalTokens)}</td>
+                  <td className="text-right text-[#4285F4]">{formatPct(m.cacheHitRate)}</td>
+                  <td className="text-right text-[#3B82F6]">{m.outputRatio.toFixed(1)}x</td>
+                  <td className="text-right text-[#F59E0B]">{formatPct(m.thoughtRatio)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ── Shared horizontal bar chart ───────────────────────
 
 function MemberBarChart<T extends { name: string }>({ data, dataKey, title, tipText, color, formatX, domain, tooltipContent, t }: {
@@ -319,8 +408,7 @@ export default function EfficiencyPage() {
   const { t } = useT();
   const { data: rawData, loading, error } = useToolData();
   const { tool: globalTool } = useTool();
-  // Efficiency 페이지는 글로벌 도구 선택을 따름 (gemini→all로 폴백)
-  const tool: EfficiencyTool = globalTool === "gemini" ? "all" : globalTool;
+  const tool: EfficiencyTool = globalTool;
 
   // Codex data from dedicated API (has reasoning tokens)
   const [codexRows, setCodexRows] = useState<CodexMemberRow[]>([]);
@@ -359,6 +447,11 @@ export default function EfficiencyPage() {
     [rawData, codexRows, codexLoading],
   );
 
+  const geminiEff = useMemo(
+    () => loading ? null : aggregateGeminiEfficiency(filterByTool(rawData, "gemini")),
+    [rawData, loading],
+  );
+
   const allEff = useMemo(
     () => loading ? null : aggregateEfficiency(rawData),
     [rawData, loading],
@@ -385,6 +478,10 @@ export default function EfficiencyPage() {
           {tool === "codex" && codexEff && <CodexEfficiencyContent eff={codexEff} t={t} />}
           {tool === "codex" && !codexEff && !codexLoading && (
             <div className="text-gray-400 text-center py-12">{t("lb.noDataCodex")}</div>
+          )}
+          {tool === "gemini" && geminiEff && <GeminiEfficiencyContent eff={geminiEff} t={t} />}
+          {tool === "gemini" && !geminiEff && !loading && (
+            <div className="text-gray-400 text-center py-12">{t("lb.noDataGemini" as TranslationKey)}</div>
           )}
           {tool === "all" && allEff && <ClaudeEfficiencyContent eff={allEff} t={t} />}
         </>

@@ -28,7 +28,12 @@ export default function RankPage() {
       .catch(() => setError("데이터를 불러오지 못했습니다."))
       .finally(() => setLoading(false));
   }, []);
-  const profiles = useMemo(() => buildProfiles(data), [data]);
+  // Gamification은 Claude 전용 — Codex/Gemini 모델 제외
+  const claudeOnly = useMemo(
+    () => data.filter((d) => !d.model.startsWith("gpt") && !d.model.startsWith("gemini")),
+    [data],
+  );
+  const profiles = useMemo(() => buildProfiles(claudeOnly), [claudeOnly]);
 
   const [selectedName, setSelectedName] = useState<string>("");
 
@@ -110,10 +115,10 @@ export default function RankPage() {
       </div>
 
       {/* Weekly Summary */}
-      <WeeklySummary profile={selected} data={data} />
+      <WeeklySummary profile={selected} data={claudeOnly} />
 
       {/* Activity Timeline */}
-      <ActivityTimeline profile={selected} data={data} />
+      <ActivityTimeline profile={selected} data={claudeOnly} />
 
       {/* Party Ranking */}
       <PartyRanking

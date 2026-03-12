@@ -280,6 +280,18 @@ const translations = {
     en: "Not enough daily trend data",
     vi: "Không đủ dữ liệu xu hướng hàng ngày",
   },
+  "eff.thoughtRatio": { ko: "사고 비율", en: "Thought Ratio", vi: "Tỷ lệ Suy nghĩ" },
+  "eff.thoughtRatio.sub": { ko: "사고 / 출력", en: "thought / output", vi: "thought / output" },
+  "eff.thoughtRatio.tip": {
+    ko: "Gemini의 thinking 토큰이 출력에서 차지하는 비율. 높을수록 깊은 추론을 수행하는 작업이 많습니다.",
+    en: "Ratio of Gemini thinking tokens to output. Higher means more deep reasoning tasks.",
+    vi: "Tỷ lệ token thinking Gemini so với output. Cao hơn = nhiều tác vụ suy luận sâu.",
+  },
+  "eff.geminiNote": {
+    ko: "Gemini는 캐시 구조가 Claude와 다릅니다. Cache Efficiency(생성 대비 재사용) 대신 Thought Ratio(사고 토큰 비율)를 표시합니다.",
+    en: "Gemini has a different caching model than Claude. Thought Ratio is shown instead of Cache Efficiency.",
+    vi: "Gemini có cơ chế cache khác Claude. Hiển thị Thought Ratio thay vì Cache Efficiency.",
+  },
   "eff.activeUsers": { ko: "사용자 수", en: "Active Users", vi: "Số người dùng" },
   "eff.activeUsers.sub": { ko: "도구 사용 팀원", en: "tool users", vi: "người dùng công cụ" },
 

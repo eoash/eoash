@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { formatTokens, formatPercent } from "@/lib/utils";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
@@ -10,9 +10,16 @@ import DateRangePicker from "@/components/layout/DateRangePicker";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import { useTool } from "@/lib/contexts/ToolContext";
+import { useAutoRefreshFetch } from "@/lib/hooks/useAutoRefreshFetch";
 import type { TranslationKey } from "@/lib/i18n";
 import type { GeminiMemberRow } from "@/app/api/gemini-usage/route";
 import type { CodexMemberRow } from "@/app/api/codex-usage/route";
+
+// Stable transform functions (모듈 레벨 — 리렌더 시 참조 불변)
+const transformClaude = (json: Record<string, unknown>) =>
+  aggregateMembers((json.data ?? []) as import("@/lib/types").ClaudeCodeDataPoint[]);
+const transformData = <T,>(json: Record<string, unknown>) =>
+  ((json.data as T[]) ?? []);
 
 function navigateToMember(name: string, router: ReturnType<typeof useRouter>) {
   localStorage.setItem("members-selected", name);
@@ -38,37 +45,12 @@ function Avatar({ name, initial, color }: { name: string; initial: string; color
 // ── Claude Code 테이블 ──────────────────────────────
 function ClaudeTable() {
   const router = useRouter();
-  const { t, locale } = useT();
+  const { t } = useT();
   const { range } = useDateRange();
-  const [rows, setRows] = useState<ClaudeMemberRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState("");
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/analytics?start=${range.start}&end=${range.end}`);
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      setRows(aggregateMembers(json.data ?? []));
-      setLastUpdated(new Date().toLocaleTimeString(locale === "ko" ? "ko-KR" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    } catch (e) {
-      console.warn("leaderboard fetch failed:", e);
-      setError(t("common.error"));
-      setRows([]);
-    } finally { setLoading(false); }
-  }, [range.start, range.end, t, locale]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const timer = setInterval(fetchData, 30_000);
-    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
-    document.addEventListener("visibilitychange", onVis);
-    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", onVis); };
-  }, [fetchData]);
+  const { rows, loading, error, lastUpdated } = useAutoRefreshFetch<ClaudeMemberRow>(
+    "/api/analytics",
+    transformClaude,
+  );
 
   const maxTotal = rows.length > 0 ? rows[0].total : 1;
   const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;
@@ -155,38 +137,13 @@ function ClaudeTable() {
 // ── Codex 테이블 (실데이터) ──────────────────────────
 function CodexTable() {
   const router = useRouter();
-  const { t, locale } = useT();
+  const { t } = useT();
   const { range } = useDateRange();
-  const [rows, setRows] = useState<CodexMemberRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState("");
+  const { rows, loading, error, lastUpdated } = useAutoRefreshFetch<CodexMemberRow>(
+    "/api/codex-usage",
+    transformData,
+  );
   const accentColor = "#10A37F";
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/codex-usage?start=${range.start}&end=${range.end}`);
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      setRows(json.data ?? []);
-      setLastUpdated(new Date().toLocaleTimeString(locale === "ko" ? "ko-KR" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    } catch (e) {
-      console.warn("codex leaderboard fetch failed:", e);
-      setError(t("common.error"));
-      setRows([]);
-    } finally { setLoading(false); }
-  }, [range.start, range.end, t, locale]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const timer = setInterval(fetchData, 30_000);
-    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
-    document.addEventListener("visibilitychange", onVis);
-    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", onVis); };
-  }, [fetchData]);
 
   return (
     <>
@@ -247,38 +204,13 @@ function CodexTable() {
 // ── Gemini CLI 테이블 (실데이터) ─────────────────────
 function GeminiTable() {
   const router = useRouter();
-  const { t, locale } = useT();
+  const { t } = useT();
   const { range } = useDateRange();
-  const [rows, setRows] = useState<GeminiMemberRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState("");
+  const { rows, loading, error, lastUpdated } = useAutoRefreshFetch<GeminiMemberRow>(
+    "/api/gemini-usage",
+    transformData,
+  );
   const accentColor = "#4285F4";
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/gemini-usage?start=${range.start}&end=${range.end}`);
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      setRows(json.data ?? []);
-      setLastUpdated(new Date().toLocaleTimeString(locale === "ko" ? "ko-KR" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    } catch (e) {
-      console.warn("gemini leaderboard fetch failed:", e);
-      setError(t("common.error"));
-      setRows([]);
-    } finally { setLoading(false); }
-  }, [range.start, range.end, t, locale]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const timer = setInterval(fetchData, 30_000);
-    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
-    document.addEventListener("visibilitychange", onVis);
-    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", onVis); };
-  }, [fetchData]);
 
   return (
     <>
@@ -344,72 +276,12 @@ interface AllMemberRow {
 
 function AllTable() {
   const router = useRouter();
-  const { t, locale } = useT();
+  const { t } = useT();
   const { range } = useDateRange();
-  const [rows, setRows] = useState<AllMemberRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState("");
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const qs = `start=${range.start}&end=${range.end}`;
-      const [claudeRes, codexRes, geminiRes] = await Promise.all([
-        fetch(`/api/analytics?${qs}`),
-        fetch(`/api/codex-usage?${qs}`),
-        fetch(`/api/gemini-usage?${qs}`),
-      ]);
-
-      // Claude → aggregateMembers
-      const claudeJson = await claudeRes.json();
-      const claudeRows = aggregateMembers(claudeJson.data ?? []);
-
-      // Codex / Gemini
-      const codexJson = await codexRes.json();
-      const geminiJson = await geminiRes.json();
-
-      // name별로 merge
-      const map = new Map<string, AllMemberRow>();
-      for (const r of claudeRows) {
-        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
-        e.claude += r.total;
-        map.set(r.name, e);
-      }
-      for (const r of (codexJson.data ?? []) as CodexMemberRow[]) {
-        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
-        e.codex += r.total;
-        map.set(r.name, e);
-      }
-      for (const r of (geminiJson.data ?? []) as GeminiMemberRow[]) {
-        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
-        e.gemini += r.total;
-        map.set(r.name, e);
-      }
-
-      // total 계산 + 0 필터 + 정렬
-      const merged = Array.from(map.values())
-        .map((r) => ({ ...r, total: r.claude + r.codex + r.gemini }))
-        .filter((r) => r.total > 0);
-      merged.sort((a, b) => b.total - a.total);
-      setRows(merged);
-      setLastUpdated(new Date().toLocaleTimeString(locale === "ko" ? "ko-KR" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    } catch (e) {
-      console.warn("all leaderboard fetch failed:", e);
-      setError(t("common.error"));
-      setRows([]);
-    } finally { setLoading(false); }
-  }, [range.start, range.end, t, locale]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const timer = setInterval(fetchData, 30_000);
-    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
-    document.addEventListener("visibilitychange", onVis);
-    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", onVis); };
-  }, [fetchData]);
+  const { rows, loading, error, lastUpdated } = useAutoRefreshFetch<AllMemberRow>(
+    "/api/all-leaderboard",
+    transformData,
+  );
 
   const maxTotal = rows.length > 0 ? rows[0].total : 1;
   const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;
