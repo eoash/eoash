@@ -989,6 +989,14 @@
       "output_tokens": 840862,
       "cache_read_tokens": 253573090,
       "cache_creation_tokens": 6991756
+    },
+    {
+      "date": "2026-03-12",
+      "model": "claude-opus-4-6",
+      "input_tokens": 7,
+      "output_tokens": 1724,
+      "cache_read_tokens": 208766,
+      "cache_creation_tokens": 4374
     }
   ]
 }
