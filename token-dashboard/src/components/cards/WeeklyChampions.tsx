@@ -18,13 +18,16 @@ interface WeeklyChampion {
   avatar?: string;
 }
 
-function getWeeklyChampions(data: ClaudeCodeDataPoint[]): WeeklyChampion[] {
+function isCodexModel(model: string): boolean {
+  return model.startsWith("gpt-") || model.toLowerCase().includes("codex");
+}
+
+function computeChampions(data: ClaudeCodeDataPoint[], filter: (model: string) => boolean): WeeklyChampion[] {
   const weekUserMap = new Map<string, Map<string, number>>();
 
   for (const d of data) {
-    if (!d.date) continue;
-    // Codex(gpt-*)는 토커나이저가 달라 Claude와 동일 기준 비교 불가 → 제외
-    if (d.model?.startsWith("gpt-") || d.model?.toLowerCase().includes("codex")) continue;
+    if (!d.date || !d.model) continue;
+    if (!filter(d.model)) continue;
     const weekStart = startOfWeek(parseISO(d.date), { weekStartsOn: 1 });
     const weekKey = format(weekStart, "yyyy-MM-dd");
     const name = resolveActorName(d.actor);
@@ -62,9 +65,51 @@ function getWeeklyChampions(data: ClaudeCodeDataPoint[]): WeeklyChampion[] {
   return champions.sort((a, b) => b.week.localeCompare(a.week));
 }
 
+function ChampionRow({ c, i, accentColor, levelMap }: {
+  c: WeeklyChampion;
+  i: number;
+  accentColor: string;
+  levelMap: Map<string, { level: number; icon: string }>;
+}) {
+  const isTop = i === 0;
+  return (
+    <div
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+        isTop ? `border` : "bg-white/[0.02]"
+      }`}
+      style={isTop ? { backgroundColor: `${accentColor}08`, borderColor: `${accentColor}33` } : undefined}
+    >
+      <span className="text-xs font-mono w-24 flex-shrink-0" style={{ color: isTop ? accentColor : undefined }}>
+        {!isTop && <span className="text-gray-500">{c.weekLabel}</span>}
+        {isTop && c.weekLabel}
+      </span>
+      {c.avatar ? (
+        <img src={c.avatar} alt={c.name} className="w-6 h-6 rounded-full flex-shrink-0" />
+      ) : (
+        <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
+          {c.name[0]}
+        </div>
+      )}
+      <span className={`text-sm font-medium flex-1 ${isTop ? "text-white" : "text-gray-300"}`}>
+        {levelMap.get(c.name) && (
+          <span className="text-xs text-gray-500 mr-1">
+            {levelMap.get(c.name)!.icon}Lv.{levelMap.get(c.name)!.level}
+          </span>
+        )}
+        {c.name}
+      </span>
+      <span className="text-xs font-mono" style={{ color: isTop ? accentColor : undefined }}>
+        {!isTop && <span className="text-gray-500">{formatTokens(c.tokens)}</span>}
+        {isTop && formatTokens(c.tokens)}
+      </span>
+    </div>
+  );
+}
+
 export default function WeeklyChampions({ data }: { data: ClaudeCodeDataPoint[] }) {
   const { t, locale } = useT();
-  const champions = useMemo(() => getWeeklyChampions(data), [data]);
+  const claudeChampions = useMemo(() => computeChampions(data, (m) => !isCodexModel(m)), [data]);
+  const codexChampions = useMemo(() => computeChampions(data, isCodexModel), [data]);
   const profiles = useMemo(() => buildProfiles(data), [data]);
   const levelMap = useMemo(() => {
     const map = new Map<string, { level: number; icon: string }>();
@@ -72,43 +117,40 @@ export default function WeeklyChampions({ data }: { data: ClaudeCodeDataPoint[] 
     return map;
   }, [profiles]);
 
-  if (champions.length === 0) return null;
+  if (claudeChampions.length === 0 && codexChampions.length === 0) return null;
 
   return (
     <div className="rounded-xl border border-[#222] bg-[#111111] p-5">
-      <h2 className="text-sm font-semibold text-white mb-4">{t("weekly.title")}</h2>
-      <div className="space-y-2">
-        {champions.map((c, i) => (
-          <div
-            key={c.week}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
-              i === 0 ? "bg-[#00E87A]/5 border border-[#00E87A]/20" : "bg-white/[0.02]"
-            }`}
-          >
-            <span className={`text-xs font-mono w-24 flex-shrink-0 ${i === 0 ? "text-[#00E87A]" : "text-gray-500"}`}>
-              {c.weekLabel}
-            </span>
-            {c.avatar ? (
-              <img src={c.avatar} alt={c.name} className="w-6 h-6 rounded-full flex-shrink-0" />
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
-                {c.name[0]}
-              </div>
-            )}
-            <span className={`text-sm font-medium flex-1 ${i === 0 ? "text-white" : "text-gray-300"}`}>
-              {levelMap.get(c.name) && (
-                <span className="text-xs text-gray-500 mr-1">
-                  {levelMap.get(c.name)!.icon}Lv.{levelMap.get(c.name)!.level}
-                </span>
-              )}
-              {c.name}
-            </span>
-            <span className={`text-xs font-mono ${i === 0 ? "text-[#00E87A]" : "text-gray-500"}`}>
-              {formatTokens(c.tokens)}
-            </span>
+      {/* Claude 주간 챔피언 */}
+      {claudeChampions.length > 0 && (
+        <>
+          <h2 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+            {t("weekly.title")}
+            <span className="text-[10px] font-normal text-gray-500 bg-white/5 px-1.5 py-0.5 rounded">Claude</span>
+          </h2>
+          <div className="space-y-2">
+            {claudeChampions.map((c, i) => (
+              <ChampionRow key={c.week} c={c} i={i} accentColor="#00E87A" levelMap={levelMap} />
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
+
+      {/* Codex 주간 챔피언 */}
+      {codexChampions.length > 0 && (
+        <>
+          <h2 className={`text-sm font-semibold text-white mb-3 flex items-center gap-2 ${claudeChampions.length > 0 ? "mt-5" : ""}`}>
+            {t("weekly.title")}
+            <span className="text-[10px] font-normal text-gray-500 bg-white/5 px-1.5 py-0.5 rounded">Codex</span>
+          </h2>
+          <div className="space-y-2">
+            {codexChampions.map((c, i) => (
+              <ChampionRow key={c.week} c={c} i={i} accentColor="#10A37F" levelMap={levelMap} />
+            ))}
+          </div>
+        </>
+      )}
+
       <Link
         href="/rank"
         className="mt-3 block text-center text-xs text-gray-500 hover:text-[#00E87A] transition-colors"
