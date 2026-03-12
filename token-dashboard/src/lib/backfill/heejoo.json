@@ -75,10 +75,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 80,
-      "output_tokens": 24650,
-      "cache_read_tokens": 2199230,
-      "cache_creation_tokens": 154120,
+      "input_tokens": 83,
+      "output_tokens": 24992,
+      "cache_read_tokens": 2293025,
+      "cache_creation_tokens": 154518,
       "actor": {
         "type": "user",
         "id": "heejoo@eoeoeo.net",
