@@ -797,6 +797,22 @@
       "output_tokens": 20697,
       "cache_read_tokens": 3283058,
       "cache_creation_tokens": 245613
+    },
+    {
+      "date": "2026-03-12",
+      "model": "gpt-5.4",
+      "input_tokens": 1651962,
+      "output_tokens": 57633,
+      "cache_read_tokens": 17323264,
+      "cache_creation_tokens": 14387,
+      "session_count": 2,
+      "commits": 0,
+      "lines_of_code": 0,
+      "pull_requests": 0,
+      "actor": {
+        "email_address": "chiri@eoeoeo.net",
+        "id": "chiri@eoeoeo.net"
+      }
     }
   ]
 }
