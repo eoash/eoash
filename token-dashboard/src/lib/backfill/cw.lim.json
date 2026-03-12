@@ -39,10 +39,10 @@
     {
       "date": "2026-03-11",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 4,
-      "output_tokens": 126,
-      "cache_read_tokens": 146702,
-      "cache_creation_tokens": 330
+      "input_tokens": 8,
+      "output_tokens": 224,
+      "cache_read_tokens": 293930,
+      "cache_creation_tokens": 590
     },
     {
       "actor": {
