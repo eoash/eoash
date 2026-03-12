@@ -87,8 +87,11 @@ export const MODEL_CONFIG: Record<string, ModelConfig> = {
   "claude-sonnet-4-6":         { label: "Sonnet 4.6", color: "#3B82F6" },
   "claude-haiku-4-5-20251001": { label: "Haiku 4.5",  color: "#F59E0B" },
   "claude-sonnet-4-5-20250929":  { label: "Sonnet 4.5", color: "#8B5CF6" },
+  "claude-opus-4-5-20251101":    { label: "Opus 4.5",   color: "#059669" },
   "claude-3-5-sonnet-20241022": { label: "Sonnet 3.5", color: "#6366F1" },
   "claude-3-5-haiku-20241022":  { label: "Haiku 3.5",  color: "#FB923C" },
+  "gpt-5.3-codex":              { label: "Codex 5.3",  color: "#9CA3AF" },
+  "gpt-5.4":                    { label: "GPT 5.4",    color: "#6B7280" },
 };
 
 export function getModelLabel(model: string): string {
