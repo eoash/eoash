@@ -126,8 +126,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 ## 4. 현재 진행 상태
 
 ### Token Dashboard — 안정 운영 중
-- **설치 현황**: 26/34명 (backfill 24명 + OTel only 2명: hyunahk, chanhee)
-- **미가입 8명**: Kashy, Dowon, Gunwook, Jeebin, Sumin, SoYoung, Jade, Zen
+- **설치 현황**: 25/34명 (backfill 기준). Zen 신규 가입
+- **미가입 9명**: Kashy, Dowon, Gunwook, Jeebin, Sumin, SoYoung, Jade, Hyunah, Chanhee
+- **데이터 유실**: hyunahk, chanhee — 과거 OTel push 이력 있으나 backfill 미생성 + Collector 리셋으로 Prometheus 데이터 소실. 재설치 필요
 - **완료된 주요 기능**: Board 게시판(Notion DB), 게이미피케이션(/rank), DateRangePicker, Members 인사이트 v2, Hook 자가복구, data-integrity CI, 브랜드 컬러 #00E87A 통일, 모노레포 Vercel 직접 연결, Codex Overview 통합, LeaderboardTable DateRangePicker
 - **폐기(3/11)**: 레벨업 카드 + Slack 알림 — satori OG Image API 텍스트 겹침 해결 불가로 삭제
 - **데이터 파이프라인**: OTel → backfill 우선 (Prometheus 과다집계 우회), 세션별 backfill + 하루 1회 re-backfill
@@ -141,6 +142,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/12)**: All 통합 리더보드 — 3도구 합산 랭킹 + 스택 바 (Claude/Codex/Gemini 비율 시각화)
 - **완료(3/12)**: Members KPI 조건부 (Gemini→세션/커밋 숨김) + gamification Claude 전용 (XP/인사이트)
 - **완료(3/12)**: Codex 모델 컬러 #10A37F + Gemini 모델 5종 추가 (Google 브랜드 컬러)
+- **완료(3/13)**: 코드 품질 P0~P2 개선 — codex-backfill.ts/gemini-range.ts 공유 유틸 추출, toolHasActivity()/toolHasClaude() 조건식 통일, Promise.allSettled 부분 실패, normalizeDataPoint 경계 정규화, health API revalidate:60 캐싱, TOOL_COLORS 컬러 통일
 - [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
 - [ ] /rank 페이지 gamification Claude 전용 처리 (현재 전체 rawData 사용)
 - [x] auto-deploy 안정화 모니터링
@@ -158,4 +160,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-12*
+*마지막 업데이트: 2026-03-13*
