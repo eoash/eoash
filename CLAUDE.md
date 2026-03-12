@@ -137,7 +137,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/12)**: Codex 데이터 메인 파이프라인 완전 분리 — 토커나이저 기준 상이로 Claude와 혼합 불가. Codex는 /api/codex-usage + 리더보드 Codex 탭 전용
 - **완료(3/12)**: Gemini 리더보드 DateRange 연동 — instant query → queryRangeRaw + computeDailyIncrease 패턴 전환
 - **완료(3/12)**: README 모노레포 전환 공지 (token-dashboard + finance-dashboard)
+- **완료(3/12)**: 글로벌 Tool Selector (All/Claude/Codex/Gemini) — ToolContext + useToolData hook, Sidebar 도구 전환 UI
+- **완료(3/12)**: All 통합 리더보드 — 3도구 합산 랭킹 + 스택 바 (Claude/Codex/Gemini 비율 시각화)
+- **완료(3/12)**: Members KPI 조건부 (Gemini→세션/커밋 숨김) + gamification Claude 전용 (XP/인사이트)
+- **완료(3/12)**: Codex 모델 컬러 #10A37F + Gemini 모델 5종 추가 (Google 브랜드 컬러)
 - [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
+- [ ] /rank 페이지 gamification Claude 전용 처리 (현재 전체 rawData 사용)
 - [x] auto-deploy 안정화 모니터링
 
 ### Finance Dashboard — 안정 운영 중
