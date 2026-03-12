@@ -21,7 +21,8 @@ SEND_START_DATE = date(2026, 3, 9)
 
 # --- 설정 ---
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN", "")
-GITHUB_REPO = "eoash/token-dashboard"
+GITHUB_REPO = "eoash/eoash"
+REPO_PREFIX = "token-dashboard/"
 PROMETHEUS_URL = os.environ.get("PROMETHEUS_URL", "")
 
 # 팀원 목록: (email, slack_user_id)
@@ -90,7 +91,7 @@ EO Studio 내부 도구이며 AI 사용량만 수집합니다 (코드·개인정
 def check_backfill_files() -> set[str]:
     """GitHub repo의 backfill/ 디렉토리에서 설치된 사용자 이메일 추출."""
     installed = set()
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/src/lib/backfill"
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{REPO_PREFIX}src/lib/backfill"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "remind-script"})
         with urllib.request.urlopen(req, timeout=10) as resp:
