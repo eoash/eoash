@@ -3,6 +3,8 @@ import { fetchAnalytics, getDataSource } from "@/lib/data-source";
 import { EXCLUDED_EMAILS } from "@/lib/constants";
 import { getDateRange } from "@/lib/utils";
 import type { ClaudeCodeDataPoint } from "@/lib/types";
+import fs from "fs";
+import path from "path";
 
 /**
  * /api/data-integrity — 데이터 무결성 검증
@@ -13,6 +15,33 @@ import type { ClaudeCodeDataPoint } from "@/lib/types";
 
 const SPIKE_THRESHOLD = 10; // 전일 대비 10x 이상이면 스파이크
 const MIN_TOKENS_FOR_SPIKE = 100_000; // 10만 이하는 변동 무시
+
+/** backfill JSON에서 (email, date) → 총 토큰 인덱스 생성 */
+function buildBackfillIndex(): Map<string, number> {
+  const dir = path.join(process.cwd(), "src/lib/backfill");
+  if (!fs.existsSync(dir)) return new Map();
+
+  const index = new Map<string, number>();
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+
+  for (const file of files) {
+    try {
+      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed.data)) continue;
+      for (const d of parsed.data) {
+        const email = (d.actor?.email_address ?? d.actor?.id ?? "").toLowerCase();
+        if (!email) continue;
+        const key = `${email}|${d.date}`;
+        const tokens = (d.input_tokens ?? 0) + (d.output_tokens ?? 0);
+        index.set(key, (index.get(key) ?? 0) + tokens);
+      }
+    } catch {
+      // skip malformed files
+    }
+  }
+  return index;
+}
 
 interface IntegrityCheck {
   status: "pass" | "warn" | "fail";
@@ -30,6 +59,8 @@ interface SpikeAlert {
   tokens: number;
   prevDayTokens: number;
   ratio: number;
+  verdict: "ok" | "check";
+  verdictReason: string;
 }
 
 interface DropAlert {
@@ -74,6 +105,7 @@ export async function GET() {
 
     const spikes: SpikeAlert[] = [];
     const drops: DropAlert[] = [];
+    const bfIndex = buildBackfillIndex();
 
     for (const [email, dayMap] of userDayTokens) {
       const sortedDates = [...dayMap.keys()].sort();
@@ -86,12 +118,24 @@ export async function GET() {
         if (prev > 0 && curr > MIN_TOKENS_FOR_SPIKE) {
           const ratio = curr / prev;
           if (ratio >= SPIKE_THRESHOLD) {
+            // 자동 판정: backfill이 해당 날짜를 커버하면 정상
+            const bfKey = `${email.toLowerCase()}|${sortedDates[i]}`;
+            const bfTokens = bfIndex.get(bfKey);
+            let verdict: "ok" | "check" = "check";
+            let verdictReason = "backfill 없음 — Prometheus 스파이크 대시보드 노출 가능";
+            if (bfTokens !== undefined) {
+              verdict = "ok";
+              verdictReason = `backfill 커버 (${bfTokens.toLocaleString()} tokens) — 대시보드 정상`;
+            }
+
             spikes.push({
               user: email,
               date: sortedDates[i],
               tokens: curr,
               prevDayTokens: prev,
               ratio: Math.round(ratio * 10) / 10,
+              verdict,
+              verdictReason,
             });
           }
         }
@@ -118,7 +162,8 @@ export async function GET() {
 
     const hasSpikes = spikes.length > 0;
     const hasDrops = drops.length > 0;
-    const status = hasSpikes ? "fail" : hasDrops ? "warn" : "pass";
+    const hasRealSpikes = spikes.some((s) => s.verdict === "check");
+    const status = hasRealSpikes ? "fail" : hasSpikes ? "warn" : hasDrops ? "warn" : "pass";
 
     const parts: string[] = [];
     if (hasSpikes) parts.push(`${spikes.length} spike(s)`);

@@ -112,6 +112,9 @@ Gemini CLI  → 네이티브 OTel → OTel Collector (Railway) → Prometheus
 ### OTel Collector
 - `metrics_url_path: /v1/metrics` — Gemini v0.33+ 표준 경로 복원 완료 (v0.32 버그 우회 해제)
 
+### otel_push.py
+- **delta=0 early return 시 re-backfill 스킵 금지**: `compute_delta()`가 빈 dict를 반환하면 `maybe_daily_rebackfill()`까지 도달하지 못해 cutoff가 갱신되지 않음. delta=0이어도 re-backfill은 반드시 실행해야 Prometheus 스파이크 차단 가능 (실사례: chiri 3/10 haiku 30M 스파이크가 cutoff 미갱신으로 계속 노출)
+
 ### install-hook.sh / install-hook.ps1 (셸→Python)
 - `python3 -c "..."` 안에서 triple-quote + 변수 → 충돌 위험. 환경변수로 전달 후 `os.environ[]`로 읽기
 - f-string `\"` 이스케이프 → `.get()` 또는 문자열 연결로 대체
