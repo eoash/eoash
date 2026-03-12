@@ -801,9 +801,9 @@
     {
       "date": "2026-03-12",
       "model": "gpt-5.4",
-      "input_tokens": 1651962,
-      "output_tokens": 57633,
-      "cache_read_tokens": 17323264,
+      "input_tokens": 1850515,
+      "output_tokens": 58507,
+      "cache_read_tokens": 18108416,
       "cache_creation_tokens": 14387,
       "session_count": 2,
       "commits": 0,
