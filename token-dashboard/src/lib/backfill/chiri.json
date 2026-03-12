@@ -813,6 +813,19 @@
         "email_address": "chiri@eoeoeo.net",
         "id": "chiri@eoeoeo.net"
       }
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-opus-4-6",
+      "input_tokens": 5,
+      "output_tokens": 10651,
+      "cache_read_tokens": 289192,
+      "cache_creation_tokens": 163172,
+      "actor": {
+        "type": "user",
+        "id": "chiri@eoeoeo.net",
+        "email_address": "chiri@eoeoeo.net"
+      }
     }
   ]
 }
