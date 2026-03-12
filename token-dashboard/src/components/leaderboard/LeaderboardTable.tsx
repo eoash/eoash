@@ -6,6 +6,7 @@ import { formatTokens, formatPercent } from "@/lib/utils";
 import { aggregateMembers, type ClaudeMemberRow } from "@/lib/aggregators/leaderboard";
 import { NAME_TO_AVATAR } from "@/lib/constants";
 import InfoTip from "@/components/InfoTip";
+import DateRangePicker from "@/components/layout/DateRangePicker";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import type { TranslationKey } from "@/lib/i18n";
@@ -342,7 +343,7 @@ export default function LeaderboardTable() {
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] overflow-hidden">
-      <div className="px-6 py-5 flex items-center gap-4 border-b border-[#222]">
+      <div className="px-6 py-5 flex items-center justify-between gap-4 border-b border-[#222]">
         <div className="flex gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-1">
           {AI_TOOLS.map((ai) => (
             <button key={ai.key} onClick={() => setTool(ai.key)}
@@ -352,6 +353,7 @@ export default function LeaderboardTable() {
             </button>
           ))}
         </div>
+        <DateRangePicker />
       </div>
 
       {tool === "claude" && <ClaudeTable />}
