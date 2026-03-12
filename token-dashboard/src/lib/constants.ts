@@ -91,7 +91,7 @@ export const MODEL_CONFIG: Record<string, ModelConfig> = {
   "claude-3-5-sonnet-20241022": { label: "Sonnet 3.5", color: "#6366F1" },
   "claude-3-5-haiku-20241022":  { label: "Haiku 3.5",  color: "#FB923C" },
   "gpt-5.3-codex":              { label: "Codex 5.3",  color: "#10A37F" },
-  "gpt-5.4":                    { label: "GPT 5.4",    color: "#1A7F64" },
+  "gpt-5.4":                    { label: "Codex 5.4",  color: "#1A7F64" },
   // Gemini models
   "gemini-2.5-pro":             { label: "Gemini 2.5 Pro",   color: "#4285F4" },
   "gemini-2.5-flash":           { label: "Gemini 2.5 Flash", color: "#34A853" },
