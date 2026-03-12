@@ -611,16 +611,18 @@ def main():
     #    resume 시 전체 transcript를 다시 파싱하므로, 이전에 보낸 분을 빼야 이중 집계 방지
     prev_state = load_sent_state(transcript_path)
     delta = compute_delta(totals, prev_state)
+
+    # 4. 사용자 이메일 (delta 유무와 무관하게 re-backfill에 필요)
+    user_email = detect_user_email()
+
     if not delta:
-        # 새로운 토큰이 없으면 세션 카운트만 보내고 종료
+        # 새로운 토큰이 없어도 re-backfill은 실행 (cutoff 갱신 안전망)
         save_sent_state(transcript_path, totals)
+        maybe_daily_rebackfill(user_email)
         return
 
-    # 4. 비용 추정 (delta 기준)
+    # 5. 비용 추정 (delta 기준)
     costs = estimate_cost(delta)
-
-    # 5. 사용자 이메일 (git activity 조회에 필요하므로 먼저 감지)
-    user_email = detect_user_email()
 
     # 6. 커밋/PR 카운트 (delta 계산)
     git_commits = count_git_activity(transcript_path, user_email)
