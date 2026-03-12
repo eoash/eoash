@@ -1030,15 +1030,15 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-12",
-      "session_count": 2,
+      "session_count": 12,
       "lines_of_code": 0,
-      "commits": 4,
+      "commits": 28,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 8615,
-      "output_tokens": 291929,
-      "cache_read_tokens": 73773876,
-      "cache_creation_tokens": 2284704
+      "input_tokens": 18749,
+      "output_tokens": 298340,
+      "cache_read_tokens": 111422099,
+      "cache_creation_tokens": 3889631
     },
     {
       "date": "2026-03-13",
