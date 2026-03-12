@@ -333,25 +333,186 @@ function GeminiTable() {
   );
 }
 
+// ── All 통합 테이블 ──────────────────────────────────
+interface AllMemberRow {
+  name: string;
+  claude: number;
+  codex: number;
+  gemini: number;
+  total: number;
+}
+
+function AllTable() {
+  const router = useRouter();
+  const { t, locale } = useT();
+  const { range } = useDateRange();
+  const [rows, setRows] = useState<AllMemberRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState("");
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const qs = `start=${range.start}&end=${range.end}`;
+      const [claudeRes, codexRes, geminiRes] = await Promise.all([
+        fetch(`/api/analytics?${qs}`),
+        fetch(`/api/codex-usage?${qs}`),
+        fetch(`/api/gemini-usage?${qs}`),
+      ]);
+
+      // Claude → aggregateMembers
+      const claudeJson = await claudeRes.json();
+      const claudeRows = aggregateMembers(claudeJson.data ?? []);
+
+      // Codex / Gemini
+      const codexJson = await codexRes.json();
+      const geminiJson = await geminiRes.json();
+
+      // name별로 merge
+      const map = new Map<string, AllMemberRow>();
+      for (const r of claudeRows) {
+        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
+        e.claude += r.total;
+        map.set(r.name, e);
+      }
+      for (const r of (codexJson.data ?? []) as CodexMemberRow[]) {
+        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
+        e.codex += r.total;
+        map.set(r.name, e);
+      }
+      for (const r of (geminiJson.data ?? []) as GeminiMemberRow[]) {
+        const e = map.get(r.name) ?? { name: r.name, claude: 0, codex: 0, gemini: 0, total: 0 };
+        e.gemini += r.total;
+        map.set(r.name, e);
+      }
+
+      // total 계산 + 0 필터 + 정렬
+      const merged = Array.from(map.values())
+        .map((r) => ({ ...r, total: r.claude + r.codex + r.gemini }))
+        .filter((r) => r.total > 0);
+      merged.sort((a, b) => b.total - a.total);
+      setRows(merged);
+      setLastUpdated(new Date().toLocaleTimeString(locale === "ko" ? "ko-KR" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    } catch (e) {
+      console.warn("all leaderboard fetch failed:", e);
+      setError(t("common.error"));
+      setRows([]);
+    } finally { setLoading(false); }
+  }, [range.start, range.end, t, locale]);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const timer = setInterval(fetchData, 30_000);
+    const onVis = () => { if (document.visibilityState === "visible") fetchData(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", onVis); };
+  }, [fetchData]);
+
+  const maxTotal = rows.length > 0 ? rows[0].total : 1;
+  const avgTotal = rows.length > 0 ? rows.reduce((s, r) => s + r.total, 0) / rows.length : 0;
+  const avgLineIndex = rows.findIndex((r) => r.total < avgTotal);
+
+  return (
+    <>
+      {lastUpdated && <p className="text-xs text-neutral-600 px-6 pb-2">Updated {lastUpdated}</p>}
+      {error && (
+        <div className="mx-6 mb-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-xs">{error}</div>
+      )}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[#1e1e1e]">
+              <th className="px-3 py-3 text-left text-xs text-neutral-600 font-medium w-10 md:px-4">#</th>
+              <th className="px-3 py-3 text-left text-xs text-neutral-600 font-medium md:px-4">{t("lb.developer")}</th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#E8FF47" }}>CLAUDE</span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#10A37F" }}>CODEX</span></th>
+              <th className="hidden sm:table-cell px-4 py-3 text-right text-xs text-neutral-600 font-medium"><span className="inline-flex items-center justify-end" style={{ color: "#4285F4" }}>GEMINI</span></th>
+              <th className="px-3 py-3 text-right text-xs text-neutral-600 font-medium min-w-[120px] md:min-w-[180px] md:px-4">{t("lb.total")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr><td colSpan={6} className="px-4 py-12 text-center text-neutral-600">{t("common.loading")}</td></tr>
+            ) : rows.map((row, i) => {
+              const isTop3 = i < 3;
+              const isBelowAvg = row.total < avgTotal;
+              const showAvgLine = i === avgLineIndex && avgLineIndex > 0;
+              // 스택 바: Claude/Codex/Gemini 비율
+              const claudePct = maxTotal > 0 ? (row.claude / maxTotal) * 100 : 0;
+              const codexPct = maxTotal > 0 ? (row.codex / maxTotal) * 100 : 0;
+              const geminiPct = maxTotal > 0 ? (row.gemini / maxTotal) * 100 : 0;
+
+              return (
+                <React.Fragment key={row.name}>
+                  {showAvgLine && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-0">
+                        <div className="flex items-center gap-2 py-1">
+                          <div className="flex-1 border-t border-dashed border-yellow-500/40" />
+                          <span className="text-xs text-yellow-500/60 font-medium whitespace-nowrap">{t("lb.teamAvg")} — {formatTokens(avgTotal)}</span>
+                          <div className="flex-1 border-t border-dashed border-yellow-500/40" />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  <tr onClick={() => navigateToMember(row.name, router)} className={`border-b border-[#1a1a1a] transition-colors cursor-pointer ${isTop3 ? "bg-[#00E87A]/[0.03] hover:bg-[#00E87A]/[0.07]" : "hover:bg-[#161616]"} ${isBelowAvg ? "opacity-50" : ""}`}>
+                    <td className="px-3 py-3 text-sm md:px-4 md:py-4">{isTop3 ? MEDAL[i] : <span className="text-neutral-600">{i + 1}</span>}</td>
+                    <td className="px-3 py-3 md:px-4 md:py-4">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <Avatar name={row.name} initial={row.name[0]} color={isTop3 ? "#00E87A" : AVATAR_COLORS[i % AVATAR_COLORS.length]} />
+                        <span className={`font-medium text-sm md:text-base ${isTop3 ? "text-white" : "text-neutral-300"}`}>{row.name}</span>
+                      </div>
+                    </td>
+                    <td className="hidden sm:table-cell px-4 py-4 text-right text-neutral-400 font-mono text-sm">{row.claude > 0 ? formatTokens(row.claude) : "—"}</td>
+                    <td className="hidden sm:table-cell px-4 py-4 text-right text-neutral-400 font-mono text-sm">{row.codex > 0 ? formatTokens(row.codex) : "—"}</td>
+                    <td className="hidden sm:table-cell px-4 py-4 text-right text-neutral-400 font-mono text-sm">{row.gemini > 0 ? formatTokens(row.gemini) : "—"}</td>
+                    <td className="px-3 py-3 text-right md:px-4 md:py-4">
+                      <div className="flex items-center justify-end gap-2 md:gap-3">
+                        <div className="w-16 md:w-24 h-2 rounded-full bg-[#1a1a1a] overflow-hidden flex">
+                          {claudePct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${claudePct}%`, backgroundColor: "#E8FF47" }} />}
+                          {codexPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${codexPct}%`, backgroundColor: "#10A37F" }} />}
+                          {geminiPct > 0 && <div className="h-full transition-all duration-500" style={{ width: `${geminiPct}%`, backgroundColor: "#4285F4" }} />}
+                        </div>
+                        <span className="text-white font-mono text-xs md:text-sm font-medium min-w-[50px] md:min-w-[60px] text-right">{formatTokens(row.total)}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </React.Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
+        <span>{rows.length}{t("lb.members")} · {range.label}</span>
+        <span>{t("lb.autoRefresh")}</span>
+      </div>
+    </>
+  );
+}
+
 // ── 메인 컴포넌트 ────────────────────────────────────
 export default function LeaderboardTable() {
   const { tool } = useTool();
 
-  // "all" → Claude 테이블 (전체 데이터는 Overview에서 보이므로)
-  const activeTool: AiTool = tool === "all" ? "claude" : tool;
+  const headerLabel = tool === "all" ? "All Tools" : tool === "claude" ? "Claude Code" : tool === "codex" ? "Codex" : "Gemini";
 
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between gap-4 border-b border-[#222]">
         <span className="text-sm font-medium text-neutral-400">
-          {activeTool === "claude" ? "Claude Code" : activeTool === "codex" ? "Codex" : "Gemini"} Leaderboard
+          {headerLabel} Leaderboard
         </span>
         <DateRangePicker />
       </div>
 
-      {activeTool === "claude" && <ClaudeTable />}
-      {activeTool === "gemini" && <GeminiTable />}
-      {activeTool === "codex"  && <CodexTable />}
+      {tool === "all"    && <AllTable />}
+      {tool === "claude" && <ClaudeTable />}
+      {tool === "gemini" && <GeminiTable />}
+      {tool === "codex"  && <CodexTable />}
     </div>
   );
 }

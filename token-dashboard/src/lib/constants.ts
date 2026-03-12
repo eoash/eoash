@@ -90,8 +90,14 @@ export const MODEL_CONFIG: Record<string, ModelConfig> = {
   "claude-opus-4-5-20251101":    { label: "Opus 4.5",   color: "#059669" },
   "claude-3-5-sonnet-20241022": { label: "Sonnet 3.5", color: "#6366F1" },
   "claude-3-5-haiku-20241022":  { label: "Haiku 3.5",  color: "#FB923C" },
-  "gpt-5.3-codex":              { label: "Codex 5.3",  color: "#9CA3AF" },
-  "gpt-5.4":                    { label: "Codex 5.4",  color: "#6B7280" },
+  "gpt-5.3-codex":              { label: "Codex 5.3",  color: "#10A37F" },
+  "gpt-5.4":                    { label: "GPT 5.4",    color: "#1A7F64" },
+  // Gemini models
+  "gemini-2.5-pro":             { label: "Gemini 2.5 Pro",   color: "#4285F4" },
+  "gemini-2.5-flash":           { label: "Gemini 2.5 Flash", color: "#34A853" },
+  "gemini-2.0-flash":           { label: "Gemini 2.0 Flash", color: "#FBBC04" },
+  "gemini-2.0-flash-lite":      { label: "Gemini 2.0 Flash Lite", color: "#EA4335" },
+  "gemini-exp-1206":            { label: "Gemini Exp",       color: "#5F6368" },
 };
 
 export function getModelLabel(model: string): string {
