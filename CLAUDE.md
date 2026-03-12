@@ -134,6 +134,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/12)**: Codex 토큰 Overview 포함 + `/api/codex-backfill` 신설 + Codex/GPT 모델 라벨 추가
 - **완료(3/12)**: actor 누락 방어 (data-source 스킵 + backfill API 자동 주입) + 활동 지표 NaN 방어 (`?? 0`)
 - **완료(3/12)**: 서브레포 누락 backfill 병합 (chiri 6건 + cw.lim 1건) + LeaderboardTable DateRangePicker
+- **완료(3/12)**: Codex 데이터 메인 파이프라인 완전 분리 — 토커나이저 기준 상이로 Claude와 혼합 불가. Codex는 /api/codex-usage + 리더보드 Codex 탭 전용
+- **완료(3/12)**: Gemini 리더보드 DateRange 연동 — instant query → queryRangeRaw + computeDailyIncrease 패턴 전환
+- **완료(3/12)**: README 모노레포 전환 공지 (token-dashboard + finance-dashboard)
 - [ ] jemin 데이터 누락 확인 (3/10 14:00 KST 이후 otel_push 안 됨)
 - [x] auto-deploy 안정화 모니터링
 
