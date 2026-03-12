@@ -33,7 +33,7 @@ export async function GET() {
       const email = `${username}@eoeoeo.net`;
       const raw = JSON.parse(fs.readFileSync(path.join(backfillDir, file), "utf-8"));
       const entries: BackfillEntry[] = (raw.data ?? []).filter(
-        (e: BackfillEntry) => e.model && e.model.startsWith("gpt-")
+        (e: BackfillEntry) => e.model && (e.model.startsWith("gpt-") || e.model.toLowerCase().includes("codex"))
       );
       if (entries.length === 0) continue;
 

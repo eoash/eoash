@@ -53,9 +53,9 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
 
 const backfillData = loadAllBackfill();
 
-/** Codex 모델 여부 (gpt-* 계열은 /api/codex-usage에서 별도 서빙) */
+/** Codex 모델 여부 (gpt-* 또는 codex 포함 모델) */
 function isCodexModel(model: string): boolean {
-  return model.startsWith("gpt-");
+  return model.startsWith("gpt-") || model.toLowerCase().includes("codex");
 }
 
 /** 유저별 backfill 마지막 날짜 계산 (Claude 모델만, Codex 제외) */
@@ -122,24 +122,32 @@ export async function fetchAnalytics(params: {
     promMap.set(key, d);
   }
 
-  // Backfill: cutoff 이전 날짜만 (Codex 제외)
+  // Backfill: Claude는 cutoff 이전만, Codex는 날짜 범위만 (Prometheus에 없으므로 cutoff 불필요)
   const backfillPoints = backfillData.filter((d) => {
-    if (isCodexModel(d.model)) return false;
+    if (d.date < params.start_date || d.date > params.end_date) return false;
+    if (isCodexModel(d.model)) return true; // Codex는 backfill only → cutoff 불필요
     const email = d.actor?.email_address ?? d.actor?.id ?? "";
     const cutoff = perUserCutoff.get(email) ?? "";
-    return (
-      d.date >= params.start_date &&
-      d.date <= params.end_date &&
-      d.date <= cutoff
-    );
+    return d.date <= cutoff;
   });
 
   // 병합: backfill 우선 (Admin API = ground truth), Prometheus는 보조
   // Prometheus 이중전송으로 부풀려진 데이터가 backfill을 덮어쓰지 않도록 함
+  // 단, 활동 지표(commits, sessions, LOC, PRs)는 backfill에 없으므로 Prometheus에서 보충
   const merged = new Map<string, ClaudeCodeDataPoint>();
 
   for (const d of backfillPoints) {
     merged.set(pointKey(d), d);
+  }
+
+  // backfill 포인트에 Prometheus 활동 지표 보충 (토큰은 backfill 유지)
+  for (const [key, backfillPoint] of merged) {
+    const promPoint = promMap.get(key);
+    if (!promPoint) continue;
+    if (!backfillPoint.commits) backfillPoint.commits = promPoint.commits ?? 0;
+    if (!backfillPoint.session_count) backfillPoint.session_count = promPoint.session_count ?? 0;
+    if (!backfillPoint.lines_of_code) backfillPoint.lines_of_code = promPoint.lines_of_code ?? 0;
+    if (!backfillPoint.pull_requests) backfillPoint.pull_requests = promPoint.pull_requests ?? 0;
   }
 
   for (const [key, promPoint] of promMap) {
