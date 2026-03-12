@@ -96,7 +96,9 @@ export const MODEL_CONFIG: Record<string, ModelConfig> = {
   "gemini-2.5-pro":             { label: "Gemini 2.5 Pro",   color: "#4285F4" },
   "gemini-2.5-flash":           { label: "Gemini 2.5 Flash", color: "#34A853" },
   "gemini-2.0-flash":           { label: "Gemini 2.0 Flash", color: "#FBBC04" },
-  "gemini-2.0-flash-lite":      { label: "Gemini 2.0 Flash Lite", color: "#EA4335" },
+  "gemini-2.5-flash-lite":      { label: "Gemini 2.5 Flash Lite", color: "#EA4335" },
+  "gemini-2.0-flash-lite":      { label: "Gemini 2.0 Flash Lite", color: "#D93025" },
+  "gemini-3-flash-preview":     { label: "Gemini 3 Flash",   color: "#0D652D" },
   "gemini-exp-1206":            { label: "Gemini Exp",       color: "#5F6368" },
 };
 
