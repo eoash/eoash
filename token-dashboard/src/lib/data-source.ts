@@ -1,4 +1,5 @@
 import type { ClaudeCodeAnalyticsResponse, ClaudeCodeDataPoint } from "./types";
+import { normalizeDataPoint } from "./types";
 import { fetchFromPrometheus } from "./prometheus";
 import { getMockAnalytics } from "./mock-data";
 import { EMAIL_ALIAS } from "./constants";
@@ -36,14 +37,12 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
           // actor 방어 정책: backfill API(route.ts)가 입수 시 자동 주입하지만,
           // 수동 추가된 JSON이나 레거시 데이터에 actor가 없을 수 있음 → 스킵 (defense in depth)
           if (!d.actor?.email_address && !d.actor?.id) continue;
+          // 정규화: 누락 필드를 0으로 채움 → 이후 aggregator에서 ?? 0 불필요
+          const normalized = normalizeDataPoint(d);
           // sanitize emails
-          if (d.actor?.email_address) {
-            d.actor.email_address = sanitizeEmail(d.actor.email_address);
-          }
-          if (d.actor?.id) {
-            d.actor.id = sanitizeEmail(d.actor.id);
-          }
-          all.push(d);
+          normalized.actor.email_address = sanitizeEmail(normalized.actor.email_address ?? "");
+          normalized.actor.id = sanitizeEmail(normalized.actor.id);
+          all.push(normalized);
         }
       }
     } catch (e) {

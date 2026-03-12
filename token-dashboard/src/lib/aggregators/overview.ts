@@ -37,13 +37,13 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
     totalCacheRead += d.cache_read_tokens;
     totalCacheCreation += d.cache_creation_tokens;
     totalInput += d.input_tokens;
-    totalSessions += d.session_count ?? 0;
-    totalLines += d.lines_of_code ?? 0;
-    totalCommits += d.commits ?? 0;
-    totalPRs += d.pull_requests ?? 0;
-    if (d.tool_acceptance_rate != null) {
-      acceptanceRateSum += d.tool_acceptance_rate * (d.session_count ?? 0);
-      acceptanceRateCount += d.session_count ?? 0;
+    totalSessions += d.session_count;
+    totalLines += d.lines_of_code;
+    totalCommits += d.commits;
+    totalPRs += d.pull_requests;
+    if (d.tool_acceptance_rate > 0) {
+      acceptanceRateSum += d.tool_acceptance_rate * d.session_count;
+      acceptanceRateCount += d.session_count;
     }
 
     userSet.add(resolveActorName(d.actor));
@@ -53,7 +53,7 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
       existing.input += d.input_tokens;
       existing.output += d.output_tokens;
       existing.cache += d.cache_read_tokens;
-      existing.sessions += d.session_count ?? 0;
+      existing.sessions += d.session_count;
       dailyMap.set(d.date, existing);
     }
 
@@ -64,12 +64,12 @@ export function aggregateOverview(data: ClaudeCodeDataPoint[]): OverviewAggregat
       existing.cacheRead += d.cache_read_tokens;
       existing.cacheCreation += d.cache_creation_tokens;
       existing.input += d.input_tokens;
-      existing.lines += d.lines_of_code ?? 0;
-      existing.commits += d.commits ?? 0;
-      existing.prs += d.pull_requests ?? 0;
-      if (d.tool_acceptance_rate != null) {
-        existing.acceptanceSum += d.tool_acceptance_rate * (d.session_count ?? 0);
-        existing.acceptanceCount += d.session_count ?? 0;
+      existing.lines += d.lines_of_code;
+      existing.commits += d.commits;
+      existing.prs += d.pull_requests;
+      if (d.tool_acceptance_rate > 0) {
+        existing.acceptanceSum += d.tool_acceptance_rate * d.session_count;
+        existing.acceptanceCount += d.session_count;
       }
       memberMap.set(name, existing);
     }

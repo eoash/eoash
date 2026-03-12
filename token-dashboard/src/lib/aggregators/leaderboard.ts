@@ -29,8 +29,8 @@ export function aggregateMembers(data: ClaudeCodeDataPoint[]): ClaudeMemberRow[]
     e.output += d.output_tokens;
     e.cacheRead += d.cache_read_tokens;
     e.cacheCreation += d.cache_creation_tokens;
-    e.sessions += d.session_count ?? 0;
-    if (d.tool_acceptance_rate != null) { e.acceptSum += d.tool_acceptance_rate * (d.session_count ?? 0); e.acceptCount += d.session_count ?? 0; }
+    e.sessions += d.session_count;
+    if (d.tool_acceptance_rate > 0) { e.acceptSum += d.tool_acceptance_rate * d.session_count; e.acceptCount += d.session_count; }
     e.days.add(d.date);
     e.total = e.input + e.output;
     map.set(name, e);

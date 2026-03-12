@@ -38,8 +38,8 @@ function deduplicateActivity(data: ClaudeCodeDataPoint[]): ClaudeCodeDataPoint[]
     const email = d.actor.email_address ?? d.actor.id;
     const key = `${email}|${d.date}`;
     const cur = maxActivity.get(key) ?? { commits: 0, pull_requests: 0 };
-    cur.commits = Math.max(cur.commits, d.commits ?? 0);
-    cur.pull_requests = Math.max(cur.pull_requests, d.pull_requests ?? 0);
+    cur.commits = Math.max(cur.commits, d.commits);
+    cur.pull_requests = Math.max(cur.pull_requests, d.pull_requests);
     maxActivity.set(key, cur);
   }
 
