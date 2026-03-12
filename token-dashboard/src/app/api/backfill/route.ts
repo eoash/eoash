@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
   const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_read_tokens", "cache_creation_tokens"];
   for (const d of body.data) {
     const rec = d as Record<string, unknown>;
-    // actor 없으면 email에서 자동 주입 (크래시 방어)
+    // actor 방어 정책: 입수 단계에서 보장 → data-source.ts가 actor 없는 엔트리를 스킵하므로 여기서 주입 필수
     if (!rec.actor) {
       rec.actor = { type: "user", id: body.email, email_address: body.email };
     }

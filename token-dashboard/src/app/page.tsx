@@ -13,7 +13,7 @@ import { aggregateOverview } from "@/lib/aggregators/overview";
 import { useToolData } from "@/lib/hooks/useToolData";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
 import { useT } from "@/lib/contexts/LanguageContext";
-import { useTool } from "@/lib/contexts/ToolContext";
+import { useTool, toolHasActivity } from "@/lib/contexts/ToolContext";
 import { useMemo } from "react";
 
 export default function OverviewPage() {
@@ -49,7 +49,7 @@ export default function OverviewPage() {
             <KpiCard title={t("kpi.avgDailySessions")} value={String(overview.avgDailySessions)} subtitle={t("kpi.avgDailySessions.sub")} tooltip={t("kpi.avgDailySessions.tip")} />
           </div>
 
-          {(tool === "claude" || tool === "all" || tool === "codex") && overview.totalCommits > 0 && (
+          {toolHasActivity(tool) && overview.totalCommits > 0 && (
             <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
               <KpiCard title={t("kpi.totalCommits")} value={overview.totalCommits.toLocaleString()} subtitle={t("kpi.totalCommits.sub")} tooltip={t("kpi.totalCommits.tip")} />
               <KpiCard title={t("kpi.pullRequests")} value={overview.totalPRs.toLocaleString()} subtitle={t("kpi.pullRequests.sub")} tooltip={t("kpi.pullRequests.tip")} />

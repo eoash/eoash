@@ -14,7 +14,7 @@ import { buildProfiles } from "@/lib/gamification";
 import { generateUsageInsights, buildTeamStats } from "@/lib/usage-insights";
 import { useT } from "@/lib/contexts/LanguageContext";
 import { useDateRange } from "@/lib/contexts/DateRangeContext";
-import { useTool } from "@/lib/contexts/ToolContext";
+import { useTool, toolHasActivity, toolHasClaude } from "@/lib/contexts/ToolContext";
 
 export default function TeamPage() {
   const { t } = useT();
@@ -36,10 +36,10 @@ export default function TeamPage() {
   const memberData = aggregateMember(rawData, selectedName);
 
   // Gamification은 Claude 데이터 전용 (XP/레벨/업적 시스템이 Claude 토큰 기반)
-  const isClaudeTool = tool === "claude" || tool === "all";
+  const hasClaude = toolHasClaude(tool);
   const claudeOnlyData = useMemo(
-    () => isClaudeTool ? rawData.filter((d) => !d.model.startsWith("gpt-") && !d.model.startsWith("gemini")) : [],
-    [rawData, isClaudeTool],
+    () => hasClaude ? rawData.filter((d) => !d.model.startsWith("gpt-") && !d.model.startsWith("gemini")) : [],
+    [rawData, hasClaude],
   );
   const profiles = useMemo(() => buildProfiles(claudeOnlyData), [claudeOnlyData]);
   const selectedProfile = useMemo(
@@ -87,18 +87,18 @@ export default function TeamPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <KpiCard title={t("kpi.totalTokens")} value={formatTokens(memberData.totalTokens)} tooltip={t("team.tokens.tip")} />
             <KpiCard title={t("kpi.cacheHitRate")} value={formatPercent(memberData.cacheHitRate)} tooltip={t("team.cacheHit.tip")} />
-            {tool !== "gemini" && (
+            {toolHasActivity(tool) && (
               <KpiCard title={t("team.sessions")} value={String(memberData.sessions)} tooltip={t("team.sessions.tip")} />
             )}
           </div>
-          {(tool === "claude" || tool === "all" || tool === "codex") && memberData.commits > 0 && (
+          {toolHasActivity(tool) && memberData.commits > 0 && (
             <div className="grid grid-cols-2 gap-4 mb-6">
               <KpiCard title={t("kpi.totalCommits")} value={String(memberData.commits)} subtitle={`by ${selectedName}`} tooltip={t("team.commits.tip")} />
               <KpiCard title={t("kpi.pullRequests")} value={String(memberData.pullRequests)} subtitle={`by ${selectedName}`} tooltip={t("team.prs.tip")} />
             </div>
           )}
 
-          {isClaudeTool && <UsageInsightCard insights={insights} name={selectedName} />}
+          {hasClaude && <UsageInsightCard insights={insights} name={selectedName} />}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">

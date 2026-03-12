@@ -33,7 +33,8 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.data)) {
         for (const d of parsed.data) {
-          // actor 없는 엔트리는 스킵 (잘못된 backfill 데이터 방어)
+          // actor 방어 정책: backfill API(route.ts)가 입수 시 자동 주입하지만,
+          // 수동 추가된 JSON이나 레거시 데이터에 actor가 없을 수 있음 → 스킵 (defense in depth)
           if (!d.actor?.email_address && !d.actor?.id) continue;
           // sanitize emails
           if (d.actor?.email_address) {

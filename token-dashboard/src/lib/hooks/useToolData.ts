@@ -76,21 +76,25 @@ export function useToolData(): UseToolDataResult {
     const { start, end } = range;
 
     if (tool === "all") {
-      // 3개 병렬 fetch
-      Promise.all([
+      // 3개 병렬 fetch — 부분 실패 허용 (성공한 도구 데이터만 표시)
+      Promise.allSettled([
         fetchToolData("claude", start, end),
         fetchToolData("codex", start, end),
         fetchToolData("gemini", start, end),
       ])
-        .then(([claude, codex, gemini]) => {
-          if (!cancelled) {
-            const merged = [...claude, ...codex, ...gemini];
-            setRawData({ tool, data: merged });
-          }
-        })
-        .catch((e: unknown) => {
-          if (!cancelled) {
-            console.error("all tools fetch failed:", e);
+        .then((results) => {
+          if (cancelled) return;
+          const merged: ClaudeCodeDataPoint[] = [];
+          const failed: string[] = [];
+          const tools = ["Claude", "Codex", "Gemini"] as const;
+          results.forEach((r, i) => {
+            if (r.status === "fulfilled") merged.push(...r.value);
+            else { console.warn(`${tools[i]} fetch failed:`, r.reason); failed.push(tools[i]); }
+          });
+          setRawData({ tool, data: merged });
+          if (failed.length > 0 && failed.length < 3) {
+            setError(`${failed.join(", ")} 데이터를 불러오지 못했습니다.`);
+          } else if (failed.length === 3) {
             setError("데이터를 불러오지 못했습니다.");
           }
         })

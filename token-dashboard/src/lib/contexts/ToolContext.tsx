@@ -46,6 +46,16 @@ export function useTool() {
   return useContext(ToolContext);
 }
 
+/** 활동 지표(sessions, commits, PRs) 지원 여부 — Gemini는 미지원 */
+export function toolHasActivity(tool: ToolType): boolean {
+  return tool !== "gemini";
+}
+
+/** Claude 데이터 포함 여부 — gamification/XP/인사이트용 */
+export function toolHasClaude(tool: ToolType): boolean {
+  return tool === "claude" || tool === "all";
+}
+
 /** Tool brand colors */
 export const TOOL_COLORS: Record<ToolType, string> = {
   all: "#00E87A",
