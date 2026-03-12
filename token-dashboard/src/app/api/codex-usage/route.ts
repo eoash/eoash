@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { EMAIL_TO_NAME } from "@/lib/constants";
 import fs from "fs";
 import path from "path";
@@ -22,8 +22,12 @@ interface BackfillEntry {
   model?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = req.nextUrl;
+    const startDate = searchParams.get("start") ?? "";
+    const endDate = searchParams.get("end") ?? "";
+
     const memberMap = new Map<string, { input: number; output: number; cached: number; reasoning: number }>();
 
     // backfill/*.json에서 Codex 모델(gpt-*) 레코드 추출
@@ -33,7 +37,12 @@ export async function GET() {
       const email = `${username}@eoeoeo.net`;
       const raw = JSON.parse(fs.readFileSync(path.join(backfillDir, file), "utf-8"));
       const entries: BackfillEntry[] = (raw.data ?? []).filter(
-        (e: BackfillEntry) => e.model && (e.model.startsWith("gpt-") || e.model.toLowerCase().includes("codex"))
+        (e: BackfillEntry) => {
+          if (!e.model || (!e.model.startsWith("gpt-") && !e.model.toLowerCase().includes("codex"))) return false;
+          if (startDate && e.date < startDate) return false;
+          if (endDate && e.date > endDate) return false;
+          return true;
+        }
       );
       if (entries.length === 0) continue;
 

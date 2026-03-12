@@ -154,6 +154,7 @@ function ClaudeTable() {
 function CodexTable() {
   const router = useRouter();
   const { t, locale } = useT();
+  const { range } = useDateRange();
   const [rows, setRows] = useState<CodexMemberRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -164,7 +165,7 @@ function CodexTable() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/codex-usage");
+      const res = await fetch(`/api/codex-usage?start=${range.start}&end=${range.end}`);
       if (!res.ok) throw new Error(`Server error (${res.status})`);
       const json = await res.json();
       setRows(json.data ?? []);
@@ -174,7 +175,7 @@ function CodexTable() {
       setError(t("common.error"));
       setRows([]);
     } finally { setLoading(false); }
-  }, [t, locale]);
+  }, [range.start, range.end, t, locale]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => {
@@ -234,7 +235,7 @@ function CodexTable() {
         </table>
       </div>
       <div className="px-6 py-3 border-t border-[#1a1a1a] flex justify-between text-xs text-neutral-600">
-        <span>{rows.length}{t("lb.members")} · {t("period.allTime")}</span>
+        <span>{rows.length}{t("lb.members")} · {range.label}</span>
         <span>{t("lb.autoRefresh")}</span>
       </div>
     </>
