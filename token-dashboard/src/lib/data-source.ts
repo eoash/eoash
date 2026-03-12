@@ -33,6 +33,8 @@ function loadAllBackfill(): ClaudeCodeDataPoint[] {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.data)) {
         for (const d of parsed.data) {
+          // actor 없는 엔트리는 스킵 (잘못된 backfill 데이터 방어)
+          if (!d.actor?.email_address && !d.actor?.id) continue;
           // sanitize emails
           if (d.actor?.email_address) {
             d.actor.email_address = sanitizeEmail(d.actor.email_address);

@@ -68,6 +68,10 @@ export async function POST(req: NextRequest) {
   const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_read_tokens", "cache_creation_tokens"];
   for (const d of body.data) {
     const rec = d as Record<string, unknown>;
+    // actor 없으면 email에서 자동 주입 (크래시 방어)
+    if (!rec.actor) {
+      rec.actor = { type: "user", id: body.email, email_address: body.email };
+    }
     const key = `${rec.date}|${rec.model}`;
     if (additive && merged.has(key)) {
       // add 모드: 기존 값에 합산 (세션 delta 누적)
