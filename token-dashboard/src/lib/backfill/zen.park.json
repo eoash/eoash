@@ -1,0 +1,148 @@
+{
+  "data": [
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-02-25",
+      "session_count": 5,
+      "lines_of_code": 0,
+      "commits": 2,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 559,
+      "output_tokens": 35016,
+      "cache_read_tokens": 14105305,
+      "cache_creation_tokens": 402930
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-02",
+      "session_count": 2,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 41,
+      "output_tokens": 167,
+      "cache_read_tokens": 1173917,
+      "cache_creation_tokens": 528688
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-04",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 107,
+      "output_tokens": 377,
+      "cache_read_tokens": 5528209,
+      "cache_creation_tokens": 866828
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-05",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 39,
+      "output_tokens": 111,
+      "cache_read_tokens": 1174695,
+      "cache_creation_tokens": 138449
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-06",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 63,
+      "output_tokens": 64,
+      "cache_read_tokens": 1272690,
+      "cache_creation_tokens": 1078838
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-08",
+      "session_count": 1,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 33,
+      "output_tokens": 14,
+      "cache_read_tokens": 526303,
+      "cache_creation_tokens": 566416
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-10",
+      "session_count": 1,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 46,
+      "output_tokens": 37977,
+      "cache_read_tokens": 1949656,
+      "cache_creation_tokens": 468065
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "zen.park@eoeoeo.net",
+        "email_address": "zen.park@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-11",
+      "session_count": 1,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 18,
+      "output_tokens": 12804,
+      "cache_read_tokens": 154122,
+      "cache_creation_tokens": 239164
+    }
+  ]
+}
