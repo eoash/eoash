@@ -124,10 +124,10 @@ export async function fetchAnalytics(params: {
     promMap.set(key, d);
   }
 
-  // Backfill: Claude는 cutoff 이전만, Codex는 날짜 범위만 (Prometheus에 없으므로 cutoff 불필요)
+  // Backfill: Claude만 포함 (Codex는 /api/codex-usage 별도 파이프라인)
   const backfillPoints = backfillData.filter((d) => {
     if (d.date < params.start_date || d.date > params.end_date) return false;
-    if (isCodexModel(d.model)) return true; // Codex는 backfill only → cutoff 불필요
+    if (isCodexModel(d.model)) return false; // Codex 완전 분리 — 토커나이저 기준 상이
     const email = d.actor?.email_address ?? d.actor?.id ?? "";
     const cutoff = perUserCutoff.get(email) ?? "";
     return d.date <= cutoff;
