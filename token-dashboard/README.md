@@ -1,10 +1,13 @@
 # EO Studio — AI Token Dashboard
 
+> **Note**: 이 프로젝트는 모노레포 [`eoash/eoash`](https://github.com/eoash/eoash)의 `token-dashboard/` 디렉토리로 이전되었습니다.
+> 기존 서브레포 `eoash/token-dashboard`는 더 이상 업데이트되지 않습니다.
+
 EO Studio 팀의 AI 코딩 도구 사용량을 실시간으로 모니터링하는 내부 대시보드입니다.
 **Claude Code / Codex / Gemini CLI** 사용 현황을 팀원별·모델별·기간별로 추적합니다.
 
 **Live →** https://token-dashboard-iota.vercel.app
-**Repository →** https://github.com/eoash/token-dashboard
+**Repository →** https://github.com/eoash/eoash/tree/main/token-dashboard
 
 ---
 
@@ -84,7 +87,7 @@ Prometheus는 cutoff + 1일부터 데이터를 사용합니다 (OTel `increase([
 대시보드에 **실제 사용량 데이터**를 표시하려면 각 팀원이 아래 명령어를 한 번만 실행합니다:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/install-hook.sh | bash
+curl -sL https://raw.githubusercontent.com/eoash/eoash/main/token-dashboard/scripts/install-hook.sh | bash
 ```
 
 ### 설치 시 자동으로 수행되는 작업
@@ -120,8 +123,8 @@ curl -sL https://raw.githubusercontent.com/eoash/token-dashboard/main/scripts/in
 ### 1. 클론 및 설치
 
 ```bash
-git clone https://github.com/eoash/token-dashboard.git
-cd token-dashboard
+git clone https://github.com/eoash/eoash.git
+cd eoash/token-dashboard
 npm install
 ```
 

@@ -56,6 +56,16 @@
       "sourceType": "github",
       "computedHash": "d3a4c7d2f2715a33662c8b06ffc16035d01965a8b4ed81c2958fb22ae94760f8"
     },
+    "distill-receive": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "4670325434a564409e76cc52afb077a98347f574acbb5df4ae044b4dce8c6a83"
+    },
+    "distill-share": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "0d0cabb300aeb00c0328ab29f1d62798d7438be36ef47fcb614b1b66134aa927"
+    },
     "docx": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
@@ -95,6 +105,16 @@
       "source": "eoash/ash-skills",
       "sourceType": "github",
       "computedHash": "1df2afcb74a16484dfc50ec3d77acb7828325c1e662607dc273c12f7b6b3ab2d"
+    },
+    "memory-receive": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "2d04d1a4072eb013711f8eddcef957d32b8e978d78c89f5a4b850eb4b2c8111f"
+    },
+    "memory-share": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "e9298563e7c86d3508f6c342396f4664761957e7dd0e23189aef4c3dc1e8b85c"
     },
     "my-code-reviewer": {
       "source": "eoash/ash-skills",
@@ -220,6 +240,16 @@
       "source": "remotion-dev/skills",
       "sourceType": "github",
       "computedHash": "9851afb52e1b892c43b2af973bda1776ce01fedfdfe704e0cfd70069a3a9c300"
+    },
+    "sessions-receive": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "8ae522ef7f7c3526652d6e24b0e1556511e6a76b275b267b14d6280b823d0e1b"
+    },
+    "sessions-share": {
+      "source": "NAMYUNWOO/claudeSpread",
+      "sourceType": "github",
+      "computedHash": "a56c0c639cfc60fe79a6971e91d65584c9789d6b211d7a65816ae033a6b8de31"
     },
     "slack-to-gcal": {
       "source": "eoash/ash-skills",

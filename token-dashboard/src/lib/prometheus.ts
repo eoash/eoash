@@ -55,7 +55,7 @@ const Q_RAW = {
 
 // --- Query helpers ---
 
-async function queryRangeRaw(
+export async function queryRangeRaw(
   query: string,
   startISO: string,
   endISO: string

@@ -91,7 +91,7 @@ export const MODEL_CONFIG: Record<string, ModelConfig> = {
   "claude-3-5-sonnet-20241022": { label: "Sonnet 3.5", color: "#6366F1" },
   "claude-3-5-haiku-20241022":  { label: "Haiku 3.5",  color: "#FB923C" },
   "gpt-5.3-codex":              { label: "Codex 5.3",  color: "#9CA3AF" },
-  "gpt-5.4":                    { label: "GPT 5.4",    color: "#6B7280" },
+  "gpt-5.4":                    { label: "Codex 5.4",  color: "#6B7280" },
 };
 
 export function getModelLabel(model: string): string {
