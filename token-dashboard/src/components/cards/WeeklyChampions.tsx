@@ -23,6 +23,8 @@ function getWeeklyChampions(data: ClaudeCodeDataPoint[]): WeeklyChampion[] {
 
   for (const d of data) {
     if (!d.date) continue;
+    // Codex(gpt-*)는 토커나이저가 달라 Claude와 동일 기준 비교 불가 → 제외
+    if (d.model?.startsWith("gpt-") || d.model?.toLowerCase().includes("codex")) continue;
     const weekStart = startOfWeek(parseISO(d.date), { weekStartsOn: 1 });
     const weekKey = format(weekStart, "yyyy-MM-dd");
     const name = resolveActorName(d.actor);
