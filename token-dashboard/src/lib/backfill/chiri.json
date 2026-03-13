@@ -817,10 +817,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-opus-4-6",
-      "input_tokens": 7634,
-      "output_tokens": 212299,
-      "cache_read_tokens": 38831455,
-      "cache_creation_tokens": 1206587,
+      "input_tokens": 7669,
+      "output_tokens": 228431,
+      "cache_read_tokens": 42535294,
+      "cache_creation_tokens": 1349397,
       "actor": {
         "type": "user",
         "id": "chiri@eoeoeo.net",
