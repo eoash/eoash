@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EMAIL_TO_NAME } from "@/lib/constants";
+import { EMAIL_TO_NAME, IS_DEMO } from "@/lib/constants";
 import { readCodexBackfill } from "@/lib/codex-backfill";
+import { getMockCodexAnalytics } from "@/lib/mock-data";
 
 export interface CodexMemberRow {
   name: string;
@@ -16,12 +17,16 @@ export interface CodexMemberRow {
 }
 
 export async function GET(req: NextRequest) {
+  if (IS_DEMO) {
+    return NextResponse.json(getMockCodexAnalytics());
+  }
+
   try {
     const { searchParams } = req.nextUrl;
     const startDate = searchParams.get("start") ?? "";
     const endDate = searchParams.get("end") ?? "";
 
-    const memberMap = readCodexBackfill(startDate, endDate);
+    const memberMap = await readCodexBackfill(startDate, endDate);
 
     const data: CodexMemberRow[] = [];
     for (const [email, m] of memberMap) {

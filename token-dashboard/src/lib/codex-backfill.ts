@@ -1,6 +1,5 @@
-import fs from "fs";
-import path from "path";
 import { EMAIL_TO_NAME } from "./constants";
+import { getBackfillFiles } from "./backfill-loader";
 
 export interface CodexBackfillEntry {
   date: string;
@@ -31,24 +30,22 @@ export function isCodexModel(model: string): boolean {
 }
 
 /** backfill에서 Codex 엔트리를 ClaudeCodeDataPoint[] 형태로 반환 (codex-analytics용) */
-export function readCodexBackfillRaw(startDate: string, endDate: string): Record<string, unknown>[] {
-  const backfillDir = path.join(process.cwd(), "src/lib/backfill");
-  if (!fs.existsSync(backfillDir)) return [];
-
+export async function readCodexBackfillRaw(startDate: string, endDate: string): Promise<Record<string, unknown>[]> {
+  const files = await getBackfillFiles();
   const result: Record<string, unknown>[] = [];
-  for (const file of fs.readdirSync(backfillDir).filter((f) => f.endsWith(".json"))) {
-    const username = file.replace(".json", "");
-    const email = `${username}@eoeoeo.net`;
-    const name = EMAIL_TO_NAME[email] ?? username;
 
-    const raw = JSON.parse(fs.readFileSync(path.join(backfillDir, file), "utf-8"));
-    for (const e of raw.data ?? []) {
+  for (const { name, data } of files) {
+    const username = name.replace(".json", "");
+    const email = `${username}@eoeoeo.net`;
+    const resolvedName = EMAIL_TO_NAME[email] ?? username;
+
+    for (const e of data) {
       if (!e.model || !isCodexModel(e.model)) continue;
       if (startDate && e.date < startDate) continue;
       if (endDate && e.date > endDate) continue;
 
       result.push({
-        actor: { type: "user", id: email, email_address: email, name },
+        actor: { type: "user", id: email, email_address: email, name: resolvedName },
         model: e.model ?? "codex-unknown",
         date: e.date,
         session_count: e.session_count ?? 0,
@@ -70,17 +67,14 @@ export function readCodexBackfillRaw(startDate: string, endDate: string): Record
  * backfill/*.json에서 Codex 모델(gpt-*, codex) 레코드를 읽어 유저별 집계.
  * codex-usage API와 all-leaderboard API가 공유.
  */
-export function readCodexBackfill(startDate: string, endDate: string): Map<string, CodexUserData> {
-  const backfillDir = path.join(process.cwd(), "src/lib/backfill");
+export async function readCodexBackfill(startDate: string, endDate: string): Promise<Map<string, CodexUserData>> {
+  const files = await getBackfillFiles();
   const memberMap = new Map<string, CodexUserData>();
 
-  if (!fs.existsSync(backfillDir)) return memberMap;
-
-  for (const file of fs.readdirSync(backfillDir).filter((f) => f.endsWith(".json"))) {
-    const username = file.replace(".json", "");
+  for (const { name, data } of files) {
+    const username = name.replace(".json", "");
     const email = `${username}@eoeoeo.net`;
-    const raw = JSON.parse(fs.readFileSync(path.join(backfillDir, file), "utf-8"));
-    const entries: CodexBackfillEntry[] = (raw.data ?? []).filter(
+    const entries: CodexBackfillEntry[] = data.filter(
       (e: CodexBackfillEntry) => {
         if (!e.model || !isCodexModel(e.model)) return false;
         if (startDate && e.date < startDate) return false;

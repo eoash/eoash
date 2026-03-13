@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       data,
       _source: getDataSource(),
-      _backfill_end: getBackfillEnd(),
+      _backfill_end: await getBackfillEnd(),
       _backfill_count: raw.data.length - data.length !== undefined ? raw.data.length : 0,
     });
   } catch (error) {

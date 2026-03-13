@@ -2,13 +2,13 @@ import type { ClaudeCodeAnalyticsResponse, ClaudeCodeDataPoint } from "./types";
 import { normalizeDataPoint } from "./types";
 import { fetchFromPrometheus } from "./prometheus";
 import { getMockAnalytics } from "./mock-data";
-import { EMAIL_ALIAS } from "./constants";
-import fs from "fs";
-import path from "path";
+import { EMAIL_ALIAS, IS_DEMO } from "./constants";
+import { getBackfillFiles } from "./backfill-loader";
 
 export type DataSource = "prometheus" | "mock";
 
 export function getDataSource(): DataSource {
+  if (IS_DEMO) return "mock";
   if (process.env.PROMETHEUS_URL) return "prometheus";
   return "mock";
 }
@@ -20,40 +20,27 @@ function sanitizeEmail(email: string): string {
   return EMAIL_ALIAS[normalized] ?? normalized;
 }
 
-/** backfill/ 디렉토리의 모든 JSON을 읽어서 병합 + sanitize */
-function loadAllBackfill(): ClaudeCodeDataPoint[] {
-  const dir = path.join(process.cwd(), "src/lib/backfill");
-  if (!fs.existsSync(dir)) return [];
-
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+/** backfill/ 의 모든 JSON을 GitHub raw URL에서 읽어 병합 + sanitize */
+async function loadAllBackfill(): Promise<ClaudeCodeDataPoint[]> {
+  const files = await getBackfillFiles();
   const all: ClaudeCodeDataPoint[] = [];
 
-  for (const file of files) {
+  for (const { name, data } of files) {
     try {
-      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed.data)) {
-        for (const d of parsed.data) {
-          // actor 방어 정책: backfill API(route.ts)가 입수 시 자동 주입하지만,
-          // 수동 추가된 JSON이나 레거시 데이터에 actor가 없을 수 있음 → 스킵 (defense in depth)
-          if (!d.actor?.email_address && !d.actor?.id) continue;
-          // 정규화: 누락 필드를 0으로 채움 → 이후 aggregator에서 ?? 0 불필요
-          const normalized = normalizeDataPoint(d);
-          // sanitize emails
-          normalized.actor.email_address = sanitizeEmail(normalized.actor.email_address ?? "");
-          normalized.actor.id = sanitizeEmail(normalized.actor.id);
-          all.push(normalized);
-        }
+      for (const d of data) {
+        if (!d.actor?.email_address && !d.actor?.id) continue;
+        const normalized = normalizeDataPoint(d);
+        normalized.actor.email_address = sanitizeEmail(normalized.actor.email_address ?? "");
+        normalized.actor.id = sanitizeEmail(normalized.actor.id);
+        all.push(normalized);
       }
     } catch (e) {
-      console.warn(`backfill: failed to parse ${file}:`, e);
+      console.warn(`backfill: failed to parse ${name}:`, e);
     }
   }
 
   return all;
 }
-
-const backfillData = loadAllBackfill();
 
 /** Codex 모델 여부 (gpt-* 또는 codex 포함 모델) */
 function isCodexModel(model: string): boolean {
@@ -61,7 +48,7 @@ function isCodexModel(model: string): boolean {
 }
 
 /** 유저별 backfill 마지막 날짜 계산 (Claude 모델만, Codex 제외) */
-function buildPerUserCutoff(): Map<string, string> {
+function buildPerUserCutoff(backfillData: ClaudeCodeDataPoint[]): Map<string, string> {
   const cutoffs = new Map<string, string>();
   for (const d of backfillData) {
     if (isCodexModel(d.model)) continue;
@@ -72,16 +59,10 @@ function buildPerUserCutoff(): Map<string, string> {
   return cutoffs;
 }
 
-const perUserCutoff = buildPerUserCutoff();
-
-/** 글로벌 backfill end (가장 최근 날짜) — 호환용 */
-const BACKFILL_END = (() => {
-  const dates = backfillData.map((d) => d.date);
+export async function getBackfillEnd(): Promise<string> {
+  const data = await loadAllBackfill();
+  const dates = data.map((d) => d.date);
   return dates.length > 0 ? dates.sort().pop()! : "";
-})();
-
-export function getBackfillEnd(): string {
-  return BACKFILL_END;
 }
 
 /** <synthetic> 태그 제거 전처리 (이메일 + 모델) */
@@ -114,8 +95,12 @@ export async function fetchAnalytics(params: {
     return getMockAnalytics();
   }
 
-  // Prometheus 전체 데이터 (cutoff 제한 없이)
-  const promData = await fetchFromPrometheus(params);
+  // backfill + Prometheus 병렬 로드
+  const [backfillData, promData] = await Promise.all([
+    loadAllBackfill(),
+    fetchFromPrometheus(params),
+  ]);
+  const perUserCutoff = buildPerUserCutoff(backfillData);
 
   // Prometheus 데이터를 (email, model, date) 맵으로 인덱싱
   const promMap = new Map<string, ClaudeCodeDataPoint>();

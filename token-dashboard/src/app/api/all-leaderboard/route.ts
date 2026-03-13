@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchAnalytics } from "@/lib/data-source";
-import { EMAIL_TO_NAME, EXCLUDED_EMAILS, DEFAULT_DAYS } from "@/lib/constants";
+import { EMAIL_TO_NAME, EXCLUDED_EMAILS, DEFAULT_DAYS, IS_DEMO } from "@/lib/constants";
 import { getDateRange } from "@/lib/utils";
 import { queryRangeRaw, computeDailyIncrease } from "@/lib/prometheus";
 import { aggregateMembers } from "@/lib/aggregators/leaderboard";
 import { readCodexBackfill } from "@/lib/codex-backfill";
 import { computeGeminiRange } from "@/lib/gemini-range";
+import { getMockCodexAnalytics, getMockGeminiAnalytics } from "@/lib/mock-data";
 
 export interface AllMemberRow {
   name: string;
@@ -27,8 +28,16 @@ async function fetchClaude(startDate: string, endDate: string) {
   return aggregateMembers(filtered);
 }
 
-function fetchCodex(startDate: string, endDate: string): Map<string, number> {
-  const memberMap = readCodexBackfill(startDate, endDate);
+async function fetchCodex(startDate: string, endDate: string): Promise<Map<string, number>> {
+  if (IS_DEMO) {
+    const mock = getMockCodexAnalytics();
+    const totals = new Map<string, number>();
+    for (const row of mock.data) {
+      totals.set(row.name as string, (row.total as number) ?? 0);
+    }
+    return totals;
+  }
+  const memberMap = await readCodexBackfill(startDate, endDate);
   const totals = new Map<string, number>();
   for (const [email, m] of memberMap) {
     const total = m.input + m.output + m.cached + m.reasoning;
@@ -41,6 +50,15 @@ function fetchCodex(startDate: string, endDate: string): Map<string, number> {
 }
 
 async function fetchGemini(startDate: string, endDate: string) {
+  if (IS_DEMO) {
+    const mock = getMockGeminiAnalytics();
+    const totals = new Map<string, number>();
+    for (const row of mock.data) {
+      totals.set(row.name as string, (row.total as number) ?? 0);
+    }
+    return totals;
+  }
+
   const { start, end, actualStartDate } = computeGeminiRange(startDate, endDate);
 
   const query = "sum by (user_email, type) (gemini_cli_token_usage_total)";
