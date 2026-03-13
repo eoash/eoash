@@ -156,6 +156,17 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **확인(3/14)**: chanho(chankim) 데이터 정상 — 최근 사용량 있음, Opus 80~95% 사용 중 (Sonnet 전환 안내 필요)
 - **완료(3/14)**: 메모리 파일 정리 — MEMORY.md 217줄→62줄 압축, debug/tool-selector 임시 파일 삭제, ANTI_PATTERNS.md 2개 항목 추가
 
+### eo-video-pipeline — 자동화 확장 중
+- **레포**: eoash/eo-video-pipeline (로컬: `/Users/ash/Documents/eo-video-pipeline`)
+- **첫 분석 성공(3/14)**: Po Shen Loh 27분 영상 → 트랜스크립트 + 핵심발언 20개 + 챕터 6개 + FCPXML 마커 26개
+- **완료(3/14)**: Slack Webhook 알림, 2GB 초과 자동 오디오 추출, NAS fswatch 감시, 5단계 체크포인트, watch-nas CLI, launchd 데몬 설정
+- [x] Drive watch 모드 + launchd 상시 실행 → NAS watch + launchd plist로 대체 구현
+- [ ] FCPXML을 Final Cut Pro에서 열어서 마커 확인
+- [ ] Google Sheets 연동 (SHEETS_SPREADSHEET_ID 설정)
+- [ ] 화자 분리 개선 (인터뷰어 + 게스트)
+- [ ] Slack Webhook URL 발급 + .env 등록
+- [ ] 실제 3시간 원본 테스트
+
 ### Slack-to-GCal 자동화 — 진행 중
 - **스크립트**: `scripts/tools/slack_to_gcal_realtime.py` (Socket Mode), `slack_to_gcal.py` (배치)
 - **완료(3/13)**: OAuth credentials.json 복원 (ADC→OAuth 되돌림), `--event-id` 직접 지정 옵션 추가, 전체회식 4명 수동 초대 (MCP)
@@ -175,4 +186,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-14*
+*마지막 업데이트: 2026-03-14 (eo-video-pipeline 자동화 확장)*
