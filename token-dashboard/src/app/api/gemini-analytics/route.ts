@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EMAIL_TO_NAME } from "@/lib/constants";
+import { EMAIL_TO_NAME, IS_DEMO } from "@/lib/constants";
 import { queryRangeRaw, computeDailyIncrease, tsToDate } from "@/lib/prometheus";
 import { computeGeminiRange } from "@/lib/gemini-range";
+import { getMockGeminiDataPoints } from "@/lib/mock-data";
 
 /**
  * Gemini analytics API — returns ClaudeCodeDataPoint[] shape
@@ -11,6 +12,10 @@ import { computeGeminiRange } from "@/lib/gemini-range";
  * labels: user_email, model, type (input/output/cache/thought)
  */
 export async function GET(req: NextRequest) {
+  if (IS_DEMO) {
+    return NextResponse.json({ data: getMockGeminiDataPoints() });
+  }
+
   try {
     const { searchParams } = req.nextUrl;
     const startDate = searchParams.get("start") ?? "";

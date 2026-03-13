@@ -1,7 +1,9 @@
 export type TeamMember = { email: string; name: string; avatar?: string };
 
+export const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
 // 이메일 → 이름 매핑 (같은 사람이 여러 이메일을 쓸 수 있음)
-export const TEAM_MEMBERS: TeamMember[] = [
+const REAL_TEAM_MEMBERS: TeamMember[] = [
   // — Primary Owner / Owners —
   { email: "ash@eoeoeo.net", name: "Seohyun", avatar: "https://avatars.slack-edge.com/2026-02-09/10474629156276_69b69fa7c803f1e56d85_72.jpg" },
   { email: "june@eoeoeo.net", name: "June", avatar: "https://avatars.slack-edge.com/2025-10-17/9719139044772_b3797a98688f8d42ceee_72.jpg" },
@@ -48,10 +50,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
   { email: "chris@eostudio.tv", name: "Chris" },
 ];
 
+// Demo mode: 가상 팀원으로 전환
+import { DEMO_TEAM_MEMBERS, DEMO_EMAIL_ALIAS } from "./demo-constants";
+
+export const TEAM_MEMBERS: TeamMember[] = IS_DEMO ? DEMO_TEAM_MEMBERS : REAL_TEAM_MEMBERS;
+
 /** 외부 이메일 → 사내 이메일 매핑 (git email이 다른 팀원용) */
-export const EMAIL_ALIAS: Record<string, string> = {
-  "jobskim@icloud.com": "ty@eoeoeo.net",
-};
+export const EMAIL_ALIAS: Record<string, string> = IS_DEMO
+  ? DEMO_EMAIL_ALIAS
+  : { "jobskim@icloud.com": "ty@eoeoeo.net" };
 
 export const EMAIL_TO_NAME: Record<string, string> = Object.fromEntries(
   TEAM_MEMBERS.flatMap((m) => {

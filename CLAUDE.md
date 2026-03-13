@@ -118,6 +118,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **Windows UTF-8**: Python 3.x라도 Windows 기본 인코딩은 cp949 → `PYTHONUTF8=1` + `encoding='utf-8'` 필수
 - **Vercel 연속 push 취소**: 이중 레포 sync 시 연달아 push하면 Vercel이 이전 빌드를 auto-cancel → 결과적으로 모든 빌드 Canceled 가능. `vercel ls --prod`로 확인 후 `npx vercel --prod` 수동 배포
 - **Vercel Ignored Build Step CWD**: Root Directory 설정 시 ignoreCommand는 Root Directory 안에서 실행됨 → `git diff -- token-dashboard/`는 이중 경로 → `git diff --quiet HEAD^ HEAD -- .` 사용 필수
+- **Vercel backfill 빌드 폭탄**: backfill JSON만 변경된 커밋도 ignoreCommand `-- .`에 걸려 풀 빌드 트리거 → 하루 12~15시간 빌드, 월 $270+ 과금 (3/11~12 실사례). `":(exclude)src/lib/backfill"` pathspec으로 backfill 제외 필수. token-dashboard에 적용 완료 (2026-03-13)
 - **Vercel requireVerifiedCommits**: 기본 활성화 시 GPG 서명 없는 커밋 전면 차단 (Canceled). API로 비활성화: `PATCH /v9/projects/{id} {"gitProviderOptions":{"requireVerifiedCommits":false}}`
 - **이중 레포 git reset 주의**: sub-repo에서 `git reset --hard origin/main` 시 모노레포 git에만 있는 신규 파일이 디스크에서 삭제됨. `git show HEAD:path > file`로 복원
 - **gcloud ADC 민감 스코프 차단**: `gcloud auth application-default login`의 기본 클라이언트 ID는 Calendar/Gmail 등 민감 스코프 차단됨. 자체 OAuth 클라이언트(`credentials.json` + `InstalledAppFlow`)로 별도 인증 필수. 잘 되는 OAuth 인증을 ADC로 "깔끔하게" 리팩터링하지 말 것
@@ -145,6 +146,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/12)**: Members KPI 조건부 (Gemini→세션/커밋 숨김) + gamification Claude 전용 (XP/인사이트)
 - **완료(3/12)**: Codex 모델 컬러 #10A37F + Gemini 모델 5종 추가 (Google 브랜드 컬러)
 - **완료(3/13)**: 코드 품질 P0~P2 개선 — codex-backfill.ts/gemini-range.ts 공유 유틸 추출, toolHasActivity()/toolHasClaude() 조건식 통일, Promise.allSettled 부분 실패, normalizeDataPoint 경계 정규화, health API revalidate:60 캐싱, TOOL_COLORS 컬러 통일
+- **완료(3/13)**: Vercel backfill 빌드 폭탄 수정 — ignoreCommand에 `":(exclude)src/lib/backfill"` pathspec 추가, backfill-only 커밋 시 빌드 스킵
+- **완료(3/13)**: Demo 모드 추가 — `IS_DEMO` 플래그 + demo-constants.ts + Gemini API mock shortcut, 외부 발표용 가상 데이터 전환
+- **완료(3/13)**: Kashy(diepngan), Jade(yjk) 이름/아바타 매핑 추가, ty GitHub 이메일 alias(jobskim@icloud.com) 등록
 - [x] jemin 데이터 누락 확인 → 3/12 backfill 정상 확인, 자동 복구됨
 - [x] /rank 페이지 gamification Claude 전용 처리 → claudeOnly 필터 구현 완료 (gpt-*/gemini-* 제외)
 - [x] auto-deploy 안정화 모니터링
@@ -169,4 +173,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-13*
+*마지막 업데이트: 2026-03-13 (세션2)*
