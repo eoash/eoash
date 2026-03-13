@@ -1088,6 +1088,19 @@
         "id": "ash@eoeoeo.net",
         "email_address": "ash@eoeoeo.net"
       }
+    },
+    {
+      "date": "2026-03-14",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 4,
+      "output_tokens": 419,
+      "cache_read_tokens": 54638,
+      "cache_creation_tokens": 55150,
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      }
     }
   ]
 }
