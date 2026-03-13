@@ -152,7 +152,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] jemin 데이터 누락 확인 → 3/12 backfill 정상 확인, 자동 복구됨
 - [x] /rank 페이지 gamification Claude 전용 처리 → claudeOnly 필터 구현 완료 (gpt-*/gemini-* 제외)
 - [x] auto-deploy 안정화 모니터링
-- [ ] ty(TaeYong) hook 재설치 확인 — 3/10 이후 미집계, 3/13 Slack DM 발송 완료, 실행 대기 중
+- [ ] ty(TaeYong) hook 재설치 확인 — 3/10 이후 미집계, 3/13·3/14 Slack DM 발송 완료, 실행 대기 중. unknown.json(3/13 1건)은 ty가 아닐 가능성 높음 (alias 매핑 정상 작동 중이었으므로 hook 자체 미실행 추정)
+- **확인(3/14)**: chanho(chankim) 데이터 정상 — 최근 사용량 있음, Opus 80~95% 사용 중 (Sonnet 전환 안내 필요)
+- **완료(3/14)**: 메모리 파일 정리 — MEMORY.md 217줄→62줄 압축, debug/tool-selector 임시 파일 삭제, ANTI_PATTERNS.md 2개 항목 추가
 
 ### Slack-to-GCal 자동화 — 진행 중
 - **스크립트**: `scripts/tools/slack_to_gcal_realtime.py` (Socket Mode), `slack_to_gcal.py` (배치)
@@ -173,4 +175,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-13 (세션2)*
+*마지막 업데이트: 2026-03-14*
