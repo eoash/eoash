@@ -19,12 +19,30 @@
       "cache_creation_tokens": 299087
     },
     {
-      "date": "2026-03-13",
+      "actor": {
+        "type": "user",
+        "id": "hungtran@eoeoeo.net",
+        "email_address": "hungtran@eoeoeo.net"
+      },
       "model": "claude-sonnet-4-6",
-      "input_tokens": 86,
-      "output_tokens": 12538,
-      "cache_read_tokens": 652830,
-      "cache_creation_tokens": 50879,
+      "date": "2026-03-13",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 139,
+      "output_tokens": 13409,
+      "cache_read_tokens": 968197,
+      "cache_creation_tokens": 132751
+    },
+    {
+      "date": "2026-03-14",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 5,
+      "output_tokens": 1030,
+      "cache_read_tokens": 37376,
+      "cache_creation_tokens": 24749,
       "actor": {
         "type": "user",
         "id": "hungtran@eoeoeo.net",
