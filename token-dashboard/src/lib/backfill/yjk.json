@@ -21,10 +21,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 325,
-      "output_tokens": 33081,
-      "cache_read_tokens": 4385967,
-      "cache_creation_tokens": 223036,
+      "input_tokens": 332,
+      "output_tokens": 33725,
+      "cache_read_tokens": 4481606,
+      "cache_creation_tokens": 238845,
       "actor": {
         "type": "user",
         "id": "yjk@eoeoeo.net",
