@@ -120,6 +120,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **Vercel Ignored Build Step CWD**: Root Directory 설정 시 ignoreCommand는 Root Directory 안에서 실행됨 → `git diff -- token-dashboard/`는 이중 경로 → `git diff --quiet HEAD^ HEAD -- .` 사용 필수
 - **Vercel requireVerifiedCommits**: 기본 활성화 시 GPG 서명 없는 커밋 전면 차단 (Canceled). API로 비활성화: `PATCH /v9/projects/{id} {"gitProviderOptions":{"requireVerifiedCommits":false}}`
 - **이중 레포 git reset 주의**: sub-repo에서 `git reset --hard origin/main` 시 모노레포 git에만 있는 신규 파일이 디스크에서 삭제됨. `git show HEAD:path > file`로 복원
+- **gcloud ADC 민감 스코프 차단**: `gcloud auth application-default login`의 기본 클라이언트 ID는 Calendar/Gmail 등 민감 스코프 차단됨. 자체 OAuth 클라이언트(`credentials.json` + `InstalledAppFlow`)로 별도 인증 필수. 잘 되는 OAuth 인증을 ADC로 "깔끔하게" 리팩터링하지 말 것
 
 ---
 
@@ -148,6 +149,12 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [x] /rank 페이지 gamification Claude 전용 처리 → claudeOnly 필터 구현 완료 (gpt-*/gemini-* 제외)
 - [x] auto-deploy 안정화 모니터링
 - [ ] ty(TaeYong) hook 재설치 확인 — 3/10 이후 미집계, 3/13 Slack DM 발송 완료, 실행 대기 중
+
+### Slack-to-GCal 자동화 — 진행 중
+- **스크립트**: `scripts/tools/slack_to_gcal_realtime.py` (Socket Mode), `slack_to_gcal.py` (배치)
+- **완료(3/13)**: OAuth credentials.json 복원 (ADC→OAuth 되돌림), `--event-id` 직접 지정 옵션 추가, 전체회식 4명 수동 초대 (MCP)
+- [ ] SLACK_APP_TOKEN 발급 + .env 등록 → Socket Mode 활성화
+- [ ] launchd 데몬 등록 (상시 실행)
 
 ### Finance Dashboard — 안정 운영 중
 - 모든 주요 기능 완료 (세션15~19): Cash Position 자동화, 환율 API, USD/KRW 토글, 7개 페이지

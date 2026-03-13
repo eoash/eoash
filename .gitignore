@@ -53,6 +53,7 @@ secret*.txt
 credentials.json
 token.json
 token_sheets.json
+token_calendar.json
 
 # SQLite databases (runtime data)
 *.db
