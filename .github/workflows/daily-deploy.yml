@@ -1,0 +1,16 @@
+name: Token Dashboard - Daily Deploy
+
+on:
+  schedule:
+    # 매일 00:00 KST (15:00 UTC 전날)
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deploy Hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: curl -s -X POST "$DEPLOY_HOOK_URL"
