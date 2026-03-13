@@ -471,10 +471,10 @@
     {
       "date": "2026-03-12",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 94,
-      "output_tokens": 34178,
-      "cache_read_tokens": 3732463,
-      "cache_creation_tokens": 253562,
+      "input_tokens": 109,
+      "output_tokens": 37734,
+      "cache_read_tokens": 4867686,
+      "cache_creation_tokens": 259918,
       "actor": {
         "type": "user",
         "id": "chankim@eoeoeo.net",
