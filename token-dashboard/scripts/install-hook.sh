@@ -206,8 +206,8 @@ else
   echo "      ~/.codex/sessions/ 없음. Codex를 사용하면 자동 수집됩니다."
 fi
 
-# 6. Codex 자동 수집 + Hook 헬스체크 cron 등록 (2시간마다)
-echo "[5/7] Codex 자동 수집 + Hook 헬스체크 cron 등록 중..."
+# 6. Codex 자동 수집 + Hook 헬스체크 등록 (2시간마다)
+echo "[5/7] Codex 자동 수집 + Hook 헬스체크 등록 중..."
 
 CODEX_PUSH_LOCAL="$HOOKS_DIR/codex_push.py"
 HOOK_HEALTH_LOCAL="$HOOKS_DIR/hook_health.py"
@@ -215,18 +215,64 @@ curl -sL "$BASE_URL/codex_push.py" -o "$CODEX_PUSH_LOCAL"
 curl -sL "$BASE_URL/hook_health.py" -o "$HOOK_HEALTH_LOCAL"
 chmod +x "$CODEX_PUSH_LOCAL" "$HOOK_HEALTH_LOCAL"
 
-# cron 명령: 헬스체크 → 최신 스크립트 다운로드 → Codex 수집
-CRON_CMD="curl -sL $BASE_URL/hook_health.py -o $HOOK_HEALTH_LOCAL 2>/dev/null; python3 $HOOK_HEALTH_LOCAL; curl -sL $BASE_URL/codex_push.py -o $CODEX_PUSH_LOCAL 2>/dev/null; python3 $CODEX_PUSH_LOCAL --email $GIT_EMAIL"
-CRON_LINE="0 */2 * * * $CRON_CMD # eo-codex-push"
+SCHEDULER_CMD="curl -sL $BASE_URL/hook_health.py -o $HOOK_HEALTH_LOCAL 2>/dev/null; python3 $HOOK_HEALTH_LOCAL; curl -sL $BASE_URL/codex_push.py -o $CODEX_PUSH_LOCAL 2>/dev/null; python3 $CODEX_PUSH_LOCAL --email $GIT_EMAIL"
 
-# 기존 eo-codex-push cron 제거 후 새로 등록 (temp file 방식 — zsh/bash 호환)
-CRON_TMP=$(mktemp)
-crontab -l > "$CRON_TMP" 2>/dev/null
-grep -v "eo-codex-push" "$CRON_TMP" > "${CRON_TMP}.new" 2>/dev/null
-echo "$CRON_LINE" >> "${CRON_TMP}.new"
-crontab "${CRON_TMP}.new"
-rm -f "$CRON_TMP" "${CRON_TMP}.new"
-echo "      -> cron 등록 완료: 매 2시간마다 헬스체크 + 자동 수집"
+if [[ "$(uname)" == "Darwin" ]]; then
+  # macOS: launchd 사용 (cron은 Full Disk Access 없으면 silent fail)
+  LAUNCHD_LABEL="net.eoeoeo.hook-health"
+  PLIST_PATH="$HOME/Library/LaunchAgents/${LAUNCHD_LABEL}.plist"
+  mkdir -p "$HOME/Library/LaunchAgents"
+
+  cat > "$PLIST_PATH" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>${LAUNCHD_LABEL}</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>${SCHEDULER_CMD}</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>7200</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>${HOOKS_DIR}/launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>${HOOKS_DIR}/launchd.log</string>
+</dict>
+</plist>
+PLIST
+
+  # 기존 등록 해제 후 재등록
+  launchctl unload "$PLIST_PATH" 2>/dev/null
+  launchctl load "$PLIST_PATH"
+
+  # 기존 cron 제거 (마이그레이션)
+  CRON_TMP=$(mktemp)
+  crontab -l > "$CRON_TMP" 2>/dev/null
+  if grep -q "eo-codex-push" "$CRON_TMP"; then
+    grep -v "eo-codex-push" "$CRON_TMP" > "${CRON_TMP}.new" 2>/dev/null
+    crontab "${CRON_TMP}.new"
+    echo "      -> 기존 cron 제거 완료 (launchd로 전환)"
+  fi
+  rm -f "$CRON_TMP" "${CRON_TMP}.new"
+  echo "      -> launchd 등록 완료: 매 2시간마다 헬스체크 + 자동 수집"
+else
+  # Linux: cron 사용
+  CRON_LINE="0 */2 * * * $SCHEDULER_CMD # eo-codex-push"
+  CRON_TMP=$(mktemp)
+  crontab -l > "$CRON_TMP" 2>/dev/null
+  grep -v "eo-codex-push" "$CRON_TMP" > "${CRON_TMP}.new" 2>/dev/null
+  echo "$CRON_LINE" >> "${CRON_TMP}.new"
+  crontab "${CRON_TMP}.new"
+  rm -f "$CRON_TMP" "${CRON_TMP}.new"
+  echo "      -> cron 등록 완료: 매 2시간마다 헬스체크 + 자동 수집"
+fi
 
 # 7. Gemini CLI 텔레메트리 설정 (네이티브 OTel → Collector 직접 전송)
 echo "[6/7] Gemini CLI 텔레메트리 설정 중..."
@@ -310,5 +356,9 @@ echo "사용자: $GIT_EMAIL"
 echo "대시보드: https://token-dashboard-iota.vercel.app"
 echo ""
 echo "Claude Code: 세션 종료 시 자동 수집 (Stop hook)"
-echo "Codex CLI:   2시간마다 자동 수집 (cron)"
+if [[ "$(uname)" == "Darwin" ]]; then
+  echo "Codex CLI:   2시간마다 자동 수집 (launchd)"
+else
+  echo "Codex CLI:   2시간마다 자동 수집 (cron)"
+fi
 echo "Gemini CLI:  세션 중 실시간 전송 (네이티브 OTel)"
