@@ -125,6 +125,19 @@
       "output_tokens": 989,
       "cache_read_tokens": 276261,
       "cache_creation_tokens": 27059
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 2048,
+      "output_tokens": 1382,
+      "cache_read_tokens": 38532,
+      "cache_creation_tokens": 14381,
+      "actor": {
+        "type": "user",
+        "id": "gyeol@eoeoeo.net",
+        "email_address": "gyeol@eoeoeo.net"
+      }
     }
   ]
 }
