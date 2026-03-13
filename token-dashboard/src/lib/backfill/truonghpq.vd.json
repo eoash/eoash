@@ -26,28 +26,33 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-11",
+      "session_count": 3,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 4103,
+      "output_tokens": 9352,
+      "cache_read_tokens": 1683782,
+      "cache_creation_tokens": 92935
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "truonghpq.vd@eoeoeo.net",
+        "email_address": "truonghpq.vd@eoeoeo.net"
+      },
+      "model": "claude-opus-4-6",
+      "date": "2026-03-13",
       "session_count": 1,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 4075,
-      "output_tokens": 9236,
-      "cache_read_tokens": 1386866,
-      "cache_creation_tokens": 85493
-    },
-    {
-      "date": "2026-03-13",
-      "model": "claude-opus-4-6",
-      "input_tokens": 5,
-      "output_tokens": 662,
-      "cache_read_tokens": 34534,
-      "cache_creation_tokens": 8462,
-      "actor": {
-        "type": "user",
-        "id": "truonghpq.vd@eoeoeo.net",
-        "email_address": "truonghpq.vd@eoeoeo.net"
-      }
+      "input_tokens": 11,
+      "output_tokens": 690,
+      "cache_read_tokens": 47598,
+      "cache_creation_tokens": 21726
     }
   ]
 }
