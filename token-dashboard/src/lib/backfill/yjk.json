@@ -1,0 +1,61 @@
+{
+  "data": [
+    {
+      "actor": {
+        "type": "user",
+        "id": "yjk@eoeoeo.net",
+        "email_address": "yjk@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-08",
+      "session_count": 6,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 290,
+      "output_tokens": 90201,
+      "cache_read_tokens": 12254264,
+      "cache_creation_tokens": 778161
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-haiku-4-5-20251001",
+      "input_tokens": 108,
+      "output_tokens": 5129,
+      "cache_read_tokens": 514530,
+      "cache_creation_tokens": 65233,
+      "actor": {
+        "type": "user",
+        "id": "yjk@eoeoeo.net",
+        "email_address": "yjk@eoeoeo.net"
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-opus-4-6",
+      "input_tokens": 12,
+      "output_tokens": 1188,
+      "cache_read_tokens": 47597,
+      "cache_creation_tokens": 47745,
+      "actor": {
+        "type": "user",
+        "id": "yjk@eoeoeo.net",
+        "email_address": "yjk@eoeoeo.net"
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 342,
+      "output_tokens": 34868,
+      "cache_read_tokens": 4553705,
+      "cache_creation_tokens": 263645,
+      "actor": {
+        "type": "user",
+        "id": "yjk@eoeoeo.net",
+        "email_address": "yjk@eoeoeo.net"
+      }
+    }
+  ]
+}
