@@ -167,6 +167,16 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [ ] Slack Webhook URL 발급 + .env 등록
 - [ ] 실제 3시간 원본 테스트
 
+### Gowid Slack Bot — 설계 완료, API Key 대기
+- **위치**: `gowid-slack-bot/` (README.md + DESIGN.md)
+- **목적**: Gowid 법인카드 API + Slack 연동 지출 자동화
+- **설계**: Claude+Codex 4라운드 Deliberate → LGTM(조건부) 판정
+- **완료(3/14)**: API 스펙 분석 16개 엔드포인트, 2025년 반복결제 18종 추출, 3단계 자동화 전략(완전자동/반자동/메모필수), 상태머신+DB+idempotency+reconciliation 설계
+- [x] API Key 발급 신청 (Gowid 채팅 문의)
+- [ ] API Key 수령 → Swagger 실제 응답 확인
+- [ ] Slack App 생성 (Bot Token + App Token)
+- [ ] Phase 1 MVP 개발 (2주)
+
 ### Slack-to-GCal 자동화 — 진행 중
 - **스크립트**: `scripts/tools/slack_to_gcal_realtime.py` (Socket Mode), `slack_to_gcal.py` (배치)
 - **완료(3/13)**: OAuth credentials.json 복원 (ADC→OAuth 되돌림), `--event-id` 직접 지정 옵션 추가, 전체회식 4명 수동 초대 (MCP)
