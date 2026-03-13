@@ -1030,23 +1030,59 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-12",
-      "session_count": 12,
+      "session_count": 17,
       "lines_of_code": 0,
-      "commits": 28,
+      "commits": 34,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 18749,
-      "output_tokens": 298340,
-      "cache_read_tokens": 111422099,
-      "cache_creation_tokens": 3889631
+      "input_tokens": 19810,
+      "output_tokens": 434595,
+      "cache_read_tokens": 162471716,
+      "cache_creation_tokens": 6053053
     },
     {
-      "date": "2026-03-13",
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      },
       "model": "claude-opus-4-6",
-      "input_tokens": 980,
-      "output_tokens": 200734,
-      "cache_read_tokens": 47382425,
-      "cache_creation_tokens": 1645306,
+      "date": "2026-03-13",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 1003,
+      "output_tokens": 101278,
+      "cache_read_tokens": 41440438,
+      "cache_creation_tokens": 1790928
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-13",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 59,
+      "output_tokens": 6391,
+      "cache_read_tokens": 1583747,
+      "cache_creation_tokens": 103593
+    },
+    {
+      "date": "2026-03-14",
+      "model": "claude-opus-4-6",
+      "input_tokens": 685,
+      "output_tokens": 32291,
+      "cache_read_tokens": 6558064,
+      "cache_creation_tokens": 206991,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
@@ -1054,12 +1090,12 @@
       }
     },
     {
-      "date": "2026-03-13",
+      "date": "2026-03-14",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 3,
-      "output_tokens": 987,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 43977,
+      "input_tokens": 26,
+      "output_tokens": 11231,
+      "cache_read_tokens": 1119506,
+      "cache_creation_tokens": 88316,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",

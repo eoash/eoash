@@ -34,10 +34,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-opus-4-6",
-      "input_tokens": 47,
-      "output_tokens": 8535,
-      "cache_read_tokens": 371535,
-      "cache_creation_tokens": 111615,
+      "input_tokens": 4244,
+      "output_tokens": 101528,
+      "cache_read_tokens": 9895090,
+      "cache_creation_tokens": 717436,
       "actor": {
         "type": "user",
         "id": "yjk@eoeoeo.net",
@@ -47,10 +47,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 342,
-      "output_tokens": 34868,
-      "cache_read_tokens": 4553705,
-      "cache_creation_tokens": 263645,
+      "input_tokens": 439,
+      "output_tokens": 48350,
+      "cache_read_tokens": 5904659,
+      "cache_creation_tokens": 332020,
       "actor": {
         "type": "user",
         "id": "yjk@eoeoeo.net",
