@@ -103,10 +103,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 4850,
-      "output_tokens": 22878,
-      "cache_read_tokens": 222195758,
-      "cache_creation_tokens": 5244812
+      "input_tokens": 3111,
+      "output_tokens": 16571,
+      "cache_read_tokens": 151628826,
+      "cache_creation_tokens": 3564020
     },
     {
       "actor": {
@@ -463,10 +463,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 132494,
-      "output_tokens": 122493,
-      "cache_read_tokens": 10506969,
-      "cache_creation_tokens": 1415141
+      "input_tokens": 98090,
+      "output_tokens": 15002,
+      "cache_read_tokens": 1808627,
+      "cache_creation_tokens": 734026
     },
     {
       "date": "2026-03-12",
@@ -489,15 +489,15 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-13",
-      "session_count": 1,
+      "session_count": 0,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 57084,
-      "output_tokens": 15474,
-      "cache_read_tokens": 4750976,
-      "cache_creation_tokens": 794160
+      "input_tokens": 65901,
+      "output_tokens": 110183,
+      "cache_read_tokens": 16521987,
+      "cache_creation_tokens": 1805367
     },
     {
       "actor": {
@@ -512,10 +512,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 30,
-      "output_tokens": 4588,
-      "cache_read_tokens": 1288191,
-      "cache_creation_tokens": 132205
+      "input_tokens": 207,
+      "output_tokens": 26310,
+      "cache_read_tokens": 5680831,
+      "cache_creation_tokens": 306150
     }
   ]
 }
