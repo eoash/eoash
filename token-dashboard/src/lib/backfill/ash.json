@@ -1056,10 +1056,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 3,
-      "output_tokens": 987,
-      "cache_read_tokens": 0,
-      "cache_creation_tokens": 43977,
+      "input_tokens": 15,
+      "output_tokens": 3101,
+      "cache_read_tokens": 461542,
+      "cache_creation_tokens": 48267,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
