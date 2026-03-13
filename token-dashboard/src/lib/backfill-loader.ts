@@ -45,9 +45,13 @@ function loadFromFs(): BackfillFile[] {
 
 /** GitHub에서 backfill 파일 목록 + 내용 fetch */
 async function loadFromGitHub(): Promise<BackfillFile[]> {
-  // 1. 파일 목록
+  // 1. 파일 목록 (인증 시 5,000req/hr, 비인증 60req/hr)
+  const headers: Record<string, string> = { Accept: "application/vnd.github.v3+json" };
+  const ghToken = process.env.GITHUB_BACKFILL_TOKEN;
+  if (ghToken) headers.Authorization = `Bearer ${ghToken}`;
+
   const listRes = await fetch(GITHUB_API_BASE, {
-    headers: { Accept: "application/vnd.github.v3+json" },
+    headers,
     cache: "no-store",
   });
   if (!listRes.ok) {
