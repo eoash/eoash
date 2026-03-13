@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "date": "2026-03-13",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 7,
+      "output_tokens": 577,
+      "cache_read_tokens": 131940,
+      "cache_creation_tokens": 1292,
+      "actor": {
+        "type": "user",
+        "id": "unknown",
+        "email_address": "unknown"
+      }
+    }
+  ]
+}
