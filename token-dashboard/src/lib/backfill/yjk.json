@@ -17,6 +17,19 @@
       "output_tokens": 90201,
       "cache_read_tokens": 12254264,
       "cache_creation_tokens": 778161
+    },
+    {
+      "date": "2026-03-13",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 8,
+      "output_tokens": 1338,
+      "cache_read_tokens": 93381,
+      "cache_creation_tokens": 19665,
+      "actor": {
+        "type": "user",
+        "id": "yjk@eoeoeo.net",
+        "email_address": "yjk@eoeoeo.net"
+      }
     }
   ]
 }
