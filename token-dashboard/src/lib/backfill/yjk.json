@@ -34,10 +34,10 @@
     {
       "date": "2026-03-13",
       "model": "claude-opus-4-6",
-      "input_tokens": 3062,
-      "output_tokens": 58304,
-      "cache_read_tokens": 4498744,
-      "cache_creation_tokens": 418061,
+      "input_tokens": 3065,
+      "output_tokens": 59047,
+      "cache_read_tokens": 4595244,
+      "cache_creation_tokens": 418802,
       "actor": {
         "type": "user",
         "id": "yjk@eoeoeo.net",
