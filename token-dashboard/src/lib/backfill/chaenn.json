@@ -319,10 +319,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 193,
-      "output_tokens": 37668,
-      "cache_read_tokens": 7781543,
-      "cache_creation_tokens": 387337
+      "input_tokens": 208,
+      "output_tokens": 45547,
+      "cache_read_tokens": 8961683,
+      "cache_creation_tokens": 402141
     }
   ]
 }
