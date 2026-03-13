@@ -1030,41 +1030,51 @@
       },
       "model": "claude-opus-4-6",
       "date": "2026-03-12",
-      "session_count": 12,
+      "session_count": 17,
       "lines_of_code": 0,
-      "commits": 28,
+      "commits": 34,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 18749,
-      "output_tokens": 298340,
-      "cache_read_tokens": 111422099,
-      "cache_creation_tokens": 3889631
+      "input_tokens": 19810,
+      "output_tokens": 434595,
+      "cache_read_tokens": 162471716,
+      "cache_creation_tokens": 6053053
     },
     {
-      "date": "2026-03-13",
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      },
       "model": "claude-opus-4-6",
-      "input_tokens": 1103,
-      "output_tokens": 232778,
-      "cache_read_tokens": 53769257,
-      "cache_creation_tokens": 2096145,
-      "actor": {
-        "type": "user",
-        "id": "ash@eoeoeo.net",
-        "email_address": "ash@eoeoeo.net"
-      }
+      "date": "2026-03-13",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 1003,
+      "output_tokens": 101278,
+      "cache_read_tokens": 41440438,
+      "cache_creation_tokens": 1790928
     },
     {
-      "date": "2026-03-13",
-      "model": "claude-sonnet-4-6",
-      "input_tokens": 34,
-      "output_tokens": 6334,
-      "cache_read_tokens": 1014000,
-      "cache_creation_tokens": 54244,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
         "email_address": "ash@eoeoeo.net"
-      }
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-13",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 59,
+      "output_tokens": 6391,
+      "cache_read_tokens": 1583747,
+      "cache_creation_tokens": 103593
     },
     {
       "date": "2026-03-14",
