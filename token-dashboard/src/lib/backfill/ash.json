@@ -1079,10 +1079,10 @@
     {
       "date": "2026-03-14",
       "model": "claude-opus-4-6",
-      "input_tokens": 2447,
-      "output_tokens": 230470,
-      "cache_read_tokens": 38479052,
-      "cache_creation_tokens": 1322680,
+      "input_tokens": 2451,
+      "output_tokens": 230660,
+      "cache_read_tokens": 38785472,
+      "cache_creation_tokens": 1330835,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
