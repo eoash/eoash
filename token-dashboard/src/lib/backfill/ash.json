@@ -1126,10 +1126,10 @@
     {
       "date": "2026-03-15",
       "model": "claude-opus-4-6",
-      "input_tokens": 1006,
-      "output_tokens": 14993,
-      "cache_read_tokens": 1877170,
-      "cache_creation_tokens": 139927,
+      "input_tokens": 1021,
+      "output_tokens": 17427,
+      "cache_read_tokens": 2605793,
+      "cache_creation_tokens": 425581,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
@@ -1139,10 +1139,10 @@
     {
       "date": "2026-03-15",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 48,
-      "output_tokens": 16421,
-      "cache_read_tokens": 2528833,
-      "cache_creation_tokens": 173224,
+      "input_tokens": 1009,
+      "output_tokens": 65589,
+      "cache_read_tokens": 11250905,
+      "cache_creation_tokens": 653994,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
