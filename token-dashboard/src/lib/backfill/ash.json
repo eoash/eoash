@@ -1139,10 +1139,10 @@
     {
       "date": "2026-03-15",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 1173,
-      "output_tokens": 117189,
-      "cache_read_tokens": 19948976,
-      "cache_creation_tokens": 809349,
+      "input_tokens": 3054,
+      "output_tokens": 153776,
+      "cache_read_tokens": 23409188,
+      "cache_creation_tokens": 890533,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
