@@ -337,10 +337,10 @@
       "commits": 12,
       "pull_requests": 2,
       "tool_acceptance_rate": 0,
-      "input_tokens": 1358,
-      "output_tokens": 20936,
-      "cache_read_tokens": 25347996,
-      "cache_creation_tokens": 1148076
+      "input_tokens": 6634,
+      "output_tokens": 21788,
+      "cache_read_tokens": 27773224,
+      "cache_creation_tokens": 1226366
     },
     {
       "actor": {
