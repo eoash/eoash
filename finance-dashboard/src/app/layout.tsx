@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import Sidebar from "@/components/layout/Sidebar";
 import { LanguageProvider } from "@/lib/contexts/LanguageContext";
 import "./globals.css";
@@ -35,6 +36,7 @@ export default function RootLayout({
             <main className="flex-1 p-4 pt-16 md:ml-60 md:p-8 md:pt-8">{children}</main>
           </div>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
