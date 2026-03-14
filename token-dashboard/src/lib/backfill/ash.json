@@ -1117,6 +1117,19 @@
         "email_address": "ash@eoeoeo.net",
         "id": "ash@eoeoeo.net"
       }
+    },
+    {
+      "date": "2026-03-15",
+      "model": "claude-opus-4-6",
+      "input_tokens": 6,
+      "output_tokens": 2448,
+      "cache_read_tokens": 108575,
+      "cache_creation_tokens": 38371,
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      }
     }
   ]
 }
