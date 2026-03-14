@@ -10,7 +10,7 @@
       "date": "2026-02-25",
       "session_count": 7,
       "lines_of_code": 0,
-      "commits": 1,
+      "commits": 8,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 11904,
@@ -172,7 +172,7 @@
       "date": "2026-03-08",
       "session_count": 0,
       "lines_of_code": 0,
-      "commits": 0,
+      "commits": 1,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 16,
@@ -244,7 +244,7 @@
       "date": "2026-03-11",
       "session_count": 13,
       "lines_of_code": 0,
-      "commits": 1,
+      "commits": 15,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 4116,
@@ -280,7 +280,7 @@
       "date": "2026-03-12",
       "session_count": 25,
       "lines_of_code": 0,
-      "commits": 8,
+      "commits": 45,
       "pull_requests": 4,
       "tool_acceptance_rate": 0,
       "input_tokens": 66575,
@@ -301,10 +301,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 13756,
-      "output_tokens": 282478,
-      "cache_read_tokens": 114457928,
-      "cache_creation_tokens": 6569436
+      "input_tokens": 18400,
+      "output_tokens": 279914,
+      "cache_read_tokens": 118041365,
+      "cache_creation_tokens": 6768112
     },
     {
       "actor": {
@@ -319,23 +319,46 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 1713,
-      "output_tokens": 193936,
-      "cache_read_tokens": 33304138,
-      "cache_creation_tokens": 1289718
+      "input_tokens": 711,
+      "output_tokens": 145450,
+      "cache_read_tokens": 32556421,
+      "cache_creation_tokens": 2090368
     },
     {
-      "date": "2026-03-14",
-      "model": "claude-opus-4-6",
-      "input_tokens": 7,
-      "output_tokens": 811,
-      "cache_read_tokens": 337286,
-      "cache_creation_tokens": 89016,
       "actor": {
         "type": "user",
         "id": "chaenn@eoeoeo.net",
         "email_address": "chaenn@eoeoeo.net"
-      }
+      },
+      "model": "claude-opus-4-6",
+      "date": "2026-03-14",
+      "session_count": 5,
+      "lines_of_code": 0,
+      "commits": 12,
+      "pull_requests": 2,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 267,
+      "output_tokens": 5797,
+      "cache_read_tokens": 5726502,
+      "cache_creation_tokens": 675572
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "chaenn@eoeoeo.net",
+        "email_address": "chaenn@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-14",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 2583,
+      "output_tokens": 81766,
+      "cache_read_tokens": 26250617,
+      "cache_creation_tokens": 861464
     }
   ]
 }
