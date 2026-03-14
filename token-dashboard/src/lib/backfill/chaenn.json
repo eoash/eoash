@@ -323,6 +323,19 @@
       "output_tokens": 193936,
       "cache_read_tokens": 33304138,
       "cache_creation_tokens": 1289718
+    },
+    {
+      "date": "2026-03-14",
+      "model": "claude-opus-4-6",
+      "input_tokens": 7,
+      "output_tokens": 811,
+      "cache_read_tokens": 337286,
+      "cache_creation_tokens": 89016,
+      "actor": {
+        "type": "user",
+        "id": "chaenn@eoeoeo.net",
+        "email_address": "chaenn@eoeoeo.net"
+      }
     }
   ]
 }
