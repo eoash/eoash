@@ -629,6 +629,19 @@
       "output_tokens": 259967,
       "cache_read_tokens": 85516830,
       "cache_creation_tokens": 3091667
+    },
+    {
+      "date": "2026-03-14",
+      "model": "claude-opus-4-6",
+      "input_tokens": 8,
+      "output_tokens": 2629,
+      "cache_read_tokens": 156879,
+      "cache_creation_tokens": 100927,
+      "actor": {
+        "type": "user",
+        "id": "saul@eoeoeo.net",
+        "email_address": "saul@eoeoeo.net"
+      }
     }
   ]
 }
