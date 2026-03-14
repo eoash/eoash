@@ -186,6 +186,9 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 ### Finance Dashboard — 안정 운영 중
 - 모든 주요 기능 완료 (세션15~19): Cash Position 자동화, 환율 API, USD/KRW 토글, 7개 페이지
 - Sheets 에러 검증 완료, 모바일 UI 확인
+- **완료(3/15)**: Skeleton 로딩 — `Skeleton.tsx` + 6개 페이지 `loading.tsx`
+- **완료(3/15)**: Overview 페이지 (`/overview`) — Revenue·Cash·AR KPI 9개 병렬 fetch, 한 화면 요약
+- **완료(3/15)**: DataFreshness 컴포넌트 — 마지막 업데이트 시각 표시, 10분+ 경과 시 경고
 
 ### Leave Dashboard — 미완료
 - [ ] 입사일 필드 연동
@@ -196,4 +199,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-14 (eo-video-pipeline 자동화 확장)*
+*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가)*
