@@ -1126,10 +1126,23 @@
     {
       "date": "2026-03-15",
       "model": "claude-opus-4-6",
-      "input_tokens": 983,
-      "output_tokens": 12378,
-      "cache_read_tokens": 1294241,
-      "cache_creation_tokens": 134740,
+      "input_tokens": 986,
+      "output_tokens": 13067,
+      "cache_read_tokens": 1364318,
+      "cache_creation_tokens": 136210,
+      "actor": {
+        "type": "user",
+        "id": "ash@eoeoeo.net",
+        "email_address": "ash@eoeoeo.net"
+      }
+    },
+    {
+      "date": "2026-03-15",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 20,
+      "output_tokens": 6371,
+      "cache_read_tokens": 1404111,
+      "cache_creation_tokens": 88091,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
