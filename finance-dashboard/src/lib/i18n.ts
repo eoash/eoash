@@ -2,6 +2,7 @@ export type Locale = "ko" | "en";
 
 const translations = {
   // ── Sidebar ──
+  "nav.overview": { ko: "Overview", en: "Overview" },
   "nav.revenue": { ko: "매출 현황", en: "Revenue" },
   "nav.clients": { ko: "클라이언트별 매출", en: "Client Revenue" },
   "nav.ar": { ko: "A/R 현황", en: "A/R Status" },

@@ -1,4 +1,5 @@
 import ArDashboard from "@/components/ar/ArDashboard";
+import DataFreshness from "@/components/common/DataFreshness";
 import { fetchAR } from "@/lib/sheets";
 
 export const revalidate = 300;
@@ -20,5 +21,5 @@ export default async function ArPage() {
     );
   }
 
-  return <ArDashboard invoices={data.invoices} />;
+  return <><DataFreshness fetchedAt={new Date().toISOString()} /><ArDashboard invoices={data.invoices} /></>;
 }

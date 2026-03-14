@@ -1,5 +1,6 @@
 import { fetchCashPosition } from "@/lib/sheets";
 import CashDashboard from "@/components/cash/CashDashboard";
+import DataFreshness from "@/components/common/DataFreshness";
 
 export const revalidate = 300;
 
@@ -34,5 +35,5 @@ export default async function CashPage({ searchParams }: { searchParams: Promise
     );
   }
 
-  return <CashDashboard data={data} year={year} />;
+  return <><DataFreshness fetchedAt={new Date().toISOString()} /><CashDashboard data={data} year={year} /></>;
 }

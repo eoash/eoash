@@ -1,4 +1,5 @@
 import RevenueDashboard from "@/components/revenue/RevenueDashboard";
+import DataFreshness from "@/components/common/DataFreshness";
 import { fetchRevenue } from "@/lib/sheets";
 
 export const revalidate = 300;
@@ -32,5 +33,5 @@ export default async function RevenuePage({ searchParams }: { searchParams: Prom
     );
   }
 
-  return <RevenueDashboard data={data} year={year} />;
+  return <><DataFreshness fetchedAt={new Date().toISOString()} source={data._meta._source} /><RevenueDashboard data={data} year={year} /></>;
 }

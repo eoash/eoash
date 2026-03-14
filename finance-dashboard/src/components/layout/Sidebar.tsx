@@ -10,6 +10,9 @@ import type { ReactNode } from "react";
 const iconProps = { width: 16, height: 16, viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
 
 const menuItems: { labelKey: TranslationKey; href: string; icon: ReactNode }[] = [
+  { labelKey: "nav.overview", href: "/overview", icon: (
+    <svg {...iconProps}><rect x="2" y="2" width="5" height="5" rx="0.5" /><rect x="9" y="2" width="5" height="5" rx="0.5" /><rect x="2" y="9" width="5" height="5" rx="0.5" /><rect x="9" y="9" width="5" height="5" rx="0.5" /></svg>
+  )},
   { labelKey: "nav.revenue", href: "/", icon: (
     <svg {...iconProps}><path d="M2 12l3-4 3 2 4-5 2 2" /><path d="M2 14h12" /></svg>
   )},
