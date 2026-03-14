@@ -835,10 +835,10 @@
     {
       "date": "2026-03-14",
       "model": "claude-opus-4-6",
-      "input_tokens": 6845,
-      "output_tokens": 466999,
-      "cache_read_tokens": 102712923,
-      "cache_creation_tokens": 2213537,
+      "input_tokens": 6921,
+      "output_tokens": 501585,
+      "cache_read_tokens": 111608170,
+      "cache_creation_tokens": 2305268,
       "actor": {
         "type": "user",
         "id": "chiri@eoeoeo.net",
