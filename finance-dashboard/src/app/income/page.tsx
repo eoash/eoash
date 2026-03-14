@@ -1,104 +1,33 @@
-"use client";
+export const revalidate = 300; // 5분마다 재검증 (Sheets 업데이트 반영)
 
-import KpiCard from "@/components/cards/KpiCard";
-import MonthlyPnLChart from "@/components/charts/MonthlyPnLChart";
-import RevenueCompositionChart from "@/components/charts/RevenueCompositionChart";
-import ExpenseTop10Chart from "@/components/charts/ExpenseTop10Chart";
-import AnnualTrendChart from "@/components/charts/AnnualTrendChart";
-import { useState } from "react";
-import { WITHTAX_YEARLY, WITHTAX_LAST_UPDATED } from "@/lib/withtax-data";
-import { formatKRW, formatPercent } from "@/lib/utils";
-import { useT } from "@/lib/contexts/LanguageContext";
+import IncomeDashboard from "@/components/income/IncomeDashboard";
+import { fetchWithtaxData } from "@/lib/sheets";
+import {
+  WITHTAX_YEARLY,
+  WITHTAX_2025,
+  WITHTAX_EXPENSES_2025,
+  WITHTAX_LAST_UPDATED,
+} from "@/lib/withtax-data";
 
-const availableYears = WITHTAX_YEARLY.map((y) => y.year);
+// 위드택스 월별 상세 데이터가 있는 최신 연도
+const DETAIL_YEAR = "2025";
 
-export default function IncomePage() {
-  const { t } = useT();
-  const [selectedYear, setSelectedYear] = useState("2025");
+export default async function IncomePage() {
+  // _SYNC_Withtax 탭 우선, 없으면 정적 데이터 fallback
+  const sheetsData = await fetchWithtaxData(Number(DETAIL_YEAR));
 
-  const yearData = WITHTAX_YEARLY.find((y) => y.year === selectedYear)!;
-  const prevYearData = WITHTAX_YEARLY.find((y) => y.year === String(Number(selectedYear) - 1));
-
-  const totalRevenue = yearData.매출합계;
-  const totalExpense = yearData.판관비합계;
-  const netIncome = yearData.당기순이익;
-  const netMargin = totalRevenue > 0 ? netIncome / totalRevenue : 0;
-  const revenueGrowth = prevYearData && prevYearData.매출합계 > 0
-    ? ((totalRevenue - prevYearData.매출합계) / prevYearData.매출합계) * 100
-    : 0;
+  const yearly = sheetsData?.yearly ?? WITHTAX_YEARLY;
+  const monthly = sheetsData?.monthly ?? WITHTAX_2025;
+  const expenses = sheetsData?.expenses ?? WITHTAX_EXPENSES_2025;
+  const lastUpdated = sheetsData?.lastUpdated || WITHTAX_LAST_UPDATED;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold">{t("income.title")}</h1>
-          <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}
-            className="bg-[#111111] border border-[#333] rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#00E87A] cursor-pointer">
-            {availableYears.map((y) => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </div>
-        <span className="text-xs text-gray-500">{t("income.subtitle")}</span>
-        <span className="text-xs text-yellow-500/80 flex items-center gap-1">
-          ⚠ 데이터 기준일: {WITHTAX_LAST_UPDATED} (위드택스)
-        </span>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
-        <KpiCard
-          title={t("income.totalRevenue")}
-          value={formatKRW(totalRevenue)}
-          subtitle={t("income.totalRevenue.sub")}
-          tooltip={t("income.totalRevenue.tip")}
-          trend={{ value: Math.round(revenueGrowth), isPositive: revenueGrowth > 0 }}
-        />
-        <KpiCard
-          title={t("income.totalExpense")}
-          value={formatKRW(totalExpense)}
-          subtitle={t("income.totalExpense.sub")}
-          tooltip={t("income.totalExpense.tip")}
-        />
-        <KpiCard
-          title={t("income.netIncome")}
-          value={formatKRW(netIncome)}
-          subtitle={t("income.netIncome.sub")}
-          tooltip={t("income.netIncome.tip")}
-          trend={
-            netIncome !== 0
-              ? { value: Math.abs(Math.round(netMargin * 100)), isPositive: netIncome > 0 }
-              : undefined
-          }
-        />
-        <KpiCard
-          title={t("income.netMargin")}
-          value={formatPercent(netMargin)}
-          subtitle={t("income.netMargin.sub")}
-          tooltip={t("income.netMargin.tip")}
-          trend={
-            netMargin !== 0
-              ? { value: Math.abs(Math.round(netMargin * 100)), isPositive: netMargin > 0 }
-              : undefined
-          }
-        />
-      </div>
-
-      {/* Row 1: Monthly P&L + Revenue Composition (2025 only) */}
-      {selectedYear === "2025" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          <div className="lg:col-span-2">
-            <MonthlyPnLChart />
-          </div>
-          <div>
-            <RevenueCompositionChart />
-          </div>
-        </div>
-      )}
-
-      {/* Row 2: Expense TOP 10 (2025 only) + Annual Trend (always) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {selectedYear === "2025" && <ExpenseTop10Chart />}
-        <AnnualTrendChart />
-      </div>
-    </div>
+    <IncomeDashboard
+      yearly={yearly}
+      monthly={monthly}
+      expenses={expenses}
+      lastUpdated={lastUpdated}
+      detailYear={DETAIL_YEAR}
+    />
   );
 }

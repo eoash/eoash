@@ -12,15 +12,8 @@ import {
   ComposedChart,
   ReferenceLine,
 } from "recharts";
-import { WITHTAX_2025 } from "@/lib/withtax-data";
+import type { WithtaxMonthly } from "@/lib/withtax-data";
 import { useT } from "@/lib/contexts/LanguageContext";
-
-const data = WITHTAX_2025.map((m) => ({
-  month: m.month,
-  매출: m.매출합계,
-  판관비: m.판관비합계,
-  당기순이익: m.당기순이익,
-}));
 
 function fmt(v: number) {
   if (Math.abs(v) >= 1e8) return `${(v / 1e8).toFixed(1)}억`;
@@ -43,15 +36,21 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
-export default function MonthlyPnLChart() {
+export default function MonthlyPnLChart({ monthly }: { monthly: WithtaxMonthly[] }) {
   const { t } = useT();
+  const chartData = monthly.map((m) => ({
+    month: m.month,
+    매출: m.매출합계,
+    판관비: m.판관비합계,
+    당기순이익: m.당기순이익,
+  }));
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
       <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.monthlyPnl")}</h3>
       <p className="mb-3 text-xs text-gray-500">{t("income.chart.monthlyPnl.sub")}</p>
       <div className="h-[350px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
+          <ComposedChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#222" />
             <XAxis dataKey="month" stroke="#666" tick={{ fill: "#999", fontSize: 12 }} />
             <YAxis

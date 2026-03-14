@@ -875,6 +875,85 @@ function parseDate(str: string): Date | null {
   return isNaN(d.getTime()) ? null : d;
 }
 
+// ─── Withtax (세무법인 공식 데이터) ───────────────
+
+export async function fetchWithtaxData(year: number = 2025): Promise<{
+  monthly: import("./withtax-data").WithtaxMonthly[];
+  yearly: import("./withtax-data").WithtaxYearly[];
+  expenses: import("./withtax-data").ExpenseItem[];
+  lastUpdated: string;
+  _meta: FetchMeta;
+} | null> {
+  const sync = await readSyncTab("Withtax");
+  if (!sync) return null;
+
+  // METADATA 행에서 lastUpdated 추출
+  const metaRow = sync.data.find((r) => String(r[0]) === "METADATA");
+  const lastUpdated = metaRow ? String(metaRow[2] || "") : "";
+
+  // _SYNC_Withtax 탭 구조:
+  // headers: [type, year, item, v1, v2, ..., v12]
+  // MONTHLY: v1-v12 = 1월~12월 값
+  // YEARLY:  v1 = 연간 합계 값
+  // EXPENSE: v1 = 금액, v2 = 비율(%)
+
+  const MONTHLY_METRICS: (keyof import("./withtax-data").WithtaxMonthly)[] = [
+    "서비스매출", "컨텐츠수입", "도서매출", "플랫폼매출",
+    "수탁수익", "미국법인매출", "매출합계", "판관비합계",
+    "영업외수익", "영업외비용", "당기순이익",
+  ];
+
+  // 월별 데이터 (요청 연도)
+  const monthlyRows = sync.data.filter(
+    (r) => String(r[0]) === "MONTHLY" && String(r[1]) === String(year),
+  );
+  const monthly: import("./withtax-data").WithtaxMonthly[] = Array.from({ length: 12 }, (_, m) => {
+    const entry: Record<string, number | string> = { month: `${m + 1}월` };
+    for (const key of MONTHLY_METRICS) {
+      const row = monthlyRows.find((r) => String(r[2]) === key);
+      entry[key] = row ? toNum(row[m + 3]) : 0;
+    }
+    return entry as unknown as import("./withtax-data").WithtaxMonthly;
+  });
+
+  // 연도별 요약 (전체 연도)
+  const yearlyRows = sync.data.filter((r) => String(r[0]) === "YEARLY");
+  const yearMap = new Map<string, Record<string, number>>();
+  for (const row of yearlyRows) {
+    const y = String(row[1]);
+    const item = String(row[2]);
+    const val = toNum(row[3]);
+    if (!yearMap.has(y)) yearMap.set(y, {});
+    yearMap.get(y)![item] = val;
+  }
+  const yearly: import("./withtax-data").WithtaxYearly[] = Array.from(yearMap.entries())
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([y, vals]) => ({
+      year: y,
+      매출합계: vals["매출합계"] ?? 0,
+      판관비합계: vals["판관비합계"] ?? 0,
+      당기순이익: vals["당기순이익"] ?? 0,
+      매출항목: Object.fromEntries(
+        Object.entries(vals).filter(([k]) => !["매출합계", "판관비합계", "당기순이익"].includes(k)),
+      ),
+    }));
+
+  // 판관비 세부항목 (요청 연도)
+  const expenseRows = sync.data.filter(
+    (r) => String(r[0]) === "EXPENSE" && String(r[1]) === String(year),
+  );
+  const expenses: import("./withtax-data").ExpenseItem[] = expenseRows
+    .map((r) => ({
+      name: String(r[2]),
+      amount: toNum(r[3]),
+      ratio: r[4] ? toNum(r[4]) : 0,
+    }))
+    .filter((e) => e.amount > 0)
+    .sort((a, b) => b.amount - a.amount);
+
+  return { monthly, yearly, expenses, lastUpdated, _meta: { _source: "sync", _fetchedAt: new Date().toISOString() } };
+}
+
 // ─── FX ───────────────────────────────────────
 
 export async function fetchFx(): Promise<FxRate[]> {

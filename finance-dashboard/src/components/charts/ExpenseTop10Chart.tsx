@@ -1,10 +1,7 @@
 "use client";
 
-import { WITHTAX_EXPENSES_2025 } from "@/lib/withtax-data";
+import type { ExpenseItem } from "@/lib/withtax-data";
 import { useT } from "@/lib/contexts/LanguageContext";
-
-const data = WITHTAX_EXPENSES_2025.slice(0, 10);
-const maxAmount = data[0].amount;
 
 const BAR_COLORS = [
   "#FF6B6B", "#F87171", "#FB923C", "#FBBF24", "#FDE68A",
@@ -16,8 +13,10 @@ function fmt(v: number) {
   return `${(v / 1e4).toFixed(0)}만`;
 }
 
-export default function ExpenseTop10Chart() {
+export default function ExpenseTop10Chart({ expenses }: { expenses: ExpenseItem[] }) {
   const { t } = useT();
+  const data = expenses.slice(0, 10);
+  const maxAmount = data[0]?.amount ?? 1;
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
       <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.expenseTop10")}</h3>

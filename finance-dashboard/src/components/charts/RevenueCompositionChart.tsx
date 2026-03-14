@@ -7,23 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { WITHTAX_YEARLY } from "@/lib/withtax-data";
+import type { WithtaxYearly } from "@/lib/withtax-data";
 import { useT } from "@/lib/contexts/LanguageContext";
 
 const COLORS = ["#34D399", "#47B8FF", "#A78BFA", "#F59E0B", "#FF6B6B", "#00E87A"];
-
-const yearly2025 = WITHTAX_YEARLY.find((y) => y.year === "2025");
-const items = yearly2025?.매출항목 ?? {};
-const total = Object.values(items).reduce((s, v) => s + v, 0);
-
-const data = Object.entries(items)
-  .map(([name, amount]) => ({ name, amount, ratio: ((amount / total) * 100).toFixed(1) }))
-  .sort((a, b) => b.amount - a.amount);
-
-function fmt(v: number) {
-  if (Math.abs(v) >= 1e8) return `${(v / 1e8).toFixed(1)}억`;
-  return `${(v / 1e4).toFixed(0)}만`;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomTooltip({ active, payload }: any) {
@@ -40,8 +27,14 @@ function CustomTooltip({ active, payload }: any) {
   );
 }
 
-export default function RevenueCompositionChart() {
+export default function RevenueCompositionChart({ yearData }: { yearData: WithtaxYearly }) {
   const { t } = useT();
+  const items = yearData.매출항목 ?? {};
+  const total = Object.values(items).reduce((s, v) => s + v, 0);
+  const data = Object.entries(items)
+    .map(([name, amount]) => ({ name, amount, ratio: ((amount / total) * 100).toFixed(1) }))
+    .sort((a, b) => b.amount - a.amount);
+
   return (
     <div className="rounded-xl bg-[#111111] border border-[#222] p-6">
       <h3 className="mb-4 text-lg font-semibold text-white">{t("income.chart.composition")}</h3>
