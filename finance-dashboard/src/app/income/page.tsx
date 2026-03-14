@@ -6,7 +6,7 @@ import RevenueCompositionChart from "@/components/charts/RevenueCompositionChart
 import ExpenseTop10Chart from "@/components/charts/ExpenseTop10Chart";
 import AnnualTrendChart from "@/components/charts/AnnualTrendChart";
 import { useState } from "react";
-import { WITHTAX_YEARLY } from "@/lib/withtax-data";
+import { WITHTAX_YEARLY, WITHTAX_LAST_UPDATED } from "@/lib/withtax-data";
 import { formatKRW, formatPercent } from "@/lib/utils";
 import { useT } from "@/lib/contexts/LanguageContext";
 
@@ -38,6 +38,9 @@ export default function IncomePage() {
           </select>
         </div>
         <span className="text-xs text-gray-500">{t("income.subtitle")}</span>
+        <span className="text-xs text-yellow-500/80 flex items-center gap-1">
+          ⚠ 데이터 기준일: {WITHTAX_LAST_UPDATED} (위드택스)
+        </span>
       </div>
 
       {/* KPI Cards */}

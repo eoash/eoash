@@ -2,6 +2,8 @@
 // last update: 2026.01.21
 // 데이터 소스: https://lookerstudio.google.com/s/mrHnGOvqVDQ
 
+export const WITHTAX_LAST_UPDATED = "2026.01.21";
+
 // --- 2025년 월별 영업이익 ---
 export interface WithtaxMonthly {
   month: string;
