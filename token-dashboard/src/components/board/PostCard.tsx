@@ -70,6 +70,7 @@ interface Props {
 
 export default function PostCard({ post, compact, user, onDeleted, onUpdated, defaultOpen, onLoginClick }: Props) {
   const [expanded, setExpanded] = useState(defaultOpen ?? false);
+  const [views, setViews] = useState(post.views);
   const [deleting, setDeleting] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(post.title);
@@ -79,6 +80,25 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
 
   const canDelete = user && user.name === post.author && !post.pinned;
   const canEdit = user && user.name === post.author && !post.pinned;
+
+  const handleExpand = () => {
+    const next = !expanded;
+    setExpanded(next);
+    if (next) {
+      const key = `viewed_${post.id}`;
+      if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, "1");
+        fetch("/api/board/views", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pageId: post.id }),
+        })
+          .then((r) => r.json())
+          .then((d) => { if (d.views) setViews(d.views); })
+          .catch(() => { /* silent */ });
+      }
+    }
+  };
 
   const handleDelete = async () => {
     if (!confirm("이 글을 삭제하시겠습니까?")) return;
@@ -173,7 +193,7 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
     >
       {/* 메인 행 */}
       <button
-        onClick={() => setExpanded(!expanded)}
+        onClick={handleExpand}
         className="w-full text-left px-4 py-3 flex items-center gap-3 cursor-pointer"
       >
         {/* 카테고리 배지 */}
@@ -198,6 +218,15 @@ export default function PostCard({ post, compact, user, onDeleted, onUpdated, de
           {post.edited && (
             <span className="text-xs text-gray-500 font-normal ml-1.5">(편집됨)</span>
           )}
+        </span>
+
+        {/* 조회수 */}
+        <span className="text-xs text-gray-600 shrink-0 hidden sm:inline flex items-center gap-0.5">
+          <svg className="w-3 h-3 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          {views}
         </span>
 
         {/* 메타 — 작성자 + 날짜 */}

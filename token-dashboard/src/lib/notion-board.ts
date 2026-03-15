@@ -20,6 +20,7 @@ export interface BoardPost {
   pinned: boolean;
   edited: boolean;
   date: string; // YYYY-MM-DD
+  views: number;
   reactions: {
     "👍": number;
     "💡": number;
@@ -66,6 +67,7 @@ function parsePage(p: any): BoardPost {
     pinned,
     edited,
     date: dateObj?.start ?? "",
+    views: (props["조회수"]?.number as number) ?? 0,
     reactions: {
       "👍": (props["👍"]?.number as number) ?? 0,
       "💡": (props["💡"]?.number as number) ?? 0,
@@ -200,6 +202,24 @@ export async function updatePost(
 
   const page = await res.json();
   return parsePage(page);
+}
+
+export async function incrementView(pageId: string): Promise<number> {
+  const pageRes = await fetch(`${NOTION_API}/pages/${pageId}`, { headers });
+  if (!pageRes.ok) throw new Error(`Page fetch failed: ${pageRes.status}`);
+  const page = await pageRes.json();
+
+  const current = (page.properties?.["조회수"]?.number as number) ?? 0;
+  const next = current + 1;
+
+  const updateRes = await fetch(`${NOTION_API}/pages/${pageId}`, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify({ properties: { "조회수": { number: next } } }),
+  });
+
+  if (!updateRes.ok) throw new Error(`View increment failed: ${updateRes.status}`);
+  return next;
 }
 
 export async function archivePost(pageId: string): Promise<void> {
