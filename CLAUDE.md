@@ -51,8 +51,11 @@
 agent/advisors/senior_architect.md   → Alex  (코드/아키텍처/리팩터링)
 agent/advisors/legal_advisor.md      → Lisa  (법률/계약/주주/외국환)
 agent/advisors/finance_advisor.md    → Chris (재무/AR/FX/캐시플로우)
+agent/advisors/designer_advisor.md   → Mia   (UI/UX/컴포넌트/데이터시각화)
+agent/advisors/pm_advisor.md         → Ryan   (기능우선순위/로드맵/PRD)
+agent/advisors/critic_advisor.md     → Jordan (반론/약점/Pre-mortem)
 ```
-자동 라우팅: `/consult` → 키워드 감지 → Alex/Lisa/Chris 자동 분기
+자동 라우팅: `/consult` → 키워드 감지 → Alex/Lisa/Chris/Mia/Ryan/Jordan 자동 분기
 
 ### 스킬 (`.claude/skills/`)
 핵심 커스텀 스킬 (`my-*`):
@@ -155,6 +158,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - [ ] ty(TaeYong) hook 재설치 확인 — 3/10 이후 미집계, 3/13·3/14 Slack DM 발송 완료, 실행 대기 중. unknown.json(3/13 1건)은 ty가 아닐 가능성 높음 (alias 매핑 정상 작동 중이었으므로 hook 자체 미실행 추정)
 - **확인(3/14)**: chanho(chankim) 데이터 정상 — 최근 사용량 있음, Opus 80~95% 사용 중 (Sonnet 전환 안내 필요)
 - **완료(3/14)**: 메모리 파일 정리 — MEMORY.md 217줄→62줄 압축, debug/tool-selector 임시 파일 삭제, ANTI_PATTERNS.md 2개 항목 추가
+- **완료(3/15)**: 레포 정리 — node_modules/~2.3GB + .next/~953MB + venv/196MB 삭제, claude-code-video/ 별도 레포 분리, .agents/.agent 스킬 중복 제거, 총 3.8GB→254MB
 
 ### eo-video-pipeline — 자동화 확장 중
 - **레포**: eoash/eo-video-pipeline (로컬: `/Users/ash/Documents/eo-video-pipeline`)
@@ -199,4 +203,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가)*
+*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가, 레포 정리 3.8GB→254MB, macOS Stop 훅 알림 추가)*
