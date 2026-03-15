@@ -525,10 +525,10 @@
     {
       "date": "2026-03-15",
       "model": "claude-opus-4-6",
-      "input_tokens": 374,
-      "output_tokens": 128339,
-      "cache_read_tokens": 19868021,
-      "cache_creation_tokens": 885614,
+      "input_tokens": 382,
+      "output_tokens": 128727,
+      "cache_read_tokens": 20277517,
+      "cache_creation_tokens": 887872,
       "actor": {
         "type": "user",
         "id": "jemin@eoeoeo.net",
