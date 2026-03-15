@@ -887,9 +887,9 @@ export async function fetchWithtaxData(year: number = 2025): Promise<{
   const sync = await readSyncTab("Withtax");
   if (!sync) return null;
 
-  // METADATA 행에서 lastUpdated 추출
+  // METADATA 행에서 lastUpdated 추출 — 구조: [METADATA, "", "lastUpdated", "2026.01.21", ...]
   const metaRow = sync.data.find((r) => String(r[0]) === "METADATA");
-  const lastUpdated = metaRow ? String(metaRow[2] || "") : "";
+  const lastUpdated = metaRow ? String(metaRow[3] || "") : "";
 
   // _SYNC_Withtax 탭 구조:
   // headers: [type, year, item, v1, v2, ..., v12]
