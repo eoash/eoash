@@ -521,6 +521,19 @@
       "output_tokens": 5089,
       "cache_read_tokens": 850848,
       "cache_creation_tokens": 187305
+    },
+    {
+      "date": "2026-03-15",
+      "model": "claude-sonnet-4-6",
+      "input_tokens": 8,
+      "output_tokens": 736,
+      "cache_read_tokens": 103935,
+      "cache_creation_tokens": 19081,
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      }
     }
   ]
 }
