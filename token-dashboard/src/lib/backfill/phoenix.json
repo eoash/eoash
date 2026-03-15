@@ -26,28 +26,33 @@
       },
       "model": "claude-sonnet-4-6",
       "date": "2026-03-11",
+      "session_count": 14,
+      "lines_of_code": 0,
+      "commits": 3,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 693,
+      "output_tokens": 86177,
+      "cache_read_tokens": 15043812,
+      "cache_creation_tokens": 640700
+    },
+    {
+      "actor": {
+        "type": "user",
+        "id": "phoenix@eoeoeo.net",
+        "email_address": "phoenix@eoeoeo.net"
+      },
+      "model": "claude-sonnet-4-6",
+      "date": "2026-03-15",
       "session_count": 1,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 394,
-      "output_tokens": 78186,
-      "cache_read_tokens": 8383868,
-      "cache_creation_tokens": 414680
-    },
-    {
-      "date": "2026-03-15",
-      "model": "claude-sonnet-4-6",
-      "input_tokens": 4,
+      "input_tokens": 7,
       "output_tokens": 180,
-      "cache_read_tokens": 20371,
-      "cache_creation_tokens": 10010,
-      "actor": {
-        "type": "user",
-        "id": "phoenix@eoeoeo.net",
-        "email_address": "phoenix@eoeoeo.net"
-      }
+      "cache_read_tokens": 26844,
+      "cache_creation_tokens": 18255
     }
   ]
 }
