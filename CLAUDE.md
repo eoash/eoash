@@ -186,6 +186,8 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/15)**: Overview 페이지 (`/overview`) — Revenue·Cash·AR KPI 9개 병렬 fetch, 한 화면 요약
 - **완료(3/15)**: DataFreshness 컴포넌트 — 마지막 업데이트 시각 표시, 10분+ 경과 시 경고
 - **완료(3/15)**: withtax Sheets 이관 — `fetchWithtaxData()` + `_SYNC_Withtax` 탭 직접 생성 + income 서버 컴포넌트 전환 + 차트 4개 props 리팩터링
+- **완료(3/15)**: DataFreshness 전 페이지 통일 — clients/yoy 추가 (revenue·ar·cash·overview·clients·yoy 6개 페이지)
+- **완료(3/15)**: AR 알림 배지 — `/api/alerts` route + Sidebar AR 메뉴 위험 클라이언트 배지 (>60일 red, >30일 orange)
 
 ### Leave Dashboard — 미완료
 - [ ] 입사일 필드 연동
@@ -196,4 +198,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가, 레포 정리 3.8GB→254MB, macOS Stop 훅 알림 추가, eo-video-pipeline 폐기)*
+*마지막 업데이트: 2026-03-15 (finance-dashboard DataFreshness 전 페이지 통일 + AR 알림 배지 추가)*
