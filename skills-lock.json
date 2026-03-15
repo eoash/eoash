@@ -4,47 +4,47 @@
     "agent-browser": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "2f771f8eb25f9856d2169a4de4766de94e2bdbff999f42c458c8f1e2ca405c03"
+      "computedHash": "a7235898c50422ed8d3cf43cb640ecb591cce3220cf88d31256a59c16a20d8ea"
     },
     "agent-tower-plugin": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "364b268faeb6077e582b4b1b8094c7fe078df4af139086859e13137fa73f7faf"
+      "computedHash": "59e4359c74f2efd14bcb2fc110a14a058a502c361b4ac7ba67c89eb175f72af9"
     },
     "biz-email-writer": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "1ad1fc4228b25dedd93b3c945ad2f8cbdd0e74e6b0522b0d4157e444f0610cf2"
+      "computedHash": "588a7fa57f9c61aaa8a000dfa54a484fe99ae8897e01f2f47a87fbe4cdd28535"
     },
     "data-report-generator": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "432cd815fc8e6f07ef42ca2e96a29362c202b02acc023e6340ac6f9e14fa15e8"
+      "computedHash": "934700c5f3bf0ef7fe80b2b2cfd99e0cbb1d54177045c10943515ec2f727d88d"
     },
     "day1-onboarding": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "2c55099acf003e5f8e7205b17ce80add86acd25aa88b27588377970a6bb97dc5"
+      "computedHash": "92a09c01a235d5b035fac57857d97b589655df148a3911d08522ee918425a7c1"
     },
     "day2-create-context-sync-skill": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "d4bcd15ae827828111801877c80097efc4d50cf2ff98f592588312199bf7f288"
+      "computedHash": "74e3488f37a893a762ee17555fee5dbfbc4487f0f873bbfee50885d47640eb58"
     },
     "day2-supplement-mcp": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "9855907a4c909e4a8ce4d94d3288608b2435fd65b1f516a514404187b09e63a3"
+      "computedHash": "4f75a0f7d86467ec0e3948d0fa636866bc5c06d44d814ca3d97f73fa25e18062"
     },
     "day4-wrap-and-analyze": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "f45b4438e2e4f9cf16c92d61ce709640928fcfaa040c663e4262eab555db576c"
+      "computedHash": "cfcfc59ff249c1bc2a77a1a3657141365e46333c05791adb564470bd2a8ca1d6"
     },
     "day5-fetch-and-digest": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "2f48ffbc89c15c6804c303179a1fb1f24d83311190fa8eadb71a9e87c1e99be2"
+      "computedHash": "ac1bdf50c8bd1ce42ff43087163f760b76ebd1a265551737235f2ef489a59a25"
     },
     "day6-prd-submit": {
       "source": "ai-native-camp/camp-1",
@@ -54,7 +54,7 @@
     "design-md": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "d3a4c7d2f2715a33662c8b06ffc16035d01965a8b4ed81c2958fb22ae94760f8"
+      "computedHash": "44af3e6e89a42a765d9cebf943f1e2ff3cdf43d1958341eb43fb7b74116f6691"
     },
     "distill-receive": {
       "source": "NAMYUNWOO/claudeSpread",
@@ -69,17 +69,17 @@
     "docx": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "9ccd6d058d32ed848e10bf23647c01f8ad6d3170ad5664f5784189cef04175b2"
+      "computedHash": "c54f825695dfa3ee931a0eb61512a170785f3ee0237c0a56e38211da63cffa13"
     },
     "excel-automation": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "fb1f78c4fb06711e5fa29a1ee739477705157289e75ba80bc56242422b2b5131"
+      "computedHash": "005311ff82d645168a8fe5976156f138974ee6ec9acf6c1ba506f983313ca760"
     },
     "find-skills": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "6412eb4eb3b91595ebab937f0c69501240e7ba761b3d82510b5cf506ec5c7adc"
+      "computedHash": "25872a21881a950edc3db1f3329664d60405d539660ce05b3265db2de06a7dfd"
     },
     "frontend-design": {
       "source": "anthropics/skills",
@@ -89,22 +89,22 @@
     "hwpx": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "6146a840889d6ed27bb64757f8a027a6aeda7f0346e45bdc2a1d6865c2f2f4dc"
+      "computedHash": "d4870f650915ccb77852c7ed709f35c6deaf384b648db050a817e0adde5cd74d"
     },
     "korean-biz-docs": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "6d9eb0b93475f537598d3a14c479fd01cf7534c6ca7214bfe391f8fa038b9a88"
+      "computedHash": "4a4f01edfaf252d6cd8764aeafdd67901a11438989adcdd400f700c2a6f77979"
     },
     "korean-translator": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "ffec69d869b15d92039ce6619b4e38e27a1537d23e3d6194b83fff40dfe2714e"
+      "computedHash": "0c41b5b1ca91f192edb4a45d1f9fb308efd3d15f281d18e73e6fa7269c7cd9c2"
     },
     "meeting-minutes": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "1df2afcb74a16484dfc50ec3d77acb7828325c1e662607dc273c12f7b6b3ab2d"
+      "computedHash": "8ed8040f0f4604b77e590acf0bb7596a197ff7fd25750496f1c87c6404c49d1e"
     },
     "memory-receive": {
       "source": "NAMYUNWOO/claudeSpread",
@@ -119,127 +119,132 @@
     "my-code-reviewer": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "6c9a4e45155b35d135028d931e0cc5cd12987b4dd8cc66c482af1d828bb764b2"
+      "computedHash": "872392dc1bc98ed69cb1c1a0ac52c6d8e1728cb2a1fea3303a5a287c2137df0e"
     },
     "my-consult": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "136974809c757a9dcfc801f12d7da339e1fb9fbdb77dd448c9bd1f1f8f3dd097"
+      "computedHash": "faee4cefc272b31ac68d40a41b41512265524de9bc64400d7ca7e1ea7113721f"
     },
     "my-content-digest": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "36623586b10a4dec0ec347ea910a420f419c17bdbfd6b1e5912a4638dfa715a2"
+      "computedHash": "dceea6d42325df3d434eba9c9fbccd5b9ef65eb50d07422d203167890855d968"
     },
     "my-context-sync": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "9e99d03cbbf3b055a7edcd0d608c70b32f80b19070c45d31575bf5cad4238513"
+      "computedHash": "d1c506e2af2a27a95466723585abc7ab126d2a8544da17374ca92af69719d421"
     },
     "my-dev-team": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "7b714ea8537b8ed65de0c1bff245b44885ee0e273519a9f04427a9810c4ee056"
+      "computedHash": "53dff5ada56462d465034d2476e4b9470142c26aaf5e9e768b999f68bf42771d"
+    },
+    "my-docs-sync": {
+      "source": "eoash/ash-skills",
+      "sourceType": "github",
+      "computedHash": "990927efd29e9ed07799be22e996993a7039bb5ac1a8e718cb5784cca6610f7f"
     },
     "my-fetch-tweet": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "f5f36bcb93294c7b8d5852305f2581040c55916b9a2f162bf6ea533ca4f4ddc8"
+      "computedHash": "014f4e0c15dd4c1389afc31c93188e3f5e02e7d50ea25d104b1e284654aa8b88"
     },
     "my-fetch-youtube": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "23d69d3416ca27c2f633c40c7c6d26216f205ee73ef16b341e407824e6c9c72f"
+      "computedHash": "e5d758768b5bba1b3b7a279641f4129e85ece60eca2db640d7d55adde6da22d1"
     },
     "my-finance-advisor": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "af6de69847d90ecbe2651d60e155741640dc17a45c960667271e03b7a6b65053"
+      "computedHash": "5fdbca4eb3d0e88e937d3dcfa1f9cfabe881b324cfdeb85da8fb820a966704ce"
     },
     "my-history-insight": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "0e62e42bdb0d512f869bf60a435274b7a3328a51bf10bc959143dfe05c0996a1"
+      "computedHash": "1bd5c77ce191ec13a56ceda31b8422591b2cabf7f1f6656c6761515d69127269"
     },
     "my-homework-new": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "a77e948f9a77ea1a89f7da41a321af47e05c3db3df9a4419e490013c9ed694e6"
+      "computedHash": "f6905dd68c61cacd27041031b426b7b8a0ac0e49607fab6ef3caf7116a1fe4ab"
     },
     "my-legal-advisor": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "54794610931c7fc28a70470adde5db70868e78aa93fab4445248ff8b7df9ddaf"
+      "computedHash": "2a45ba6c80cce920c52272819034e48789ebf4799d095a230e888581b1280b29"
     },
     "my-session-analyzer": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "7fa991eed4b45c07491890e784bba3d109b5bd83e19aa72f91777788411252db"
+      "computedHash": "e9b8bc250e2e61d5942e83793d01b65dd7a4b4e6efc626cb70f659403a4306d2"
     },
     "my-session-wrap": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "2ca5dc180ecb87160ec965aa7f2fc99a5cdc8c1ce036d4b8fa809d9422b81ed6"
+      "computedHash": "91f7469c5af2541c68970b403eba5e300c9feb38ff49b742226b38b4ffebaf0b"
     },
     "my-townhall-agency": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "b95376c90e79afbfe0261794e75340f3dc8fc472e7aa28ce15395ff8cc32e2c6"
+      "computedHash": "e91a515fe1e3875cb370185f253b7c218e10a59ad40efbed637010522ba5f630"
     },
     "opusplan": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "31c4c2b5e21201053cd5ce4b313dcb191700cb5f26b16fdae6e87f383172e9bc"
+      "computedHash": "0ba5fd185a44270e52fdb45b05b3e1d3c8c9db304a53c29107d7e7764579c08f"
     },
     "pdf": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "cfbc539377088ca7e44a813b30c306327385bbd973cd7a721e1743f60837dd62"
+      "computedHash": "37226d4220d844377e6b2a386c51a011df4cd130855ff0b80bcc22f9c28abd57"
     },
     "plan-first": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "5149d3795c767cc04e84b1303935c2bccbc52f2d63779407f8b7e826120e586b"
+      "computedHash": "2aec20fde54c0062e0d1146dbf912f8e5c8a3b9663d59775f5820155f7c44d47"
     },
     "portfolio-builder": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "07fb9e012c4a47d367a887901b780d23d2685812d6a369ad87c49e0852b7b6f6"
+      "computedHash": "f3d43f21b22c4f8effda888775ed256a00eec06793d1cf089fca0be66eb96f92"
     },
     "ppt-design-system": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "af5d95cf9bdb13ae09020f1a16b4c7f019cfcc44cc10cf7ea08b60807ecc2eb3"
+      "computedHash": "a12abf5cfa4d6b3dcf46ad80378677ba56d01df586cf853e30d1d12244f3c8d0"
     },
     "pptx": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "84a12cf04677d71bee0c62e771a0f66aba301cc0975d77c7a7db1f81343c0596"
+      "computedHash": "72f1f98d0450db820e26c7df3989a9b84df6fad2cffe20f3a295667de24c4170"
     },
     "project-tracker": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "4c5c1433aa182886f2480cad179ab8f035615dd56755db37e4d53db092bc7f69"
+      "computedHash": "ca2e8c3098f3bc3773be1aa3bb36310c702cbed3077edbdb5ac63aad738d179f"
     },
     "prompt-engineer": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "ed5a603e9f77eb8ee1dc8f2d79e27cd73c6d454288f9a771d7459a0de1c909bd"
+      "computedHash": "df210856ffef51e20c2a7109aaf13f02a931a4fd1e5a44dde0e1148ab8f886a7"
     },
     "proposal-maker": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "45fdc4c6a39e54b4db6f64a4b7f2abfa0e32fabafaa17bee384d38ba5a58dfb0"
+      "computedHash": "3c034a4ec0bd0e778f052ee770ef421e3c9880942451ff19b121a555366ef11c"
     },
     "ralph-loop": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "0f107512ab2adafbc1c3cdc0dc1eff080eb58d64f5c23042e7560e608734563b"
+      "computedHash": "2d37c022578d8b0f2f90f41fe0db931b24ba14958b625f6ebfd65bd5bbeded51"
     },
     "remotion-best-practices": {
-      "source": "remotion-dev/skills",
+      "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "9851afb52e1b892c43b2af973bda1776ce01fedfdfe704e0cfd70069a3a9c300"
+      "computedHash": "46a55d68886d6c104bde7803c55a479f91b45ae01441e37c800373bcb0bf3719"
     },
     "sessions-receive": {
       "source": "NAMYUNWOO/claudeSpread",
@@ -254,27 +259,27 @@
     "slack-to-gcal": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "34d5de798ec346c259cb353e961e66ae6b635ac203fda68910abb2adadfb5b8c"
+      "computedHash": "f135d1f927115e31aede106c3fe62e3d365c3b97ea461f5aecfd6c0743d40125"
     },
     "svg-diagram": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "f06da737e75415a4dccf9c68b6e803109532b320a9bdcbde76566c49e9347850"
+      "computedHash": "9a2f6f976e8f1cbdd06ac85d116520d3ac15eaad46ec7970015fc4fff0b54f4d"
     },
     "vercel-react-best-practices": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "bed451c57cea71b959002a872f93c96413ce35df0d718f79f62035ca2ad100d5"
+      "computedHash": "9d67d97d1d601b8af4701840c73400d4aa763edee386175ea3281957422d635e"
     },
     "web-design-guidelines": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
     },
     "xlsx": {
       "source": "eoash/ash-skills",
       "sourceType": "github",
-      "computedHash": "c6ac1d2b95fe5475b26891c6843136e7a8849c9414576eefb6cd32875e26af39"
+      "computedHash": "43bd610d75590ed425709412551c5c69b66838bf65b3367aa5c0c4fcc58c86bb"
     }
   }
 }
