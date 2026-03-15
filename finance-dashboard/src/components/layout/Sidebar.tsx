@@ -9,7 +9,11 @@ import type { ReactNode } from "react";
 
 const iconProps = { width: 16, height: 16, viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
 
-const menuItems: { labelKey: TranslationKey; href: string; icon: ReactNode }[] = [
+interface AlertState {
+  ar: { red: number; orange: number; total: number };
+}
+
+const menuItems: { labelKey: TranslationKey; href: string; icon: ReactNode; alertKey?: keyof AlertState }[] = [
   { labelKey: "nav.overview", href: "/overview", icon: (
     <svg {...iconProps}><rect x="2" y="2" width="5" height="5" rx="0.5" /><rect x="9" y="2" width="5" height="5" rx="0.5" /><rect x="2" y="9" width="5" height="5" rx="0.5" /><rect x="9" y="9" width="5" height="5" rx="0.5" /></svg>
   )},
@@ -19,7 +23,7 @@ const menuItems: { labelKey: TranslationKey; href: string; icon: ReactNode }[] =
   { labelKey: "nav.clients", href: "/clients", icon: (
     <svg {...iconProps}><rect x="3" y="6" width="10" height="8" rx="1" /><path d="M5 6V4a3 3 0 0 1 6 0v2" /></svg>
   )},
-  { labelKey: "nav.ar", href: "/ar", icon: (
+  { labelKey: "nav.ar", href: "/ar", alertKey: "ar", icon: (
     <svg {...iconProps}><circle cx="8" cy="8" r="6" /><path d="M8 4v4l2.5 1.5" /></svg>
   )},
   { labelKey: "nav.yoy", href: "/yoy", icon: (
@@ -43,6 +47,14 @@ export default function Sidebar() {
   const { locale, setLocale, t } = useT();
   const [open, setOpen] = useState(false);
   const [syncState, setSyncState] = useState<SyncState>("idle");
+  const [alerts, setAlerts] = useState<AlertState | null>(null);
+
+  useEffect(() => {
+    fetch("/api/alerts")
+      .then((r) => r.json())
+      .then((d) => setAlerts(d))
+      .catch(() => {});
+  }, []);
 
   // 페이지 이동 시 드로어 닫기
   useEffect(() => {
@@ -73,6 +85,10 @@ export default function Sidebar() {
                 ? pathname === "/"
                 : pathname.startsWith(item.href);
 
+            const alertData = item.alertKey ? alerts?.[item.alertKey] : null;
+            const badgeCount = alertData?.total ?? 0;
+            const isRed = alertData?.red && alertData.red > 0;
+
             return (
               <Link
                 key={item.href}
@@ -84,7 +100,14 @@ export default function Sidebar() {
                 }`}
               >
                 {item.icon}
-                {t(item.labelKey)}
+                <span className="flex-1">{t(item.labelKey)}</span>
+                {badgeCount > 0 && (
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none ${
+                    isRed ? "bg-red-500/20 text-red-400" : "bg-yellow-500/20 text-yellow-400"
+                  }`}>
+                    {badgeCount}
+                  </span>
+                )}
               </Link>
             );
           })}

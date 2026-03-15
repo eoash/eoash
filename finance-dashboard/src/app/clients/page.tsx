@@ -1,12 +1,13 @@
 import { fetchClientRevenue } from "@/lib/sheets";
 import ClientsDashboard from "@/components/clients/ClientsDashboard";
+import DataFreshness from "@/components/common/DataFreshness";
 
 export const revalidate = 300;
 
 export default async function ClientsPage() {
   try {
     const { invoices } = await fetchClientRevenue();
-    return <ClientsDashboard invoices={invoices} />;
+    return <><DataFreshness fetchedAt={new Date().toISOString()} /><ClientsDashboard invoices={invoices} /></>;
   } catch (error) {
     console.error("[ClientsPage] failed:", error);
     return (

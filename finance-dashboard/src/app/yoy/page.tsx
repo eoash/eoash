@@ -1,5 +1,6 @@
 import { fetchYoY } from "@/lib/sheets";
 import YoYDashboard from "@/components/yoy/YoYDashboard";
+import DataFreshness from "@/components/common/DataFreshness";
 
 export const revalidate = 300;
 
@@ -20,5 +21,5 @@ export default async function YoYPage() {
     );
   }
 
-  return <YoYDashboard data={data} />;
+  return <><DataFreshness fetchedAt={new Date().toISOString()} /><YoYDashboard data={data} /></>;
 }
