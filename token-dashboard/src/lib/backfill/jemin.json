@@ -523,6 +523,19 @@
       "cache_creation_tokens": 205931
     },
     {
+      "date": "2026-03-15",
+      "model": "claude-opus-4-6",
+      "input_tokens": 5,
+      "output_tokens": 333,
+      "cache_read_tokens": 61862,
+      "cache_creation_tokens": 8463,
+      "actor": {
+        "type": "user",
+        "id": "jemin@eoeoeo.net",
+        "email_address": "jemin@eoeoeo.net"
+      }
+    },
+    {
       "actor": {
         "type": "user",
         "id": "jemin@eoeoeo.net",
