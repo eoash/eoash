@@ -88,10 +88,10 @@
     {
       "date": "2026-03-16",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 16,
-      "output_tokens": 995,
-      "cache_read_tokens": 532961,
-      "cache_creation_tokens": 84666,
+      "input_tokens": 25,
+      "output_tokens": 7103,
+      "cache_read_tokens": 653280,
+      "cache_creation_tokens": 120710,
       "actor": {
         "type": "user",
         "id": "phoenix@eoeoeo.net",
