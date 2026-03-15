@@ -561,10 +561,10 @@
     {
       "date": "2026-03-16",
       "model": "claude-opus-4-6",
-      "input_tokens": 156,
-      "output_tokens": 25544,
-      "cache_read_tokens": 16172895,
-      "cache_creation_tokens": 321323,
+      "input_tokens": 162,
+      "output_tokens": 26750,
+      "cache_read_tokens": 16303530,
+      "cache_creation_tokens": 322996,
       "actor": {
         "type": "user",
         "id": "jemin@eoeoeo.net",
