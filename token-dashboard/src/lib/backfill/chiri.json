@@ -845,10 +845,10 @@
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 6121,
-      "output_tokens": 434443,
-      "cache_read_tokens": 156297631,
-      "cache_creation_tokens": 5132457
+      "input_tokens": 6566,
+      "output_tokens": 558712,
+      "cache_read_tokens": 188329383,
+      "cache_creation_tokens": 6075115
     },
     {
       "date": "2026-03-14",
@@ -867,17 +867,22 @@
       }
     },
     {
-      "date": "2026-03-15",
-      "model": "claude-opus-4-6",
-      "input_tokens": 469,
-      "output_tokens": 255250,
-      "cache_read_tokens": 37218349,
-      "cache_creation_tokens": 1083190,
       "actor": {
         "type": "user",
         "id": "chiri@eoeoeo.net",
         "email_address": "chiri@eoeoeo.net"
-      }
+      },
+      "model": "claude-opus-4-6",
+      "date": "2026-03-15",
+      "session_count": 0,
+      "lines_of_code": 0,
+      "commits": 0,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 324,
+      "output_tokens": 117773,
+      "cache_read_tokens": 22689319,
+      "cache_creation_tokens": 930587
     },
     {
       "date": "2026-03-16",
