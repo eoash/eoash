@@ -160,16 +160,8 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/14)**: 메모리 파일 정리 — MEMORY.md 217줄→62줄 압축, debug/tool-selector 임시 파일 삭제, ANTI_PATTERNS.md 2개 항목 추가
 - **완료(3/15)**: 레포 정리 — node_modules/~2.3GB + .next/~953MB + venv/196MB 삭제, claude-code-video/ 별도 레포 분리, .agents/.agent 스킬 중복 제거, 총 3.8GB→254MB
 
-### eo-video-pipeline — 자동화 확장 중
-- **레포**: eoash/eo-video-pipeline (로컬: `/Users/ash/Documents/eo-video-pipeline`)
-- **첫 분석 성공(3/14)**: Po Shen Loh 27분 영상 → 트랜스크립트 + 핵심발언 20개 + 챕터 6개 + FCPXML 마커 26개
-- **완료(3/14)**: Slack Webhook 알림, 2GB 초과 자동 오디오 추출, NAS fswatch 감시, 5단계 체크포인트, watch-nas CLI, launchd 데몬 설정
-- [x] Drive watch 모드 + launchd 상시 실행 → NAS watch + launchd plist로 대체 구현
-- [ ] FCPXML을 Final Cut Pro에서 열어서 마커 확인
-- [ ] Google Sheets 연동 (SHEETS_SPREADSHEET_ID 설정)
-- [ ] 화자 분리 개선 (인터뷰어 + 게스트)
-- [ ] Slack Webhook URL 발급 + .env 등록
-- [ ] 실제 3시간 원본 테스트
+### eo-video-pipeline — ~~폐기 (3/15)~~
+- 레포 보존: eoash/eo-video-pipeline (로컬: `/Users/ash/Documents/eo-video-pipeline`)
 
 ### Gowid Slack Bot — 설계 완료, API Key 대기
 - **위치**: `gowid-slack-bot/` (README.md + DESIGN.md)
@@ -193,6 +185,7 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 - **완료(3/15)**: Skeleton 로딩 — `Skeleton.tsx` + 6개 페이지 `loading.tsx`
 - **완료(3/15)**: Overview 페이지 (`/overview`) — Revenue·Cash·AR KPI 9개 병렬 fetch, 한 화면 요약
 - **완료(3/15)**: DataFreshness 컴포넌트 — 마지막 업데이트 시각 표시, 10분+ 경과 시 경고
+- **완료(3/15)**: withtax Sheets 이관 — `fetchWithtaxData()` + `_SYNC_Withtax` 탭 직접 생성 + income 서버 컴포넌트 전환 + 차트 4개 props 리팩터링
 
 ### Leave Dashboard — 미완료
 - [ ] 입사일 필드 연동
@@ -203,4 +196,4 @@ AI 실수·재발 방지 기록: `agent/memory/ANTI_PATTERNS.md`
 
 ---
 
-*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가, 레포 정리 3.8GB→254MB, macOS Stop 훅 알림 추가)*
+*마지막 업데이트: 2026-03-15 (finance-dashboard Skeleton·Overview·DataFreshness 추가, 레포 정리 3.8GB→254MB, macOS Stop 훅 알림 추가, eo-video-pipeline 폐기)*
