@@ -1198,10 +1198,10 @@
     {
       "date": "2026-03-16",
       "model": "claude-sonnet-4-6",
-      "input_tokens": 488,
-      "output_tokens": 194403,
-      "cache_read_tokens": 23218493,
-      "cache_creation_tokens": 1035257,
+      "input_tokens": 494,
+      "output_tokens": 195014,
+      "cache_read_tokens": 23678622,
+      "cache_creation_tokens": 1037794,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
