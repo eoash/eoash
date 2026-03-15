@@ -98,15 +98,15 @@
       },
       "model": "claude-sonnet-4-5-20250929",
       "date": "2026-02-13",
-      "session_count": 0,
+      "session_count": 1,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 6311,
-      "output_tokens": 57942,
-      "cache_read_tokens": 52451183,
-      "cache_creation_tokens": 1994226
+      "input_tokens": 2074,
+      "output_tokens": 13655,
+      "cache_read_tokens": 13303351,
+      "cache_creation_tokens": 266048
     },
     {
       "actor": {
@@ -478,7 +478,7 @@
       "date": "2026-03-10",
       "session_count": 4,
       "lines_of_code": 0,
-      "commits": 0,
+      "commits": 1,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
       "input_tokens": 425,
@@ -523,17 +523,22 @@
       "cache_creation_tokens": 205931
     },
     {
-      "date": "2026-03-15",
-      "model": "claude-opus-4-6",
-      "input_tokens": 1324,
-      "output_tokens": 197665,
-      "cache_read_tokens": 48271583,
-      "cache_creation_tokens": 1299185,
       "actor": {
         "type": "user",
         "id": "jemin@eoeoeo.net",
         "email_address": "jemin@eoeoeo.net"
-      }
+      },
+      "model": "claude-opus-4-6",
+      "date": "2026-03-15",
+      "session_count": 21,
+      "lines_of_code": 0,
+      "commits": 5,
+      "pull_requests": 0,
+      "tool_acceptance_rate": 0,
+      "input_tokens": 7407,
+      "output_tokens": 284608,
+      "cache_read_tokens": 110735535,
+      "cache_creation_tokens": 5897218
     },
     {
       "actor": {
@@ -543,15 +548,15 @@
       },
       "model": "claude-sonnet-4-6",
       "date": "2026-03-15",
-      "session_count": 1,
+      "session_count": 0,
       "lines_of_code": 0,
       "commits": 0,
       "pull_requests": 0,
       "tool_acceptance_rate": 0,
-      "input_tokens": 13,
-      "output_tokens": 744,
-      "cache_read_tokens": 133963,
-      "cache_creation_tokens": 36288
+      "input_tokens": 22,
+      "output_tokens": 3648,
+      "cache_read_tokens": 305614,
+      "cache_creation_tokens": 70731
     },
     {
       "date": "2026-03-16",
