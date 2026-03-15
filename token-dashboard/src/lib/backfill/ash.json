@@ -1185,10 +1185,10 @@
     {
       "date": "2026-03-16",
       "model": "claude-opus-4-6",
-      "input_tokens": 371,
-      "output_tokens": 43670,
-      "cache_read_tokens": 10930040,
-      "cache_creation_tokens": 683369,
+      "input_tokens": 392,
+      "output_tokens": 57478,
+      "cache_read_tokens": 13198612,
+      "cache_creation_tokens": 956141,
       "actor": {
         "type": "user",
         "id": "ash@eoeoeo.net",
