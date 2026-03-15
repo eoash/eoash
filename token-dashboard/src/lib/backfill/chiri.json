@@ -887,10 +887,10 @@
     {
       "date": "2026-03-16",
       "model": "claude-opus-4-6",
-      "input_tokens": 163,
-      "output_tokens": 85990,
-      "cache_read_tokens": 12373521,
-      "cache_creation_tokens": 298262,
+      "input_tokens": 181,
+      "output_tokens": 97351,
+      "cache_read_tokens": 14601949,
+      "cache_creation_tokens": 325805,
       "actor": {
         "type": "user",
         "id": "chiri@eoeoeo.net",
